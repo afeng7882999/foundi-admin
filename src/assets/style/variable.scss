@@ -1,0 +1,247 @@
+@use 'sass:math';
+
+@use 'color' as color-def;
+@use 'element-plus-dynamic-theme/theme-chalk/common/var' as common-var;
+
+/* SCSS variables
+-------------------------- */
+
+// theme
+$dark-mode: 'theme-dark';
+$sharp-mode: 'theme-sharp';
+$round-mode: 'theme-round';
+
+// transition
+$default-transition-time: 0.3s !default;
+$bg-transition: opacity 0.3s cubic-bezier(0.7, 0.3, 0.1, 1) !default;
+$stop-transition: none !important !default;
+
+// colors
+$color-white: color-def.$white !default;
+$color-white-rgb: 255, 255, 255 !default;
+$color-black: color-def.$black !default;
+$color-black-rgb: 0, 0, 0 !default;
+
+$color-primary: #579ddb !default;
+$color-accent: #faab1a !default;
+
+$color-success: color-def.$green !default;
+$color-warning: color-def.$orange !default;
+$color-danger: color-def.$red !default;
+$color-error: color-def.$red !default;
+$color-info: color-def.$grey !default;
+
+$color-text-primary: rgba($color-black, 0.9) !default;
+$color-text-regular: rgba($color-black, 0.85) !default;
+$color-text-secondary: rgba($color-black, 0.38) !default;
+$color-text-placeholder: rgba($color-black, 0.26) !default;
+
+$background-color-base: #f5f7fa !default;
+$background-color-hover: rgba($color-black, 0.1) !default;
+$body-background-color: rgb(237, 240, 242) !default;
+$modal-background-color: rgba(0, 0, 0, 0.3) !default;
+
+$scrollbar-background-color: rgba($color-text-secondary, 0.3) !default;
+$scrollbar-hover-background-color: rgba($color-text-secondary, 0.5) !default;
+
+// shadow
+$box-shadow-base: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04) !default;
+$box-shadow-dark: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.12) !default;
+$box-shadow-light: 0 2px 12px 0 rgba(0, 0, 0, 0.1) !default;
+$real-shadow-base: 0 16px 38px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12),
+  0 8px 10px -5px rgba(0, 0, 0, 0.2) !default;
+
+// z-index
+$index-normal: 1 !default;
+$index-top: 1000 !default;
+$index-top-bg: 999 !default;
+$index-popper: 2000 !default;
+
+// font
+$font-size-large: 18px !default;
+$font-size-base: 14px !default;
+$font-size-small: 13px !default;
+$font-size-tiny: 12px !default;
+$font-color-disabled-base: #bbb !default;
+$font-weight-primary: 500 !default;
+$font-weight-bold: 700 !default;
+$font-weight-secondary: 100 !default;
+$font-line-height-primary: 24px !default;
+$font-line-height-secondary: 16px !default;
+
+// border
+$border-color-base: #dcdfe6 !default;
+$border-color-light: #e4e7ed !default;
+$border-color-lighter: #ebeef5 !default;
+$border-color-extra-light: #f2f6fc !default;
+$border-width-base: 1px !default;
+$border-radius-base: 4px !default;
+$border-radius-small: 3px !default;
+
+// rightPanel
+$right-panel-width: 260px !default;
+
+// appTitle
+$app-title-height: 50px !default;
+$app-title-font-size: $font-size-small !default;
+$app-title-back-color: $color-white !default;
+
+// appTags
+$app-tags-height: 50px !default;
+$app-tags-padding: 30px !default;
+$app-tags-font-size: $font-size-small !default;
+$app-tags-back-color: $color-white !default;
+
+// icon
+$icon-size-large: 24px !default;
+$icon-size-base: 22px !default;
+$icon-size-middle: 18px !default;
+$icon-size-small: 14px !default;
+$icon-size-tiny: 10px !default;
+
+// sidebar
+$sidebar-min-width: 56px !default;
+$sidebar-normal-width: 250px !default;
+$sidebar-transition-time: 0.3s !default;
+$sidebar-back-color: #343a40 !default;
+$sidebar-text-color: rgba($color-white, 0.9) !default;
+$sidebar-text-placeholder-color: rgba($color-white, 0.4) !default;
+$sidebar-hover-color: rgba($color-white, 0.1) !default;
+$sidebar-border-color: rgba($color-white, 0) !default;
+$sidebar-active-color: $color-primary !default;
+$sidebar-active-text-color: rgba($color-white, 0.9) !default;
+$sidebar-active-hover-color: $color-primary !default;
+$sidebar-background-img: 'none' !default;
+$sidebar-z-index: 2001 !default;
+
+/* CSS variables
+-------------------------- */
+
+:root {
+  --el-color-white: #{$color-white};
+  --el-color-white-rgb: #{$color-white-rgb};
+  --el-color-black: #{$color-black};
+  --el-color-black-rgb: #{$color-black-rgb};
+
+  --el-color-primary: #{$color-primary};
+  @each $i in common-var.$color-depths {
+    --el-color-primary-light-#{$i}: #{mix($color-white, $color-primary, math.percentage(math.div($i, 10)))};
+  }
+  --el-color-primary-dark-1: #{mix($color-black, $color-primary, 10%)};
+
+  --el-color-success: #{$color-success};
+  @each $i in common-var.$color-depths {
+    --el-color-success-light-#{$i}: #{mix($color-white, $color-success, math.percentage(math.div($i, 10)))};
+  }
+  --el-color-success-dark-1: #{mix($color-black, $color-success, 10%)};
+
+  --el-color-warning: #{$color-warning};
+  @each $i in common-var.$color-depths {
+    --el-color-warning-light-#{$i}: #{mix($color-white, $color-warning, math.percentage(math.div($i, 10)))};
+  }
+  --el-color-warning-dark-1: #{mix($color-black, $color-warning, 10%)};
+
+  --el-color-danger: #{$color-danger};
+  @each $i in common-var.$color-depths {
+    --el-color-danger-light-#{$i}: #{mix($color-white, $color-danger, math.percentage(math.div($i, 10)))};
+  }
+  --el-color-danger-dark-1: #{mix($color-black, $color-danger, 10%)};
+
+  --el-color-error: #{$color-error};
+  @each $i in common-var.$color-depths {
+    --el-color-error-light-#{$i}: #{mix($color-white, $color-error, math.percentage(math.div($i, 10)))};
+  }
+  --el-color-error-dark-1: #{mix($color-black, $color-error, 10%)};
+
+  --el-color-info: #{$color-info};
+  @each $i in common-var.$color-depths {
+    --el-color-info-light-#{$i}: #{mix($color-white, $color-info, math.percentage(math.div($i, 10)))};
+  }
+  --el-color-info-dark-1: #{mix($color-black, $color-info, 10%)};
+
+  @each $i in common-var.$gray-depths {
+    @if $i >= 1 {
+      --el-color-gray-#{$i}: #{mix($color-black, $color-white, math.percentage(math.div($i, 10)))};
+    } @else {
+      --el-color-gray-0#{$i * 10}: #{mix($color-black, $color-white, math.percentage(math.div($i, 10)))};
+    }
+  }
+
+  --el-text-color-primary: #{$color-text-primary};
+  --el-text-color-regular: #{$color-text-regular};
+  --el-text-color-secondary: #{$color-text-secondary};
+  --el-text-color-placeholder: #{$color-text-placeholder};
+
+  --el-border-color-base: #{$border-color-base};
+  --el-border-color-light: #{$border-color-light};
+  --el-border-color-lighter: #{$border-color-lighter};
+  --el-border-color-extra-light: #{$border-color-extra-light};
+
+  --el-background-color-base: #{$background-color-base};
+
+  --el-border-width-base: #{$border-width-base};
+  --el-border-style-base: solid;
+  --el-border-color-hover: var(--el-text-color-placeholder);
+  --el-border-base: var(--el-border-width-base) var(--el-border-style-base) var(--el-border-color-base);
+
+  --el-border-radius-base: #{$border-radius-base};
+  --el-border-radius-small: #{$border-radius-small};
+  --el-border-radius-round: 20px;
+  --el-border-radius-circle: 100%;
+
+  --el-box-shadow-base: #{$box-shadow-base};
+  --el-box-shadow-light: #{$box-shadow-light};
+
+  --el-svg-monochrome-grey: var(--el-color-gray-1);
+  --el-fill-base: var(--el-color-white);
+
+  --el-font-size-extra-large: 20px;
+  --el-font-size-large: #{$font-size-large};
+  --el-font-size-medium: 16px;
+  --el-font-size-base: #{$font-size-base};
+  --el-font-size-small: #{$font-size-small};
+  --el-font-size-extra-small: #{$font-size-tiny};
+  --el-font-weight-primary: #{$font-weight-primary};
+  --el-font-line-height-primary: #{$font-line-height-primary};
+  --el-font-color-disabled-base: #{$font-color-disabled-base};
+
+  --el-index-normal: #{$index-normal};
+  --el-index-top: #{$index-top};
+  --el-index-popper: #{$index-popper};
+
+  --el-disabled-fill-base: var(--el-background-color-base);
+  --el-disabled-color-base: var(--el-text-color-placeholder);
+  --el-disabled-border-base: var(--el-border-color-light);
+
+  --el-scrollbar-background-color: #{$scrollbar-background-color};
+  --el-scrollbar-hover-background-color: #{$scrollbar-hover-background-color};
+
+  --el-transition-duration: #{$default-transition-time};
+  --el-transition-duration-fast: 0.2s;
+  --el-transition-function-ease-in-out-bezier: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --el-transition-function-fast-bezier: cubic-bezier(0.23, 1, 0.32, 1);
+  --el-transition-all: all var(--el-transition-duration) var(--el-transition-function-ease-in-out-bezier);
+  --el-transition-fade: opacity var(--el-transition-duration) var(--el-transition-function-fast-bezier);
+  --el-transition-md-fade: transform var(--el-transition-duration) var(--el-transition-function-fast-bezier),
+    opacity var(--el-transition-duration) var(--el-transition-function-fast-bezier);
+  --el-transition-fade-linear: opacity var(--el-transition-duration-fast) linear;
+  --el-transition-border: border-color var(--el-transition-duration-fast)
+    var(--el-transition-function-ease-in-out-bezier);
+  --el-transition-color: color var(--el-transition-duration-fast) var(--el-transition-function-ease-in-out-bezier);
+
+  // foundi variables
+  --fd-background-color-hover: #{$background-color-hover};
+  --fd-body-background-color: #{$body-background-color};
+  --fd-app-tags-back-color: #{$app-tags-back-color};
+  --fd-app-title-back-color: #{$app-title-back-color};
+
+  --fd-sidebar-back-color: #{$sidebar-back-color};
+  --fd-sidebar-text-color: #{$sidebar-text-color};
+  --fd-sidebar-text-placeholder-color: #{$sidebar-text-placeholder-color};
+  --fd-sidebar-hover-color: #{$sidebar-hover-color};
+  --fd-sidebar-active-color: #{$sidebar-active-color};
+  --fd-sidebar-active-text-color: #{$sidebar-active-text-color};
+  --fd-sidebar-active-hover-color: #{$sidebar-active-hover-color};
+  --fd-sidebar-background-img: #{$sidebar-background-img};
+  --fd-sidebar-background-color: #{$sidebar-back-color};
+}

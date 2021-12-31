@@ -1,0 +1,28 @@
+.theme-dark {
+  // el-loading-mask
+  .el-loading-mask {
+    background-color: rgba(var(--el-color-white-rgb), 0.9) !important;
+  }
+
+  // el-menu
+  .el-menu--horizontal > .el-submenu .el-submenu__title:hover {
+    background-color: var(--el-color-primary-light-9);
+  }
+  .el-menu--horizontal > .el-menu-item:not(.is-disabled):hover, .el-menu--horizontal > .el-menu-item:not(.is-disabled):focus {
+    background-color: var(--el-color-primary-light-9);
+  }
+  .el-menu.el-menu--horizontal {
+    border-bottom: 1px solid var(--el-border-color-base);
+    border-right: none;
+  }
+  .el-menu {
+    border-right: 1px solid var(--el-border-color-base);
+  }
+  .el-submenu .el-menu {
+    border: none;
+  }
+
+  .fd-code-block {
+    @import "highlight.js/scss/solarized-dark.scss";
+  }
+}
