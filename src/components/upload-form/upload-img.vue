@@ -2,6 +2,7 @@
   <div class="fd-upload-img">
     <el-upload
       ref="imgUpload"
+      class="fd-upload-img__upload"
       :before-upload="beforeUpload"
       :headers="uploadHeaders"
       :http-request="uploadFile"
@@ -11,91 +12,83 @@
       :on-error="uploadError"
       :on-success="uploadSuccess"
       :show-file-list="false"
-      class="img-upload"
     >
-      <div v-loading="loading" class="upload-section">
-        <fd-icon v-if="!modelValue" class="upload-icon" icon="folder-add"></fd-icon>
-        <el-image v-if="modelValue" :src="modelValue" fit="fill" class="upload-img" />
-        <div v-if="modelValue" class="upload-actions">
-          <span title="预览" @click.stop="dialogVisible === true"><i class="el-icon-zoom-in"></i></span>
+      <div v-loading="state.loading" class="fd-upload-img__section">
+        <fd-icon v-if="!modelValue" class="section-icon" icon="folder-add"></fd-icon>
+        <el-image v-if="modelValue" :src="modelValue" fit="fill" class="section-image" />
+        <div v-if="modelValue" class="section-actions">
+          <span title="预览" @click.stop="state.dialogVisible === true"><i class="el-icon-zoom-in"></i></span>
           <span title="移除" @click.stop="removeImage"><i class="el-icon-delete"></i></span>
         </div>
       </div>
     </el-upload>
-    <el-dialog v-model:visible="dialogVisible" title="预览" class="upload-preview" append-to-body>
+    <el-dialog v-model:visible="state.dialogVisible" title="预览" class="fd-upload-img__preview" append-to-body>
       <img :src="modelValue" alt="预览" />
     </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue'
+export default {
+  name: 'FdUploadImg'
+}
+</script>
+
+<script setup lang="ts">
+import { reactive } from 'vue'
 import useUpload from './use-upload'
 import { DEFAULT_OSS } from '@/api/system/file'
 import { localOrRemoteUrl } from '@/utils/query'
 
-export default defineComponent({
-  name: 'FdUploadImg',
-  props: {
-    modelValue: {
-      type: String,
-      default: ''
-    },
-    oss: {
-      type: String,
-      default: DEFAULT_OSS
-    }
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: ''
   },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    const state = reactive({
-      loading: false,
-      dialogVisible: false
-    })
-
-    const { uploadHeaders, uploadError: _uploadError, uploadFile } = useUpload({ oss: props.oss })
-
-    const removeImage = () => {
-      emit('update:modelValue', '')
-    }
-
-    const uploadSuccess = (response: string[]) => {
-      emit('update:modelValue', localOrRemoteUrl(response[0], 'upload'))
-      state.loading = false
-    }
-
-    const beforeUpload = () => {
-      state.loading = true
-    }
-
-    const uploadError = () => {
-      _uploadError()
-      state.loading = false
-    }
-
-    return {
-      ...toRefs(state),
-      uploadHeaders,
-      removeImage,
-      uploadSuccess,
-      beforeUpload,
-      uploadError,
-      uploadFile
-    }
+  oss: {
+    type: String,
+    default: DEFAULT_OSS
   }
 })
+
+const emit = defineEmits(['update:modelValue'])
+
+const state = reactive({
+  loading: false,
+  dialogVisible: false
+})
+
+const { uploadHeaders, uploadError: _uploadError, uploadFile } = useUpload({ oss: props.oss })
+
+const removeImage = () => {
+  emit('update:modelValue', '')
+}
+
+const uploadSuccess = (response: string[]) => {
+  emit('update:modelValue', localOrRemoteUrl(response[0], 'upload'))
+  state.loading = false
+}
+
+const beforeUpload = () => {
+  state.loading = true
+}
+
+const uploadError = () => {
+  _uploadError()
+  state.loading = false
+}
 </script>
 
 <style lang="scss">
 @use 'src/assets/style/variable' as *;
 
 .fd-img-upload {
-  .el-upload {
+  &__upload {
     display: inline-block;
     vertical-align: top;
   }
 
-  .upload-section {
+  &__section {
     position: relative;
     display: flex;
     align-items: center;
@@ -106,21 +99,22 @@ export default defineComponent({
     border-radius: var(--el-border-radius-base);
     overflow: hidden;
 
-    .upload-icon {
+    .section-icon {
       flex: 1;
       font-size: 80px;
       color: var(--el-text-color-placeholder);
     }
 
-    .upload-img {
+    .section-image {
       flex: 1;
       align-self: stretch;
+
       .el-image__error {
         background-color: var(--el-fill-base);
       }
     }
 
-    .upload-actions {
+    .section-actions {
       opacity: 0;
       position: absolute;
       display: flex;
@@ -132,22 +126,24 @@ export default defineComponent({
       height: 100%;
       background-color: rgba(var(--el-color-white-rgb), 0.8);
       transition: all $default-transition-time;
+
       span {
         padding: 10px;
         color: var(--el-text-color-primary);
         font-size: 22px;
+
         &:hover {
           color: var(--el-color-primary);
         }
       }
     }
 
-    &:hover .upload-actions {
+    &:hover .section-actions {
       opacity: 1;
     }
   }
 
-  .upload-preview {
+  &__preview {
     width: 800px;
 
     img {

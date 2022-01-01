@@ -32,7 +32,7 @@ module.exports = defineConfig({
         SwitchCase: 1
       }
     ],
-    'no-debugger': import.meta.env.PROD ? 'error' : 'off',
+    'no-debugger': 'off',
     'no-prototype-builtins': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',

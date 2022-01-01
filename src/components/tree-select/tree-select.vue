@@ -1,8 +1,8 @@
 <template>
-  <div :id="state.treeSelectId" class="fd-tree-select" ref="treeSelect">
+  <div :id="state.treeSelectId" ref="treeSelect" class="fd-tree-select">
     <el-popover
-      popper-class="fd-tree-select__popper"
       v-model:visible="state.visible"
+      popper-class="fd-tree-select__popper"
       :disabled="disabled"
       :placement="placement"
       :show-arrow="true"
@@ -11,24 +11,24 @@
     >
       <template #reference>
         <el-select
+          v-bind="selectParamsCo"
+          ref="selectCom"
+          v-model="state.labels"
           class="fd-tree-select__select"
           popper-class="fd-tree-select__option"
           :style="styles"
-          v-model="state.labels"
           :disabled="disabled"
           :filterable="false"
           :popper-append-to-body="false"
-          v-bind="selectParamsCo"
           @clear="onSelectClear"
           @focus="onPopoverShow"
           @remove-tag="onRemoveTag"
-          ref="selectCom"
         ></el-select>
       </template>
       <el-input
         v-if="treeParamsCo.filterable"
-        class="fd-tree-select__filter"
         v-model="state.keywords"
+        class="fd-tree-select__filter"
         size="mini"
         @change="onFilterChange"
       >
@@ -38,19 +38,19 @@
       </el-input>
       <el-scrollbar class="fd-tree-select__tree">
         <el-tree
-            v-show="state.data.length > 0"
-            :current-node-key="state.ids && state.ids.length > 0 ? state.ids[0] : '0'"
-            :data="state.data"
-            :draggable="false"
-            :filter-node-method="filter"
-            node-key="id"
-            :show-checkbox="selectParamsCo.multiple"
-            :expand-on-click-node="true"
-            :highlight-current="true"
-            v-bind="treeParamsCo"
-            @check="onTreeCheck"
-            @node-click="onTreeNodeClick"
-            ref="treeCom"
+          v-show="state.data.length > 0"
+          v-bind="treeParamsCo"
+          ref="treeCom"
+          :current-node-key="state.ids && state.ids.length > 0 ? state.ids[0] : '0'"
+          :data="state.data"
+          :draggable="false"
+          :filter-node-method="filter"
+          node-key="id"
+          :show-checkbox="selectParamsCo.multiple"
+          :expand-on-click-node="true"
+          :highlight-current="true"
+          @check="onTreeCheck"
+          @node-click="onTreeNodeClick"
         ></el-tree>
         <div v-if="state.data.length === 0" class="fd-tree-select__no-data">暂无数据</div>
       </el-scrollbar>
@@ -71,7 +71,7 @@ import { off, on } from '@/utils/dom'
 import { generateId } from '@/utils/lang'
 import { merge } from 'lodash-es'
 import { computed, nextTick, onBeforeMount, onBeforeUnmount, onMounted, PropType, reactive, ref, watch } from 'vue'
-import {DEFAULT_SELECT_PARAMS, DEFAULT_TREE_FIELDS, DEFAULT_TREE_PARAMS} from '@/components/tree-select/types'
+import { DEFAULT_SELECT_PARAMS, DEFAULT_TREE_FIELDS, DEFAULT_TREE_PARAMS } from '@/components/tree-select/types'
 
 const props = defineProps({
   dataList: {
