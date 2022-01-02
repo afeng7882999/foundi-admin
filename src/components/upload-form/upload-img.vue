@@ -14,15 +14,21 @@
       :show-file-list="false"
     >
       <div v-loading="state.loading" class="fd-upload-img__section">
-        <fd-icon v-if="!modelValue" class="section-icon" icon="folder-add"></fd-icon>
-        <el-image v-if="modelValue" :src="modelValue" fit="fill" class="section-image" />
+        <fd-icon v-if="!modelValue" class="section-icon" icon="add-pic"></fd-icon>
+        <el-image v-if="modelValue" :src="modelValue" fit="cover" class="section-image" />
         <div v-if="modelValue" class="section-actions">
-          <span title="预览" @click.stop="state.dialogVisible === true"><i class="el-icon-zoom-in"></i></span>
-          <span title="移除" @click.stop="removeImage"><i class="el-icon-delete"></i></span>
+          <el-button size="small" @click.stop="openPreview">
+            <fd-icon icon="preview-open"></fd-icon>
+            预览
+          </el-button>
+          <el-button size="small" @click.stop="removeImage">
+            <fd-icon icon="delete"></fd-icon>
+            移除
+          </el-button>
         </div>
       </div>
     </el-upload>
-    <el-dialog v-model:visible="state.dialogVisible" title="预览" class="fd-upload-img__preview" append-to-body>
+    <el-dialog v-model="state.dialogVisible" title="预览" custom-class="fd-upload-img__preview" append-to-body>
       <img :src="modelValue" alt="预览" />
     </el-dialog>
   </div>
@@ -64,6 +70,10 @@ const removeImage = () => {
   emit('update:modelValue', '')
 }
 
+const openPreview = () => {
+  state.dialogVisible = true
+}
+
 const uploadSuccess = (response: string[]) => {
   emit('update:modelValue', localOrRemoteUrl(response[0], 'upload'))
   state.loading = false
@@ -82,7 +92,7 @@ const uploadError = () => {
 <style lang="scss">
 @use 'src/assets/style/variable' as *;
 
-.fd-img-upload {
+.fd-upload-img {
   &__upload {
     display: inline-block;
     vertical-align: top;
@@ -101,7 +111,7 @@ const uploadError = () => {
 
     .section-icon {
       flex: 1;
-      font-size: 80px;
+      font-size: 50px;
       color: var(--el-text-color-placeholder);
     }
 
@@ -118,6 +128,7 @@ const uploadError = () => {
       opacity: 0;
       position: absolute;
       display: flex;
+      flex-flow: column;
       align-items: center;
       justify-content: center;
       top: 0;
@@ -127,14 +138,8 @@ const uploadError = () => {
       background-color: rgba(var(--el-color-white-rgb), 0.8);
       transition: all $default-transition-time;
 
-      span {
-        padding: 10px;
-        color: var(--el-text-color-primary);
-        font-size: 22px;
-
-        &:hover {
-          color: var(--el-color-primary);
-        }
+      .el-button:last-child {
+        margin: 10px 0;
       }
     }
 
