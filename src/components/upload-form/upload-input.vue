@@ -22,7 +22,9 @@
           :show-file-list="false"
         >
           <el-tooltip :content="tipContent" placement="top" :disabled="ifHideTip">
-            <el-button icon="el-icon-more"></el-button>
+            <div class="fd-upload-input__trigger">
+              <fd-icon icon="more"></fd-icon>
+            </div>
           </el-tooltip>
         </el-upload>
       </template>
@@ -87,7 +89,7 @@ const {
 
 const uploadSuccess = (response: string[]) => {
   _uploadSuccess(response)
-  emit('update:modelValue', localOrRemoteUrl(response[0]), 'upload')
+  emit('update:modelValue', localOrRemoteUrl(response[0], 'upload'))
 }
 
 const changeValue = (val: string) => {
@@ -98,3 +100,17 @@ const clearValue = () => {
   emit('update:modelValue', '')
 }
 </script>
+
+<style lang="scss">
+@use 'src/assets/style/variable' as *;
+
+.fd-upload-input {
+  .el-input .el-input-group__append {
+    padding: 0;
+  }
+
+  &__trigger {
+    padding: 6px 20px;
+  }
+}
+</style>
