@@ -8,6 +8,7 @@ const WIDTH = 1024
 const RATIO = 3
 const TITLE_HEIGHT = 50
 const TAB_HEIGHT = 50
+const TITLE_PADDING = 10
 const SIDEBAR_MINI_WIDTH = 56
 const SIDEBAR_NORMAL_WIDTH = 250
 
@@ -39,13 +40,17 @@ export default function useLayoutResize() {
 
   const getDocHeight = () => {
     const rect = body.getBoundingClientRect()
-    const height = storeState.app.enableTags ? TAB_HEIGHT + TITLE_HEIGHT : TITLE_HEIGHT
+    const height = storeState.app.enableTags ? TAB_HEIGHT + TITLE_HEIGHT + TITLE_PADDING : TITLE_HEIGHT + TITLE_PADDING
     return rect.height - height
   }
 
   const getDocWidth = () => {
     const rect = body.getBoundingClientRect()
-    const sideWide = storeState.app.sidebarMode!.offScreen ? 0 : storeState.app.sidebarMode!.minimized ? SIDEBAR_MINI_WIDTH : SIDEBAR_NORMAL_WIDTH
+    const sideWide = storeState.app.sidebarMode!.offScreen
+      ? 0
+      : storeState.app.sidebarMode!.minimized
+        ? SIDEBAR_MINI_WIDTH
+        : SIDEBAR_NORMAL_WIDTH
     return rect.width - sideWide
   }
 
