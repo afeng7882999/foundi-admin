@@ -1,5 +1,12 @@
 <template>
-  <div class="fd-split-pane" :class="wrapperClass" :style="{ cursor, userSelect }" @mouseup="onMouseUp" @mousemove="onMouseMove" ref="wrapper">
+  <div
+    ref="wrapper"
+    class="fd-split-pane"
+    :class="wrapperClass"
+    :style="{ cursor, userSelect }"
+    @mouseup="onMouseUp"
+    @mousemove="onMouseMove"
+  >
     <div class="fd-split-pane__pane is-left" :style="leftStyle">
       <slot name="left"></slot>
     </div>
@@ -69,7 +76,13 @@ const type = computed(() => {
 })
 
 const resizeType = computed(() => {
-  return props.split === 'vertical' ? (props.shrink === 'right' ? 'left' : 'right') : props.shrink === 'right' ? 'top' : 'bottom'
+  return props.split === 'vertical'
+    ? props.shrink === 'right'
+      ? 'left'
+      : 'right'
+    : props.shrink === 'right'
+      ? 'top'
+      : 'bottom'
 })
 
 const userSelect = computed(() => {
@@ -137,7 +150,10 @@ const onMouseMove = (e: MouseEvent) => {
       }
     }
     const pagePos = props.split === 'vertical' ? e.pageX : e.pageY
-    const targetWidth = props.split === 'vertical' ? (e.currentTarget as HTMLElement).offsetWidth : (e.currentTarget as HTMLElement).offsetHeight
+    const targetWidth =
+      props.split === 'vertical'
+        ? (e.currentTarget as HTMLElement).offsetWidth
+        : (e.currentTarget as HTMLElement).offsetHeight
     const toLeft = pagePos - pageOffset
 
     if (toLeft > props.leftMin && toLeft < targetWidth - props.rightMin) {
@@ -160,6 +176,7 @@ const onMouseMove = (e: MouseEvent) => {
   position: relative;
 
   &__resizer {
+    align-self: stretch;
     flex-shrink: 0;
     background-repeat: no-repeat;
     background-position: 50%;
@@ -193,6 +210,7 @@ const onMouseMove = (e: MouseEvent) => {
 
     .fd-split-pane__resizer {
       width: 10px;
+      height: auto;
       background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAeCAYAAAAGos/EAAAAJklEQVQYlWM8c+bMfwYGBgYmEAECjP//gwUQIixnz54dAWoYGBgAwRIwW7Zq4jkAAAAASUVORK5CYII=');
       cursor: col-resize;
     }
@@ -203,10 +221,11 @@ const onMouseMove = (e: MouseEvent) => {
     }
   }
 
-  &.horizontal {
+  &.is-horizontal {
     flex-direction: column;
 
     .fd-split-pane__resizer {
+      width: auto;
       height: 10px;
       background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAACCAYAAABPJGxCAAAAJElEQVQImWM8c+bMfwYGBgZjY2NGEH327Fm68JlABN0BAwMDAIKiH2fCZyKfAAAAAElFTkSuQmCC');
       cursor: row-resize;
