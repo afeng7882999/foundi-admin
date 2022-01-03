@@ -16,13 +16,13 @@ export default function () {
 
   // 窗口最小高度
   const pageMinHeight = computed(() => {
-    const height = storeState.app.docHeight - 30
+    const height = storeState.app.docHeight
     return { minHeight: height + 'px' }
   })
 
   // 窗口高度
   const pageHeight = computed(() => {
-    const height = storeState.app.docHeight - 30
+    const height = storeState.app.docHeight
     return { height: height + 'px' }
   })
 

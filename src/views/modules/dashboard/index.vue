@@ -1,18 +1,46 @@
 <template>
-  <div class="page-dashboard">
+  <div class="page-dashboard fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <el-row :gutter="15">
       <el-col :xs="12" :sm="12" :md="6">
-        <fd-widget-card icon="chart-pie-one" content="200" sub="%" type="primary" more-url="/system/user" desc="一个月内注册的用户"></fd-widget-card>
+        <fd-widget-card
+          icon="chart-pie-one"
+          content="200"
+          sub="%"
+          type="primary"
+          more-url="/system/user"
+          desc="一个月内注册的用户"
+        ></fd-widget-card>
       </el-col>
       <el-col :xs="12" :sm="12" :md="6">
-        <fd-widget-card icon="chart-pie-one" content="200" sub="%" type="success" more-url="/system/user" desc="一个月内注册的用户"></fd-widget-card>
+        <fd-widget-card
+          icon="chart-pie-one"
+          content="200"
+          sub="%"
+          type="success"
+          more-url="/system/user"
+          desc="一个月内注册的用户"
+        ></fd-widget-card>
       </el-col>
       <el-col :xs="12" :sm="12" :md="6">
-        <fd-widget-card icon="chart-pie-one" content="200" sub="%" type="warning" more-url="/system/user" desc="一个月内注册的用户"></fd-widget-card>
+        <fd-widget-card
+          icon="chart-pie-one"
+          content="200"
+          sub="%"
+          type="warning"
+          more-url="/system/user"
+          desc="一个月内注册的用户"
+        ></fd-widget-card>
       </el-col>
       <el-col :xs="12" :sm="12" :md="6">
-        <fd-widget-card icon="chart-pie-one" content="200" sub="%" type="info" more-url="/system/user" desc="一个月内注册的用户"></fd-widget-card>
+        <fd-widget-card
+          icon="chart-pie-one"
+          content="200"
+          sub="%"
+          type="info"
+          more-url="/system/user"
+          desc="一个月内注册的用户"
+        ></fd-widget-card>
       </el-col>
     </el-row>
     <el-row :gutter="15">

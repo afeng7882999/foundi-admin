@@ -241,6 +241,8 @@
 
 // module page
 .fd-page {
+  padding: 10px 20px 20px 20px;
+  
   &.fix-height {
     display: flex;
     flex-direction: column;

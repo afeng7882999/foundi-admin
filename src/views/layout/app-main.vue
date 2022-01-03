@@ -33,7 +33,6 @@ export default defineComponent({
 <style lang="scss">
 // app-main
 .app-main {
-  padding: 10px 20px 20px 20px;
   position: relative;
   overflow: hidden;
 }
