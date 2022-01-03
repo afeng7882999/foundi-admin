@@ -40,7 +40,8 @@ module.exports = defineConfig({
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     'vue/no-v-html': 'off',
-    'vue/require-default-prop': 'off'
+    'vue/require-default-prop': 'off',
+    'vue/multi-word-component-names': 'off'
   },
   globals: {
     defineProps: 'writable',

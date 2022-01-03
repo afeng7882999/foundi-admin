@@ -1,16 +1,16 @@
 <template>
   <div class="page-error-404">
-    <span class="error-title">OOPS! PAGE NOT FOUND</span>
-    <div class="error-icon vivify flipInX">
+    <span class="page-error-404__title">OOPS! PAGE NOT FOUND</span>
+    <div class="page-error-404__icon vivify flipInX">
       <fd-svg-image img="graphics-404"></fd-svg-image>
     </div>
-    <span class="error-desc">对不起, 您访问的页面不存在, 您可以返回上一页, 或回到首页</span>
-    <div class="error-act">
-      <el-button class="act-back" size="medium" type="info" @click="goBack">
+    <span class="page-error-404__desc">对不起, 您访问的页面不存在, 您可以返回上一页, 或回到首页</span>
+    <div class="page-error-404__act">
+      <el-button size="medium" type="info" @click="goBack">
         <fd-icon class="in-button" icon="left"></fd-icon>
         返回上一页
       </el-button>
-      <el-button class="act-home" size="medium" type="primary" @click="goHome">
+      <el-button size="medium" type="primary" @click="goHome">
         <fd-icon class="in-button" icon="home"></fd-icon>
         回到首页
       </el-button>
@@ -19,31 +19,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { useRouter } from 'vue-router'
-
-export default defineComponent({
-  name: 'NotFound',
-  setup() {
-    const router = useRouter()
-
-    const goBack = () => {
-      router.go(-1)
-    }
-
-    const goHome = () => {
-      router.push('/dashboard')
-    }
-
-    return {
-      goBack,
-      goHome
-    }
-  }
-})
+export default {
+  name: '404'
+}
 </script>
 
-<style lang="scss" scoped>
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goBack = () => {
+  router.go(-1)
+}
+
+const goHome = () => {
+  router.push('/dashboard')
+}
+</script>
+
+<style lang="scss">
 @use 'src/assets/style/variable' as *;
 @use 'src/assets/style/color' as *;
 
@@ -59,25 +54,20 @@ export default defineComponent({
   align-items: center;
   background-color: var(--fd-body-background-color);
 
-  .error-title {
+  &__title {
     text-align: center;
     color: var(--el-text-color-primary);
   }
 
-  .error-icon {
+  &__icon {
     display: flex;
     color: var(--el-color-warning);
   }
 
-  .error-desc {
+  &__desc {
     text-align: center;
     color: var(--el-text-color-primary);
     padding: 20px 0 40px 0;
-  }
-
-  .error-act {
-    .act-back {
-    }
   }
 }
 </style>
