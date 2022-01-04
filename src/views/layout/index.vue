@@ -1,12 +1,18 @@
 <template>
   <div :class="classObj" class="app-layout">
-    <fd-sidebar :app-config="appConfig" :menu="menu" :mode="mode" :user-profile="userProfile" @off-screen-click="closeOffScreenSidebar" />
+    <fd-sidebar
+      :app-config="appConfig"
+      :menu="menu"
+      :mode="mode"
+      :user-profile="userProfile"
+      @off-screen-click="closeOffScreenSidebar"
+    />
     <div class="main-container">
       <div class="fixable-header">
         <app-title @appSettingShow="showAppSetting"></app-title>
         <app-tags v-show="enableTags"></app-tags>
       </div>
-      <app-main></app-main>
+      <fd-main></fd-main>
     </div>
     <app-setting ref="appSetting"></app-setting>
   </div>
@@ -15,7 +21,7 @@
 <script lang="ts">
 import FdSidebar from './sidebar/index.vue'
 import AppSetting from './app-setting.vue'
-import AppMain from '@/views/layout/app-main.vue'
+import FdMain from '@/views/layout/main.vue'
 import AppTitle from '@/views/layout/app-title.vue'
 import AppTags from '@/views/layout/app-tags.vue'
 import { DEFAULT_AVATAR } from '@/store/modules/user'
@@ -31,7 +37,7 @@ export default defineComponent({
   components: {
     FdSidebar,
     AppSetting,
-    AppMain,
+    FdMain,
     AppTitle,
     AppTags
   },

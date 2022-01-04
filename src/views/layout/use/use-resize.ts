@@ -46,12 +46,13 @@ export default function useLayoutResize() {
 
   const getDocWidth = () => {
     const rect = body.getBoundingClientRect()
-    const sideWide = storeState.app.sidebarMode!.offScreen
-      ? 0
-      : storeState.app.sidebarMode!.minimized
-        ? SIDEBAR_MINI_WIDTH
-        : SIDEBAR_NORMAL_WIDTH
-    return rect.width - sideWide
+    if (storeState.app.sidebarMode?.offScreen) {
+      return rect.width
+    }
+    if (storeState.app.sidebarMode?.minimized) {
+      return rect.width - SIDEBAR_MINI_WIDTH
+    }
+    return rect.width - SIDEBAR_NORMAL_WIDTH
   }
 
   const isMobile = () => {
