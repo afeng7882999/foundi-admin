@@ -1,6 +1,6 @@
 <template>
   <div :class="classObj" class="app-layout">
-    <app-sidebar :app-config="appConfig" :menu="menu" :mode="mode" :user-profile="userProfile" @off-screen-click="closeOffScreenSidebar" />
+    <fd-sidebar :app-config="appConfig" :menu="menu" :mode="mode" :user-profile="userProfile" @off-screen-click="closeOffScreenSidebar" />
     <div class="main-container">
       <div class="fixable-header">
         <app-title @appSettingShow="showAppSetting"></app-title>
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import AppSidebar from './app-sidebar/index.vue'
+import FdSidebar from './sidebar/index.vue'
 import AppSetting from './app-setting.vue'
 import AppMain from '@/views/layout/app-main.vue'
 import AppTitle from '@/views/layout/app-title.vue'
@@ -29,7 +29,7 @@ import { DeviceType, SidebarMode } from '@/store/modules/app'
 export default defineComponent({
   name: 'AppLayout',
   components: {
-    AppSidebar,
+    FdSidebar,
     AppSetting,
     AppMain,
     AppTitle,

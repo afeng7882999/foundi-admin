@@ -195,5 +195,4 @@ const onLogoutClick = async () => {
   @include minimized();
   @include hover();
 }
-
 </style>
