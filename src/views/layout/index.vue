@@ -9,7 +9,7 @@
     />
     <div class="main-container">
       <div class="fixable-header">
-        <app-title @appSettingShow="showAppSetting"></app-title>
+        <fd-title @app-setting-show="showAppSetting"></fd-title>
         <app-tags v-show="enableTags"></app-tags>
       </div>
       <fd-main></fd-main>
@@ -22,7 +22,7 @@
 import FdSidebar from './sidebar/index.vue'
 import AppSetting from './app-setting.vue'
 import FdMain from '@/views/layout/main.vue'
-import AppTitle from '@/views/layout/app-title.vue'
+import FdTitle from '@/views/layout/title.vue'
 import AppTags from '@/views/layout/app-tags.vue'
 import { DEFAULT_AVATAR } from '@/store/modules/user'
 import { setDocumentTheme } from 'element-plus-dynamic-theme/theme'
@@ -38,7 +38,7 @@ export default defineComponent({
     FdSidebar,
     AppSetting,
     FdMain,
-    AppTitle,
+    FdTitle,
     AppTags
   },
   setup() {
