@@ -133,6 +133,9 @@ onMounted(() => {
   state.enableTags = storeState.app.enableTags
   state.showBreadcrumb = storeState.app.showBreadcrumb
   state.fixedHeader = storeState.app.fixedHeader
+  state.sidebarGrouped = !!storeState.app.sidebarMode?.useGroup
+  state.sidebarShowLogo = !!storeState.app.sidebarMode?.showLogo
+  state.sidebarShowUser = !!storeState.app.sidebarMode?.showUser
 })
 
 const rightPanel = ref()

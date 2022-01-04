@@ -14,7 +14,7 @@
       </div>
       <fd-main></fd-main>
     </div>
-    <fd-setting ref="setting"></fd-setting>
+    <fd-setting ref="appSetting"></fd-setting>
   </div>
 </template>
 
