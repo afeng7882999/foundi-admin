@@ -144,7 +144,7 @@ const setExpand = (ifExpand: boolean) => {
     .fd-sidebar__inner {
       left: -$sidebar-normal-width;
       box-shadow: none;
-      transition: transform $default-transition-time;
+      transition: transform $sidebar-transition-time;
     }
 
     &.opened {
