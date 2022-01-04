@@ -1,5 +1,5 @@
 <template>
-  <el-drawer :custom-class="objClass" v-model="state.visible" :with-header="false" :modal="true" size="320px">
+  <el-drawer :custom-class="objClass" v-model="state.visible" :with-header="false" :modal="true" :size="size">
     <div class="fd-right-panel__content">
       <div class="fd-right-panel__title">
         <span class="title-text">{{ title }}</span>
@@ -27,6 +27,10 @@ const props = defineProps({
   customClass: {
     type: String,
     default: ''
+  },
+  size: {
+    type: String,
+    default: '320px'
   }
 })
 
@@ -61,34 +65,34 @@ defineExpose({
   .el-drawer__body {
     height: 100%;
     padding: 0;
+  }
 
-    .fd-right-panel__content {
-      height: 100%;
-      color: var(--el-text-color-regular);
+  &__content {
+    height: 100%;
+    color: var(--el-text-color-regular);
 
-      .fd-right-panel__title {
-        padding: 15px;
-        display: flex;
-        align-items: center;
-        height: 50px;
-        border-bottom: 1px solid var(--el-border-color-base);
+    .drawer-container {
+      height: calc(100% - 50px);
+    }
+  }
 
-        .title-text {
-          flex: 1;
-          text-align: center;
-          font-size: $font-size-large;
-        }
+  &__title {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    border-bottom: 1px solid var(--el-border-color-base);
 
-        .title-button {
-          position: absolute !important;
-          top: 10px;
-          right: 15px;
-        }
-      }
+    .title-text {
+      flex: 1;
+      text-align: center;
+      font-size: $font-size-large;
+    }
 
-      .drawer-container {
-        height: calc(100% - 50px);
-      }
+    .title-button {
+      position: absolute !important;
+      top: 10px;
+      right: 15px;
     }
   }
 }

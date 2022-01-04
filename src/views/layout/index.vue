@@ -14,13 +14,13 @@
       </div>
       <fd-main></fd-main>
     </div>
-    <app-setting ref="appSetting"></app-setting>
+    <fd-setting ref="appSetting"></fd-setting>
   </div>
 </template>
 
 <script lang="ts">
 import FdSidebar from './sidebar/index.vue'
-import AppSetting from './app-setting.vue'
+import FdSetting from './setting.vue'
 import FdMain from './main.vue'
 import FdTitle from './title.vue'
 import FdTags from './tags.vue'
@@ -36,7 +36,7 @@ export default defineComponent({
   name: 'AppLayout',
   components: {
     FdSidebar,
-    AppSetting,
+    FdSetting,
     FdMain,
     FdTitle,
     FdTags
