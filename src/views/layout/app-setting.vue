@@ -53,7 +53,7 @@ import { computed, defineComponent, onMounted, reactive, ref, toRefs, watch } fr
 import FdRightPanel from '@/components/right-panel/index.vue'
 import FdThemeSelect from '@/components/theme-select/index.vue'
 import { DEFAULT_THEMES, themeProcess } from 'element-plus-dynamic-theme/theme'
-import useLayoutResize from './use/use-resize'
+import useLayoutResize from './use-resize'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 

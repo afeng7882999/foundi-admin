@@ -10,7 +10,7 @@
     <div class="main-container">
       <div class="fixable-header">
         <fd-title @app-setting-show="showAppSetting"></fd-title>
-        <app-tags v-show="enableTags"></app-tags>
+        <fd-tags v-show="enableTags"></fd-tags>
       </div>
       <fd-main></fd-main>
     </div>
@@ -21,15 +21,15 @@
 <script lang="ts">
 import FdSidebar from './sidebar/index.vue'
 import AppSetting from './app-setting.vue'
-import FdMain from '@/views/layout/main.vue'
-import FdTitle from '@/views/layout/title.vue'
-import AppTags from '@/views/layout/app-tags.vue'
+import FdMain from './main.vue'
+import FdTitle from './title.vue'
+import FdTags from './tags.vue'
 import { DEFAULT_AVATAR } from '@/store/modules/user'
 import { setDocumentTheme } from 'element-plus-dynamic-theme/theme'
 import { computed, defineComponent, onBeforeMount, onMounted, ref } from 'vue'
 import { AllState } from '@/store'
 import { useStore } from 'vuex'
-import useLayoutResize from './use/use-resize'
+import useLayoutResize from './use-resize'
 import { DeviceType, SidebarMode } from '@/store/modules/app'
 
 export default defineComponent({
@@ -39,7 +39,7 @@ export default defineComponent({
     AppSetting,
     FdMain,
     FdTitle,
-    AppTags
+    FdTags
   },
   setup() {
     const store = useStore<AllState>()
