@@ -49,9 +49,9 @@ export function getLastDateList(num: number): string[] {
  */
 export function getDateListByRange(start: Date, end: Date): string[] {
   let d1 = dayjs(start)
-  const d2 = dayjs(end).startOf('day')
+  const d2 = dayjs(end).endOf('day')
   const result = [] as string[]
-  while (d1.isBefore(d2)) {
+  while (!d1.isAfter(d2)) {
     result.push(d1.format(DEFAULT_DATE_FORMAT))
     d1 = d1.add(1, 'day')
   }

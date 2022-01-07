@@ -13,4 +13,4 @@ export const CUSTOM_THEME = {
   '--el-border-color-base': '#dcdfe6',
   '--fd-sidebar-back-color': '#343a40',
   '--fd-sidebar-active-color': '#579ddb'
-}
+} as Record<string, string>
