@@ -1,14 +1,14 @@
 <template>
-  <fd-widget-panel class="widget-content-stat" title="作品数据趋势" icon="analysis">
+  <fd-widget-panel class="widget-visitor" title="作品数据趋势" icon="analysis">
     <template #action>
-      <span class="widget-content-stat__label">时间</span>
-      <el-radio-group v-model="state.dateRange" class="widget-content-stat__radio" size="mini" @change="onRadioGroupChange">
+      <span class="widget-visitor__label">时间</span>
+      <el-radio-group v-model="state.dateRange" class="widget-visitor__radio" size="mini" @change="onRadioGroupChange">
         <el-radio-button label="7">7天</el-radio-button>
         <el-radio-button label="30">30天</el-radio-button>
       </el-radio-group>
       <el-date-picker
         v-model="state.dateRangeCustom"
-        class="widget-content-stat__date-picker"
+        class="widget-visitor__date-picker"
         size="mini"
         :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
         end-placeholder="结束日期"
@@ -30,8 +30,9 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import FdWidgetPanel from './panel.vue'
+import * as echarts from 'echarts/core'
 import { getContentStat } from '@/api-mock/dashboard'
 import useECharts from '@/views/modules/dashboard/widgets/useECharts'
 
@@ -78,9 +79,13 @@ const option = {
       data: [] as number[]
     }
   ],
-  color: [] as string[],
+  color: [],
   animationDelay: 500
 }
+
+const chartElement = ref()
+
+let echartsCom = undefined as echarts.ECharts | undefined
 
 const state = reactive({
   dateRange: 7 as number | 'custom',
@@ -97,28 +102,30 @@ const loadChartData = async () => {
   return option
 }
 
-const { chartElement, initChart, setChartData } = useECharts(option, loadChartData)
+const { initChart, setChartData, setChartTheme } = useECharts(option, loadChartData)
 
 onMounted(async () => {
-  initChart()
-  await setChartData()
+  echartsCom = echarts.init(chartElement.value as HTMLElement)
+  initChart(echartsCom)
+  setChartTheme(echartsCom)
+  await setChartData(echartsCom)
 })
 
 const onRadioGroupChange = async () => {
   state.dateRangeCustom = []
-  await setChartData()
+  await setChartData(echartsCom)
 }
 
 const onDatePickerChange = async () => {
   state.dateRange = 'custom'
-  await setChartData()
+  await setChartData(echartsCom)
 }
 </script>
 
 <style lang="scss">
 @use 'src/assets/style/variable' as *;
 
-.widget-content-stat {
+.widget-visitor {
   &__label {
     margin: 0 15px 0 0;
     color: var(--el-text-color-secondary);

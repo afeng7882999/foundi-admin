@@ -2,13 +2,12 @@ import { AnyFunction, AnyObject } from '@/utils'
 import { CUSTOM_THEME } from '@/components/theme-select/theme'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
-import { nextTick, ref, watch } from 'vue'
-
+import { nextTick, watch } from 'vue'
 import * as echarts from 'echarts/core'
 import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent } from 'echarts/components'
 import { LineChart } from 'echarts/charts'
-import { UniversalTransition } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
+import { UniversalTransition } from 'echarts/features'
 
 echarts.use([
   TitleComponent,
@@ -22,26 +21,23 @@ echarts.use([
 ])
 
 export default function (option: AnyObject, optionLoadFunc: AnyFunction) {
-  const chartElement = ref()
   const store = useStore<AllState>()
   const storeState = store.state as AllState
-
-  const chartRef = ref<echarts.ECharts>()
 
   /**
    * 加载图表数据
    */
-  const setChartData = async () => {
-    chartRef.value?.showLoading({ text: '正在加载...' })
+  const setChartData = async (chart: echarts.ECharts | undefined) => {
+    chart?.showLoading({ text: '正在加载...' })
     const option = await optionLoadFunc()
-    chartRef.value?.setOption(option)
-    chartRef.value?.hideLoading()
+    chart?.setOption(option)
+    chart?.hideLoading()
   }
 
   /**
    * 设置图表主题色
    */
-  const setChartTheme = () => {
+  const setChartTheme = (chart: echarts.ECharts | undefined) => {
     const names = [
       '--el-color-primary',
       '--el-color-success',
@@ -57,43 +53,38 @@ export default function (option: AnyObject, optionLoadFunc: AnyFunction) {
         color.push(CUSTOM_THEME[n])
       }
       option.color = color
-      chartRef.value?.setOption(option)
+      chart?.setOption(option)
     })
   }
 
   /**
    * 图表初始化
    */
-  const initChart = () => {
-    chartRef.value = echarts.init(chartElement.value as HTMLElement)
-
+  const initChart = (chart: echarts.ECharts | undefined) => {
     watch(
       () => storeState.app.docWidth,
       () => {
-        chartRef.value?.resize()
+        chart?.resize()
       }
     )
     watch(
       () => storeState.app.sidebarMode,
       () => {
         nextTick(() => {
-          chartRef.value?.resize()
+          chart?.resize()
         })
       },
       { deep: true }
     )
     watch(
       () => storeState.app.theme,
-      () => setChartTheme()
+      () => setChartTheme(chart)
     )
 
-    console.log(chartRef.value)
-    setChartTheme()
+    setChartTheme(chart)
   }
 
   return {
-    chartElement,
-    chartRef,
     initChart,
     setChartData,
     setChartTheme
