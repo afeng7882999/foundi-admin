@@ -2,7 +2,7 @@ import { AnyFunction, AnyObject } from '@/utils'
 import { CUSTOM_THEME } from '@/components/theme-select/theme'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
-import { nextTick, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import * as echarts from 'echarts/core'
 import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent } from 'echarts/components'
 import { LineChart } from 'echarts/charts'
@@ -21,14 +21,20 @@ echarts.use([
 ])
 
 export default function (option: AnyObject, optionLoadFunc: AnyFunction) {
+  const chartElement = ref()
+  let chart = undefined as echarts.ECharts | undefined
+  let theme = 'light'
+
   const store = useStore<AllState>()
   const storeState = store.state as AllState
 
   /**
    * 加载图表数据
    */
-  const setChartData = async (chart: echarts.ECharts | undefined) => {
-    chart?.showLoading({ text: '正在加载...' })
+  const setChartData = async () => {
+    // const mask = theme === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.05)'
+    const text = theme === 'light' ? 'rgba(36, 36, 36, 0.85)' : 'rgba(255, 255, 255, 0.6)'
+    chart?.showLoading({ text: '正在加载...', textColor: text, maskColor: 'transparent' })
     const option = await optionLoadFunc()
     chart?.setOption(option)
     chart?.hideLoading()
@@ -37,7 +43,7 @@ export default function (option: AnyObject, optionLoadFunc: AnyFunction) {
   /**
    * 设置图表主题色
    */
-  const setChartTheme = (chart: echarts.ECharts | undefined) => {
+  const setChartTheme = () => {
     const names = [
       '--el-color-primary',
       '--el-color-success',
@@ -60,7 +66,11 @@ export default function (option: AnyObject, optionLoadFunc: AnyFunction) {
   /**
    * 图表初始化
    */
-  const initChart = (chart: echarts.ECharts | undefined) => {
+  const initChart = () => {
+    theme = storeState.app.theme && storeState.app.theme['dark-mode'] === 'true' ? 'dark' : 'light'
+    chart = echarts.init(chartElement.value as HTMLElement, theme)
+    setChartTheme()
+
     watch(
       () => storeState.app.docWidth,
       () => {
@@ -78,13 +88,19 @@ export default function (option: AnyObject, optionLoadFunc: AnyFunction) {
     )
     watch(
       () => storeState.app.theme,
-      () => setChartTheme(chart)
+      () => {
+        theme = storeState.app.theme && storeState.app.theme['dark-mode'] === 'true' ? 'dark' : 'light'
+        chart?.dispose()
+        chart = echarts.init(chartElement.value as HTMLElement, theme)
+        setChartTheme()
+      }
     )
 
-    setChartTheme(chart)
+    return chart
   }
 
   return {
+    chartElement,
     initChart,
     setChartData,
     setChartTheme
