@@ -1,10 +1,10 @@
 <template>
   <div ref="moduleRoot" :style="pageMinHeight" class="page-loginLog fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <div class="fd-page-form">
+    <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList()">
         <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
-          <div v-show="queryFormShow" class="page-form-query">
+          <div v-show="queryFormShow" class="fd-page__query">
             <el-form-item label="时间" prop="operTime">
               <el-date-picker v-model="query.operTime" :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]" end-placeholder="结束日期" format="YYYY-MM-DD" range-separator="-" start-placeholder="开始日期" type="daterange"></el-date-picker>
             </el-form-item>
@@ -24,23 +24,23 @@
             </el-form-item>
             <el-form-item>
               <el-button plain type="primary" @click="queryList">
-                <fd-icon class="in-button" icon="search"></fd-icon>
+                <fd-icon class="is-in-btn" icon="search"></fd-icon>
                 查询
               </el-button>
               <el-button @click="resetQuery">
-                <fd-icon class="in-button" icon="refresh"></fd-icon>
+                <fd-icon class="is-in-btn" icon="refresh"></fd-icon>
                 清空
               </el-button>
             </el-form-item>
           </div>
         </transition>
       </el-form>
-      <div class="page-form-action">
+      <div class="fd-page__action">
         <el-button v-show="hasAuth('system:loginLog:delete')" v-waves :disabled="selectedNodes.length <= 0" plain size="medium" type="danger" @click="del()">
-          <fd-icon class="in-button" icon="delete"></fd-icon>
+          <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           批量删除
         </el-button>
-        <div class="right-action">
+        <div class="action-right">
           <el-button v-show="hasAuth('system:loginLog:export')" v-waves size="medium" @click="exportData()">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
           <el-tooltip :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
@@ -49,7 +49,7 @@
         </div>
       </div>
     </div>
-    <div class="fd-page-table border">
+    <div class="fd-page__table border">
       <el-table v-loading="loading" :data="data" row-key="id" @selection-change="onSelectionChange">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="访问时间" prop="operTime" width="200">

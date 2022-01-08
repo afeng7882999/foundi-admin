@@ -1,5 +1,5 @@
 <template>
-  <div class="fd-page-form">
+  <div class="fd-page__form">
     <el-descriptions :column="2" :title="`系统字典 - ${data[idx].name}`" border direction="vertical" size="medium">
       <el-descriptions-item label="名称">
         <span>{{ data[idx].name }}</span>

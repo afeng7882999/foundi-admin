@@ -1,22 +1,22 @@
 <template>
   <div ref="moduleRoot" :style="pageMinHeight" class="page-oauthUser fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <div class="fd-page-form">
-      <div class="page-form-action">
+    <div class="fd-page__form">
+      <div class="fd-page__action">
         <el-button size="medium" @click="close()">
-          <fd-icon class="in-button" icon="left"></fd-icon>
+          <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
         </el-button>
         <el-button v-show="hasAuth('system:oauthUser:delete')" v-waves :disabled="selectedNodes.length <= 0" plain size="medium" type="danger" @click="del()">
-          <fd-icon class="in-button" icon="delete"></fd-icon>
+          <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           批量删除
         </el-button>
-        <div class="right-action">
+        <div class="action-right">
           <el-button v-show="hasAuth('system:oauthUser:export')" v-waves size="medium" @click="exportData()">导出数据</el-button>
         </div>
       </div>
     </div>
-    <div class="fd-page-table border">
+    <div class="fd-page__table border">
       <el-table v-loading="loading" :data="data" row-key="id" @selection-change="onSelectionChange">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
         <el-table-column align="center" header-align="center" label="头像" prop="avatar" width="50">

@@ -1,5 +1,5 @@
 <template>
-  <div class="fd-page-form">
+  <div class="fd-page__form">
     <el-descriptions :column="2" :title="`系统配置详细 - ${data[idx].configKey}`" border direction="vertical" size="medium">
       <el-descriptions-item label="配置分类">
         {{ dictVal(dicts.sysConfigType, data[idx].configTypeDict) }}

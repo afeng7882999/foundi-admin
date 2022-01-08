@@ -1,17 +1,12 @@
 <template>
   <el-popover
-    popper-class="fd-theme-select__popper"
     v-model:visible="state.visible"
+    popper-class="fd-theme-select__popper"
     placement="bottom"
     width="200"
     trigger="click"
   >
-    <div
-      class="fd-theme-select__list"
-      v-for="(theme, idx) in state.themes"
-      :key="idx"
-      @click="selectTheme(idx)"
-    >
+    <div v-for="(theme, idx) in state.themes" :key="idx" class="fd-theme-select__list" @click="selectTheme(idx)">
       <fd-theme-diagram :theme="theme"></fd-theme-diagram>
     </div>
     <template #reference>
@@ -29,7 +24,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue'
+import { reactive } from 'vue'
 import FdThemeDiagram from './theme-diagram.vue'
 import { DEFAULT_THEMES } from 'element-plus-dynamic-theme/theme'
 import { CUSTOM_THEME } from './theme'

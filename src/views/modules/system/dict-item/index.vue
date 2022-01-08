@@ -1,10 +1,10 @@
 <template>
   <div ref="moduleRoot" :style="pageMinHeight" class="page-dictItem fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <div class="fd-page-form">
+    <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList()">
         <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
-          <div v-show="queryFormShow" class="page-form-query">
+          <div v-show="queryFormShow" class="fd-page__query">
             <el-form-item label="字典项键值" prop="itemKey">
               <el-input v-model="query.itemKey" clearable placeholder="请输入字典项键值" />
             </el-form-item>
@@ -13,27 +13,27 @@
             </el-form-item>
             <el-form-item>
               <el-button plain type="primary" @click="queryList">
-                <fd-icon class="in-button" icon="search" plain></fd-icon>
+                <fd-icon class="is-in-btn" icon="search" plain></fd-icon>
                 查询
               </el-button>
               <el-button @click="resetQuery">
-                <fd-icon class="in-button" icon="refresh"></fd-icon>
+                <fd-icon class="is-in-btn" icon="refresh"></fd-icon>
                 清空
               </el-button>
             </el-form-item>
           </div>
         </transition>
       </el-form>
-      <div class="page-form-action">
+      <div class="fd-page__action">
         <el-button size="medium" @click="close()">
-          <fd-icon class="in-button" icon="left"></fd-icon>
+          <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
         </el-button>
         <el-button v-show="hasAuth('system:dictItem:delete')" v-waves :disabled="selectedNodes.length <= 0" plain size="medium" type="danger" @click="del()">
-          <fd-icon class="in-button" icon="delete"></fd-icon>
+          <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           批量删除
         </el-button>
-        <div class="right-action">
+        <div class="action-right">
           <el-button v-show="hasAuth('system:dictItem:add')" v-waves plain size="medium" type="primary" @click="showDictItemEdit()">新增</el-button>
           <el-button v-show="hasAuth('system:dictItem:export')" size="medium" @click.prevent.stop="openMenu($event)">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div class="fd-page-table border">
+    <div class="fd-page__table border">
       <el-table v-loading="loading" :data="data" row-key="id" @selection-change="onSelectionChange">
         <el-table-column align="left" header-align="left" type="selection" width="40"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="字典项键值" prop="itemKey"></el-table-column>

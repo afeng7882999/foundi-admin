@@ -33,7 +33,7 @@
             </el-checkbox>
             <div class="card-content__act">
               <el-button class="content-act__direct" @click="goLogin">
-                <fd-icon class="in-button large" icon="two-dimensional-code"></fd-icon>
+                <fd-icon class="is-in-btn large" icon="two-dimensional-code"></fd-icon>
                 登录页直接扫码登录
               </el-button>
               <el-button class="content-act__submit" type="primary" @click="submit">注册</el-button>
@@ -284,7 +284,7 @@ const goLogin = () => {
             align-items: center;
             justify-content: center;
 
-            .fd-icon.in-button.large {
+            .fd-icon.is-in-btn.large {
               font-size: 20px;
             }
           }

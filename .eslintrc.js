@@ -24,7 +24,6 @@ module.exports = defineConfig({
     'plugin:prettier/recommended'
   ],
   rules: {
-    'prettier/prettier': ['error', { endOfLine: 'auto' }],
     'vue/max-attributes-per-line': 'off',
     indent: ['error', 2, { SwitchCase: 1 }],
     'no-debugger': 'off',

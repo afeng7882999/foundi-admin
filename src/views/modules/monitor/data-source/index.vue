@@ -1,12 +1,12 @@
 <template>
   <div class="page-monitor-db fd-page" :style="pageMinHeight">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <div class="fd-page-form">
+    <div class="fd-page__form">
       <div class="page-monitor-db__act">
         <el-button @click="dbStatReset" type="primary" v-if="hasAuth('monitor:dataSource:edit')" v-waves size="medium">重置</el-button>
       </div>
     </div>
-    <div class="fd-page-table border">
+    <div class="fd-page__table border">
       <el-tabs v-model="state.activeTab">
         <el-tab-pane label="首页" name="1"></el-tab-pane>
         <el-tab-pane label="数据源" name="2"></el-tab-pane>
@@ -1087,7 +1087,7 @@ const { pageMinHeight, showPageHeader, hasAuth } = usePage()
     }
   }
 
-  .fd-page-table {
+  .fd-page__table {
     padding: 24px 24px;
   }
 }

@@ -1,17 +1,17 @@
 <template>
   <div ref="pageRoot" :style="pageMinHeight" class="page-generator-edit fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <div class="fd-page-form">
-      <div class="page-form-action">
+    <div class="fd-page__form">
+      <div class="fd-page__action">
         <el-button size="medium" @click="close()">
-          <fd-icon class="in-button" icon="left"></fd-icon>
+          <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
         </el-button>
         <el-button plain size="medium" type="warning" @click="handleSyncFromDb()">
-          <fd-icon class="in-button" icon="refresh"></fd-icon>
+          <fd-icon class="is-in-btn" icon="refresh"></fd-icon>
           与数据库同步
         </el-button>
-        <div class="right-action">
+        <div class="action-right">
           <el-button size="medium" type="primary" @click="submitForm()">提交</el-button>
           <el-button size="medium" @click="close()">取消</el-button>
         </div>
@@ -19,8 +19,8 @@
     </div>
 
     <el-form ref="tableForm" :model="data.table" :rules="rules" label-width="150px" size="medium">
-      <div class="fd-page-form">
-        <div class="fd-page-sub-title"><span class="fd-page-sub-title__title">基本信息</span></div>
+      <div class="fd-page__form">
+        <div class="fd-page__sub-title"><span class="title-text">基本信息</span></div>
         <el-row>
           <el-col :span="12">
             <el-form-item label="表名称" prop="tableName">
@@ -47,8 +47,8 @@
         </el-row>
       </div>
 
-      <div class="fd-page-form">
-        <div class="fd-page-sub-title"><span class="fd-page-sub-title__title">生成信息</span></div>
+      <div class="fd-page__form">
+        <div class="fd-page__sub-title"><span class="title-text">生成信息</span></div>
         <el-row>
           <el-col :span="24">
             <el-form-item label="表类型">
@@ -165,8 +165,8 @@
       </div>
     </el-form>
 
-    <div class="fd-page-table border">
-      <div class="fd-page-sub-title"><span class="fd-page-sub-title__title">字段信息</span></div>
+    <div class="fd-page__table border">
+      <div class="fd-page__sub-title"><span class="title-text">字段信息</span></div>
       <el-table :data="data.columns" row-key="id">
         <el-table-column class-name="allowDrag" label="" width="38">
           <template #default>

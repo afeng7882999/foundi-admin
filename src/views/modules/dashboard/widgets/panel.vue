@@ -13,7 +13,7 @@
       </div>
     </div>
     <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
-      <div class="fd-wg-panel__main" v-show="!state.isMinimized">
+      <div v-show="!state.isMinimized" class="fd-wg-panel__main">
         <slot></slot>
       </div>
     </transition>
@@ -155,8 +155,8 @@ const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition
 
   &.is-minimized {
     .fd-wg-panel__minimize .fd-icon {
-        transform: rotate(90deg);
-      }
+      transform: rotate(90deg);
     }
+  }
 }
 </style>

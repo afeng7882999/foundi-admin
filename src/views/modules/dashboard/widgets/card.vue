@@ -15,7 +15,7 @@
       </span>
     </div>
     <div class="fd-wg-card__more">
-      <div class="more__inner" v-show="ifShowMore" @click="onMoreClick">
+      <div v-show="ifShowMore" class="more__inner" @click="onMoreClick">
         <fd-icon icon="right-c"></fd-icon>
         <span>更多</span>
       </div>

@@ -5,10 +5,10 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, ref, watch} from 'vue'
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import FdWidgetPanel from './panel.vue'
 import * as echarts from 'echarts/core'
-import {BarChart, BarSeriesOption, LineSeriesOption} from 'echarts/charts'
+import { BarChart, BarSeriesOption, LineSeriesOption } from 'echarts/charts'
 import {
   DatasetComponent,
   DatasetComponentOption,
@@ -20,18 +20,35 @@ import {
   TooltipComponentOption,
   TransformComponent
 } from 'echarts/components'
-import {LabelLayout, UniversalTransition} from 'echarts/features'
-import {CanvasRenderer} from 'echarts/renderers'
-import {useStore} from 'vuex'
-import {AllState} from '@/store'
+import { LabelLayout, UniversalTransition } from 'echarts/features'
+import { CanvasRenderer } from 'echarts/renderers'
+import { useStore } from 'vuex'
+import { AllState } from '@/store'
 
-type ECOption = echarts.ComposeOption<BarSeriesOption | LineSeriesOption | TitleComponentOption | TooltipComponentOption | GridComponentOption | DatasetComponentOption>
+type ECOption = echarts.ComposeOption<
+  | BarSeriesOption
+  | LineSeriesOption
+  | TitleComponentOption
+  | TooltipComponentOption
+  | GridComponentOption
+  | DatasetComponentOption
+>
 
-echarts.use([TitleComponent, TooltipComponent, GridComponent, DatasetComponent, TransformComponent, BarChart, LabelLayout, UniversalTransition, CanvasRenderer])
+echarts.use([
+  TitleComponent,
+  TooltipComponent,
+  GridComponent,
+  DatasetComponent,
+  TransformComponent,
+  BarChart,
+  LabelLayout,
+  UniversalTransition,
+  CanvasRenderer
+])
 
 export default defineComponent({
   name: 'WidgetWatch',
-  components: {FdWidgetPanel},
+  components: { FdWidgetPanel },
   setup() {
     const option: ECOption = {
       tooltip: {},
@@ -50,7 +67,7 @@ export default defineComponent({
 
     const myEcharts = ref()
 
-    let echartsCom = undefined as echarts.ECharts
+    let echartsCom = undefined as echarts.ECharts | undefined
     const initChart = () => {
       echartsCom = echarts.init(myEcharts.value as HTMLElement)
       echartsCom.setOption(option)
@@ -62,10 +79,10 @@ export default defineComponent({
     const store = useStore<AllState>()
     const storeState = store.state as AllState
     watch(
-        () => storeState.app.docWidth,
-        () => {
-          echartsCom?.resize()
-        }
+      () => storeState.app.docWidth,
+      () => {
+        echartsCom?.resize()
+      }
     )
 
     return {

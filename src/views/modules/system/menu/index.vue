@@ -1,19 +1,19 @@
 <template>
   <div ref="moduleRoot" :style="pageMinHeight" class="page-menu fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <div class="fd-page-form">
-      <div class="page-form-action">
+    <div class="fd-page__form">
+      <div class="fd-page__action">
         <el-button v-show="hasAuth('system:menu:delete')" v-waves :disabled="selectedNodes.length <= 0" plain size="medium" type="danger" @click="del()">
-          <fd-icon class="in-button" icon="delete"></fd-icon>
+          <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           批量删除
         </el-button>
-        <div class="right-action">
+        <div class="action-right">
           <el-button v-show="hasAuth('system:menu:add')" v-waves plain size="medium" type="primary" @click="showEdit()">新增</el-button>
           <el-button v-show="hasAuth('system:menu:export')" v-waves size="medium" @click="exportData()">导出数据</el-button>
         </div>
       </div>
     </div>
-    <div class="fd-page-table border">
+    <div class="fd-page__table border">
       <el-table ref="table" v-loading="loading" :data="data" :default-expand-all="true" :indent="15" row-key="id" style="width: 100%" @select="selectHandle" @select-all="selectAllHandle">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="菜单名称" prop="name" width="200"></el-table-column>

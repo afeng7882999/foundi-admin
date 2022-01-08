@@ -3,7 +3,7 @@
     <div class="fd-page">
       <el-form ref="form" :model="formData" :rules="formRule" label-width="80px" size="medium" @keyup.enter="submit">
         <el-card shadow="hover">
-        <div class="fd-page-sub-title"><span class="fd-page-sub-title__title">基本信息</span></div>
+        <div class="fd-page__sub-title"><span class="title-text">基本信息</span></div>
         <el-row>
           <el-col :span="12">
             <el-form-item label="角色名称" prop="name">
@@ -23,20 +23,20 @@
         <el-row :gutter="20" style="padding-top: 15px">
           <el-col :span="12">
             <el-card shadow="hover">
-            <div class="fd-page-sub-title">
-              <span class="fd-page-sub-title__title">业务权限（{{ menuSelectedCount }}项）</span>
+            <div class="fd-page__sub-title">
+              <span class="title-text">业务权限（{{ menuSelectedCount }}项）</span>
             </div>
             <div class="el-tree-panel">
               <div class="el-tree-panel__action">
                 <el-tooltip :show-after="500" content="选择当前项与下级" effect="dark" placement="top">
                   <el-button size="mini" @click="menuTreeSelectAll">
-                    <fd-icon class="in-button" icon="check"></fd-icon>
+                    <fd-icon class="is-in-btn" icon="check"></fd-icon>
                     全选当前
                   </el-button>
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="清空当前项与下级" effect="dark" placement="top">
                   <el-button size="mini" @click="menuTreeClearAll">
-                    <fd-icon class="in-button" icon="close"></fd-icon>
+                    <fd-icon class="is-in-btn" icon="close"></fd-icon>
                     清空当前
                   </el-button>
                 </el-tooltip>
@@ -59,8 +59,8 @@
           </el-col>
           <el-col :span="12">
             <el-card shadow="hover">
-            <div class="fd-page-sub-title">
-              <span class="fd-page-sub-title__title">数据权限（{{ groupSelectedCount }}项）</span>
+            <div class="fd-page__sub-title">
+              <span class="title-text">数据权限（{{ groupSelectedCount }}项）</span>
             </div>
             <el-form-item label="数据范围" prop="dataScopeDict">
               <el-select v-model="formData.dataScopeDict" style="width: 100%">
@@ -71,13 +71,13 @@
               <div class="el-tree-panel__action">
                 <el-tooltip :show-after="500" content="选择当前项本级与下级" effect="dark" placement="top">
                   <el-button size="mini" @click="groupTreeSelectAll">
-                    <fd-icon class="in-button" icon="check"></fd-icon>
+                    <fd-icon class="is-in-btn" icon="check"></fd-icon>
                     全选当前
                   </el-button>
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="清空当前项本级与下级" effect="dark" placement="top">
                   <el-button size="mini" @click="groupTreeClearAll">
-                    <fd-icon class="in-button" icon="close"></fd-icon>
+                    <fd-icon class="is-in-btn" icon="close"></fd-icon>
                     清空当前
                   </el-button>
                 </el-tooltip>

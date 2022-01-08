@@ -22,12 +22,12 @@
       <template #extra>
         <el-button v-show="ifEditable" size="medium" type="primary" @click="onEdit">编辑</el-button>
         <el-button v-show="ifShowNavigation" :disabled="prevDisabled" size="medium" @click="onPrev">
-          <fd-icon class="in-button" icon="left-small"></fd-icon>
+          <fd-icon class="is-in-btn" icon="left-small"></fd-icon>
           上一个
         </el-button>
         <el-button v-show="ifShowNavigation" :disabled="nextDisabled" size="medium" @click="onNext">
           下一个
-          <fd-icon class="in-button right" icon="right-small"></fd-icon>
+          <fd-icon class="is-in-btn right" icon="right-small"></fd-icon>
         </el-button>
       </template>
     </el-descriptions>

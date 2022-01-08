@@ -164,7 +164,7 @@ const showAppSetting = () => {
     }
   }
 
-  &.is-mobile.fixed-header {
+  &.is-mobile.is-fixed-header {
     .fd-layout__header {
       width: 100%;
     }

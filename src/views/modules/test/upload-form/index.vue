@@ -1,12 +1,12 @@
 <template>
-  <div v-if="hasAuth('test:uploadForm:list')" :style="pageMinHeight" class="page-user fd-page">
+  <div v-if="hasAuth('test:uploadForm:list')" :style="pageMinHeight" class="page-test-upload-form fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <div class="fd-page-form">
-      <div class="fd-page-sub-title"><span class="fd-page-sub-title__title">UploadInput</span></div>
+    <div class="fd-page__form">
+      <div class="fd-page__sub-title"><span class="title-text">UploadInput</span></div>
       <fd-upload-input v-model="inputVal" size="medium"></fd-upload-input>
     </div>
-    <div class="fd-page-form">
-      <div class="fd-page-sub-title"><span class="fd-page-sub-title__title">UploadImg</span></div>
+    <div class="fd-page__form">
+      <div class="fd-page__sub-title"><span class="title-text">UploadImg</span></div>
       <fd-upload-img v-model="imgVal"></fd-upload-img>
     </div>
   </div>

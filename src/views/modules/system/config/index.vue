@@ -3,7 +3,7 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <fd-split-pane :default-pos="400" shrink="left">
       <template #left>
-        <div class="fd-page-form">
+        <div class="fd-page__form">
           <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList()">
             <transition
               name="expand"
@@ -11,16 +11,15 @@
               @after-enter="expandAfterEnter"
               @before-leave="expandBeforeLeave"
             >
-              <div v-show="queryFormShow" class="page-form-query">
+              <div v-show="queryFormShow" class="fd-page__query">
                 <el-form-item label="配置分类" prop="configTypeDict">
                   <el-select v-model="query.configTypeDict" multiple clearable placeholder="请选择配置分类">
                     <el-option
-                        v-for="item in dicts.sysConfigType"
-                        :key="item.itemKey"
-                        :label="item.itemValue"
-                        :value="item.itemKey"
-                    >
-                    </el-option>
+                      v-for="item in dicts.sysConfigType"
+                      :key="item.itemKey"
+                      :label="item.itemValue"
+                      :value="item.itemKey"
+                    ></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="键" prop="configKey">
@@ -28,18 +27,18 @@
                 </el-form-item>
                 <el-form-item>
                   <el-button plain type="primary" @click="queryList">
-                    <fd-icon class="in-button" icon="search"></fd-icon>
+                    <fd-icon class="is-in-btn" icon="search"></fd-icon>
                     查询
                   </el-button>
                   <el-button @click="resetQuery">
-                    <fd-icon class="in-button" icon="refresh"></fd-icon>
+                    <fd-icon class="is-in-btn" icon="refresh"></fd-icon>
                     清空
                   </el-button>
                 </el-form-item>
               </div>
             </transition>
           </el-form>
-          <div class="page-form-action">
+          <div class="fd-page__action">
             <el-button
               v-show="hasAuth('system:config:delete')"
               v-waves
@@ -49,10 +48,10 @@
               type="danger"
               @click="del()"
             >
-              <fd-icon class="in-button" icon="delete"></fd-icon>
+              <fd-icon class="is-in-btn" icon="delete"></fd-icon>
               批量删除
             </el-button>
-            <div class="right-action">
+            <div class="action-right">
               <el-button
                 v-show="hasAuth('system:config:add')"
                 v-waves
@@ -83,7 +82,7 @@
             </div>
           </div>
         </div>
-        <div class="fd-page-table border">
+        <div class="fd-page__table border">
           <el-table
             v-loading="loading"
             :data="data"

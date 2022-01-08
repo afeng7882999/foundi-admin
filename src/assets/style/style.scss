@@ -243,12 +243,12 @@
 .fd-page {
   padding: 10px 20px 20px 20px;
   
-  &.fix-height {
+  &.is-fix-height {
     display: flex;
     flex-direction: column;
   }
 
-  .fd-page-sub-title {
+  &__sub-title {
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
@@ -258,70 +258,73 @@
     margin-bottom: 30px;
     color: var(--el-text-color-regular);
     font-weight: $font-weight-bold;
-    &.icon {
+    
+    &.is-has-icon {
       border: none;
       .fd-icon {
         font-size: 24px;
         margin-right: 5px;
       }
     }
-    &__title {
+    
+    .title-text {
       flex: 1;
       display: inline-block;
       height: 20px;
       line-height: 20px;
       overflow: hidden;
     }
-    &__brief {
+  
+    .title-brief {
       height: 20px;
       overflow: hidden;
       font-weight: normal;
     }
   }
 
-  .fd-page-form {
+  &__form {
     padding: 20px 15px;
     border: 1px solid var(--el-border-color-lighter);
     border-radius: var(--el-border-radius-base);
     background-color: var(--el-fill-base);
     margin-bottom: 15px;
-
-    .page-form-query {
-      @include expandTransition($default-transition-time);
-    }
-
-    .page-form-action {
+  }
+  
+  &__query {
+    @include expandTransition($default-transition-time);
+  }
+  
+  &__action {
+    display: flex;
+    align-items: center;
+    height: 38px;
+    
+    .action-right {
+      margin-left: auto;
       display: flex;
       align-items: center;
-      height: 38px;
-
-      .right-action {
-        margin-left: auto;
-        display: flex;
-        align-items: center;
-
-        .action-divider {
-          margin: 0 10px;
-          height: 30px;
+      
+      .action-divider {
+        margin: 0 10px;
+        height: 30px;
+      }
+      
+      .action-toggle-btn {
+        color: var(--el-text-color-placeholder);
+        .fd-icon {
+          transition: transform $default-transition-time;
         }
-
-        .action-toggle-btn {
+        &.expanded .fd-icon {
+          transform: rotate(180deg);
+        }
+        &:hover {
           color: var(--el-text-color-placeholder);
-          .fd-icon {
-            transition: transform $default-transition-time;
-          }
-          &.expanded .fd-icon {
-            transform: rotate(180deg);
-          }
-          &:hover {
-            color: var(--el-text-color-placeholder);
-          }
         }
       }
     }
   }
 
-  .fd-page-pagination {
+  &__pagination {
     padding: 9px 15px 24px 15px;
     border: 1px solid var(--el-border-color-lighter);
     border-radius: var(--el-border-radius-base);
@@ -329,7 +332,7 @@
     margin-top: 0;
   }
 
-  .fd-page-table {
+  &__table {
     width: 100%;
     padding: 24px 15px 24px 15px;
     background-color: var(--el-fill-base);
@@ -361,7 +364,7 @@
     outline: 0;
   }
 
-  &.in-button {
+  &.is-in-btn {
     margin: 0 5px 0 0;
     &.right {
       margin: 0 0 0 5px;

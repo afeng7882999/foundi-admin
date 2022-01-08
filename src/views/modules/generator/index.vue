@@ -1,10 +1,10 @@
 <template>
   <div :style="pageMinHeight" class="page-generator fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <div class="fd-page-form">
+    <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList">
         <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
-          <div v-show="queryFormShow" class="page-form-query">
+          <div v-show="queryFormShow" class="fd-page__query">
             <el-form-item label="表名称" prop="tableName">
               <el-input v-model="query.tableName" clearable placeholder="请输入表名称" />
             </el-form-item>
@@ -16,28 +16,28 @@
             </el-form-item>
             <el-form-item>
               <el-button plain type="primary" @click="queryList">
-                <fd-icon class="in-button" icon="search"></fd-icon>
+                <fd-icon class="is-in-btn" icon="search"></fd-icon>
                 查询
               </el-button>
               <el-button @click="resetQuery">
-                <fd-icon class="in-button" icon="refresh"></fd-icon>
+                <fd-icon class="is-in-btn" icon="refresh"></fd-icon>
                 清空
               </el-button>
             </el-form-item>
           </div>
         </transition>
-        <div class="page-form-action">
+        <div class="fd-page__action">
           <el-button v-show="hasAuth('generator:genTable:delete')" v-waves :disabled="selectedNodes.length <= 0" plain size="medium" type="danger" @click="del()">
-            <fd-icon class="in-button" icon="delete"></fd-icon>
+            <fd-icon class="is-in-btn" icon="delete"></fd-icon>
             批量删除
           </el-button>
-          <div class="right-action">
+          <div class="action-right">
             <el-button v-show="hasAuth('generator:genTable:edit')" v-waves size="medium" type="primary" @click="handleGenerate">
-              <fd-icon class="in-button" icon="download"></fd-icon>
+              <fd-icon class="is-in-btn" icon="download"></fd-icon>
               生成
             </el-button>
             <el-button v-show="hasAuth('generator:genTable:edit')" v-waves size="medium" type="info" @click="openImport">
-              <fd-icon class="in-button" icon="upload-one"></fd-icon>
+              <fd-icon class="is-in-btn" icon="upload-one"></fd-icon>
               导入
             </el-button>
             <el-divider class="action-divider" direction="vertical"></el-divider>
@@ -48,7 +48,7 @@
         </div>
       </el-form>
     </div>
-    <div class="fd-page-table border">
+    <div class="fd-page__table border">
       <el-table v-loading="loading" :data="data" @selection-change="onSelectionChange">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="表名" prop="tableName" width="200"></el-table-column>

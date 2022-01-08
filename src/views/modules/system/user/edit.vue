@@ -1,10 +1,10 @@
 <template>
   <el-dialog
-      v-model="visible"
-      :close-on-click-modal="false"
-      :title="isCreate ? '新增' : '修改'"
-      width="720px"
-      @closed="hideDialog"
+    v-model="visible"
+    :close-on-click-modal="false"
+    :title="isCreate ? '新增' : '修改'"
+    width="720px"
+    @closed="hideDialog"
   >
     <el-form ref="form" :model="formData" :rules="formRule" label-width="80px" size="medium" @keyup.enter="submit">
       <el-row>
@@ -17,9 +17,9 @@
           <el-row>
             <el-form-item label="用户组" prop="groupId" style="width: 100%">
               <fd-tree-select
-                  v-model="formData.groupId"
-                  :data-list="groupList"
-                  :select-params="{ placeholder: '请选择用户组' }"
+                v-model="formData.groupId"
+                :data-list="groupList"
+                :select-params="{ placeholder: '请选择用户组' }"
               ></fd-tree-select>
             </el-form-item>
           </el-row>
@@ -27,11 +27,11 @@
         <el-col :span="8">
           <el-form-item label="头像" prop="avatar">
             <fd-image-cropper
-                v-model="formData.avatar"
-                :img-ratio="[1, 1]"
-                :show-circle="true"
-                :default-img="defaultAvatar"
-                style="width: 95px; height: 95px"
+              v-model="formData.avatar"
+              :img-ratio="[1, 1]"
+              :show-circle="true"
+              :default-img="defaultAvatar"
+              style="width: 95px; height: 95px"
             ></fd-image-cropper>
           </el-form-item>
         </el-col>
@@ -59,10 +59,10 @@
       <el-form-item label="状态" prop="statusDict">
         <el-select v-model="formData.statusDict" style="width: 100%">
           <el-option
-              v-for="item in dicts.sysUserStatus"
-              :key="item.itemKey"
-              :label="item.itemValue"
-              :value="item.itemKey"
+            v-for="item in dicts.sysUserStatus"
+            :key="item.itemKey"
+            :label="item.itemValue"
+            :value="item.itemKey"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -76,10 +76,10 @@
           <el-form-item label="性别" prop="genderDict">
             <el-select v-model="formData.genderDict" style="width: 100%">
               <el-option
-                  v-for="item in dicts.gender"
-                  :key="item.itemKey"
-                  :label="item.itemValue"
-                  :value="item.itemKey"
+                v-for="item in dicts.gender"
+                :key="item.itemKey"
+                :label="item.itemValue"
+                :value="item.itemKey"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -87,15 +87,15 @@
       </el-row>
       <el-form-item label="出生日期" prop="birthday">
         <el-date-picker
-            v-model="formData.birthday"
-            placeholder="出生日期"
-            style="width: 100%"
-            type="date"
-            value-format="YYYY-MM-DD"
+          v-model="formData.birthday"
+          placeholder="出生日期"
+          style="width: 100%"
+          type="date"
+          value-format="YYYY-MM-DD"
         ></el-date-picker>
       </el-form-item>
       <el-form-item label="城市地区" prop="province">
-        <fd-region-cascader v-model="formData.userRegion" placeholder="城市地区" style="width: 100%"/>
+        <fd-region-cascader v-model="formData.userRegion" placeholder="城市地区" style="width: 100%" />
       </el-form-item>
       <el-form-item label="住址" prop="address">
         <el-input v-model="formData.address" :rows="2" placeholder="住址" type="textarea"></el-input>
@@ -112,8 +112,8 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, ref, toRefs} from 'vue'
-import useListEdit, {REFRESH_DATA_EVENT} from '@/components/crud/use-list-edit'
+import { computed, defineComponent, ref, toRefs } from 'vue'
+import useListEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-list-edit'
 import {
   checkEmail,
   checkMobile,
@@ -124,20 +124,20 @@ import {
   userPutOne
 } from '@/api/system/user'
 import FdImageCropper from '@/components/img-cropper/index.vue'
-import {validEmail, validMobile, validPassword, validUsername} from '@/utils/validate'
+import { validEmail, validMobile, validPassword, validUsername } from '@/utils/validate'
 import FdRegionCascader from '@/components/region-cascader/index.vue'
-import {omit} from 'lodash-es'
-import {groupList, IGroup} from '@/api/system/group'
+import { omit } from 'lodash-es'
+import { groupList, IGroup } from '@/api/system/group'
 import ChangePassword from './change-password.vue'
-import {arrayToTree} from '@/utils/data-tree'
-import {IRole, roleList} from '@/api/system/role'
-import {DEFAULT_AVATAR} from '@/store/modules/user'
+import { arrayToTree } from '@/utils/data-tree'
+import { IRole, roleList } from '@/api/system/role'
+import { DEFAULT_AVATAR } from '@/store/modules/user'
 
 export default defineComponent({
   name: 'SystemUserEdit',
-  components: {FdImageCropper, FdRegionCascader, ChangePassword},
+  components: { FdImageCropper, FdRegionCascader, ChangePassword },
   emits: [REFRESH_DATA_EVENT],
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const changePasswordDialog = ref()
 
     const validateUsername = async (rule: any, value: string, callback: any) => {
@@ -178,7 +178,7 @@ export default defineComponent({
     }
 
     const validateEmail = async (rule: any, value: string, callback: any) => {
-      if(value) {
+      if (value) {
         if (!validEmail(value)) {
           callback(new Error('请输入正确的邮件地址'))
         } else {
@@ -248,21 +248,21 @@ export default defineComponent({
         checkPass: ''
       },
       formRule: {
-        username: [{required: true, validator: validateUsername, trigger: 'blur'}],
-        password: [{validator: validatePassword, trigger: 'blur'}],
-        checkPass: [{validator: validateCheckPass, trigger: 'blur'}],
-        email: [{validator: validateEmail, trigger: 'blur'}],
-        mobile: [{validator: validateMobile, trigger: 'blur'}]
+        username: [{ required: true, validator: validateUsername, trigger: 'blur' }],
+        password: [{ validator: validatePassword, trigger: 'blur' }],
+        checkPass: [{ validator: validateCheckPass, trigger: 'blur' }],
+        email: [{ validator: validateEmail, trigger: 'blur' }],
+        mobile: [{ validator: validateMobile, trigger: 'blur' }]
       }
     }
 
     const defaultAvatar = computed(() => DEFAULT_AVATAR)
 
-    const {mixRefs, mixState, mixMethods} = useListEdit(stateOption, emit)
+    const { mixRefs, mixState, mixMethods } = useListEdit(stateOption, emit)
 
     mixMethods.onBeforeOpen(async () => {
-      const {data: groups} = await groupList()
-      const {data: roles} = await roleList()
+      const { data: groups } = await groupList()
+      const { data: roles } = await roleList()
       mixState.groupList = arrayToTree(groups)
       mixState.roleList = arrayToTree(roles)
     })

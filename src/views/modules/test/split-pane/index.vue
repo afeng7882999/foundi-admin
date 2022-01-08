@@ -3,20 +3,20 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <fd-split-pane :default-pos="400" shrink="right">
       <template #left>
-        <div class="fd-page-form is-left">
-          <div class="fd-page-sub-title"><span class="fd-page-sub-title__title">form1</span></div>
+        <div class="fd-page__form is-left">
+          <div class="fd-page__sub-title"><span class="title-text">form1</span></div>
         </div>
       </template>
       <template #right>
         <fd-split-pane :default-pos="400" split="horizontal" shrink="right">
           <template #left>
-            <div class="fd-page-form is-right-top">
-              <div class="fd-page-sub-title"><span class="fd-page-sub-title__title">form2</span></div>
+            <div class="fd-page__form is-right-top">
+              <div class="fd-page__sub-title"><span class="title-text">form2</span></div>
             </div>
           </template>
           <template #right>
-            <div class="fd-page-form is-right-bottom">
-              <div class="fd-page-sub-title"><span class="fd-page-sub-title__title">form3</span></div>
+            <div class="fd-page__form is-right-bottom">
+              <div class="fd-page__sub-title"><span class="title-text">form3</span></div>
             </div>
           </template>
         </fd-split-pane>
@@ -48,7 +48,7 @@ const { pageMinHeight, showPageHeader, hasAuth } = usePage()
     height: 100%;
   }
 
-  .fd-page-form {
+  .fd-page__form {
     height: 100%;
 
     &.is-left {

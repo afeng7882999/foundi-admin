@@ -1,5 +1,5 @@
 <template>
-  <div class="fd-page-form">
+  <div class="fd-page__form">
     <el-descriptions :column="2" :title="`系统用户 - ${data[idx].username}`" border direction="horizontal" size="medium">
       <el-descriptions-item :span="2" label="用户ID">{{ data[idx].id }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="用户名">{{ data[idx].username }}</el-descriptions-item>
