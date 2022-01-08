@@ -1,14 +1,14 @@
 <template>
-  <fd-widget-panel class="widget-visitor" title="作品数据趋势" icon="analysis">
+  <fd-widget-panel class="widget-content-stat" title="作品数据趋势" icon="analysis">
     <template #action>
-      <span class="widget-visitor__label">时间</span>
-      <el-radio-group v-model="state.dateRange" class="widget-visitor__radio" size="mini" @change="onRadioGroupChange">
+      <span class="widget-content-stat__label">时间</span>
+      <el-radio-group v-model="state.dateRange" class="widget-content-stat__radio" size="mini" @change="onRadioGroupChange">
         <el-radio-button label="7">7天</el-radio-button>
         <el-radio-button label="30">30天</el-radio-button>
       </el-radio-group>
       <el-date-picker
         v-model="state.dateRangeCustom"
-        class="widget-visitor__date-picker"
+        class="widget-content-stat__date-picker"
         size="mini"
         :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
         end-placeholder="结束日期"
@@ -25,7 +25,7 @@
 
 <script lang="ts">
 export default {
-  name: 'WidgetVisitor'
+  name: 'WidgetContentStat'
 }
 </script>
 
@@ -118,7 +118,7 @@ const onDatePickerChange = async () => {
 <style lang="scss">
 @use 'src/assets/style/variable' as *;
 
-.widget-visitor {
+.widget-content-stat {
   &__label {
     margin: 0 15px 0 0;
     color: var(--el-text-color-secondary);

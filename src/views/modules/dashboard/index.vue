@@ -45,7 +45,7 @@
     </el-row>
     <el-row :gutter="15">
       <el-col :xs="24" :sm="24" :md="16">
-        <widget-visitor></widget-visitor>
+        <widget-content-stat></widget-content-stat>
         <widget-region></widget-region>
       </el-col>
       <el-col :xs="24" :sm="24" :md="8">
@@ -65,7 +65,7 @@ import { computed, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import FdWidgetCard from './widgets/card.vue'
-import WidgetVisitor from './widgets/visitor.vue'
+import WidgetContentStat from './widgets/content-stat.vue'
 import WidgetRegion from './widgets/region.vue'
 import WidgetWatch from './widgets/watch.vue'
 
