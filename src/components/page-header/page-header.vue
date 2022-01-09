@@ -91,7 +91,6 @@ const getPageHeader = () => {
   } else if (storeState.user.menu) {
     const menu = getTreeNode(storeState.user.menu, (m) => m.url === route.path)
     if (menu) {
-      console.log('menu', menu)
       state.theIcon = menu.icon
       state.theTitle = menu.name
       state.theDesc = menu.remark

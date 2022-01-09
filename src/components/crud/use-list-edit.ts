@@ -145,7 +145,6 @@ export default function <T extends IListEditStateOption>(stateOption: T, emit: A
 
   // 提交
   const submit = async () => {
-    console.log('submit')
     if (mixState.isCreate && mixState.postApi === needImplFunc) {
       return
     }

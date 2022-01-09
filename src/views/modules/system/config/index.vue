@@ -1,21 +1,21 @@
 <template>
-  <div ref="moduleRoot" :style="pageMinHeight" class="page-config fd-page">
+  <div ref="moduleRoot" :style="pageMinHeight" class="page-system-config fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <fd-split-pane :default-pos="400" shrink="left">
       <template #left>
         <div class="fd-page__form">
-          <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList()">
+          <el-form ref="queryForm" :inline="true" :model="state.query" size="medium" @keyup.enter="queryList()">
             <transition
               name="expand"
               @enter="expandEnter"
               @after-enter="expandAfterEnter"
               @before-leave="expandBeforeLeave"
             >
-              <div v-show="queryFormShow" class="fd-page__query">
+              <div v-show="state.queryFormShow" class="fd-page__query">
                 <el-form-item label="配置分类" prop="configTypeDict">
-                  <el-select v-model="query.configTypeDict" multiple clearable placeholder="请选择配置分类">
+                  <el-select v-model="state.query.configTypeDict" multiple clearable placeholder="请选择配置分类">
                     <el-option
-                      v-for="item in dicts.sysConfigType"
+                      v-for="item in state.dicts.sysConfigType"
                       :key="item.itemKey"
                       :label="item.itemValue"
                       :value="item.itemKey"
@@ -23,7 +23,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="键" prop="configKey">
-                  <el-input v-model="query.configKey" clearable placeholder="请输入键" />
+                  <el-input v-model="state.query.configKey" clearable placeholder="请输入键" />
                 </el-form-item>
                 <el-form-item>
                   <el-button plain type="primary" @click="queryList">
@@ -42,7 +42,7 @@
             <el-button
               v-show="hasAuth('system:config:delete')"
               v-waves
-              :disabled="selectedNodes.length <= 0"
+              :disabled="state.selectedNodes.length <= 0"
               plain
               size="medium"
               type="danger"
@@ -67,13 +67,13 @@
               </el-button>
               <el-divider class="action-divider" direction="vertical"></el-divider>
               <el-tooltip
-                :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'"
+                :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'"
                 :show-after="500"
                 effect="dark"
                 placement="top"
               >
                 <fd-icon-button
-                  :class="queryFormShow ? 'expanded' : ''"
+                  :class="state.queryFormShow ? 'expanded' : ''"
                   class="action-toggle-btn"
                   icon="double-down"
                   @click="toggleQueryForm()"
@@ -84,8 +84,8 @@
         </div>
         <div class="fd-page__table border">
           <el-table
-            v-loading="loading"
-            :data="data"
+            v-loading="state.loading"
+            :data="state.data"
             highlight-current-row
             row-key="id"
             @selection-change="onSelectionChange"
@@ -114,7 +114,7 @@
               width="150"
             >
               <template #default="scope">
-                <span>{{ dictVal(dicts.sysConfigType, scope.row.configTypeDict) }}</span>
+                <span>{{ dictVal(state.dicts.sysConfigType, scope.row.configTypeDict) }}</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -179,11 +179,11 @@
           </el-table>
           <el-pagination
             :background="true"
-            :current-page="current"
-            :page-count="total"
-            :page-size="size"
+            :current-page="state.current"
+            :page-count="state.total"
+            :page-size="state.size"
             :page-sizes="[10, 20, 50, 100, 200]"
-            :total="count"
+            :total="state.count"
             layout="total, sizes, prev, pager, next, jumper"
             @current-change="pageChange"
             @size-change="sizeChange"
@@ -195,12 +195,17 @@
       </template>
     </fd-split-pane>
     <el-backtop></el-backtop>
-    <edit v-if="editShow" ref="editDialog" @refresh-data-list="getList"></edit>
+    <edit v-if="state.editShow" ref="editDialog" @refresh-data-list="getList"></edit>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from 'vue'
+export default {
+  name: 'SystemConfig'
+}
+</script>
+
+<script setup lang="ts">
 import useList from '@/components/crud/use-list'
 import {
   configDel,
@@ -216,51 +221,57 @@ import Detail from './detail.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import FdSplitPane from '@/components/split-pane/index.vue'
 
-export default defineComponent({
-  name: 'SystemConfig',
-  components: { FdSplitPane, Edit, Detail },
-  setup() {
-    const stateOption = {
-      idField: configFields.idField,
-      listApi: configList,
-      delApi: configDel,
-      exportApi: configExport,
-      dicts: configDicts,
-      query: configQuery,
-      currentId: ''
-    }
+const stateOption = {
+  idField: configFields.idField,
+  listApi: configList,
+  delApi: configDel,
+  exportApi: configExport,
+  dicts: configDicts,
+  query: configQuery,
+  currentId: ''
+}
 
-    const { mixRefs, mixState, mixComputed, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
 
-    const onTableRowClick = (row: IConfig) => {
-      setCurrentData(row)
-    }
+const { queryForm, editDialog, detailDialog } = mixRefs
 
-    mixMethods.onAfterGetList(async () => {
-      if (mixState.currentId) {
-        const current = mixState.data.find((d) => d.id === mixState.currentId) as IConfig
-        await setCurrentData(current)
-      }
-    })
+const { pageMinHeight, showPageHeader } = mixComputed
 
-    const setCurrentData = async (current: IConfig) => {
-      if (!current) {
-        mixState.currentId = ''
-        ;(mixRefs.detailDialog.value as any).close()
-        return
-      }
-      mixState.currentId = current.id
-      ;(mixRefs.detailDialog.value as any).open([current], 0, { dicts: mixState.dicts })
-    }
+const {
+  getList,
+  pageChange,
+  sizeChange,
+  queryList,
+  resetQuery,
+  del,
+  dictVal,
+  hasAuth,
+  exportData,
+  showEdit,
+  onSelectionChange,
+  toggleQueryForm
+} = mixMethods
 
-    return {
-      ...mixRefs,
-      ...toRefs(mixState),
-      ...mixComputed,
-      ...mixMethods,
-      ...useExpandTransition(),
-      onTableRowClick
-    }
+const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
+
+const onTableRowClick = (row: IConfig) => {
+  setCurrentData(row)
+}
+
+mixMethods.onAfterGetList(async () => {
+  if (state.currentId) {
+    const current = state.data.find((d) => d.id === state.currentId) as IConfig
+    await setCurrentData(current)
   }
 })
+
+const setCurrentData = async (current: IConfig) => {
+  if (!current) {
+    state.currentId = ''
+    ;(mixRefs.detailDialog.value as any).close()
+    return
+  }
+  state.currentId = current.id
+  ;(mixRefs.detailDialog.value as any).open([current], 0, { dicts: state.dicts })
+}
 </script>
