@@ -54,7 +54,7 @@
         <el-table-column align="center" fixed="right" header-align="center" label="启动/停止" width="100">
           <template #default="scope">
             <el-tooltip :content="ifStart(scope.row.jobStatus) ? '点击停止' : '点击启动'" :open-delay="500" class="item" effect="dark" placement="top">
-              <el-button v-show="hasAuth('system:task:edit')" :type="ifStart(scope.row.jobStatus) ? 'success' : 'danger'" class="fd-tb-act fd-tb-act-edit" plain size="mini" @click="onStatusClick(scope.row.id, scope.row.jobStatus)">
+              <el-button v-show="hasAuth('system:task:edit')" :type="ifStart(scope.row.jobStatus) ? 'success' : 'danger'" class="fd-tb-act" plain size="mini" @click="onStatusClick(scope.row.id, scope.row.jobStatus)">
                 <fd-icon :icon="ifStart(scope.row.jobStatus) ? 'stopwatch' : 'stopwatch-stop'"></fd-icon>
                 {{ ifStart(scope.row.jobStatus) ? '已启动' : '已停止' }}
               </el-button>
@@ -64,17 +64,17 @@
         <el-table-column align="center" fixed="right" header-align="center" label="操作" width="150">
           <template #default="scope">
             <el-tooltip :open-delay="500" class="item" content="立即执行一次" effect="dark" placement="top">
-              <el-button v-show="hasAuth('system:task:edit')" :disabled="!ifStart(scope.row.jobStatus)" class="fd-tb-act fd-tb-act-edit" plain size="mini" type="primary" @click="onRunClick(scope.row.id, scope.row.jobName)">
+              <el-button v-show="hasAuth('system:task:edit')" :disabled="!ifStart(scope.row.jobStatus)" class="fd-tb-act" plain size="mini" type="primary" @click="onRunClick(scope.row.id, scope.row.jobName)">
                 <fd-icon icon="lightning"></fd-icon>
               </el-button>
             </el-tooltip>
             <el-tooltip :show-after="500" content="编辑" placement="top">
-              <el-button v-show="hasAuth('system:task:edit')" class="fd-tb-act fd-tb-act-edit" plain size="mini" type="success" @click="showEdit(scope.row.id)">
+              <el-button v-show="hasAuth('system:task:edit')" class="fd-tb-act" plain size="mini" type="success" @click="showEdit(scope.row.id)">
                 <fd-icon icon="write"></fd-icon>
               </el-button>
             </el-tooltip>
             <el-tooltip :show-after="500" content="删除" placement="top">
-              <el-button v-show="hasAuth('system:task:delete')" class="fd-tb-act fd-tb-act-delete" plain size="mini" type="danger" @click="del(scope.row, scope.row.k)">
+              <el-button v-show="hasAuth('system:task:delete')" class="fd-tb-act" plain size="mini" type="danger" @click="del(scope.row, scope.row.k)">
                 <fd-icon icon="close"></fd-icon>
               </el-button>
             </el-tooltip>

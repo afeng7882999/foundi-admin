@@ -44,7 +44,7 @@
         <el-table-column align="center" fixed="right" header-align="center" label="操作" width="100">
           <template #default="scope">
             <el-tooltip :show-after="500" content="删除" placement="top">
-              <el-button v-show="hasAuth('system:oauthUser:delete')" class="fd-tb-act fd-tb-act-delete" plain size="mini" type="danger" @click="del(scope.row, scope.row.k)">
+              <el-button v-show="hasAuth('system:oauthUser:delete')" class="fd-tb-act" plain size="mini" type="danger" @click="del(scope.row, scope.row.k)">
                 <fd-icon icon="close"></fd-icon>
               </el-button>
             </el-tooltip>

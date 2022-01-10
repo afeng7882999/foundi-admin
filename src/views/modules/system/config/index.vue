@@ -153,7 +153,7 @@
                 <el-tooltip :show-after="500" content="编辑" placement="top">
                   <el-button
                     v-show="hasAuth('system:config:edit')"
-                    class="fd-tb-act fd-tb-act-edit"
+                    class="fd-tb-act"
                     plain
                     size="mini"
                     type="success"
@@ -165,7 +165,7 @@
                 <el-tooltip :show-after="500" content="删除" placement="top">
                   <el-button
                     v-show="hasAuth('system:config:delete')"
-                    class="fd-tb-act fd-tb-act-delete"
+                    class="fd-tb-act"
                     plain
                     size="mini"
                     type="danger"

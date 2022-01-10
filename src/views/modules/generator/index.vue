@@ -3,7 +3,12 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList">
-        <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
+        <transition
+          name="expand"
+          @enter="expandEnter"
+          @after-enter="expandAfterEnter"
+          @before-leave="expandBeforeLeave"
+        >
           <div v-show="queryFormShow" class="fd-page__query">
             <el-form-item label="表名称" prop="tableName">
               <el-input v-model="query.tableName" clearable placeholder="请输入表名称" />
@@ -12,7 +17,15 @@
               <el-input v-model="query.tableComment" clearable placeholder="请输入表描述" />
             </el-form-item>
             <el-form-item label="创建时间" prop="tableCreateTime">
-              <el-date-picker v-model="query.tableCreateTime" :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]" end-placeholder="结束日期" format="YYYY-MM-DD" range-separator="-" start-placeholder="开始日期" type="daterange"></el-date-picker>
+              <el-date-picker
+                v-model="query.tableCreateTime"
+                :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
+                end-placeholder="结束日期"
+                format="YYYY-MM-DD"
+                range-separator="-"
+                start-placeholder="开始日期"
+                type="daterange"
+              ></el-date-picker>
             </el-form-item>
             <el-form-item>
               <el-button plain type="primary" @click="queryList">
@@ -27,22 +40,52 @@
           </div>
         </transition>
         <div class="fd-page__action">
-          <el-button v-show="hasAuth('generator:genTable:delete')" v-waves :disabled="selectedNodes.length <= 0" plain size="medium" type="danger" @click="del()">
+          <el-button
+            v-show="hasAuth('generator:genTable:delete')"
+            v-waves
+            :disabled="selectedNodes.length <= 0"
+            plain
+            size="medium"
+            type="danger"
+            @click="del()"
+          >
             <fd-icon class="is-in-btn" icon="delete"></fd-icon>
             批量删除
           </el-button>
           <div class="action-right">
-            <el-button v-show="hasAuth('generator:genTable:edit')" v-waves size="medium" type="primary" @click="handleGenerate">
+            <el-button
+              v-show="hasAuth('generator:genTable:edit')"
+              v-waves
+              size="medium"
+              type="primary"
+              @click="handleGenerate"
+            >
               <fd-icon class="is-in-btn" icon="download"></fd-icon>
               生成
             </el-button>
-            <el-button v-show="hasAuth('generator:genTable:edit')" v-waves size="medium" type="info" @click="openImport">
+            <el-button
+              v-show="hasAuth('generator:genTable:edit')"
+              v-waves
+              size="medium"
+              type="info"
+              @click="openImport"
+            >
               <fd-icon class="is-in-btn" icon="upload-one"></fd-icon>
               导入
             </el-button>
             <el-divider class="action-divider" direction="vertical"></el-divider>
-            <el-tooltip :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
-              <fd-icon-button :class="queryFormShow ? 'expanded' : ''" class="action-toggle-btn" icon="double-down" @click="toggleQueryForm()"></fd-icon-button>
+            <el-tooltip
+              :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'"
+              :show-after="500"
+              effect="dark"
+              placement="top"
+            >
+              <fd-icon-button
+                :class="queryFormShow ? 'expanded' : ''"
+                class="action-toggle-btn"
+                icon="double-down"
+                @click="toggleQueryForm()"
+              ></fd-icon-button>
             </el-tooltip>
           </div>
         </div>
@@ -51,40 +94,119 @@
     <div class="fd-page__table border">
       <el-table v-loading="loading" :data="data" @selection-change="onSelectionChange">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="表名" prop="tableName" width="200"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="表描述" prop="tableComment" width="200"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="实体名" prop="entityName" width="200"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="包名" prop="pack" width="200"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="模块名" prop="module" width="100"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="创建时间" prop="tableCreateTime"></el-table-column>
+        <el-table-column
+          :show-overflow-tooltip="true"
+          align="left"
+          header-align="left"
+          label="表名"
+          prop="tableName"
+          width="200"
+        ></el-table-column>
+        <el-table-column
+          :show-overflow-tooltip="true"
+          align="left"
+          header-align="left"
+          label="表描述"
+          prop="tableComment"
+          width="200"
+        ></el-table-column>
+        <el-table-column
+          :show-overflow-tooltip="true"
+          align="left"
+          header-align="left"
+          label="实体名"
+          prop="entityName"
+          width="200"
+        ></el-table-column>
+        <el-table-column
+          :show-overflow-tooltip="true"
+          align="left"
+          header-align="left"
+          label="包名"
+          prop="pack"
+          width="200"
+        ></el-table-column>
+        <el-table-column
+          :show-overflow-tooltip="true"
+          align="left"
+          header-align="left"
+          label="模块名"
+          prop="module"
+          width="100"
+        ></el-table-column>
+        <el-table-column
+          :show-overflow-tooltip="true"
+          align="left"
+          header-align="left"
+          label="创建时间"
+          prop="tableCreateTime"
+        ></el-table-column>
         <el-table-column align="center" fixed="right" header-align="center" label="操作" width="250">
           <template #default="scope">
             <el-tooltip :show-after="500" content="生成并预览代码" placement="top">
-              <el-button v-show="hasAuth('generator:genTable:edit')" class="fd-tb-act fd-tb-act-edit" plain size="mini" type="primary" @click="openPreview(scope.row)">
+              <el-button
+                v-show="hasAuth('generator:genTable:edit')"
+                class="fd-tb-act"
+                plain
+                size="mini"
+                type="primary"
+                @click="openPreview(scope.row)"
+              >
                 <fd-icon icon="preview-open"></fd-icon>
                 预览
               </el-button>
             </el-tooltip>
             <el-tooltip :show-after="500" content="生成并下载代码" placement="top">
-              <el-button v-show="hasAuth('generator:genTable:edit')" class="fd-tb-act fd-tb-act-edit" plain size="mini" type="primary" @click="handleGenerate(scope.row)">
+              <el-button
+                v-show="hasAuth('generator:genTable:edit')"
+                class="fd-tb-act"
+                plain
+                size="mini"
+                type="primary"
+                @click="handleGenerate(scope.row)"
+              >
                 <fd-icon icon="download"></fd-icon>
                 生成
               </el-button>
             </el-tooltip>
             <el-tooltip :show-after="500" content="编辑" placement="top">
-              <el-button v-show="hasAuth('generator:genTable:edit')" class="fd-tb-act fd-tb-act-edit" plain size="mini" type="success" @click="handleEdit(scope.row)">
+              <el-button
+                v-show="hasAuth('generator:genTable:edit')"
+                class="fd-tb-act"
+                plain
+                size="mini"
+                type="success"
+                @click="handleEdit(scope.row)"
+              >
                 <fd-icon icon="write"></fd-icon>
               </el-button>
             </el-tooltip>
             <el-tooltip :show-after="500" content="删除" placement="top">
-              <el-button v-show="hasAuth('generator:genTable:delete')" class="fd-tb-act fd-tb-act-delete" plain size="mini" type="danger" @click="del(scope.row, scope.row.tableName)">
+              <el-button
+                v-show="hasAuth('generator:genTable:delete')"
+                class="fd-tb-act"
+                plain
+                size="mini"
+                type="danger"
+                @click="del(scope.row, scope.row.tableName)"
+              >
                 <fd-icon icon="close"></fd-icon>
               </el-button>
             </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination :background="true" :current-page="current" :page-count="total" :page-size="size" :page-sizes="[10, 20, 50, 100]" :total="count" layout="total, sizes, prev, pager, next, jumper" @current-change="pageChange" @size-change="sizeChange"></el-pagination>
+      <el-pagination
+        :background="true"
+        :current-page="current"
+        :page-count="total"
+        :page-size="size"
+        :page-sizes="[10, 20, 50, 100]"
+        :total="count"
+        layout="total, sizes, prev, pager, next, jumper"
+        @current-change="pageChange"
+        @size-change="sizeChange"
+      ></el-pagination>
     </div>
     <generator-import ref="generatorImport" @generator-imported="getList"></generator-import>
     <generator-preview ref="generatorPreview"></generator-preview>

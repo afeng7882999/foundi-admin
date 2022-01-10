@@ -26,12 +26,12 @@
         <el-table-column align="center" fixed="right" header-align="center" label="操作" width="100">
           <template #default="scope">
             <el-tooltip :show-after="500" content="编辑" placement="top">
-              <el-button v-show="hasAuth('system:group:edit')" class="fd-tb-act fd-tb-act-edit" plain size="mini" type="success" @click="showEdit(scope.row.id)">
+              <el-button v-show="hasAuth('system:group:edit')" class="fd-tb-act" plain size="mini" type="success" @click="showEdit(scope.row.id)">
                 <fd-icon icon="write"></fd-icon>
               </el-button>
             </el-tooltip>
             <el-tooltip :show-after="500" content="删除" placement="top">
-              <el-button v-show="hasAuth('system:group:delete')" class="fd-tb-act fd-tb-act-delete" plain size="mini" type="danger" @click="del(scope.row, scope.row.k)">
+              <el-button v-show="hasAuth('system:group:delete')" class="fd-tb-act" plain size="mini" type="danger" @click="del(scope.row, scope.row.k)">
                 <fd-icon icon="close"></fd-icon>
               </el-button>
             </el-tooltip>

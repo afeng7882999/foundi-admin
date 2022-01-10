@@ -228,20 +228,20 @@
                 >
                   <el-button
                     v-show="hasAuth('system:user:edit')"
-                    class="fd-tb-act fd-tb-act-edit"
+                    class="fd-tb-act"
                     plain
                     size="mini"
                     type="success"
                     @click="onOpenOAuthList(scope.row)"
                   >
                     <fd-icon icon="user-positioning"></fd-icon>
-                    <span class="fd-tb-act-cap">OAuth2账号</span>
+                    <span class="fd-tb-act__caption">OAuth2账号</span>
                   </el-button>
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="编辑" placement="top">
                   <el-button
                     v-show="hasAuth('system:user:edit')"
-                    class="fd-tb-act fd-tb-act-edit"
+                    class="fd-tb-act"
                     plain
                     size="mini"
                     type="success"
@@ -253,7 +253,7 @@
                 <el-tooltip :show-after="500" content="删除" placement="top">
                   <el-button
                     v-show="hasAuth('system:user:delete')"
-                    class="fd-tb-act fd-tb-act-delete"
+                    class="fd-tb-act"
                     plain
                     size="mini"
                     type="danger"

@@ -35,7 +35,7 @@
       <el-table-column align="center" fixed="right" header-align="center" label="删除" width="50">
         <template #default="scope">
           <el-tooltip :show-after="500" class="item" content="删除" effect="dark" placement="top">
-            <el-button class="fd-tb-act fd-tb-act-delete" plain size="mini" type="danger" @click="del(scope.row)">
+            <el-button class="fd-tb-act" plain size="mini" type="danger" @click="del(scope.row)">
               <fd-icon icon="close"></fd-icon>
             </el-button>
           </el-tooltip>

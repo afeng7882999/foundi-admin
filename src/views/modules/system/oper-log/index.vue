@@ -81,7 +81,7 @@
               </el-button>
             </el-tooltip>
             <el-tooltip :show-after="500" content="删除" placement="top">
-              <el-button v-show="hasAuth('system:operLog:delete')" class="fd-tb-act fd-tb-act-delete" plain size="mini" type="danger" @click="del(scope.row)">
+              <el-button v-show="hasAuth('system:operLog:delete')" class="fd-tb-act" plain size="mini" type="danger" @click="del(scope.row)">
                 <fd-icon icon="close"></fd-icon>
               </el-button>
             </el-tooltip>

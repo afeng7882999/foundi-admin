@@ -40,7 +40,7 @@
   .fd-tb-act {
     font-size: $icon-size-small;
     padding: 0 6px;
-    .fd-tb-act-cap {
+    &__caption {
       margin-left: 5px;
     }
   }
@@ -386,14 +386,16 @@
 .fd-detail-list {
   width: 100%;
   padding: 0 10px;
-  .fd-detail-list__act {
+  
+  &__act {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 8px 0;
   }
-  ul.fd-detail-list__lst {
+  
+  &__inner {
     margin: 0;
     padding: 0;
     li {
@@ -405,23 +407,23 @@
       &:last-child {
         border: none;
       }
-
-      &.fd-detail-list__odd {
-      }
-
-      span.fd-detail-list__idx {
-        width: 40px;
-        padding-right: 5px;
-        color: var(--el-color-primary);
-        font-weight: bold;
-      }
-
-      span.fd-detail-list__item {
-        padding: 0 5px;
-        display: flex;
-        align-items: center;
-      }
     }
+  }
+  
+  &__odd {
+  }
+  
+  &__idx {
+    width: 40px;
+    padding-right: 5px;
+    color: var(--el-color-primary);
+    font-weight: bold;
+  }
+  
+  &__item {
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
   }
 }
 
