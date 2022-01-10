@@ -5,21 +5,21 @@
         <fd-icon-button icon="left-one" @click="pageLeft"></fd-icon-button>
       </el-tooltip>
     </div>
-    <fd-scroll-panel ref="scrollPanel" scroll-item-class-name="fd-tag__inner">
-      <div class="fd-tag">
+    <fd-scroll-panel ref="scrollPanel" scroll-item-class-name="fd-tags-list__item">
+      <div class="fd-tags-list">
         <router-link
           v-for="tag in visitedViews"
           :key="tag.fullPath"
           :class="isActive(tag) ? 'is-active' : ''"
           :to="{ path: tag.path, name: tag.name, query: tag.query, params: tag.params, fullPath: tag.fullPath }"
-          class="fd-tag__inner"
+          class="fd-tags-list__item"
           @contextmenu.prevent.stop="openMenu(tag, $event)"
         >
-          <span class="fd-tag__title">{{ tag.title }}</span>
-          <span v-if="!isAffix(tag)" class="fd-tag__close" @click.prevent="closeSelectedTag(tag)">
+          <span class="fd-tags-list__title">{{ tag.title }}</span>
+          <span v-if="!isAffix(tag)" class="fd-tags-list__close" @click.prevent="closeSelectedTag(tag)">
             <fd-icon class="close-icon" icon="close-small"></fd-icon>
           </span>
-          <span v-else class="fd-tag__not-close"></span>
+          <span v-else class="fd-tags-list__affix"></span>
         </router-link>
       </div>
     </fd-scroll-panel>
@@ -161,7 +161,7 @@ const moveToCurrentTag = (r: _RouteLocationBase) => {
     for (let i = 0; i < views.length; i++) {
       if (views[i].path === r.path) {
         ;(scrollPanel.value as any).moveToIdx(i)
-        // when query is different then update
+        // when query is different, update
         if (views[i].fullPath !== r.fullPath) {
           store.dispatch('view/updateVisitedView', r)
         }
@@ -248,6 +248,7 @@ const openMenu = (tag: _RouteLocationBase, e: MouseEvent) => {
 
 <style lang="scss">
 @use 'src/assets/style/variable.scss' as *;
+@use 'src/assets/style/mixin.scss' as *;
 
 $tags-inner-height: $app-tags-height - 10;
 
@@ -300,17 +301,17 @@ $tags-inner-height: $app-tags-height - 10;
   }
 }
 
-.fd-tag {
+.fd-tags-list {
   width: 100%;
   display: flex;
 
-  &__inner {
+  &__item {
     display: inline-block;
     position: relative;
     height: $tags-inner-height;
     color: var(--el-text-color-primary);
     font-size: $app-tags-font-size;
-    border-radius: var(--el-border-radius-base) var(--el-border-radius-base) 0 0;
+    border-radius: $app-tags-radius $app-tags-radius 0 0;
 
     &.is-active {
       background-color: var(--fd-body-background-color);
@@ -323,11 +324,13 @@ $tags-inner-height: $app-tags-height - 10;
     }
 
     &:hover {
+      color: var(--el-text-color-primary);
       background-color: var(--el-color-primary-light-9);
     }
   }
 
   &__title {
+    position: relative;
     display: inline-block;
     height: $tags-inner-height;
     line-height: $tags-inner-height;
@@ -336,6 +339,7 @@ $tags-inner-height: $app-tags-height - 10;
   }
 
   &__close {
+    position: relative;
     display: inline-block;
     height: $tags-inner-height;
     line-height: $tags-inner-height;
@@ -357,11 +361,15 @@ $tags-inner-height: $app-tags-height - 10;
     }
   }
 
-  &__not-close {
+  &__affix {
     display: inline-block;
     height: $tags-inner-height;
     vertical-align: bottom;
     width: 33px;
+  }
+
+  &:first-child {
+    margin-left: 10px;
   }
 
   &:after {
@@ -369,6 +377,62 @@ $tags-inner-height: $app-tags-height - 10;
     flex-shrink: 0;
     height: $tags-inner-height;
     width: 18px;
+  }
+}
+
+.fd-tags-list__item {
+  &:before,
+  &:after {
+    position: absolute;
+    display: none;
+    bottom: 0;
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    box-shadow: 0 0 0 40px var(--fd-body-background-color);
+  }
+
+  &:before {
+    left: -20px;
+    clip-path: inset(50% -10px 0 50%);
+  }
+
+  &:after {
+    clip-path: inset(50% 50% 0 -10px);
+  }
+
+  &.is-active {
+    z-index: 1;
+    &:before,
+    &:after {
+      display: inline-block;
+    }
+    &:hover {
+      &:before,
+      &:after {
+        box-shadow: 0 0 0 40px var(--fd-body-background-color);
+      }
+    }
+  }
+
+  &:hover {
+    &:before,
+    &:after {
+      display: inline-block;
+      box-shadow: 0 0 0 40px var(--el-color-primary-light-9);
+    }
+  }
+
+  @include theme($sharp-mode) {
+    border-radius: 0;
+
+    &.is-active::before,
+    &.is-active::after,
+    &:hover::before,
+    &:hover::after {
+      display: none;
+    }
   }
 }
 </style>

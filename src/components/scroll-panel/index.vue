@@ -1,6 +1,6 @@
 <template>
-  <div class="fd-scroll-panel" ref="scrollPanel">
-    <el-scrollbar :vertical="false" @wheel.prevent="onScrollbarScroll" ref="scrollContainer">
+  <div ref="scrollPanel" class="fd-scroll-panel">
+    <el-scrollbar ref="scrollContainer" :vertical="false" @wheel.prevent="onScrollbarScroll">
       <slot />
     </el-scrollbar>
   </div>
@@ -14,7 +14,7 @@ export default {
 
 <script setup lang="ts">
 import { scrollTo } from '@/utils/smooth-scroll'
-import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 const props = defineProps({
   horizontal: {
@@ -28,10 +28,6 @@ const props = defineProps({
 })
 
 const scrollPanel = ref<HTMLElement | null>(null)
-
-const state = reactive({
-  left: 0
-})
 
 const scrollContainer = computed(() => {
   return (scrollPanel.value as HTMLElement).firstElementChild as HTMLElement
@@ -51,7 +47,9 @@ onBeforeUnmount(() => {
 
 const getScrollItems = () => {
   const $wrapper = scrollWrapper.value
-  return props.scrollItemClassName ? ([...$wrapper.querySelectorAll(`.${props.scrollItemClassName}`)] as HTMLElement[]) : ([...$wrapper.querySelectorAll('*')] as HTMLElement[])
+  const result = [] as HTMLElement[]
+  $wrapper.querySelectorAll(`.${props.scrollItemClassName}`).forEach((e) => result.push(e as HTMLElement))
+  return result
 }
 
 const onScrollbarScroll = (e: WheelEvent) => {
@@ -153,6 +151,7 @@ const moveToTarget = (target: HTMLElement) => {
 }
 
 const moveToIdx = (idx: number) => {
+  console.log(idx)
   const $container = scrollContainer.value
   const $wrapper = scrollWrapper.value
   const $items = getScrollItems()
