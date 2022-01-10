@@ -4,7 +4,7 @@ import { cleanArray } from '@/utils/lang'
 /**
  * 判断url是本地还是远端，自动添加服务器地址
  */
-export function localOrRemoteUrl(path: string, base: 'proxy' | 'upload' = 'proxy' ): string {
+export function localOrRemoteUrl(path: string, base: 'proxy' | 'upload' = 'proxy'): string {
   if (!path) {
     return ''
   }
