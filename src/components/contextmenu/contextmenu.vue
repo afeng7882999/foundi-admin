@@ -1,5 +1,5 @@
 <template>
-  <ul class="fd-contextmenu" v-show="state.visible" :id="state.elId" :style="state.style" ref="contextmenu">
+  <ul v-show="state.visible" :id="state.elId" ref="contextmenu" class="fd-contextmenu" :style="state.style">
     <slot></slot>
   </ul>
 </template>
@@ -124,11 +124,12 @@ defineExpose({
 
 <style lang="scss">
 @use 'src/assets/style/variable' as *;
+@use 'src/assets/style/mixin' as *;
 
 .fd-contextmenu {
   position: fixed;
   margin: 0;
-  padding: 15px 0;
+  padding: 8px 0;
   font-size: var(--el-font-size-base);
   color: var(--el-text-color-primary);
   white-space: nowrap;
@@ -198,5 +199,8 @@ defineExpose({
     }
   }
 
+  @include theme($round-mode) {
+    border-radius: 10px;
+  }
 }
 </style>

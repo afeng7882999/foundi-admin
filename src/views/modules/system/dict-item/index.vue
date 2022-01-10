@@ -1,9 +1,14 @@
 <template>
-  <div ref="moduleRoot" :style="pageMinHeight" class="page-dictItem fd-page">
+  <div ref="moduleRoot" :style="pageMinHeight" class="system-page-dictItem fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList()">
-        <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
+        <transition
+          name="expand"
+          @enter="expandEnter"
+          @after-enter="expandAfterEnter"
+          @before-leave="expandBeforeLeave"
+        >
           <div v-show="queryFormShow" class="fd-page__query">
             <el-form-item label="字典项键值" prop="itemKey">
               <el-input v-model="query.itemKey" clearable placeholder="请输入字典项键值" />
@@ -29,16 +34,45 @@
           <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
         </el-button>
-        <el-button v-show="hasAuth('system:dictItem:delete')" v-waves :disabled="selectedNodes.length <= 0" plain size="medium" type="danger" @click="del()">
+        <el-button
+          v-show="hasAuth('system:dictItem:delete')"
+          v-waves
+          :disabled="selectedNodes.length <= 0"
+          plain
+          size="medium"
+          type="danger"
+          @click="del()"
+        >
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           批量删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:dictItem:add')" v-waves plain size="medium" type="primary" @click="showDictItemEdit()">新增</el-button>
-          <el-button v-show="hasAuth('system:dictItem:export')" size="medium" @click.prevent.stop="openMenu($event)">导出数据</el-button>
+          <el-button
+            v-show="hasAuth('system:dictItem:add')"
+            v-waves
+            plain
+            size="medium"
+            type="primary"
+            @click="showDictItemEdit()"
+          >
+            新增
+          </el-button>
+          <el-button v-show="hasAuth('system:dictItem:export')" size="medium" @click.prevent.stop="openMenu($event)">
+            导出数据
+          </el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
-          <el-tooltip :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
-            <fd-icon-button :class="queryFormShow ? 'expanded' : ''" class="action-toggle-btn" icon="double-down" @click="toggleQueryForm()"></fd-icon-button>
+          <el-tooltip
+            :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'"
+            :show-after="500"
+            effect="dark"
+            placement="top"
+          >
+            <fd-icon-button
+              :class="queryFormShow ? 'expanded' : ''"
+              class="action-toggle-btn"
+              icon="double-down"
+              @click="toggleQueryForm()"
+            ></fd-icon-button>
           </el-tooltip>
         </div>
       </div>
@@ -46,26 +80,74 @@
     <div class="fd-page__table border">
       <el-table v-loading="loading" :data="data" row-key="id" @selection-change="onSelectionChange">
         <el-table-column align="left" header-align="left" type="selection" width="40"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="字典项键值" prop="itemKey"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="字典项值" prop="itemValue"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="备注信息" prop="remarks"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="排序" prop="sort"></el-table-column>
+        <el-table-column
+          :show-overflow-tooltip="true"
+          align="left"
+          header-align="left"
+          label="字典项键值"
+          prop="itemKey"
+        ></el-table-column>
+        <el-table-column
+          :show-overflow-tooltip="true"
+          align="left"
+          header-align="left"
+          label="字典项值"
+          prop="itemValue"
+        ></el-table-column>
+        <el-table-column
+          :show-overflow-tooltip="true"
+          align="left"
+          header-align="left"
+          label="备注信息"
+          prop="remarks"
+        ></el-table-column>
+        <el-table-column
+          :show-overflow-tooltip="true"
+          align="left"
+          header-align="left"
+          label="排序"
+          prop="sort"
+        ></el-table-column>
         <el-table-column align="center" fixed="right" header-align="center" label="操作" width="100">
           <template #default="scope">
             <el-tooltip :show-after="500" content="编辑" placement="top">
-              <el-button v-show="hasAuth('system:dictItem:edit')" class="fd-tb-act" plain size="mini" type="success" @click="showDictItemEdit(scope.row.id)">
+              <el-button
+                v-show="hasAuth('system:dictItem:edit')"
+                class="fd-tb-act"
+                plain
+                size="mini"
+                type="success"
+                @click="showDictItemEdit(scope.row.id)"
+              >
                 <fd-icon icon="write"></fd-icon>
               </el-button>
             </el-tooltip>
             <el-tooltip :show-after="500" content="删除" placement="top">
-              <el-button v-show="hasAuth('system:dictItem:delete')" class="fd-tb-act" plain size="mini" type="danger" @click="del(scope.row)">
+              <el-button
+                v-show="hasAuth('system:dictItem:delete')"
+                class="fd-tb-act"
+                plain
+                size="mini"
+                type="danger"
+                @click="del(scope.row)"
+              >
                 <fd-icon icon="close"></fd-icon>
               </el-button>
             </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination :background="true" :current-page="current" :page-count="total" :page-size="size" :page-sizes="[10, 20, 50, 100, 200]" :total="count" layout="total, sizes, prev, pager, next, jumper" @current-change="pageChange" @size-change="sizeChange"></el-pagination>
+      <el-pagination
+        :background="true"
+        :current-page="current"
+        :page-count="total"
+        :page-size="size"
+        :page-sizes="[10, 20, 50, 100, 200]"
+        :total="count"
+        layout="total, sizes, prev, pager, next, jumper"
+        @current-change="pageChange"
+        @size-change="sizeChange"
+      ></el-pagination>
     </div>
     <el-backtop></el-backtop>
     <fd-contextmenu ref="contextMenu" event-type="click">
@@ -122,9 +204,9 @@ export default defineComponent({
     })
 
     // show create/edit dialog
-    const showDictItemEdit = async (id?: string) => {
+    const showDictItemEdit = (id?: string) => {
       mixState.editShow = true
-      await nextTick(() => {
+      nextTick(() => {
         ;(mixRefs.editDialog.value as any).openDictItemEdit(mixState.query.dictId as string, id)
       })
     }
