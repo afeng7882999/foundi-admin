@@ -327,6 +327,10 @@ $tags-inner-height: $app-tags-height - 10;
       color: var(--el-text-color-primary);
       background-color: var(--el-color-primary-light-9);
     }
+
+    &:first-child {
+      margin-left: 10px;
+    }
   }
 
   &__title {
@@ -366,10 +370,6 @@ $tags-inner-height: $app-tags-height - 10;
     height: $tags-inner-height;
     vertical-align: bottom;
     width: 33px;
-  }
-
-  &:first-child {
-    margin-left: 10px;
   }
 
   &:after {
