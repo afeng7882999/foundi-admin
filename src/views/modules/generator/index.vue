@@ -2,26 +2,27 @@
   <div :style="pageMinHeight" class="page-generator fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList">
+      <el-form ref="queryForm" :inline="true" :model="state.query" size="medium" @keyup.enter="queryList">
         <transition
           name="expand"
           @enter="expandEnter"
           @after-enter="expandAfterEnter"
           @before-leave="expandBeforeLeave"
         >
-          <div v-show="queryFormShow" class="fd-page__query">
+          <div v-show="state.queryFormShow" class="fd-page__query">
             <el-form-item label="表名称" prop="tableName">
-              <el-input v-model="query.tableName" clearable placeholder="请输入表名称" />
+              <el-input v-model="state.query.tableName" clearable placeholder="请输入表名称" />
             </el-form-item>
             <el-form-item label="表描述" prop="tableComment">
-              <el-input v-model="query.tableComment" clearable placeholder="请输入表描述" />
+              <el-input v-model="state.query.tableComment" clearable placeholder="请输入表描述" />
             </el-form-item>
             <el-form-item label="创建时间" prop="tableCreateTime">
               <el-date-picker
-                v-model="query.tableCreateTime"
+                v-model="state.query.tableCreateTime"
                 :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
                 end-placeholder="结束日期"
                 format="YYYY-MM-DD"
+                value-format="x"
                 range-separator="-"
                 start-placeholder="开始日期"
                 type="daterange"
@@ -43,7 +44,7 @@
           <el-button
             v-show="hasAuth('generator:genTable:delete')"
             v-waves
-            :disabled="selectedNodes.length <= 0"
+            :disabled="state.selectedNodes.length <= 0"
             plain
             size="medium"
             type="danger"
@@ -75,13 +76,13 @@
             </el-button>
             <el-divider class="action-divider" direction="vertical"></el-divider>
             <el-tooltip
-              :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'"
+              :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'"
               :show-after="500"
               effect="dark"
               placement="top"
             >
               <fd-icon-button
-                :class="queryFormShow ? 'expanded' : ''"
+                :class="state.queryFormShow ? 'expanded' : ''"
                 class="action-toggle-btn"
                 icon="double-down"
                 @click="toggleQueryForm()"
@@ -92,7 +93,7 @@
       </el-form>
     </div>
     <div class="fd-page__table border">
-      <el-table v-loading="loading" :data="data" @selection-change="onSelectionChange">
+      <el-table v-loading="state.loading" :data="state.data" @selection-change="onSelectionChange">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
@@ -140,7 +141,12 @@
           header-align="left"
           label="创建时间"
           prop="tableCreateTime"
-        ></el-table-column>
+          width="200"
+        >
+          <template #default="scope">
+            {{ dateTimeStr(scope.row.tableCreateTime) }}
+          </template>
+        </el-table-column>
         <el-table-column align="center" fixed="right" header-align="center" label="操作" width="250">
           <template #default="scope">
             <el-tooltip :show-after="500" content="生成并预览代码" placement="top">
@@ -150,7 +156,7 @@
                 plain
                 size="mini"
                 type="primary"
-                @click="openPreview(scope.row)"
+                @click="handlePreview(scope.row)"
               >
                 <fd-icon icon="preview-open"></fd-icon>
                 预览
@@ -198,116 +204,119 @@
       </el-table>
       <el-pagination
         :background="true"
-        :current-page="current"
-        :page-count="total"
-        :page-size="size"
+        :current-page="state.current"
+        :page-count="state.total"
+        :page-size="state.size"
         :page-sizes="[10, 20, 50, 100]"
-        :total="count"
+        :total="state.count"
         layout="total, sizes, prev, pager, next, jumper"
         @current-change="pageChange"
         @size-change="sizeChange"
       ></el-pagination>
     </div>
     <generator-import ref="generatorImport" @generator-imported="getList"></generator-import>
-    <generator-preview ref="generatorPreview"></generator-preview>
     <el-backtop></el-backtop>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onActivated, ref, toRefs } from 'vue'
+export default {
+  name: 'Generator'
+}
+</script>
+
+<script setup lang="ts">
+import { onActivated, ref } from 'vue'
 import useList from '@/components/crud/use-list'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import { download, genTableDel, genTableList, genTableQuery } from '@/api/generator/gen-table'
 import GeneratorImport from './import.vue'
-import GeneratorPreview from './preview.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { AnyObject } from '@/utils'
 import { ElMessage } from 'element-plus'
 
-export default defineComponent({
-  name: 'Generator',
-  components: {
-    GeneratorImport,
-    GeneratorPreview
-  },
-  setup() {
-    const generatorImport = ref()
-    const generatorPreview = ref()
+const generatorImport = ref()
 
-    const stateOption = {
-      listApi: genTableList,
-      delApi: genTableDel,
-      downloadApi: download,
-      query: genTableQuery,
-      uniqueId: ''
-    }
+const stateOption = {
+  listApi: genTableList,
+  delApi: genTableDel,
+  downloadApi: download,
+  query: genTableQuery,
+  uniqueId: ''
+}
 
-    const router = useRouter()
-    const route = useRoute()
+const router = useRouter()
+const route = useRoute()
 
-    const { mixRefs, mixState, mixComputed, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
+const { queryForm } = mixRefs
+const { pageMinHeight, showPageHeader } = mixComputed
+const {
+  getList,
+  pageChange,
+  sizeChange,
+  queryList,
+  resetQuery,
+  del,
+  dateTimeStr,
+  hasAuth,
+  onSelectionChange,
+  toggleQueryForm,
+  setViewTitle
+} = mixMethods
 
-    onActivated(() => {
-      const time = route.query.t as string
-      if (time && time !== mixState.uniqueId) {
-        mixState.uniqueId = time
-        mixMethods.getList()
-      }
-    })
+const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 
-    // 生成代码操作
-    const handleGenerate = async (row: AnyObject) => {
-      const ids = row && row.id ? [row.id] : mixState.selectedNodes.map((n) => n.id)
-      if (ids.length === 0) {
-        ElMessage({
-          message: '请选择要操作的数据表',
-          type: 'error',
-          duration: 2500
-        })
-        return
-      }
-      try {
-        await mixState.downloadApi(ids, ids.length === 1 ? row.tableName : 'code_generated')
-      } catch (e) {
-        console.log(e)
-      }
-    }
-
-    // 导入表
-    const openImport = () => {
-      ;(generatorImport.value as any).open()
-    }
-
-    // 预览
-    const openPreview = (row: AnyObject) => {
-      ;(generatorPreview.value as any).open(row.id)
-    }
-
-    // 修改按钮操作
-    const handleEdit = async (row: AnyObject) => {
-      if (row) {
-        const tableId = row.id
-        const tableName = row.tableName
-        // path: tools/generator/edit/:id
-        await mixMethods.setViewTitle(`/generator/edit/${tableId}`, `${tableName} 修改`)
-        await router.push({ name: 'GeneratorEdit', params: { id: tableId } })
-      }
-    }
-
-    return {
-      ...toRefs(mixState),
-      ...mixComputed,
-      ...mixRefs,
-      ...mixMethods,
-      ...useExpandTransition(),
-      generatorImport,
-      generatorPreview,
-      handleGenerate,
-      openImport,
-      openPreview,
-      handleEdit
-    }
+onActivated(() => {
+  const time = route.query.t as string
+  if (time && time !== state.uniqueId) {
+    state.uniqueId = time
+    getList()
   }
 })
+
+// 生成
+const handleGenerate = async (row: AnyObject) => {
+  const ids = row && row.id ? [row.id] : state.selectedNodes.map((n) => n.id)
+  if (ids.length === 0) {
+    ElMessage({
+      message: '请选择要操作的数据表',
+      type: 'error',
+      duration: 2500
+    })
+    return
+  }
+  try {
+    await state.downloadApi(ids, ids.length === 1 ? row.tableName : 'code_generated')
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+// 导入
+const openImport = () => {
+  ;(generatorImport.value as any).open()
+}
+
+// 预览
+const handlePreview = async (row: AnyObject) => {
+  if (row) {
+    const tableId = row.id
+    const tableName = row.tableName
+    // path: tools/generator/preview/:id
+    await setViewTitle(`/generator/preview/${tableId}`, `${tableName} 代码预览`)
+    await router.push({ name: 'GeneratorPreview', params: { id: tableId } })
+  }
+}
+
+// 修改
+const handleEdit = async (row: AnyObject) => {
+  if (row) {
+    const tableId = row.id
+    const tableName = row.tableName
+    // path: tools/generator/edit/:id
+    await setViewTitle(`/generator/edit/${tableId}`, `${tableName} 修改`)
+    await router.push({ name: 'GeneratorEdit', params: { id: tableId } })
+  }
+}
 </script>

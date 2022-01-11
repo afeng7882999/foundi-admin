@@ -33,6 +33,19 @@ export function formatTimestamp(timestamp: number, option = DEFAULT_DATETIME_FOR
 }
 
 /**
+ * 时间戳转日期时间字符串
+ */
+export function formatTimestamp2(timestamp: number, option = DEFAULT_DATETIME_FORMAT): string {
+  if (('' + timestamp).length === 10) {
+    timestamp = timestamp * 1000
+  } else {
+    timestamp = +timestamp
+  }
+  const d = dayjs(timestamp)
+  return d.format(option)
+}
+
+/**
  * 获取最近N天的日期字符串数组
  */
 export function getLastDateList(num: number): string[] {

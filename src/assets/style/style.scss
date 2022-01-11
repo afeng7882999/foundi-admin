@@ -370,6 +370,10 @@
       margin: 0 0 0 5px;
     }
   }
+  
+  &.is-tip {
+    color: var(--el-text-color-placeholder);
+  }
 }
 
 // fd-icon in el-input

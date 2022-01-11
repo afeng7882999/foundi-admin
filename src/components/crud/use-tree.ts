@@ -6,6 +6,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import usePage from '@/components/crud/use-page'
 import { nextFrame } from '@/utils/next-frame'
 import useDict, { IDictList } from '@/components/crud/use-dict'
+import {formatTimestamp2} from "@/utils/time";
 
 interface ITreeStateOption {
   // 主键
@@ -150,7 +151,13 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
     mixHandlers.afterDel = fn
   }
 
+  // 字典方法
   const { getDictData, dictVal } = useDict(mixState.dicts)
+
+  // 时间戳格式化
+  const dateTimeStr = (timestamp: string) => {
+    return formatTimestamp2(Number(timestamp))
+  }
 
   // 显示页面即获取数据
   onMounted(async () => {
@@ -355,6 +362,7 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
       resetQuery,
       del,
       dictVal,
+      dateTimeStr,
       hasAuth,
       exportData,
       showEdit,

@@ -1,24 +1,60 @@
 <template>
-  <el-dialog v-model="visible" :close-on-click-modal="false" append-to-body title="导入表" top="5vh" width="80%" @close="hideDialog">
-    <el-form ref="queryForm" :inline="true" :model="query" size="medium">
+  <el-dialog
+    v-model="state.visible"
+    :close-on-click-modal="false"
+    append-to-body
+    title="导入表"
+    top="5vh"
+    width="80%"
+    @close="hideDialog"
+  >
+    <el-form ref="queryForm" :inline="true" :model="state.query" size="medium">
       <el-form-item label="表名称" prop="tableName">
-        <el-input v-model="query.tableName" clearable placeholder="请输入表名称" @keyup.enter="queryList" />
+        <el-input v-model="state.query.tableName" clearable placeholder="请输入表名称" @keyup.enter="queryList" />
       </el-form-item>
       <el-form-item label="表描述" prop="tableComment">
-        <el-input v-model="query.tableComment" clearable placeholder="请输入表描述" @keyup.enter="queryList" />
+        <el-input v-model="state.query.tableComment" clearable placeholder="请输入表描述" @keyup.enter="queryList" />
       </el-form-item>
       <el-form-item>
-        <el-button v-waves icon="el-icon-search" type="primary" @click="queryList">搜索</el-button>
-        <el-button v-waves icon="el-icon-refresh" @click="resetQuery">重置</el-button>
+        <el-button v-waves type="primary" @click="queryList">
+          <fd-icon icon="search" class="is-in-btn"></fd-icon>
+          搜索
+        </el-button>
+        <el-button v-waves @click="resetQuery">
+          <fd-icon icon="redo"></fd-icon>
+          重置
+        </el-button>
       </el-form-item>
     </el-form>
-    <el-table ref="table" v-loading="loading" :data="data" height="260px" size="medium" @row-click="clickRow" @selection-change="onSelectionChange">
+    <el-table
+      ref="table"
+      v-loading="state.loading"
+      :data="state.data"
+      height="300px"
+      size="medium"
+      @row-click="clickRow"
+      @selection-change="onSelectionChange"
+    >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column :show-overflow-tooltip="true" label="表名称" prop="tableName"></el-table-column>
       <el-table-column :show-overflow-tooltip="true" label="表描述" prop="tableComment"></el-table-column>
-      <el-table-column label="创建时间" prop="tableCreateTime"></el-table-column>
+      <el-table-column label="创建时间" prop="tableCreateTime">
+        <template #default="scope">
+          {{ dateTimeStr(scope.row.tableCreateTime) }}
+        </template>
+      </el-table-column>
     </el-table>
-    <el-pagination :background="true" :current-page="current" :page-count="total" :page-size="size" :page-sizes="[10, 20, 50, 100]" :total="count" layout="total, sizes, prev, pager, next, jumper" @current-change="pageChange" @size-change="sizeChange" />
+    <el-pagination
+      :background="true"
+      :current-page="state.current"
+      :page-count="state.total"
+      :page-size="state.size"
+      :page-sizes="[10, 20, 50, 100]"
+      :total="state.count"
+      layout="total, sizes, prev, pager, next, jumper"
+      @current-change="pageChange"
+      @size-change="sizeChange"
+    />
     <template #footer>
       <span class="fd-dialog-footer">
         <el-button size="medium" type="primary" @click="importTableHandle">确 定</el-button>
@@ -29,70 +65,67 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from 'vue'
+export default {
+  name: 'GeneratorImport'
+}
+</script>
+
+<script setup lang="ts">
 import useList from '@/components/crud/use-list'
 import { genTableImportDb, genTableListDb } from '@/api/generator/gen-table'
 import { ElMessage } from 'element-plus'
 import { AnyObject } from '@/utils'
 
-export default defineComponent({
-  name: 'GeneratorImport',
-  emits: ['generator-imported'],
-  setup(props, { emit }) {
-    const stateOption = {
-      listApi: genTableListDb,
-      importApi: genTableImportDb,
-      query: {
-        tableName: undefined,
-        tableComment: undefined
-      },
-      visible: false
-    }
+const emit = defineEmits(['generator-imported'])
 
-    const { mixRefs, mixState, mixMethods } = useList(stateOption)
+const stateOption = {
+  listApi: genTableListDb,
+  importApi: genTableImportDb,
+  query: {
+    tableName: undefined,
+    tableComment: undefined
+  },
+  visible: false
+}
 
-    // 显示弹框
-    const open = () => {
-      mixMethods.getList()
-      mixState.visible = true
-    }
+const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
+const { queryForm, table } = mixRefs
+const { getList, dateTimeStr, pageChange, sizeChange, queryList, resetQuery, onSelectionChange } = mixMethods
 
-    // 导入按钮操作
-    const importTableHandle = async () => {
-      try {
-        await mixState.importApi(mixState.selectedNodes.map((n) => n.tableName))
-      } catch (e) {
-        console.log(e)
-      }
-      mixState.visible = false
-      emit('generator-imported')
-      ElMessage({
-        message: '操作成功',
-        type: 'success',
-        duration: 1500
-      })
-    }
+// 显示弹框
+const open = () => {
+  getList()
+  state.visible = true
+}
 
-    // 隐藏弹窗
-    const hideDialog = () => {
-      mixState.visible = false
-      ;(mixRefs.queryForm.value as any).resetFields()
-    }
-
-    // 单击行选中
-    const clickRow = (row: AnyObject) => {
-      ;(mixRefs.table.value as any).toggleRowSelection(row)
-    }
-
-    return {
-      ...mixRefs,
-      ...toRefs(mixState),
-      ...mixMethods,
-      open,
-      importTableHandle,
-      hideDialog,
-      clickRow
-    }
+// 导入按钮操作
+const importTableHandle = async () => {
+  try {
+    await state.importApi(state.selectedNodes.map((n) => n.tableName))
+  } catch (e) {
+    console.log(e)
   }
+  state.visible = false
+  emit('generator-imported')
+  ElMessage({
+    message: '操作成功',
+    type: 'success',
+    duration: 1500
+  })
+}
+
+// 隐藏弹窗
+const hideDialog = () => {
+  state.visible = false
+  ;(queryForm.value as any).resetFields()
+}
+
+// 单击行选中
+const clickRow = (row: AnyObject) => {
+  ;(table.value as any).toggleRowSelection(row)
+}
+
+defineExpose({
+  open
 })
 </script>
