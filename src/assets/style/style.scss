@@ -19,7 +19,7 @@
 }
 
 .el-table .el-table__body tr td {
-  padding: 6px 0;
+  padding: 2px 0;
 }
 
 .el-table .cell {
@@ -239,9 +239,9 @@
   }
 }
 
-// module page
+// fd-page
 .fd-page {
-  padding: 10px 20px 20px 20px;
+  padding: 10px 15px 15px 15px;
   
   &.is-fix-height {
     display: flex;
@@ -283,11 +283,11 @@
   }
 
   &__form {
-    padding: 20px 15px;
+    padding: 15px 15px;
     border: 1px solid var(--el-border-color-lighter);
     border-radius: var(--el-border-radius-base);
     background-color: var(--el-fill-base);
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
   
   &__query {
@@ -337,7 +337,7 @@
     padding: 24px 15px 24px 15px;
     background-color: var(--el-fill-base);
     border-radius: var(--el-border-radius-base);
-    margin-bottom: 15px;
+    // margin-bottom: 15px;
 
     &.border {
       border: 1px solid var(--el-border-color-lighter);
