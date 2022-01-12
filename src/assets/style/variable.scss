@@ -12,8 +12,8 @@ $sharp-mode: 'theme-sharp';
 $round-mode: 'theme-round';
 
 // transition
-$default-transition-time: 0.3s !default;
-$bg-transition: opacity 0.3s cubic-bezier(0.7, 0.3, 0.1, 1) !default;
+$default-transition-time: 0.1s !default; // 0.3s !default;
+$bg-transition: opacity 0.1s cubic-bezier(0.7, 0.3, 0.1, 1) !default;
 $stop-transition: none !important !default;
 
 // colors
@@ -103,7 +103,7 @@ $icon-size-tiny: 10px !default;
 // sidebar
 $sidebar-min-width: 56px !default;
 $sidebar-normal-width: 250px !default;
-$sidebar-transition-time: 0.3s !default;
+$sidebar-transition-time: 0.1s !default; // 0.3s !default;
 $sidebar-back-color: #343a40 !default;
 $sidebar-text-color: rgba($color-white, 0.9) !default;
 $sidebar-text-placeholder-color: rgba($color-white, 0.4) !default;
