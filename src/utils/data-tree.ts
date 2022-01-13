@@ -219,7 +219,7 @@ export function getParent<T extends ITreeNode>(treeNodes: T[], ITreeNode: T, opt
 /**
  * 获取本级与下级节点列表
  */
-export function getDescendants<T extends ITreeNode>(
+export function getCurrentAndDesc<T extends ITreeNode>(
   treeNodes: T[],
   parentMatcher: (node: T) => boolean,
   opt = DEFAULT_TREE_FIELDS

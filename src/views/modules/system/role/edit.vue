@@ -2,7 +2,7 @@
   <el-dialog v-model="visible" :close-on-click-modal="false" :title="isCreate ? '新增' : '修改'" :width="750">
     <div class="fd-page">
       <el-form ref="form" :model="formData" :rules="formRule" label-width="80px" size="medium" @keyup.enter="submit">
-        <el-tabs model-value="1" stretch>
+        <el-tabs v-model="tabName" stretch>
           <el-tab-pane label="角色基本信息" name="1">
             <el-form-item label="角色名称" prop="name">
               <el-input v-model="formData.name" placeholder="请输入角色名称"></el-input>
@@ -21,8 +21,8 @@
           </el-tab-pane>
           <el-tab-pane :label="`业务权限（${menuSelectedCount}项）`" name="2">
             <el-form-item label="业务权限">
-              <div class="el-tree-panel">
-                <div class="el-tree-panel__action">
+              <div class="fd-tree-panel">
+                <div class="fd-tree-panel__action">
                   <el-tooltip :show-after="500" content="选择当前项与下级" effect="dark" placement="top">
                     <el-button size="mini" @click="menuTreeSelectAll">
                       <fd-icon class="is-in-btn" icon="check"></fd-icon>
@@ -76,8 +76,8 @@
               </el-select>
             </el-form-item>
             <el-form-item label="数据权限">
-              <div class="el-tree-panel">
-                <div class="el-tree-panel__action">
+              <div class="fd-tree-panel">
+                <div class="fd-tree-panel__action">
                   <el-tooltip :show-after="500" content="选择当前项本级与下级" effect="dark" placement="top">
                     <el-button size="mini" @click="groupTreeSelectAll">
                       <fd-icon class="is-in-btn" icon="check"></fd-icon>
@@ -137,7 +137,9 @@ import useListEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-list-edit
 import { roleDicts, roleFields, roleGetOne, rolePostOne, rolePutOne } from '@/api/system/role'
 import { groupList, IGroup } from '@/api/system/group'
 import { IMenu, menuList } from '@/api/system/menu'
-import { arrayToTree, getDescendants } from '@/utils/data-tree'
+import { arrayToTree } from '@/utils/data-tree'
+import { useElTree } from '@/utils/element-plus'
+import { ElTree } from 'element-plus'
 
 export default defineComponent({
   name: 'SystemRoleEdit',
@@ -170,7 +172,8 @@ export default defineComponent({
       groupSelectedCount: 0,
       menuExpandAll: false,
       groundExpandAll: false,
-      ifEdited: false
+      ifEdited: false,
+      tabName: '1'
     }
 
     const { mixRefs, mixState, mixMethods } = useListEdit(stateOption, emit)
@@ -180,8 +183,12 @@ export default defineComponent({
       const { data: groups } = await groupList()
       mixState.menuList = arrayToTree(menus)
       mixState.groupList = arrayToTree(groups)
-      mixState.menuSelectedCount = menus.length
-      mixState.groupSelectedCount = groups.length
+      mixState.tabName = '1'
+    })
+
+    mixMethods.onAfterGetData(async (data) => {
+      mixState.menuSelectedCount = data.menuIdList.length
+      mixState.groupSelectedCount = data.groupIdList.length
     })
 
     mixMethods.onBeforeSubmitData(async () => {
@@ -197,87 +204,49 @@ export default defineComponent({
       mixState.groupSelectedCount = checked.checkedKeys.length
     }
 
+    const { expandAll, collapseAll, checkCurrentAndDesc, uncheckCurrentAndDesc } = useElTree()
+
     const menuTreeSelectAll = () => {
-      const tree = menuTree.value as any
-      const current = tree.getCurrentKey()
-      const checked = tree.getCheckedKeys()
-      if (current) {
-        const desc = getDescendants(mixState.menuList, (m) => m.id === current)?.map((m) => m.id)
-        tree.setCheckedKeys(checked.concat(desc), true)
-      }
+      mixState.menuSelectedCount = checkCurrentAndDesc(menuTree.value as typeof ElTree, mixState.menuList)
     }
 
     const menuTreeClearAll = () => {
-      const tree = menuTree.value as any
-      const current = tree.getCurrentKey()
-      const checked = tree.getCheckedKeys()
-      if (current) {
-        const desc = getDescendants(mixState.menuList, (m) => m.id === current)?.map((m) => m.id)
-        tree.setCheckedKeys(
-          checked.filter((c: string) => !desc?.includes(c)),
-          true
-        )
-      }
+      mixState.menuSelectedCount = uncheckCurrentAndDesc(menuTree.value as typeof ElTree, mixState.menuList)
     }
 
     const menuTreeExpand = () => {
-      const nodes = (menuTree.value as any).store.nodesMap
+      expandAll(menuTree.value as typeof ElTree)
       mixState.menuExpandAll = true
-      for (const i in nodes) {
-        nodes[i].expanded = true
-      }
     }
 
     const menuTreeCollapse = () => {
-      const nodes = (menuTree.value as any).store.nodesMap
+      collapseAll(menuTree.value as typeof ElTree)
       mixState.menuExpandAll = false
-      for (const i in nodes) {
-        nodes[i].expanded = false
-      }
     }
 
     const groupTreeSelectAll = () => {
-      const tree = groupTree.value as any
-      const current = tree.getCurrentKey()
-      const checked = tree.getCheckedKeys()
-      if (current) {
-        const desc = getDescendants(mixState.groupList, (g) => g.id === current)?.map((g) => g.id)
-        tree.setCheckedKeys(checked.concat(desc), true)
-      }
+      mixState.groupSelectedCount = checkCurrentAndDesc(groupTree.value as typeof ElTree, mixState.groupList)
     }
 
     const groupTreeClearAll = () => {
-      const tree = groupTree.value as any
-      const current = tree.getCurrentKey()
-      const checked = tree.getCheckedKeys()
-      if (current) {
-        const desc = getDescendants(mixState.groupList, (g) => g.id === current)?.map((g) => g.id)
-        tree.setCheckedKeys(
-          checked.filter((c: string) => !desc?.includes(c)),
-          true
-        )
-      }
+      mixState.groupSelectedCount = uncheckCurrentAndDesc(groupTree.value as typeof ElTree, mixState.groupList)
     }
 
     const groupTreeExpand = () => {
-      const nodes = (groupTree.value as any).store.nodesMap
-      mixState.menuExpandAll = true
-      for (const i in nodes) {
-        nodes[i].expanded = true
-      }
+      expandAll(groupTree.value as typeof ElTree)
+      mixState.groundExpandAll = true
     }
 
     const groupTreeCollapse = () => {
-      const nodes = (groupTree.value as any).store.nodesMap
-      mixState.menuExpandAll = false
-      for (const i in nodes) {
-        nodes[i].expanded = false
-      }
+      collapseAll(groupTree.value as typeof ElTree)
+      mixState.groundExpandAll = false
     }
 
     mixMethods.onAfterClose(async () => {
       ;(menuTree.value as any).setCurrentKey(null)
       ;(groupTree.value as any).setCurrentKey(null)
+      mixState.menuSelectedCount = 0
+      mixState.groupSelectedCount = 0
     })
 
     return {
@@ -302,15 +271,23 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.el-tabs {
+  ::v-deep(.el-tabs__header) {
+    margin: 0 0 30px;
+  }
+}
+</style>
+
+<style lang="scss">
 @use 'src/assets/style/variable.scss' as *;
 
-.el-tree-panel {
+.fd-tree-panel {
   width: 100%;
   border: 1px solid var(--el-border-color-base);
   border-radius: var(--el-border-radius-base);
   padding: 10px;
 
-  .el-tree-panel__action {
+  &__action {
     width: 100%;
     display: flex;
     justify-content: flex-end;
