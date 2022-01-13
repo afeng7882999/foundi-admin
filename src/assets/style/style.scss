@@ -431,6 +431,23 @@
   }
 }
 
+// fd-tree-panel
+.fd-tree-panel {
+  width: 100%;
+  border: 1px solid var(--el-border-color-base);
+  border-radius: var(--el-border-radius-base);
+  padding: 10px;
+  
+  &__action {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--el-border-color-base);
+  }
+}
+
 // sortable
 .sortable-ghost{
   opacity: .3;
