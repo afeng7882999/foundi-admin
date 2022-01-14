@@ -136,6 +136,7 @@ const onLogoutClick = async () => {
   position: relative;
   display: flex;
   padding: 15px 15px 15px 0;
+  overflow: hidden;
 
   &:hover {
     background: var(--fd-sidebar-hover-color);
