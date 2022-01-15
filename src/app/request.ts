@@ -30,7 +30,7 @@ interface AxiosRequestConfigWithEnc extends AxiosRequestConfig {
 
 // axios实例
 const http = axios.create({
-  baseURL: import.meta.env.DEV ? '/' : import.meta.env.VITE_APP_BASE_API as string,
+  baseURL: import.meta.env.DEV ? '/' : (import.meta.env.VITE_APP_BASE_API as string),
   timeout: settings.timeout
 })
 
@@ -44,6 +44,7 @@ http.interceptors.request.use(
 
     // set token in headers
     if (getToken()) {
+      console.log('readToken', getToken())
       headers['Authorization'] = 'Bearer ' + getToken()
     }
 
@@ -90,6 +91,7 @@ http.interceptors.response.use(
 
     // set token
     if (res.token) {
+      console.log('setToken', res.token)
       await setToken(res.token)
     }
 

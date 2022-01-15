@@ -42,8 +42,8 @@
           </div>
           <fd-code-editor
             ref="codeEditor"
+            v-model="state.activeNode.code.content"
             :langage="state.activeNode.lang"
-            :value="state.activeNode.code.content"
             line-numbers
           ></fd-code-editor>
         </div>
@@ -147,10 +147,10 @@ const compactCodeTree = (parent: ICodePreviewNode | null, children: ICodePreview
 }
 
 onBeforeMount(async () => {
-  const { id } = route.params
-  if (id) {
+  const { ids } = route.params
+  if (ids) {
     try {
-      state.data = await preview(id as string)
+      state.data = await preview(ids as string)
       getCodeTree(0)
       compactCodeTree(null, state.nodeData)
       nextTick(() => {

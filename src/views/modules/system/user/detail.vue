@@ -1,24 +1,40 @@
 <template>
   <div class="fd-page__form">
-    <el-descriptions :column="2" :title="`系统用户 - ${data[idx].username}`" border direction="horizontal" size="medium">
+    <el-descriptions
+      :column="2"
+      :title="`系统用户 - ${data[idx].username}`"
+      border
+      direction="horizontal"
+      size="medium"
+    >
       <el-descriptions-item :span="2" label="用户ID">{{ data[idx].id }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="用户名">{{ data[idx].username }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="手机号">{{ data[idx].mobile }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="邮箱">{{ data[idx].email }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="用户组">{{ getGroupName(data[idx].groupId) }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="角色">
-        <el-tag v-for="item in getRoleNameList(data[idx].roleIdList)" :key="item" :menu-item="item" class="page-user-role-tag" size="mini">
+        <el-tag
+          v-for="item in getRoleNameList(data[idx].roleIdList)"
+          :key="item"
+          :menu-item="item"
+          class="page-user-role-tag"
+          size="mini"
+        >
           {{ item }}
         </el-tag>
       </el-descriptions-item>
       <el-descriptions-item label="注册时间">{{ data[idx].createAt }}</el-descriptions-item>
       <el-descriptions-item label="状态">
-        <el-tag v-if="dictVal(dicts?.sysUserStatus, data[idx].statusDict) === '正常'" size="mini" type="success">正常</el-tag>
-        <el-tag v-if="dictVal(dicts?.sysUserStatus, data[idx].statusDict) === '禁用'" size="mini" type="danger">禁用</el-tag>
+        <el-tag v-if="dictVal(dicts?.sysUserStatus, data[idx].statusDict) === '正常'" size="mini" type="success">
+          正常
+        </el-tag>
+        <el-tag v-if="dictVal(dicts?.sysUserStatus, data[idx].statusDict) === '禁用'" size="mini" type="danger">
+          禁用
+        </el-tag>
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="绑定信息">
         <div class="fd-detail-list">
-          <ul class="fd-detail-list__lst">
+          <ul class="fd-detail-list__inner">
             <li v-for="(item, index) in data[idx].oAuthUserList" :key="item.id">
               <span class="fd-detail-list__idx">{{ index + 1 }}</span>
               <span class="fd-detail-list__item">

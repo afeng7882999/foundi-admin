@@ -57,6 +57,18 @@
             <el-button
               v-show="hasAuth('generator:genTable:edit')"
               v-waves
+              plain
+              size="medium"
+              type="warning"
+              @click="handlePreview"
+            >
+              <fd-icon class="is-in-btn" icon="preview-open"></fd-icon>
+              预览
+            </el-button>
+            <el-button
+              v-show="hasAuth('generator:genTable:edit')"
+              v-waves
+              plain
               size="medium"
               type="primary"
               @click="handleGenerate"
@@ -67,6 +79,7 @@
             <el-button
               v-show="hasAuth('generator:genTable:edit')"
               v-waves
+              plain
               size="medium"
               type="info"
               @click="openImport"
@@ -300,13 +313,18 @@ const openImport = () => {
 
 // 预览
 const handlePreview = async (row: AnyObject) => {
-  if (row) {
-    const tableId = row.id
-    const tableName = row.tableName
-    // path: tools/generator/preview/:id
-    await setViewTitle(`/generator/preview/${tableId}`, `${tableName} 代码预览`)
-    await router.push({ name: 'GeneratorPreview', params: { id: tableId } })
+  const ids = row && row.id ? row.id : state.selectedNodes.map((n) => n.id).join(',')
+  const tableName = row && row.id ? row.tableName + ' ' : ''
+  if (ids.length === 0) {
+    ElMessage({
+      message: '请选择要操作的数据表',
+      type: 'error',
+      duration: 2500
+    })
   }
+  // path: tools/generator/preview/:ids
+  await setViewTitle(`/generator/preview/${ids}`, `${tableName}代码预览`)
+  await router.push({ name: 'GeneratorPreview', params: { ids: ids } })
 }
 
 // 修改

@@ -29,7 +29,7 @@
                   ></fd-tree-select>
                 </el-form-item>
                 <el-form-item label="状态" prop="statusDict">
-                  <el-select v-model="query.statusDict" clearable size="medium">
+                  <el-select v-model="query.statusDict" clearable>
                     <el-option
                       v-for="item in dicts.sysUserStatus"
                       :key="item.itemKey"

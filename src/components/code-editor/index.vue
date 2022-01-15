@@ -33,7 +33,7 @@ import 'codemirror/mode/vue/vue.js'
 const DARK_MODE_THEME = 'mbo'
 
 const props = defineProps({
-  value: {
+  modelValue: {
     type: String,
     default: ''
   },
@@ -66,7 +66,7 @@ const store = useStore<AllState>()
 const storeState = store.state as AllState
 
 const state = reactive({
-  cmValue: props.value,
+  cmValue: props.modelValue,
   options: {
     mode: props.language ? props.language : 'javascript',
     smartIndent: true,
@@ -82,7 +82,7 @@ const state = reactive({
 })
 
 watch(
-  () => props.value,
+  () => props.modelValue,
   (val) => {
     if (cmInstance && val !== cmInstance.getValue()) {
       cmInstance.setValue(val)
@@ -122,7 +122,7 @@ onUnmounted(() => {
   }
 })
 
-const emit = defineEmits(['update:value'])
+const emit = defineEmits(['update:modelValue'])
 
 const initialize = () => {
   const options = props.cmOptions ? merge({}, state.options, props.cmOptions) : state.options
@@ -130,7 +130,7 @@ const initialize = () => {
   refresh()
   // change or blur
   cmInstance.on('blur', (cm) => {
-    emit('update:value', cm.getValue())
+    emit('update:modelValue', cm.getValue())
   })
 }
 

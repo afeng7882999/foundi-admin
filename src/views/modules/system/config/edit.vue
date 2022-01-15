@@ -90,9 +90,9 @@ const emit = defineEmits([REFRESH_DATA_EVENT])
 
 const { mixRefs, mixState: state, mixMethods } = useListEdit(stateOption, emit)
 const { form } = mixRefs
-const { open, submit, hideDialog } = mixMethods
+const { open, submit, hideDialog, onBeforeOpen } = mixMethods
 
-mixMethods.onBeforeOpen(async () => {
+onBeforeOpen(async () => {
   if (state.isCreate) {
     nextFrame(() => {
       ;(jsonEditor.value as any).refresh()

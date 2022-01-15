@@ -108,9 +108,12 @@ const onMoreClick = () => {
   color: var(--el-text-color-regular);
   border-radius: var(--el-border-radius-base);
   background-color: var(--el-color-white);
-  box-shadow: var(--el-box-shadow-base);
   overflow: hidden;
   cursor: pointer;
+
+  &:hover {
+    box-shadow: var(--el-box-shadow-base);
+  }
 
   &.is-primary {
     .fd-wg-card__icon {

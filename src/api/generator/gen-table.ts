@@ -155,9 +155,10 @@ export const genTableSyncDb = async (id: string) => {
 }
 
 // 生成代码并预览
-export const preview = async (id: string) => {
+export const preview = async (ids: string[] | string) => {
+  const param = typeof ids === 'string' ? ids : ids.join(',')
   const { data } = await request({
-    url: `${url}/preview/${id}`,
+    url: `${url}/preview/${param}`,
     method: 'get'
   })
   return data.content as ICodePreview[]
@@ -170,6 +171,5 @@ export const download = async (ids: string[], tableName?: string) => {
     method: 'get',
     responseType: 'blob'
   })
-  console.log(data)
   downloadFile(data, tableName ? tableName : 'code', 'zip')
 }
