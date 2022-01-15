@@ -12,6 +12,7 @@
     <fd-split-pane :default-pos="300" shrink="right" :style="previewHeight">
       <template #left>
         <div class="fd-page__form page-generator-preview__tree" style="height: 100%">
+          <div class="fd-page__sub-title"><span class="title-text">文件列表</span></div>
           <el-scrollbar always>
             <el-tree
               ref="codeTree"
@@ -19,7 +20,7 @@
               :default-expand-all="true"
               :highlight-current="true"
               :props="{ label: 'name', children: 'children', value: 'id' }"
-              node-key="name"
+              node-key="id"
               @node-click="onTreeNodeClick"
             >
               <template #default="{ node, data }">
@@ -36,6 +37,9 @@
       </template>
       <template #right>
         <div class="fd-page__form page-generator-preview__code" style="height: 100%">
+          <div class="fd-page__sub-title">
+            <span class="title-text">{{ state.activeNode.path }}</span>
+          </div>
           <fd-code-editor
             ref="codeEditor"
             :langage="state.activeNode.lang"
@@ -67,6 +71,7 @@ import FdSplitPane from '@/components/split-pane/index.vue'
 import { ICodePreviewNode, LANG_OF_FILENAME } from '@/views/modules/generator/types'
 
 const codeEditor = ref()
+const codeTree = ref()
 
 const state = reactive({
   data: [] as ICodePreview[],
@@ -111,7 +116,17 @@ const getCodeTree = (idx: number) => {
     }
 
     const ext = getFileExt(item.name)
-    parents.push({ id: id++, name: item.name, lang: LANG_OF_FILENAME[ext], code: item })
+    const file = {
+      id: id++,
+      name: item.name,
+      path: item.path.replace(/\//g, ' / '),
+      lang: LANG_OF_FILENAME[ext],
+      code: item
+    }
+    parents.push(file)
+    if (state.activeNode.id === 0) {
+      state.activeNode = file
+    }
   }
 }
 
@@ -139,7 +154,8 @@ onBeforeMount(async () => {
       getCodeTree(0)
       compactCodeTree(null, state.nodeData)
       nextTick(() => {
-        ;(codeEditor.value as any).refresh('100%', `${storeState.app.docHeight - 107}px`)
+        ;(codeTree.value as any).setCurrentKey(state.activeNode.id)
+        ;(codeEditor.value as any).refresh('100%', `${storeState.app.docHeight - 152}px`)
       })
     } catch (e) {
       console.log(e)
@@ -151,7 +167,7 @@ const onTreeNodeClick = (node: ICodePreviewNode) => {
   if (node.code) {
     state.activeNode = node
     nextTick(() => {
-      ;(codeEditor.value as any).refresh('100%', `${storeState.app.docHeight - 107}px`)
+      ;(codeEditor.value as any).refresh('100%', `${storeState.app.docHeight - 152}px`)
     })
   }
 }
@@ -168,6 +184,12 @@ const close = () => {
     border-radius: var(--el-border-radius-base) 0 0 var(--el-border-radius-base);
     padding: 0;
 
+    .fd-page__sub-title {
+      font-size: var(--el-font-size-base);
+      font-weight: normal;
+      margin: 15px 15px 10px 15px;
+    }
+
     .tree-node-icon {
       font-size: var(--el-font-size-medium);
       color: var(--el-color-info);
@@ -177,8 +199,12 @@ const close = () => {
       }
     }
 
+    .el-scrollbar {
+      height: calc(100% - 45px);
+    }
+
     .el-tree {
-      padding: 5px;
+      padding: 5px 15px;
       font-size: var(--el-font-size-small);
       font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
       .el-tree-node > .el-tree-node__children {
@@ -193,6 +219,12 @@ const close = () => {
   &__code {
     border-radius: 0 var(--el-border-radius-base) var(--el-border-radius-base) 0;
     padding: 0;
+
+    .fd-page__sub-title {
+      font-size: var(--el-font-size-base);
+      font-weight: normal;
+      margin: 15px 15px 10px 15px;
+    }
   }
 }
 .fd-code-block {

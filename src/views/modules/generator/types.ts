@@ -3,8 +3,7 @@ import { ICodePreview } from '@/api/generator/gen-table'
 interface ICodePreviewNode {
   id: number
   name: string
-  expanded?: boolean
-  selected?: boolean
+  path?: string
   lang?: string
   code?: ICodePreview
   children?: ICodePreviewNode[]
