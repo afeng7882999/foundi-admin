@@ -90,6 +90,15 @@ export interface IGenTableColumn extends IResData {
   sort: number
 }
 
+export interface ICodePreview {
+  // 文件路径
+  path: string
+  // 文件名
+  name: string
+  // 文件内容
+  content: string
+}
+
 export interface IGen extends IResData {
   table: IGenTable
   columns: IGenTableColumn[]
@@ -151,7 +160,7 @@ export const preview = async (id: string) => {
     url: `${url}/preview/${id}`,
     method: 'get'
   })
-  return data.content as AnyObject[]
+  return data.content as ICodePreview[]
 }
 
 // 生成代码并下载

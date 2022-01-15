@@ -85,7 +85,6 @@ watch(
   () => props.value,
   (val) => {
     if (cmInstance && val !== cmInstance.getValue()) {
-      console.log()
       cmInstance.setValue(val)
       refresh()
     }
@@ -124,6 +123,7 @@ onUnmounted(() => {
 })
 
 const emit = defineEmits(['update:value'])
+
 const initialize = () => {
   const options = props.cmOptions ? merge({}, state.options, props.cmOptions) : state.options
   cmInstance = CodeMirror.fromTextArea(textarea.value, options)
@@ -134,10 +134,10 @@ const initialize = () => {
   })
 }
 
-const refresh = () => {
+const refresh = (w = '100%', h = '100%') => {
   nextFrame(() => {
     if (cmInstance) {
-      cmInstance.setSize('100%', '100%')
+      cmInstance.setSize(w, h)
       cmInstance.refresh()
     }
   })
@@ -160,6 +160,7 @@ defineExpose({
   .CodeMirror {
     flex: 1;
     text-align: left !important;
+    font-size: var(--el-font-size-base);
     z-index: 1;
     background: none !important;
 
@@ -170,8 +171,19 @@ defineExpose({
     .CodeMirror-overlayscroll-horizontal div,
     .CodeMirror-overlayscroll-vertical div {
       position: absolute;
-      background: var(--el-text-color-placeholder);
-      border-radius: var(--el-border-radius-base);
+      background: var(--el-scrollbar-background-color, var(--el-text-color-secondary));
+      opacity: var(--el-scrollbar-opacity, 0.3);
+      &:hover {
+        opacity: var(--el-scrollbar-hover-opacity, 0.5);
+      }
+    }
+
+    .CodeMirror-overlayscroll-horizontal div {
+      margin-bottom: 2px;
+    }
+
+    .CodeMirror-overlayscroll-vertical div {
+      margin-right: 2px;
     }
   }
 
