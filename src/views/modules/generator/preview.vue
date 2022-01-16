@@ -7,6 +7,19 @@
           <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
         </el-button>
+        <div class="action-right">
+          <el-button
+            v-show="hasAuth('generator:genTable:edit')"
+            v-waves
+            plain
+            size="medium"
+            type="primary"
+            @click="handleGenerate"
+          >
+            <fd-icon class="is-in-btn" icon="download" :loading="state.loading"></fd-icon>
+            生成
+          </el-button>
+        </div>
       </div>
     </div>
     <fd-split-pane :default-pos="300" shrink="right" :style="previewHeight">
@@ -60,7 +73,7 @@ export default {
 
 <script setup lang="ts">
 import usePage from '@/components/crud/use-page'
-import { getFileExt } from '@/utils/file'
+import { downloadFile, getFileExt } from '@/utils/file'
 import { computed, nextTick, onBeforeMount, reactive, ref } from 'vue'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { ICodePreview, preview } from '@/api/generator/gen-table'
@@ -69,6 +82,9 @@ import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { ICodePreviewNode, LANG_OF_FILENAME } from '@/views/modules/generator/types'
+import * as fflate from 'fflate'
+import { strToU8 } from 'fflate'
+import { AnyObject } from '@/utils'
 
 const codeEditor = ref()
 const codeTree = ref()
@@ -81,7 +97,8 @@ const state = reactive({
     name: '',
     lang: 'application/xml',
     code: { name: '', path: '', content: '' }
-  } as ICodePreviewNode
+  } as ICodePreviewNode,
+  loading: false
 })
 
 const { pageHeight, showPageHeader } = usePage()
@@ -175,6 +192,24 @@ const onTreeNodeClick = (node: ICodePreviewNode) => {
 const close = () => {
   store.dispatch('view/delView', route)
   router.push({ path: '/generator', query: { t: Date.now() } })
+}
+
+const { hasAuth } = usePage()
+
+const handleGenerate = async () => {
+  state.loading = true
+  const files = {} as AnyObject
+  try {
+    state.data.forEach((item) => {
+      files[item.path] = strToU8(item.content)
+    })
+    const zipped = fflate.zipSync(files)
+    downloadFile(zipped, 'code_generated', 'zip')
+    state.loading = false
+  } catch (e) {
+    console.log(e)
+    state.loading = false
+  }
 }
 </script>
 
