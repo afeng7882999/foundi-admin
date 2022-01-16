@@ -1,4 +1,4 @@
-import {defineConfig} from 'vite'
+import { defineConfig } from 'vite'
 import path from 'path'
 import vue from '@vitejs/plugin-vue'
 import legacy from '@vitejs/plugin-legacy'
@@ -10,7 +10,7 @@ import visualizer from 'rollup-plugin-visualizer'
 export default defineConfig({
   base: '/',
   resolve: {
-    alias: {'@': path.resolve(__dirname, 'src')}
+    alias: { '@': path.resolve(__dirname, 'src') }
   },
   plugins: [
     vue(),
@@ -48,8 +48,8 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://192.168.2.8:8080',
-        rewrite: path => path.replace(/^\/api/, ''),
-        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        changeOrigin: true
       }
     }
   }

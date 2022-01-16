@@ -19,3 +19,6 @@ pnpm-lock.yaml
 *.njsproj
 *.sln
 *.sw?
+
+# visualizer output result
+/stats.html

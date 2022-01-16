@@ -375,6 +375,10 @@
   &.is-tip {
     color: var(--el-text-color-placeholder);
   }
+  
+  &.is-loading {
+    animation: rotating 1s linear infinite;
+  }
 }
 
 // fd-icon in el-input
