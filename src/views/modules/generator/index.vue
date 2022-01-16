@@ -105,7 +105,7 @@
         </div>
       </el-form>
     </div>
-    <div class="fd-page__table border">
+    <div class="fd-page__table is-bordered">
       <el-table v-loading="state.loading" :data="state.data" @selection-change="onSelectionChange">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
         <el-table-column

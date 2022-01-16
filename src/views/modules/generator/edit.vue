@@ -181,7 +181,7 @@
       </div>
     </el-form>
 
-    <div class="fd-page__table border">
+    <div class="fd-page__table is-bordered">
       <div class="fd-page__sub-title"><span class="title-text">字段信息</span></div>
       <el-table :data="state.data.columns" row-key="id">
         <el-table-column class-name="allowDrag" label="" width="38">

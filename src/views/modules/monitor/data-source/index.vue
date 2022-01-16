@@ -6,7 +6,7 @@
         <el-button @click="dbStatReset" type="primary" v-if="hasAuth('monitor:dataSource:edit')" v-waves size="medium">重置</el-button>
       </div>
     </div>
-    <div class="fd-page__table border">
+    <div class="fd-page__table is-bordered">
       <el-tabs v-model="state.activeTab">
         <el-tab-pane label="首页" name="1"></el-tab-pane>
         <el-tab-pane label="数据源" name="2"></el-tab-pane>

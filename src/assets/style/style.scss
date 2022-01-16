@@ -339,7 +339,7 @@
     border-radius: var(--el-border-radius-base);
     // margin-bottom: 15px;
 
-    &.border {
+    &.is-bordered {
       border: 1px solid var(--el-border-color-lighter);
     }
   }

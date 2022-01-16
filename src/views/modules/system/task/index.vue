@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div class="fd-page__table border">
+    <div class="fd-page__table is-bordered">
       <el-table v-loading="loading" :data="data" row-key="id" @selection-change="onSelectionChange">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="任务名" prop="jobName" width="150px"></el-table-column>

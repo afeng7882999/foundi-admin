@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div class="fd-page__table border">
+    <div class="fd-page__table is-bordered">
       <el-table v-loading="loading" :data="data" row-key="id" @selection-change="onSelectionChange">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="文件名" prop="name" width="450">

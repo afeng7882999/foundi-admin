@@ -13,7 +13,7 @@
         </div>
       </div>
     </div>
-    <div class="fd-page__table border">
+    <div class="fd-page__table is-bordered">
       <el-table ref="table" v-loading="loading" :data="data" :default-expand-all="true" :indent="15" row-key="id" style="width: 100%" @select="selectHandle" @select-all="selectAllHandle">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="用户组名称" prop="name"></el-table-column>

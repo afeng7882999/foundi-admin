@@ -95,7 +95,7 @@
             </div>
           </div>
         </div>
-        <div class="fd-page__table border">
+        <div class="fd-page__table is-bordered">
           <el-table
             v-loading="loading"
             :data="data"
