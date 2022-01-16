@@ -59,22 +59,22 @@
               v-waves
               plain
               size="medium"
-              type="warning"
-              @click="handlePreview"
+              type="primary"
+              @click="handleGenerate(null)"
             >
-              <fd-icon class="is-in-btn" icon="preview-open"></fd-icon>
-              预览
+              <fd-icon class="is-in-btn" icon="download" :loading="state.generating['batch']"></fd-icon>
+              生成
             </el-button>
             <el-button
               v-show="hasAuth('generator:genTable:edit')"
               v-waves
               plain
               size="medium"
-              type="primary"
-              @click="handleGenerate"
+              type="warning"
+              @click="handlePreview"
             >
-              <fd-icon class="is-in-btn" icon="download"></fd-icon>
-              生成
+              <fd-icon class="is-in-btn" icon="preview-open"></fd-icon>
+              预览
             </el-button>
             <el-button
               v-show="hasAuth('generator:genTable:edit')"
@@ -162,19 +162,6 @@
         </el-table-column>
         <el-table-column align="center" fixed="right" header-align="center" label="操作" width="250">
           <template #default="scope">
-            <el-tooltip :show-after="500" content="生成并预览代码" placement="top">
-              <el-button
-                v-show="hasAuth('generator:genTable:edit')"
-                class="fd-tb-act"
-                plain
-                size="mini"
-                type="primary"
-                @click="handlePreview(scope.row)"
-              >
-                <fd-icon icon="preview-open"></fd-icon>
-                预览
-              </el-button>
-            </el-tooltip>
             <el-tooltip :show-after="500" content="生成并下载代码" placement="top">
               <el-button
                 v-show="hasAuth('generator:genTable:edit')"
@@ -184,8 +171,21 @@
                 type="primary"
                 @click="handleGenerate(scope.row)"
               >
-                <fd-icon icon="download"></fd-icon>
+                <fd-icon icon="download" :loading="state.generating[scope.row.id]"></fd-icon>
                 生成
+              </el-button>
+            </el-tooltip>
+            <el-tooltip :show-after="500" content="生成并预览代码" placement="top">
+              <el-button
+                v-show="hasAuth('generator:genTable:edit')"
+                class="fd-tb-act"
+                plain
+                size="mini"
+                type="warning"
+                @click="handlePreview(scope.row)"
+              >
+                <fd-icon icon="preview-open"></fd-icon>
+                预览
               </el-button>
             </el-tooltip>
             <el-tooltip :show-after="500" content="编辑" placement="top">
@@ -255,7 +255,8 @@ const stateOption = {
   delApi: genTableDel,
   downloadApi: download,
   query: genTableQuery,
-  uniqueId: ''
+  uniqueId: '',
+  generating: {} as Record<string, boolean>
 }
 
 const router = useRouter()
@@ -290,7 +291,8 @@ onActivated(() => {
 
 // 生成
 const handleGenerate = async (row: AnyObject) => {
-  const ids = row && row.id ? [row.id] : state.selectedNodes.map((n) => n.id)
+  const ids = row ? [row.id] : state.selectedNodes.map((n) => n.id)
+  const load = row ? row.id : 'batch'
   if (ids.length === 0) {
     ElMessage({
       message: '请选择要操作的数据表',
@@ -300,8 +302,11 @@ const handleGenerate = async (row: AnyObject) => {
     return
   }
   try {
+    state.generating[load] = true
     await state.downloadApi(ids, ids.length === 1 ? row.tableName : 'code_generated')
+    state.generating[load] = false
   } catch (e) {
+    state.generating[load] = false
     console.log(e)
   }
 }
