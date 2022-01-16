@@ -91,7 +91,6 @@ const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition
   padding: 15px;
   border-radius: var(--el-border-radius-base);
   background-color: var(--el-color-white);
-  box-shadow: var(--el-box-shadow-base);
   overflow: hidden;
 
   &.is-primary {
@@ -157,6 +156,10 @@ const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition
     .fd-wg-panel__minimize .fd-icon {
       transform: rotate(90deg);
     }
+  }
+
+  &:hover {
+    box-shadow: var(--el-box-shadow-base);
   }
 }
 </style>

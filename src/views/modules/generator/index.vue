@@ -114,7 +114,7 @@
           header-align="left"
           label="表名"
           prop="tableName"
-          width="200"
+          width="250"
         ></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
@@ -122,7 +122,7 @@
           header-align="left"
           label="表描述"
           prop="tableComment"
-          width="200"
+          width="250"
         ></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
@@ -138,7 +138,7 @@
           header-align="left"
           label="包名"
           prop="pack"
-          width="200"
+          width="250"
         ></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"

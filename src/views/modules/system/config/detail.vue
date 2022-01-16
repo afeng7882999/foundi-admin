@@ -16,7 +16,7 @@
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="键">{{ state.data[state.idx].configKey }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="值">
-        <fd-code-editor v-model:value="state.data[state.idx].configValue" language="application/json" readonly />
+        <fd-code-editor v-model="state.data[state.idx].configValue" language="application/json" readonly />
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="备注">{{ state.data[state.idx].remark }}</el-descriptions-item>
     </el-descriptions>

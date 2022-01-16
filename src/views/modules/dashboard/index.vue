@@ -1,7 +1,7 @@
 <template>
   <div class="page-dashboard fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <el-row :gutter="15">
+    <el-row :gutter="10">
       <el-col :xs="12" :sm="12" :md="6">
         <fd-widget-card
           icon="chart-pie-one"
@@ -43,7 +43,7 @@
         ></fd-widget-card>
       </el-col>
     </el-row>
-    <el-row :gutter="15">
+    <el-row :gutter="10">
       <el-col :xs="24" :sm="24" :md="16">
         <widget-content-stat></widget-content-stat>
         <widget-region></widget-region>
@@ -87,10 +87,10 @@ const showPageHeader = computed(() => {
 
 <style lang="scss">
 .fd-wg-card {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .fd-wg-panel {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 </style>
