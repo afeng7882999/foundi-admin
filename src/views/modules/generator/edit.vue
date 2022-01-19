@@ -191,7 +191,7 @@
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column label="序号" min-width="5%" type="index" />
+        <el-table-column label="序号" min-width="5%" prop="sort" />
         <el-table-column :show-overflow-tooltip="true" label="字段列名" min-width="10%" prop="columnName" />
         <el-table-column label="字段描述" min-width="10%">
           <template #default="scope">
@@ -384,6 +384,7 @@ onBeforeMount(async () => {
       const { data: dicts } = await dictList()
       state.dictOptions = dicts
       state.data = await genTableGetOne(id as string)
+      state.data.columns = state.data.columns.sort((a, b) => a.sort - b.sort)
     } catch (e) {
       console.log(e)
     }
