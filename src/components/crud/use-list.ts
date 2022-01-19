@@ -307,7 +307,7 @@ export default function <T extends IListStateOption>(stateOption: T) {
       if (!detailDialog.value) {
         return
       }
-      ;(detailDialog.value as any).open(mixState.data, idx, mixState.dicts)
+      ;(detailDialog.value as any).open(mixState.data, idx, { dicts: mixState.dicts })
     })
   }
 

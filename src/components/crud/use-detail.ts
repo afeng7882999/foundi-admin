@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, reactive } from 'vue'
 import useDict, { IDictList } from '@/components/crud/use-dict'
 import { AnyFunction, AnyObject } from '@/utils'
 import { off, on } from '@/utils/dom'
+import { formatTimestamp2 } from '@/utils/time'
 
 export interface IDetailStateOption {
   // 主键
@@ -71,6 +72,11 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
 
   // 字典 utils
   const { getDictData, dictVal } = useDict(mixState.dicts)
+
+  // 时间戳格式化
+  const dateTimeStr = (timestamp: string, shape = 'datetime' as 'time' | 'date' | 'datetime') => {
+    return formatTimestamp2(Number(timestamp), shape)
+  }
 
   // 显示
   const open = async (data: AnyObject[], idx: number, extra?: AnyObject) => {
@@ -144,6 +150,7 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
       resetForm,
       getDictData,
       dictVal,
+      dateTimeStr,
       onEdit,
       onPrev,
       onNext,

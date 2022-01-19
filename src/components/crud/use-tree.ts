@@ -292,7 +292,7 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
       if (!detailDialog.value) {
         return
       }
-      ;(detailDialog.value as any).open(mixState.data, idx, mixState.dicts)
+      ;(detailDialog.value as any).open(mixState.data, idx, { dicts: mixState.dicts })
     })
   }
 
