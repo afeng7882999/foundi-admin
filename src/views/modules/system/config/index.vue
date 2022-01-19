@@ -146,8 +146,12 @@
               header-align="left"
               label="创建时间"
               prop="createAt"
-              width="160"
-            ></el-table-column>
+              width="200"
+            >
+              <template #default="scope">
+                <span>{{ dateTimeStr(scope.row.createAt) }}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" fixed="right" header-align="center" label="操作" width="100">
               <template #default="scope">
                 <el-tooltip :show-after="500" content="编辑" placement="top">
@@ -245,6 +249,7 @@ const {
   resetQuery,
   del,
   dictVal,
+  dateTimeStr,
   hasAuth,
   exportData,
   showEdit,

@@ -2,7 +2,12 @@
   <el-dialog v-model="visible" :close-on-click-modal="false" :title="isCreate ? '新增' : '修改'" @closed="hideDialog">
     <el-form ref="form" :model="formData" :rules="formRule" label-width="80px" size="medium" @keyup.enter="submit()">
       <el-form-item label="父菜单" prop="parentId">
-        <fd-tree-select v-model="formData.parentId" :data-list="parentList" :tree-fields="{ labelField: 'name' }" style="width: 100%"></fd-tree-select>
+        <fd-tree-select
+          v-model="formData.parentId"
+          :data-list="parentList"
+          :tree-fields="{ labelField: 'name' }"
+          style="width: 100%"
+        ></fd-tree-select>
       </el-form-item>
       <el-form-item label="菜单名称" prop="name">
         <el-input v-model="formData.name" placeholder="请输入菜单名称"></el-input>
@@ -20,13 +25,23 @@
         <el-col :span="12">
           <el-form-item label="类型" prop="typeDict">
             <el-select v-model="formData.typeDict" style="width: 100%">
-              <el-option v-for="item in dicts.sysMenuType" :key="item.itemKey" :label="item.itemValue" :value="item.itemKey"></el-option>
+              <el-option
+                v-for="item in dicts.sysMenuType"
+                :key="item.itemKey"
+                :label="item.itemValue"
+                :value="item.itemKey"
+              ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="排序" prop="sort">
-            <el-input-number v-model="formData.sort" :min="0" controls-position="right" style="width: 100%"></el-input-number>
+            <el-input-number
+              v-model="formData.sort"
+              :min="0"
+              controls-position="right"
+              style="width: 100%"
+            ></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
@@ -43,7 +58,12 @@
         </el-col>
       </el-row>
       <el-form-item label="注释" prop="remark">
-        <el-input v-model="formData.remark" :autosize="{ minRows: 2 }" placeholder="请输入注释" type="textarea"></el-input>
+        <el-input
+          v-model="formData.remark"
+          :autosize="{ minRows: 2 }"
+          placeholder="请输入注释"
+          type="textarea"
+        ></el-input>
       </el-form-item>
       <el-form-item label="是否显示" prop="visible">
         <el-switch v-model="formData.visible" active-text="是" inactive-text="否"></el-switch>
