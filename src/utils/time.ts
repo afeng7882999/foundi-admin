@@ -35,11 +35,17 @@ export function formatTimestamp(timestamp: number, option = DEFAULT_DATETIME_FOR
 /**
  * 时间戳转日期时间字符串
  */
-export function formatTimestamp2(timestamp: number, option = DEFAULT_DATETIME_FORMAT): string {
+export function formatTimestamp2(timestamp: number, shape = 'datetime' as 'time' | 'date' | 'datetime'): string {
   if (('' + timestamp).length === 10) {
     timestamp = timestamp * 1000
   } else {
     timestamp = +timestamp
+  }
+  let option = DEFAULT_DATETIME_FORMAT
+  if (shape === 'time') {
+    option = DEFAULT_TIME_FORMAT
+  } else if (shape === 'date') {
+    option = DEFAULT_DATE_FORMAT
   }
   const d = dayjs(timestamp)
   return d.format(option)

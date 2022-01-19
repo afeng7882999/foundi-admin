@@ -155,8 +155,8 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
   const { getDictData, dictVal } = useDict(mixState.dicts)
 
   // 时间戳格式化
-  const dateTimeStr = (timestamp: string) => {
-    return formatTimestamp2(Number(timestamp))
+  const dateTimeStr = (timestamp: string, shape = 'datetime' as 'time' | 'date' | 'datetime') => {
+    return formatTimestamp2(Number(timestamp), shape)
   }
 
   // 显示页面即获取数据
@@ -297,7 +297,7 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
   }
 
   // 树节点选中
-  const selectHandle = (selection: AnyObject[]) => {
+  const onSelect = (selection: AnyObject[]) => {
     const tbl = table.value as any
     if (selection.length > mixState.selectedNodes.length) {
       const selected = selection.filter(
@@ -331,8 +331,8 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
   }
 
   // 树节点全选
-  const selectAllHandle = (selection: AnyObject[]) => {
-    selectHandle(selection)
+  const onSelectAll = (selection: AnyObject[]) => {
+    onSelect(selection)
   }
 
   const { pageMinHeight, pageHeight, showPageHeader, hasAuth, setViewTitle, currentViewTitle } = usePage()
@@ -368,8 +368,8 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
       showEdit,
       showDetail,
       toggleQueryForm,
-      selectHandle,
-      selectAllHandle,
+      onSelect,
+      onSelectAll,
       onBeforeGetList,
       onAfterGetList,
       onBeforeDel,

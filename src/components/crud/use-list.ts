@@ -139,8 +139,8 @@ export default function <T extends IListStateOption>(stateOption: T) {
   const { getDictData, dictVal } = useDict(mixState.dicts)
 
   // 时间戳格式化
-  const dateTimeStr = (timestamp: string) => {
-    return formatTimestamp2(Number(timestamp))
+  const dateTimeStr = (timestamp: string, shape = 'datetime' as 'time' | 'date' | 'datetime') => {
+    return formatTimestamp2(Number(timestamp), shape)
   }
 
   // 显示页面即获取数据
