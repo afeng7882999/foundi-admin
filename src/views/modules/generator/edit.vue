@@ -191,7 +191,7 @@
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column label="序号" min-width="5%" prop="sort" />
+        <el-table-column label="序号" prop="sort" width="50" />
         <el-table-column :show-overflow-tooltip="true" label="字段列名" min-width="10%" prop="columnName" />
         <el-table-column label="字段描述" min-width="10%">
           <template #default="scope">
@@ -203,6 +203,18 @@
         <el-table-column label="字段名称" min-width="10%">
           <template #default="scope">
             <el-input v-model="scope.row.fieldName" size="medium"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="字典类型" min-width="12%">
+          <template #default="scope">
+            <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择" size="medium">
+              <el-option
+                v-for="item in state.dictOptions"
+                :key="item.name"
+                :label="`${item.nameCn}: ${item.name}`"
+                :value="item.name"
+              ></el-option>
+            </el-select>
           </template>
         </el-table-column>
         <el-table-column label="插入" min-width="5%">
@@ -230,6 +242,11 @@
             <el-checkbox v-model="scope.row.isOrder"></el-checkbox>
           </template>
         </el-table-column>
+        <el-table-column label="必填" min-width="5%">
+          <template #default="scope">
+            <el-checkbox v-model="scope.row.isRequired"></el-checkbox>
+          </template>
+        </el-table-column>
         <el-table-column label="查询方式" min-width="10%">
           <template #default="scope">
             <el-select v-model="scope.row.queryType" size="medium">
@@ -242,11 +259,6 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column label="必填" min-width="5%">
-          <template #default="scope">
-            <el-checkbox v-model="scope.row.isRequired"></el-checkbox>
-          </template>
-        </el-table-column>
         <el-table-column label="显示类型" min-width="12%">
           <template #default="scope">
             <el-select v-model="scope.row.htmlType" size="medium">
@@ -255,18 +267,6 @@
                 :key="item.value"
                 :label="`${item.label}: ${item.value}`"
                 :value="item.value"
-              ></el-option>
-            </el-select>
-          </template>
-        </el-table-column>
-        <el-table-column label="字典类型" min-width="12%">
-          <template #default="scope">
-            <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择" size="medium">
-              <el-option
-                v-for="item in state.dictOptions"
-                :key="item.name"
-                :label="`${item.nameCn}: ${item.name}`"
-                :value="item.name"
               ></el-option>
             </el-select>
           </template>
@@ -319,7 +319,6 @@ const DEFAULT_HTML_TYPES = [
   { label: '单选框（字典）', value: 'radio' },
   { label: '复选框（字典或Boolean）', value: 'checkbox' },
   { label: '日期控件', value: 'datetime' },
-  { label: '日期范围', value: 'daterange' },
   { label: '图片上传', value: 'image' },
   { label: '文件上传', value: 'upload' },
   { label: '富文本', value: 'editor' }
