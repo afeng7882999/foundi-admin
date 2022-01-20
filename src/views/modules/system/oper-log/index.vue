@@ -10,27 +10,29 @@
           @before-leave="expandBeforeLeave"
         >
           <div v-show="queryFormShow" class="fd-page__query">
-            <el-form-item label="模块标题" prop="title">
-              <el-input v-model="query.title" clearable placeholder="请输入模块标题" />
+            <el-form-item label="模块" prop="title">
+              <el-input v-model="query.title" clearable placeholder="请输入模块标题" style="width: 150px" />
             </el-form-item>
-            <el-form-item label="方法名称" prop="method">
-              <el-input v-model="query.method" clearable placeholder="请输入方法名称" />
+            <el-form-item label="方法" prop="method">
+              <el-input v-model="query.method" clearable placeholder="请输入方法名称" style="width: 150px" />
             </el-form-item>
-            <el-form-item label="操作人员账号名" prop="operUserName">
-              <el-input v-model="query.operUserName" clearable placeholder="请输入操作人员账号名" />
+            <el-form-item label="账号" prop="operUserName">
+              <el-input v-model="query.operUserName" clearable placeholder="请输入账号" style="width: 150px" />
             </el-form-item>
-            <el-form-item label="主机地址" prop="operIp">
-              <el-input v-model="query.operIp" clearable placeholder="请输入主机地址" />
+            <el-form-item label="IP" prop="operIp">
+              <el-input v-model="query.operIp" clearable placeholder="请输入IP" style="width: 150px" />
             </el-form-item>
-            <el-form-item label="操作时间" prop="operTime">
+            <el-form-item label="时间" prop="operTime">
               <el-date-picker
                 v-model="query.operTime"
                 :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
                 end-placeholder="结束日期"
                 format="YYYY-MM-DD"
+                value-format="x"
                 range-separator="-"
                 start-placeholder="开始日期"
                 type="daterange"
+                style="width: 280px"
               ></el-date-picker>
             </el-form-item>
             <el-form-item>
@@ -87,10 +89,14 @@
           :show-overflow-tooltip="true"
           align="center"
           header-align="center"
-          label="操作时间"
+          label="时间"
           prop="operTime"
           width="200"
-        ></el-table-column>
+        >
+          <template #default="scope">
+            {{ dateTimeStr(scope.row.operTime) }}
+          </template>
+        </el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
           align="left"
@@ -107,7 +113,7 @@
           :show-overflow-tooltip="true"
           align="left"
           header-align="left"
-          label="模块标题"
+          label="模块"
           prop="title"
           width="150"
         ></el-table-column>
@@ -115,7 +121,7 @@
           :show-overflow-tooltip="true"
           align="left"
           header-align="left"
-          label="方法名称"
+          label="方法"
           prop="method"
           width="400"
         ></el-table-column>
@@ -149,7 +155,7 @@
           :show-overflow-tooltip="true"
           align="left"
           header-align="left"
-          label="账号名"
+          label="账号"
           prop="operUserName"
           width="150"
         ></el-table-column>
@@ -172,14 +178,14 @@
           :show-overflow-tooltip="true"
           align="left"
           header-align="left"
-          label="主机地址"
+          label="IP"
           prop="operIp"
         ></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
           align="left"
           header-align="left"
-          label="操作地点"
+          label="地点"
           prop="operLocation"
         ></el-table-column>
         <el-table-column
@@ -295,6 +301,7 @@ const {
   toggleQueryForm,
   sortChanged,
   dictVal,
+  dateTimeStr,
   showDetail,
   pageChange,
   sizeChange,

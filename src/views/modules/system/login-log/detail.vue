@@ -6,20 +6,20 @@
     width="80%"
   >
     <el-descriptions :column="2" :title="`ID: ${state.data[state.idx].id}`" border size="medium">
-      <el-descriptions-item label="访问时间" :span="2">
+      <el-descriptions-item label="访问时间">
         {{ dateTimeStr(state.data[state.idx].operTime) }}
       </el-descriptions-item>
-      <el-descriptions-item label="类型" :span="2">
+      <el-descriptions-item label="类型">
         {{ dictVal(state.dicts.sysLoginLogType, state.data[state.idx].typeDict) }}
       </el-descriptions-item>
-      <el-descriptions-item label="登录方式" :span="2">
+      <el-descriptions-item label="登录方式">
         {{ dictVal(state.dicts.sysAuthcType, state.data[state.idx].authcTypeDict) }}
       </el-descriptions-item>
-      <el-descriptions-item label="用户账号" :span="2">{{ state.data[state.idx].userName }}</el-descriptions-item>
-      <el-descriptions-item label="IP地址" :span="2">{{ state.data[state.idx].ip }}</el-descriptions-item>
-      <el-descriptions-item label="地点" :span="2">{{ state.data[state.idx].location }}</el-descriptions-item>
-      <el-descriptions-item label="浏览器" :span="2">{{ state.data[state.idx].browser }}</el-descriptions-item>
-      <el-descriptions-item label="操作系统" :span="2">{{ state.data[state.idx].os }}</el-descriptions-item>
+      <el-descriptions-item label="用户账号">{{ state.data[state.idx].userName }}</el-descriptions-item>
+      <el-descriptions-item label="IP地址">{{ state.data[state.idx].ip }}</el-descriptions-item>
+      <el-descriptions-item label="地点">{{ state.data[state.idx].location }}</el-descriptions-item>
+      <el-descriptions-item label="浏览器">{{ state.data[state.idx].browser }}</el-descriptions-item>
+      <el-descriptions-item label="操作系统">{{ state.data[state.idx].os }}</el-descriptions-item>
       <el-descriptions-item label="状态" :span="2">
         {{ dictVal(state.dicts.sysLoginLogStatus, state.data[state.idx].statusDict) }}
       </el-descriptions-item>
