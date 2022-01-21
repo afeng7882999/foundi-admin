@@ -62,7 +62,7 @@
               @click="del()"
             >
               <fd-icon class="is-in-btn" icon="delete"></fd-icon>
-              批量删除
+              删除
             </el-button>
             <div class="action-right">
               <el-button
@@ -87,7 +87,7 @@
               >
                 <fd-icon-button
                   :class="queryFormShow ? 'expanded' : ''"
-                  class="action-toggle-btn"
+                  class="action-query-toggle"
                   icon="double-down"
                   @click="toggleQueryForm()"
                 ></fd-icon-button>

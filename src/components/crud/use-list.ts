@@ -1,12 +1,12 @@
 import { AnyFunction, AnyObject, needImplFunc } from '@/utils'
-import { nextTick, onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { merge } from 'lodash-es'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import usePage from './use-page'
 import useDict, { IDictList } from './use-dict'
 import { scrollToTop } from '@/utils/smooth-scroll'
 import { nextFrame } from '@/utils/next-frame'
-import {formatTimestamp2} from "@/utils/time";
+import { formatTimestamp2 } from '@/utils/time'
 
 export interface IListStateOption {
   // 主键
@@ -26,6 +26,8 @@ export interface IListStateOption {
   params?: AnyObject
   // 查询数据的对象
   query?: AnyObject
+  // 查询数据的条件个数
+  queryLen?: number
 
   // 每页数据条数
   size?: number
@@ -64,6 +66,8 @@ export default function <T extends IListStateOption>(stateOption: T) {
     params: {} as AnyObject,
     // 查询数据的对象
     query: {} as AnyObject,
+    // 查询数据的条件个数
+    queryLen: 0,
     // 排序规则，支持多字段排序 { id: 'desc', createTime: 'asc' }
     sort: {} as AnyObject,
     // 页码
@@ -185,6 +189,20 @@ export default function <T extends IListStateOption>(stateOption: T) {
         orderByList.push(`${key}:${mixState.sort[key]}`)
       }
     })
+
+    let len = 0
+    for (const key in mixState.query) {
+      const val = mixState.query[key]
+      if (!val) {
+        continue
+      }
+      if (Array.isArray(val) && val.length === 0) {
+        continue
+      }
+      len++
+    }
+    mixState.queryLen = len
+
     return {
       current: mixState.current,
       size: mixState.size,

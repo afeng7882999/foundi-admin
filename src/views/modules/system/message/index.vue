@@ -30,14 +30,14 @@
       <div class="fd-page__action">
         <el-button v-show="hasAuth('system:message:delete')" :disabled="selectedNodes.length <= 0" plain type="danger" @click="del()">
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
-          批量删除
+          删除
         </el-button>
         <div class="action-right">
           <el-button v-show="hasAuth('system:message:add')" v-waves type="primary" @click="showEdit()">新增</el-button>
           <el-button v-show="hasAuth('system:message:export')" v-waves @click="exportData()">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
           <el-tooltip :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
-            <fd-icon-button :class="queryFormShow ? 'expanded' : ''" class="action-toggle-btn" icon="double-down" @click="toggleQueryForm()"></fd-icon-button>
+            <fd-icon-button :class="queryFormShow ? 'expanded' : ''" class="action-query-toggle" icon="double-down" @click="toggleQueryForm()"></fd-icon-button>
           </el-tooltip>
         </div>
       </div>

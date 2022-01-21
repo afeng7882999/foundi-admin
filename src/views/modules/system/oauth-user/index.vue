@@ -9,7 +9,7 @@
         </el-button>
         <el-button v-show="hasAuth('system:oauthUser:delete')" v-waves :disabled="selectedNodes.length <= 0" plain size="medium" type="danger" @click="del()">
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
-          批量删除
+          删除
         </el-button>
         <div class="action-right">
           <el-button v-show="hasAuth('system:oauthUser:export')" v-waves size="medium" @click="exportData()">导出数据</el-button>

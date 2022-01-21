@@ -42,7 +42,7 @@
               @click="del()"
             >
               <fd-icon class="is-in-btn" icon="delete"></fd-icon>
-              批量删除
+              删除
             </el-button>
             <div class="action-right">
               <el-button
@@ -65,12 +65,9 @@
                 effect="dark"
                 placement="top"
               >
-                <fd-icon-button
-                  :class="state.queryFormShow ? 'expanded' : ''"
-                  class="action-toggle-btn"
-                  icon="double-down"
-                  @click="toggleQueryForm()"
-                ></fd-icon-button>
+                <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
+                  <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
+                </el-badge>
               </el-tooltip>
             </div>
           </div>

@@ -239,6 +239,42 @@
   }
 }
 
+//fd-icon-button
+.fd-icon-button {
+  font-size: $icon-size-middle;
+  border-radius: var(--el-border-radius-base) !important;
+  border: none;
+  padding: 6px !important;
+  color: inherit;
+  background: none;
+  
+  &:hover {
+    color: inherit;
+    background-color: var(--el-color-primary-light-9);
+  }
+  
+  &:focus {
+    color: inherit;
+    background: none;
+    
+    &:hover {
+      color: inherit;
+      background-color: var(--el-color-primary-light-9);
+    }
+  }
+  
+  @include theme-d() {
+    &:hover {
+      background-color: var(--el-color-primary-light-5);
+    }
+    &:focus {
+      &:hover {
+        background-color: var(--el-color-primary-light-5);
+      }
+    }
+  }
+}
+
 // fd-page
 .fd-page {
   padding: 10px 15px 15px 15px;
@@ -303,24 +339,29 @@
       margin-left: auto;
       display: flex;
       align-items: center;
+    }
+  
+    .action-query-toggle {
+      color: var(--el-text-color-placeholder);
       
-      .action-divider {
-        margin: 0 10px;
-        height: 30px;
-      }
-      
-      .action-toggle-btn {
+      &:hover {
         color: var(--el-text-color-placeholder);
-        .fd-icon {
-          transition: transform $default-transition-time;
-        }
-        &.expanded .fd-icon {
-          transform: rotate(180deg);
-        }
-        &:hover {
-          color: var(--el-text-color-placeholder);
-        }
       }
+    }
+    
+    .action-badge {
+      margin-right: 10px;
+      sup {
+        height: 12px;
+        line-height: 12px;
+        border: none;
+        border-radius: 10px;
+      }
+    }
+  
+    .action-divider {
+      margin: 0 10px;
+      height: 30px;
     }
   }
 

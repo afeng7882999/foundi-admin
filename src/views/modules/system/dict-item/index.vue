@@ -44,7 +44,7 @@
           @click="del()"
         >
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
-          批量删除
+          删除
         </el-button>
         <div class="action-right">
           <el-button
@@ -67,12 +67,9 @@
             effect="dark"
             placement="top"
           >
-            <fd-icon-button
-              :class="state.queryFormShow ? 'expanded' : ''"
-              class="action-toggle-btn"
-              icon="double-down"
-              @click="toggleQueryForm()"
-            ></fd-icon-button>
+            <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
+              <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
+            </el-badge>
           </el-tooltip>
         </div>
       </div>
@@ -167,7 +164,7 @@ export default {
 <script setup lang="ts">
 import { nextTick, onBeforeMount, ref } from 'vue'
 import useList from '@/components/crud/use-list'
-import { dictItemDel, dictItemExport, dictItemFields, dictItemList, dictItemQuery } from '@/api/system/dict-item.ts'
+import { dictItemDel, dictItemExport, dictItemFields, dictItemList, dictItemQuery } from '@/api/system/dict-item'
 import Edit from './edit.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import { useRoute, useRouter } from 'vue-router'
@@ -193,8 +190,18 @@ const store = useStore()
 const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
 const { queryForm, editDialog } = mixRefs
 const { pageMinHeight, showPageHeader } = mixComputed
-const { getList, pageChange, sizeChange, queryList, resetQuery, del, hasAuth, onSelectionChange, toggleQueryForm } =
-  mixMethods
+const {
+  getList,
+  pageChange,
+  sizeChange,
+  queryList,
+  resetQuery,
+  del,
+  hasAuth,
+  onSelectionChange,
+  toggleQueryForm,
+  onAfterGetList
+} = mixMethods
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 
@@ -234,6 +241,12 @@ const exportDictItemData = async (type?: string) => {
     state.exportLoading = false
   }
 }
+
+onAfterGetList(async (resData: any) => {
+  if (state.queryLen > 0) {
+    state.queryLen = state.queryLen - 1
+  }
+})
 
 // open context menu
 const openMenu = (e: MouseEvent) => {

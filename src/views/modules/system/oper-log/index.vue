@@ -59,7 +59,7 @@
           @click="del()"
         >
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
-          批量删除
+          删除
         </el-button>
         <div class="action-right">
           <el-button v-show="hasAuth('system:operLog:export')" v-waves size="medium" @click="exportData()">
@@ -72,12 +72,9 @@
             effect="dark"
             placement="top"
           >
-            <fd-icon-button
-              :class="queryFormShow ? 'expanded' : ''"
-              class="action-toggle-btn"
-              icon="double-down"
-              @click="toggleQueryForm()"
-            ></fd-icon-button>
+            <el-badge :hidden="queryFormShow || !queryLen" :value="queryLen" class="action-badge">
+              <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
+            </el-badge>
           </el-tooltip>
         </div>
       </div>
@@ -289,7 +286,7 @@ const stateOption = {
 
 const { mixRefs, mixState, mixComputed, mixMethods } = useList(stateOption)
 const { queryForm, detailDialog } = mixRefs
-const { data, query, dicts, queryFormShow, selectedNodes, loading, current, total, size, count, detailShow } =
+const { data, query, queryLen, dicts, queryFormShow, selectedNodes, loading, current, total, size, count, detailShow } =
   toRefs(mixState)
 const { pageMinHeight, showPageHeader } = mixComputed
 const {

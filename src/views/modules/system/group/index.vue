@@ -13,7 +13,7 @@
           @click="del()"
         >
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
-          批量删除
+          删除
         </el-button>
         <div class="action-right">
           <el-button
