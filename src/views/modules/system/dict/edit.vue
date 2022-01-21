@@ -55,9 +55,7 @@ const stateOption = {
 const emit = defineEmits([REFRESH_DATA_EVENT])
 
 const { mixRefs, mixState: state, mixMethods } = useListEdit(stateOption, emit)
-
 const { form } = mixRefs
-
 const { open, submit } = mixMethods
 
 defineExpose({
