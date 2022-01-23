@@ -1,5 +1,5 @@
 <template>
-  <fd-right-panel ref="rightPanel" custom-class="fd-setting" title="定制FOUNDi" size="320px">
+  <fd-right-panel ref="rightPanel" v-model="state.visible" custom-class="fd-setting" title="定制FOUNDi" size="320px">
     <el-scrollbar class="fd-setting__scrollbar">
       <div class="fd-setting__inner">
         <div class="fd-setting__item">
@@ -56,7 +56,6 @@ export default {
 
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from 'vue'
-import FdRightPanel from '@/components/right-panel/index.vue'
 import FdThemeSelect from '@/components/theme-select/index.vue'
 import { DEFAULT_THEMES, themeProcess } from 'element-plus-dynamic-theme/theme'
 import useLayoutResize from './use-resize'
@@ -64,6 +63,8 @@ import { useStore } from 'vuex'
 import { AllState } from '@/store'
 
 const state = reactive({
+  visible: false,
+
   themes: DEFAULT_THEMES,
   themeIdx: 0,
   enableTags: true,
@@ -141,7 +142,7 @@ onMounted(() => {
 const rightPanel = ref()
 
 const show = () => {
-  ;(rightPanel.value as any).show()
+  state.visible = true
 }
 
 defineExpose({

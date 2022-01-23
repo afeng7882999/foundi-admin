@@ -352,7 +352,18 @@ export default function <T extends IListStateOption>(stateOption: T) {
     }
   }
 
-  const { pageMinHeight, pageHeight, showPageHeader, hasAuth, setViewTitle, currentViewTitle } = usePage()
+  const {
+    docMinHeight,
+    docHeight,
+    showPageHeader,
+    getBodyWidth,
+    getBodyHeight,
+    getDocWidth,
+    getDocHeight,
+    hasAuth,
+    setViewTitle,
+    currentViewTitle
+  } = usePage()
 
   return {
     mixRefs: {
@@ -363,8 +374,8 @@ export default function <T extends IListStateOption>(stateOption: T) {
     },
     mixState,
     mixComputed: {
-      pageMinHeight,
-      pageHeight,
+      docMinHeight,
+      docHeight,
       showPageHeader
     },
     mixMethods: {
@@ -389,7 +400,11 @@ export default function <T extends IListStateOption>(stateOption: T) {
       setViewTitle,
       currentViewTitle,
       colEmptyFormatter,
-      sortChanged
+      sortChanged,
+      getBodyWidth,
+      getBodyHeight,
+      getDocWidth,
+      getDocHeight
     }
   }
 }

@@ -10,20 +10,18 @@ export default {
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useStore } from 'vuex'
-import { AllState } from '@/store'
+import usePage from '@/components/crud/use-page'
 
 const props = defineProps({
   theUrl: String
 })
 
-const store = useStore<AllState>()
-const storeState = store.state as AllState
+const { getDocWidth, getDocHeight } = usePage()
 
 const iframeStyle = computed(() => {
   return {
-    width: storeState.app.docWidth + 'px',
-    height: storeState.app.docHeight - 4 + 'px'
+    width: getDocWidth(0, 'ps'),
+    height: getDocHeight(4, 'px')
   }
 })
 

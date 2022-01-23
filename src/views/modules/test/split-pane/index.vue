@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasAuth('test:splitPane:list')" :style="pageMinHeight" class="page-test-split-pane fd-page">
+  <div v-if="hasAuth('test:splitPane:list')" :style="docMinHeight" class="page-test-split-pane fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <fd-split-pane :default-pos="400" shrink="right">
       <template #left>
@@ -35,7 +35,7 @@ export default {
 import usePage from '@/components/crud/use-page'
 import FdSplitPane from '@/components/split-pane/index.vue'
 
-const { pageMinHeight, showPageHeader, hasAuth } = usePage()
+const { docMinHeight, showPageHeader, hasAuth } = usePage()
 </script>
 
 <style lang="scss">

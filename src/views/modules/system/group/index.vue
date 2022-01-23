@@ -1,5 +1,5 @@
 <template>
-  <div ref="moduleRoot" :style="pageMinHeight" class="page-system-group fd-page">
+  <div ref="moduleRoot" :style="docMinHeight" class="page-system-group fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page__action">
@@ -127,7 +127,7 @@ const stateOption = {
 
 const { mixRefs, mixState: state, mixComputed, mixMethods } = useTree(stateOption)
 const { editDialog } = mixRefs
-const { pageMinHeight, showPageHeader } = mixComputed
+const { docMinHeight, showPageHeader } = mixComputed
 const { showEdit, getList, del, onSelect, onSelectAll, hasAuth, exportData } = mixMethods
 
 const getParentName = (parentId: string) => {

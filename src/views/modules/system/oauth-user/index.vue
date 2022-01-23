@@ -1,5 +1,5 @@
 <template>
-  <div ref="moduleRoot" :style="pageMinHeight" class="page-oauthUser fd-page">
+  <div ref="moduleRoot" :style="docMinHeight" class="page-oauthUser fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page__action">

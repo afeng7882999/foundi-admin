@@ -1,5 +1,5 @@
 <template>
-  <div ref="moduleRoot" :style="pageMinHeight" class="page-menu fd-page">
+  <div ref="moduleRoot" :style="docMinHeight" class="page-menu fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page__action">

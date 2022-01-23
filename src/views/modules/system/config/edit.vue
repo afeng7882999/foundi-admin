@@ -1,9 +1,10 @@
 <template>
-  <el-dialog
+  <fd-right-panel
     v-model="state.visible"
     :close-on-click-modal="false"
-    :title="state.isCreate ? '新增' : '修改'"
-    width="80%"
+    :modal="false"
+    :title="state.isCreate ? '新增系统配置' : '修改系统配置'"
+    size="600px"
     @closed="hideDialog"
   >
     <el-form ref="form" :model="state.formData" :rules="state.formRule" label-width="80px" size="medium">
@@ -23,7 +24,7 @@
       <el-form-item class="json-editor-form-item" label="值" prop="configValue">
         <fd-code-editor
           ref="jsonEditor"
-          v-model:value="state.formData.configValue"
+          v-model="state.formData.configValue"
           border
           language="application/json"
           line-numbers
@@ -47,7 +48,7 @@
         <el-button size="medium" type="primary" @click="submit">确定</el-button>
       </span>
     </template>
-  </el-dialog>
+  </fd-right-panel>
 </template>
 
 <script lang="ts">
@@ -76,7 +77,7 @@ const stateOption = {
     configTypeDict: '',
     configKey: '',
     configValue: '',
-    enabled: '',
+    enabled: false,
     remark: ''
   },
   formRule: {
@@ -108,7 +109,11 @@ defineExpose({
 <style lang="scss" scoped>
 .el-form-item.json-editor-form-item {
   ::v-deep(.el-form-item__content) {
+    min-height: 75px;
     overflow: hidden;
+    .fd-code-editor {
+      height: 100%;
+    }
   }
 }
 </style>

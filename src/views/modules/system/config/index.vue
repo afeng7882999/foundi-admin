@@ -1,5 +1,6 @@
 <template>
-  <div ref="moduleRoot" :style="pageMinHeight" class="page-system-config fd-page">
+  <div ref="moduleRoot" :style="docMinHeight" class="page-system-config fd-page">
+    <!--  系统配置管理 -->
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <fd-split-pane :default-pos="400" shrink="left">
       <template #left>
@@ -13,7 +14,13 @@
             >
               <div v-show="state.queryFormShow" class="fd-page__query">
                 <el-form-item label="配置分类" prop="configTypeDict">
-                  <el-select v-model="state.query.configTypeDict" multiple clearable placeholder="请选择配置分类">
+                  <el-select
+                    v-model="state.query.configTypeDict"
+                    multiple
+                    clearable
+                    placeholder="请选择配置分类"
+                    style="width: 200px"
+                  >
                     <el-option
                       v-for="item in state.dicts.sysConfigType"
                       :key="item.itemKey"
@@ -23,17 +30,14 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="键" prop="configKey">
-                  <el-input v-model="state.query.configKey" clearable placeholder="请输入键" />
+                  <el-input v-model="state.query.configKey" clearable placeholder="请输入键" style="width: 200px" />
                 </el-form-item>
                 <el-form-item>
                   <el-button plain type="primary" @click="queryList">
                     <fd-icon class="is-in-btn" icon="search"></fd-icon>
                     查询
                   </el-button>
-                  <el-button @click="resetQuery">
-                    <fd-icon class="is-in-btn" icon="refresh"></fd-icon>
-                    清空
-                  </el-button>
+                  <el-button @click="resetQuery">清空</el-button>
                 </el-form-item>
               </div>
             </transition>
@@ -60,6 +64,7 @@
                 size="medium"
                 @click="showEdit()"
               >
+                <fd-icon class="is-in-btn" icon="plus"></fd-icon>
                 新增
               </el-button>
               <el-button v-show="hasAuth('system:config:export')" v-waves size="medium" @click="exportData()">
@@ -236,7 +241,7 @@ const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOptio
 
 const { queryForm, editDialog, detailDialog } = mixRefs
 
-const { pageMinHeight, showPageHeader } = mixComputed
+const { docMinHeight, showPageHeader } = mixComputed
 
 const {
   getList,

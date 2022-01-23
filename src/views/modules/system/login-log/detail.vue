@@ -1,29 +1,30 @@
 <template>
-  <el-dialog
+  <fd-right-panel
     v-model="state.visible"
     :close-on-click-modal="false"
+    :modal="false"
     :title="`系统访问日志详细 (${state.idx + 1} / ${state.data.length})`"
-    width="80%"
+    size="600px"
   >
     <el-descriptions :column="2" :title="`ID: ${state.data[state.idx].id}`" border size="medium">
-      <el-descriptions-item label="访问时间">
+      <el-descriptions-item :span="2" label="访问时间">
         {{ dateTimeStr(state.data[state.idx].operTime) }}
       </el-descriptions-item>
-      <el-descriptions-item label="类型">
+      <el-descriptions-item :span="2" label="类型">
         {{ dictVal(state.dicts.sysLoginLogType, state.data[state.idx].typeDict) }}
       </el-descriptions-item>
-      <el-descriptions-item label="登录方式">
+      <el-descriptions-item :span="2" label="登录方式">
         {{ dictVal(state.dicts.sysAuthcType, state.data[state.idx].authcTypeDict) }}
       </el-descriptions-item>
-      <el-descriptions-item label="用户账号">{{ state.data[state.idx].userName }}</el-descriptions-item>
-      <el-descriptions-item label="IP地址">{{ state.data[state.idx].ip }}</el-descriptions-item>
-      <el-descriptions-item label="地点">{{ state.data[state.idx].location }}</el-descriptions-item>
-      <el-descriptions-item label="浏览器">{{ state.data[state.idx].browser }}</el-descriptions-item>
-      <el-descriptions-item label="操作系统">{{ state.data[state.idx].os }}</el-descriptions-item>
-      <el-descriptions-item label="状态" :span="2">
+      <el-descriptions-item :span="2" label="用户账号">{{ state.data[state.idx].userName }}</el-descriptions-item>
+      <el-descriptions-item :span="2" label="IP地址">{{ state.data[state.idx].ip }}</el-descriptions-item>
+      <el-descriptions-item :span="2" label="地点">{{ state.data[state.idx].location }}</el-descriptions-item>
+      <el-descriptions-item :span="2" label="浏览器">{{ state.data[state.idx].browser }}</el-descriptions-item>
+      <el-descriptions-item :span="2" label="操作系统">{{ state.data[state.idx].os }}</el-descriptions-item>
+      <el-descriptions-item :span="2" label="状态">
         {{ dictVal(state.dicts.sysLoginLogStatus, state.data[state.idx].statusDict) }}
       </el-descriptions-item>
-      <el-descriptions-item label="提示消息" :span="2">{{ state.data[state.idx].message }}</el-descriptions-item>
+      <el-descriptions-item :span="2" label="提示消息">{{ state.data[state.idx].message }}</el-descriptions-item>
       <template #extra>
         <el-button v-show="state.ifEditable" size="medium" type="primary" @click="onEdit">编辑</el-button>
         <el-button v-show="state.ifShowNavigation" size="medium" :disabled="prevDisabled" @click="onPrev">
@@ -36,7 +37,7 @@
         </el-button>
       </template>
     </el-descriptions>
-  </el-dialog>
+  </fd-right-panel>
 </template>
 
 <script lang="ts">

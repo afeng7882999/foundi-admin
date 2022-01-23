@@ -13,6 +13,13 @@ const SIDEBAR_MINI_WIDTH = 56
 const SIDEBAR_NORMAL_WIDTH = 250
 
 export default function useLayoutResize() {
+  let bodyRect = {
+    height: 0,
+    width: 0,
+    x: 0,
+    y: 0
+  } as DOMRect
+
   const store = useStore<AllState>()
   const storeState = store.state as AllState
 
@@ -26,6 +33,9 @@ export default function useLayoutResize() {
 
   const resizeLayout = async () => {
     if (!document.hidden) {
+      bodyRect = body.getBoundingClientRect()
+      await store.dispatch('app/setBodyHeight', bodyRect.height)
+      await store.dispatch('app/setBodyWidth', bodyRect.width)
       await store.dispatch('app/setDocHeight', getDocHeight())
       await store.dispatch('app/setDocWidth', getDocWidth())
       if (isMobile()) {
@@ -39,25 +49,22 @@ export default function useLayoutResize() {
   }
 
   const getDocHeight = () => {
-    const rect = body.getBoundingClientRect()
     const height = storeState.app.enableTags ? TAB_HEIGHT + TITLE_HEIGHT + TITLE_PADDING : TITLE_HEIGHT + TITLE_PADDING
-    return rect.height - height
+    return bodyRect.height - height
   }
 
   const getDocWidth = () => {
-    const rect = body.getBoundingClientRect()
     if (storeState.app.sidebarMode?.offScreen) {
-      return rect.width
+      return bodyRect.width
     }
     if (storeState.app.sidebarMode?.minimized) {
-      return rect.width - SIDEBAR_MINI_WIDTH
+      return bodyRect.width - SIDEBAR_MINI_WIDTH
     }
-    return rect.width - SIDEBAR_NORMAL_WIDTH
+    return bodyRect.width - SIDEBAR_NORMAL_WIDTH
   }
 
   const isMobile = () => {
-    const rect = body.getBoundingClientRect()
-    return rect.width - RATIO < WIDTH
+    return bodyRect.width - RATIO < WIDTH
   }
 
   return {

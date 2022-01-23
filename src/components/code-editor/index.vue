@@ -1,6 +1,6 @@
 <template>
   <div class="fd-code-editor" :class="{ bordered: border }">
-    <textarea v-model="state.cmValue" ref="textarea"></textarea>
+    <textarea ref="textarea" v-model="state.cmValue"></textarea>
   </div>
 </template>
 
@@ -166,6 +166,10 @@ defineExpose({
 
     .CodeMirror-code {
       line-height: 19px;
+    }
+
+    .CodeMirror-lines {
+      padding: 4px 0;
     }
 
     .CodeMirror-overlayscroll-horizontal div,

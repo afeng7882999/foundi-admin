@@ -1,5 +1,5 @@
 <template>
-  <div class="page-monitor-db fd-page" :style="pageMinHeight">
+  <div class="page-monitor-db fd-page" :style="docMinHeight">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="page-monitor-db__act">
@@ -1048,7 +1048,7 @@ const arrayToText = (array: string[]) => {
   }
 }
 
-const { pageMinHeight, showPageHeader, hasAuth } = usePage()
+const { docMinHeight, showPageHeader, hasAuth } = usePage()
 </script>
 
 <style lang="scss">

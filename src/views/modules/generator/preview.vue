@@ -1,5 +1,5 @@
 <template>
-  <div :style="pageHeight" class="page-generator-preview fd-page">
+  <div :style="docHeight" class="page-generator-preview fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page__action">
@@ -101,14 +101,13 @@ const state = reactive({
   loading: false
 })
 
-const { pageHeight, showPageHeader } = usePage()
+const { showPageHeader, docHeight, getDocHeight } = usePage()
 
 const store = useStore<AllState>()
 const storeState = store.state as AllState
 
 const previewHeight = computed(() => {
-  const height = storeState.app.docHeight - 105
-  return { height: height + 'px' }
+  return { height: getDocHeight(105, 'px') }
 })
 
 const route = useRoute()
@@ -172,7 +171,7 @@ onBeforeMount(async () => {
       compactCodeTree(null, state.nodeData)
       nextTick(() => {
         ;(codeTree.value as any).setCurrentKey(state.activeNode.id)
-        ;(codeEditor.value as any).refresh('100%', `${storeState.app.docHeight - 152}px`)
+        ;(codeEditor.value as any).refresh('100%', getDocHeight(152, 'px'))
       })
     } catch (e) {
       console.log(e)
@@ -184,7 +183,7 @@ const onTreeNodeClick = (node: ICodePreviewNode) => {
   if (node.code) {
     state.activeNode = node
     nextTick(() => {
-      ;(codeEditor.value as any).refresh('100%', `${storeState.app.docHeight - 152}px`)
+      ;(codeEditor.value as any).refresh('100%', getDocHeight(152, 'px'))
     })
   }
 }

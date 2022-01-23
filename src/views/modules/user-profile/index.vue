@@ -1,5 +1,5 @@
 <template>
-  <div :style="pageMinHeight" class="page-user-profile fd-page">
+  <div :style="docMinHeight" class="page-user-profile fd-page">
     <fd-page-header :title="state.currentUser.username + '的资料'" v-show="showPageHeader"></fd-page-header>
     <el-row :gutter="20">
       <el-col :span="6">
@@ -410,7 +410,7 @@ const clearClock = () => {
   }
 }
 
-const { pageMinHeight, showPageHeader } = usePage()
+const { docMinHeight, showPageHeader } = usePage()
 
 </script>
 

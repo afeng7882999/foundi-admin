@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasAuth('test:uploadForm:list')" :style="pageMinHeight" class="page-test-upload-form fd-page">
+  <div v-if="hasAuth('test:uploadForm:list')" :style="docMinHeight" class="page-test-upload-form fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page__sub-title"><span class="title-text">UploadInput</span></div>
@@ -27,5 +27,5 @@ import { ref } from 'vue'
 const inputVal = ref('')
 const imgVal = ref('')
 
-const { pageMinHeight, showPageHeader, hasAuth } = usePage()
+const { docMinHeight, showPageHeader, hasAuth } = usePage()
 </script>

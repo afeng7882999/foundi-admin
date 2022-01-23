@@ -1,5 +1,5 @@
 <template>
-  <div ref="pageRoot" :style="pageMinHeight" class="page-generator-edit fd-page">
+  <div ref="pageRoot" :style="docMinHeight" class="page-generator-edit fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page__action">
@@ -351,7 +351,7 @@ const router = useRouter()
 const store = useStore<AllState>()
 const storeState = store.state as AllState
 
-const { pageMinHeight, showPageHeader } = usePage()
+const { docMinHeight, showPageHeader } = usePage()
 
 const tableCo = computed(() => {
   const $moduleRoot = pageRoot.value as HTMLElement

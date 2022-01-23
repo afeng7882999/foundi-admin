@@ -1,5 +1,5 @@
 <template>
-  <div ref="moduleRoot" :style="pageMinHeight" class="page-system-role fd-page">
+  <div ref="moduleRoot" :style="docMinHeight" class="page-system-role fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <fd-split-pane :default-pos="500" shrink="left">
       <template #left>
@@ -24,7 +24,6 @@
                     查询
                   </el-button>
                   <el-button @click="resetQuery">
-                    <fd-icon class="is-in-btn" icon="refresh"></fd-icon>
                     清空
                   </el-button>
                 </el-form-item>
@@ -189,7 +188,7 @@ const stateOption = {
 
 const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
 const { queryForm, editDialog, detailDialog } = mixRefs
-const { pageMinHeight, showPageHeader } = mixComputed
+const { docMinHeight, showPageHeader } = mixComputed
 const {
   getList,
   pageChange,

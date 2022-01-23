@@ -1,5 +1,5 @@
 <template>
-  <div ref="moduleRoot" :style="pageMinHeight" class="page-system-loginLog fd-page">
+  <div ref="moduleRoot" :style="docMinHeight" class="page-system-loginLog fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="state.query" size="medium" @keyup.enter="queryList()">
@@ -262,7 +262,7 @@ const stateOption = {
 
 const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
 const { queryForm, detailDialog } = mixRefs
-const { pageMinHeight, showPageHeader } = mixComputed
+const { docMinHeight, showPageHeader } = mixComputed
 const {
   queryList,
   resetQuery,

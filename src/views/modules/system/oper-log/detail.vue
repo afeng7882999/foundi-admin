@@ -1,24 +1,29 @@
 <template>
-  <el-dialog
+  <fd-right-panel
     v-model="state.visible"
     :close-on-click-modal="false"
+    :modal="false"
     :title="`系统操作日志详细 (${state.idx + 1} / ${state.data.length})`"
-    width="80%"
+    size="600px"
   >
     <el-descriptions :column="2" :title="`ID: ${state.data[state.idx].id}`" border size="medium">
-      <el-descriptions-item label="模块标题">{{ state.data[state.idx].title }}</el-descriptions-item>
-      <el-descriptions-item label="操作时间">
+      <el-descriptions-item :span="2" label="模块标题">{{ state.data[state.idx].title }}</el-descriptions-item>
+      <el-descriptions-item :span="2" label="操作时间">
         {{ dateTimeStr(state.data[state.idx].operTime) }}
       </el-descriptions-item>
-      <el-descriptions-item label="操作人员ID">{{ state.data[state.idx].operUserId }}</el-descriptions-item>
-      <el-descriptions-item label="操作人员账号">{{ state.data[state.idx].operUserName }}</el-descriptions-item>
-      <el-descriptions-item label="操作人员角色">{{ state.data[state.idx].operUserRoles }}</el-descriptions-item>
-      <el-descriptions-item label="用户组名称">{{ state.data[state.idx].groupName }}</el-descriptions-item>
-      <el-descriptions-item label="主机地址">{{ state.data[state.idx].operIp }}</el-descriptions-item>
-      <el-descriptions-item label="操作地点">{{ state.data[state.idx].operLocation }}</el-descriptions-item>
+      <el-descriptions-item :span="2" label="操作人员ID">{{ state.data[state.idx].operUserId }}</el-descriptions-item>
+      <el-descriptions-item :span="2" label="操作人员账号">
+        {{ state.data[state.idx].operUserName }}
+      </el-descriptions-item>
+      <el-descriptions-item :span="2" label="操作人员角色">
+        {{ state.data[state.idx].operUserRoles }}
+      </el-descriptions-item>
+      <el-descriptions-item :span="2" label="用户组名称">{{ state.data[state.idx].groupName }}</el-descriptions-item>
+      <el-descriptions-item :span="2" label="主机地址">{{ state.data[state.idx].operIp }}</el-descriptions-item>
+      <el-descriptions-item :span="2" label="操作地点">{{ state.data[state.idx].operLocation }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="请求URL">{{ state.data[state.idx].operUrl }}</el-descriptions-item>
-      <el-descriptions-item label="请求方式">{{ state.data[state.idx].requestMethod }}</el-descriptions-item>
-      <el-descriptions-item label="操作状态">
+      <el-descriptions-item :span="2" label="请求方式">{{ state.data[state.idx].requestMethod }}</el-descriptions-item>
+      <el-descriptions-item :span="2" label="操作状态">
         {{ dictVal(state.dicts.sysOperLogStatus, state.data[state.idx].statusDict) }}
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="方法名称">{{ state.data[state.idx].method }}</el-descriptions-item>
@@ -37,7 +42,7 @@
         </el-button>
       </template>
     </el-descriptions>
-  </el-dialog>
+  </fd-right-panel>
 </template>
 
 <script lang="ts">
@@ -89,6 +94,12 @@ defineExpose({
 .el-descriptions {
   ::v-deep(.el-descriptions__label) {
     width: 110px;
+  }
+
+  ::v-deep(.el-descriptions__body) {
+    .el-descriptions__table .el-descriptions__cell {
+      word-break: break-all;
+    }
   }
 }
 </style>

@@ -22,6 +22,8 @@ export interface SidebarMode {
 export interface AppState {
   title: string
   icon: string
+  bodyHeight: number
+  bodyWidth: number
   docHeight: number
   docWidth: number
   device: DeviceType
@@ -35,6 +37,8 @@ export interface AppState {
 const state: AppState = {
   title: 'foundi-admin',
   icon: 'infinity',
+  bodyHeight: 0,
+  bodyWidth: 0,
   docHeight: 0,
   docWidth: 0,
   device: DeviceType.Desktop, // mobile
@@ -57,6 +61,12 @@ const mutations = {
   },
   SET_ICON: (state: AppState, icon: string) => {
     state.icon = icon
+  },
+  SET_BODY_HEIGHT: (state: AppState, height: number) => {
+    state.bodyHeight = height
+  },
+  SET_BODY_WIDTH: (state: AppState, width: number) => {
+    state.bodyWidth = width
   },
   SET_DOC_HEIGHT: (state: AppState, height: number) => {
     state.docHeight = height
@@ -104,6 +114,12 @@ const mutations = {
 
 const actions = {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  setBodyHeight({ commit }: ActionContext<AppState, unknown>, height: number) {
+    commit('SET_BODY_HEIGHT', height)
+  },
+  setBodyWidth({ commit }: ActionContext<AppState, unknown>, width: number) {
+    commit('SET_BODY_WIDTH', width)
+  },
   setDocHeight({ commit }: ActionContext<AppState, unknown>, height: number) {
     commit('SET_DOC_HEIGHT', height)
   },

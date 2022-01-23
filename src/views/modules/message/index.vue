@@ -1,5 +1,5 @@
 <template>
-  <div :style="pageMinHeight" class="page-message">
+  <div :style="docMinHeight" class="page-message">
     <!-- 头部 -->
     <el-form :inline="true">
       <el-form-item>

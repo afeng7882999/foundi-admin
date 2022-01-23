@@ -141,6 +141,7 @@ export default function <T extends IListEditStateOption>(stateOption: T, emit: A
   const resetForm = () => {
     ;(form.value as any)?.clearValidate()
     mixState.formData = cloneDeep(mixState.resetFormData) // JSON.parse(JSON.stringify(mixState.resetFormData))
+    console.log(mixState.formData)
   }
 
   // 提交
@@ -155,6 +156,7 @@ export default function <T extends IListEditStateOption>(stateOption: T, emit: A
       return
     }
     try {
+      console.log(mixState.formData)
       await (form.value as any).validate()
       await mixHandlers.beforeSubmitData()
       if (mixState.isCreate) {
@@ -176,6 +178,7 @@ export default function <T extends IListEditStateOption>(stateOption: T, emit: A
 
   // 隐藏弹窗
   const hideDialog = async () => {
+    console.log('hide dialog')
     mixState.visible = false
     resetForm()
     await mixHandlers.afterClose()

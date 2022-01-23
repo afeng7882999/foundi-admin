@@ -1,5 +1,5 @@
 <template>
-  <div ref="pageRoot" :style="pageMinHeight" class="page-message fd-page">
+  <div ref="pageRoot" :style="docMinHeight" class="page-message fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList()">
@@ -20,7 +20,6 @@
                 查询
               </el-button>
               <el-button @click="resetQuery">
-                <fd-icon class="is-in-btn" icon="refresh"></fd-icon>
                 清空
               </el-button>
             </el-form-item>

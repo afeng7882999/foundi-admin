@@ -1,6 +1,6 @@
-import {createApp, getCurrentInstance} from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
-import router, {setupRouter} from './router'
+import { setupRouter } from './router'
 import store from './store'
 import 'virtual:svg-icons-register'
 
@@ -17,12 +17,21 @@ import FdContextmenu from '@/components/contextmenu'
 import FdIconButton from '@/components/icon-button'
 import FdTreeSelect from '@/components/tree-select'
 import FdTableSortHeader from '@/components/table-sort-header'
+import FdRightPanel from '@/components/right-panel'
 
 const app = createApp(App)
 app.use(store)
 setupRouter(app)
 setupElementPlus(app)
 installDirective(app)
-app.use(FdIcon).use(FdSvgImage).use(FdPageHeader).use(FdContextmenu).use(FdIconButton).use(FdTreeSelect).use(FdTableSortHeader)
+app
+  .use(FdIcon)
+  .use(FdSvgImage)
+  .use(FdPageHeader)
+  .use(FdContextmenu)
+  .use(FdIconButton)
+  .use(FdTreeSelect)
+  .use(FdTableSortHeader)
+  .use(FdRightPanel)
 
 app.mount('#app')

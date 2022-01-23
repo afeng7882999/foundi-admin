@@ -1,5 +1,5 @@
 <template>
-  <div ref="pageRoot" :style="pageMinHeight" class="page-operLog fd-page">
+  <div ref="pageRoot" :style="docMinHeight" class="page-operLog fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList()">
@@ -40,10 +40,7 @@
                 <fd-icon class="is-in-btn" icon="search"></fd-icon>
                 查询
               </el-button>
-              <el-button @click="resetQuery">
-                <fd-icon class="is-in-btn" icon="refresh"></fd-icon>
-                清空
-              </el-button>
+              <el-button @click="resetQuery">清空</el-button>
             </el-form-item>
           </div>
         </transition>
@@ -288,7 +285,7 @@ const { mixRefs, mixState, mixComputed, mixMethods } = useList(stateOption)
 const { queryForm, detailDialog } = mixRefs
 const { data, query, queryLen, dicts, queryFormShow, selectedNodes, loading, current, total, size, count, detailShow } =
   toRefs(mixState)
-const { pageMinHeight, showPageHeader } = mixComputed
+const { docMinHeight, showPageHeader } = mixComputed
 const {
   queryList,
   resetQuery,

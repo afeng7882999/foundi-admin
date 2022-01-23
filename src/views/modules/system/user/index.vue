@@ -1,5 +1,5 @@
 <template>
-  <div :style="pageMinHeight" class="page-user fd-page">
+  <div :style="docMinHeight" class="page-user fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <fd-split-pane :default-pos="400" shrink="left">
       <template #left>
@@ -44,7 +44,6 @@
                     查询
                   </el-button>
                   <el-button @click="resetQuery">
-                    <fd-icon class="is-in-btn" icon="refresh"></fd-icon>
                     清空
                   </el-button>
                 </el-form-item>

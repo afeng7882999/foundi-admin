@@ -14,17 +14,53 @@ export default function () {
     return isAuth(key)
   }
 
-  // 窗口最小高度
-  const pageMinHeight = computed(() => {
+  // Doc最小高度
+  const docMinHeight = computed(() => {
     const height = storeState.app.docHeight
     return { minHeight: height + 'px' }
   })
 
-  // 窗口高度
-  const pageHeight = computed(() => {
+  // Doc高度
+  const docHeight = computed(() => {
     const height = storeState.app.docHeight
     return { height: height + 'px' }
   })
+
+  // 获取窗口宽度
+  const getBodyWidth = (remove: number, unit?: string): number | string => {
+    if (unit) {
+      return (storeState.app.bodyWidth - remove + unit) as string
+    } else {
+      return (storeState.app.bodyWidth - remove) as number
+    }
+  }
+
+  // 获取窗口高度
+  const getBodyHeight = (remove: number, unit?: string): number | string => {
+    if (unit) {
+      return (storeState.app.bodyHeight - remove + unit) as string
+    } else {
+      return (storeState.app.bodyHeight - remove) as number
+    }
+  }
+
+  // 获取Doc宽度
+  const getDocWidth = (remove: number, unit?: string): number | string => {
+    if (unit) {
+      return (storeState.app.docWidth - remove + unit) as string
+    } else {
+      return (storeState.app.docWidth - remove) as number
+    }
+  }
+
+  // 获取Doc高度
+  const getDocHeight = (remove: number, unit?: string): number | string => {
+    if (unit) {
+      return (storeState.app.docHeight - remove + unit) as string
+    } else {
+      return (storeState.app.docHeight - remove) as number
+    }
+  }
 
   // 是否显示页面标题
   const showPageHeader = computed(() => {
@@ -43,9 +79,13 @@ export default function () {
   }
 
   return {
-    pageMinHeight,
-    pageHeight,
     showPageHeader,
+    docMinHeight,
+    docHeight,
+    getBodyWidth,
+    getBodyHeight,
+    getDocWidth,
+    getDocHeight,
     hasAuth,
     setViewTitle,
     currentViewTitle

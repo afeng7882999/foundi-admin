@@ -6,7 +6,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import usePage from '@/components/crud/use-page'
 import { nextFrame } from '@/utils/next-frame'
 import useDict, { IDictList } from '@/components/crud/use-dict'
-import {formatTimestamp2} from "@/utils/time";
+import { formatTimestamp2 } from '@/utils/time'
 
 interface ITreeStateOption {
   // 主键
@@ -335,7 +335,18 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
     onSelect(selection)
   }
 
-  const { pageMinHeight, pageHeight, showPageHeader, hasAuth, setViewTitle, currentViewTitle } = usePage()
+  const {
+    docMinHeight,
+    docHeight,
+    showPageHeader,
+    getBodyWidth,
+    getBodyHeight,
+    getDocWidth,
+    getDocHeight,
+    hasAuth,
+    setViewTitle,
+    currentViewTitle
+  } = usePage()
 
   // 显示、隐藏查询表单
   const toggleQueryForm = () => {
@@ -352,8 +363,8 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
     },
     mixState,
     mixComputed: {
-      pageMinHeight,
-      pageHeight,
+      docMinHeight,
+      docHeight,
       showPageHeader
     },
     mixMethods: {
@@ -375,7 +386,11 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
       onBeforeDel,
       onAfterDel,
       setViewTitle,
-      currentViewTitle
+      currentViewTitle,
+      getBodyWidth,
+      getBodyHeight,
+      getDocWidth,
+      getDocHeight
     }
   }
 }

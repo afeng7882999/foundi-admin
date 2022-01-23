@@ -75,11 +75,6 @@ const state = reactive({
 
 const storeState = useStore<AllState>().state as AllState
 
-const pageMinHeight = computed(() => {
-  const height = storeState.app.docHeight - 20
-  return { minHeight: height + 'px' }
-})
-
 const showPageHeader = computed(() => {
   return !storeState.app.enableTags
 })
