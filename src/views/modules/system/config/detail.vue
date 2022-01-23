@@ -16,7 +16,7 @@
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="键">{{ state.data[state.idx].configKey }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="值">
-        <fd-code-editor v-model="state.data[state.idx].configValue" language="application/json" readonly />
+        <fd-code-editor v-model="state.configValue" language="application/json" readonly />
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="备注">{{ state.data[state.idx].remark }}</el-descriptions-item>
     </el-descriptions>
@@ -34,6 +34,7 @@ import { onBeforeMount } from 'vue'
 import useDetail, { OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
 import { configFields } from '@/api/system/config'
 import FdCodeEditor from '@/components/code-editor/index.vue'
+import { formatJson } from '@/utils/lang'
 
 const stateOption = {
   idField: configFields.idField,
@@ -44,17 +45,22 @@ const stateOption = {
     configValue: '',
     enabled: '',
     remark: ''
-  }
+  },
+  configValue: ''
 }
 
 const emit = defineEmits([OPEN_EDIT_EVENT])
 
 const { mixState: state, mixMethods } = useDetail(stateOption, emit)
 
-const { open, resetForm, dictVal, close } = mixMethods
+const { open, resetForm, dictVal, close, onCurrentChanged } = mixMethods
 
 onBeforeMount(async () => {
   resetForm()
+})
+
+onCurrentChanged(async (idx: number) => {
+  state.configValue = formatJson(state.data[idx].configValue)
 })
 
 defineExpose({

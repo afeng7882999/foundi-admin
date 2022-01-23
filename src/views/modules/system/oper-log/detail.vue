@@ -59,6 +59,7 @@ export default {
 import useDetail, { OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
 import { operLogFields } from '@/api/system/oper-log'
 import FdCodeEditor from '@/components/code-editor/index.vue'
+import { formatJson } from '@/utils/lang'
 
 const emit = defineEmits([OPEN_EDIT_EVENT])
 
@@ -92,23 +93,9 @@ const { mixState: state, mixComputed, mixMethods } = useDetail(stateOption, emit
 const { prevDisabled, nextDisabled } = mixComputed
 const { open, dictVal, dateTimeStr, onEdit, onPrev, onNext, close, onCurrentChanged } = mixMethods
 
-const formatJson = (idx: number) => {
-  if (state.data && state.data[idx]) {
-    try {
-      state.operParam = JSON.stringify(JSON.parse(state.data[idx].operParam), null, 2)
-    } catch {
-      state.operParam = state.data[idx].operParam
-    }
-    try {
-      state.jsonResult = JSON.stringify(JSON.parse(state.data[idx].jsonResult), null, 2)
-    } catch {
-      state.jsonResult = state.data[idx].jsonResult
-    }
-  }
-}
-
 onCurrentChanged(async (idx: number) => {
-  formatJson(idx)
+  state.operParam = formatJson(state.data[idx].operParam)
+  state.jsonResult = formatJson(state.data[idx].jsonResult)
 })
 
 defineExpose({

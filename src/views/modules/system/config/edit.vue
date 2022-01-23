@@ -63,6 +63,7 @@ import useListEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-list-edit
 import { configDicts, configFields, configGetOne, configPostOne, configPutOne } from '@/api/system/config'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { nextFrame } from '@/utils/next-frame'
+import { cleanStr, formatJson } from '@/utils/lang'
 
 const jsonEditor = ref()
 
@@ -91,13 +92,21 @@ const emit = defineEmits([REFRESH_DATA_EVENT])
 
 const { mixRefs, mixState: state, mixMethods } = useListEdit(stateOption, emit)
 const { form } = mixRefs
-const { open, submit, hideDialog, onBeforeOpen } = mixMethods
+const { open, submit, hideDialog, onBeforeOpen, onBeforeSubmitData } = mixMethods
 
 onBeforeOpen(async () => {
   if (state.isCreate) {
     nextFrame(() => {
       ;(jsonEditor.value as any).refresh()
     })
+  } else {
+    state.formData.configValue = formatJson(state.formData.configValue)
+  }
+})
+
+onBeforeSubmitData(async () => {
+  if (state.formData.configValue) {
+    state.formData.configValue = cleanStr(state.formData.configValue)
   }
 })
 

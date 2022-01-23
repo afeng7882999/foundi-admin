@@ -119,3 +119,21 @@ export function generateId(): number {
 export function generateId2(): string {
   return Math.random().toString(36).substr(2, 6)
 }
+
+/**
+ * 清除空白字符，换行、回车、空格、制表符等
+ */
+export function cleanStr(str: string): string {
+  return str.replace(/\s+/g, '')
+}
+
+/**
+ * 格式化JSON字符串
+ */
+export function formatJson(str: string): string {
+  try {
+    return JSON.stringify(JSON.parse(str), null, 2)
+  } catch {
+    return str
+  }
+}
