@@ -66,7 +66,7 @@ defineExpose({
 <style lang="scss" scoped>
 .el-descriptions {
   ::v-deep(.el-descriptions__body) {
-    table {
+    .el-descriptions__table {
       table-layout: fixed;
     }
   }

@@ -27,8 +27,12 @@
         {{ dictVal(state.dicts.sysOperLogStatus, state.data[state.idx].statusDict) }}
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="方法名称">{{ state.data[state.idx].method }}</el-descriptions-item>
-      <el-descriptions-item :span="2" label="请求参数">{{ state.data[state.idx].operParam }}</el-descriptions-item>
-      <el-descriptions-item :span="2" label="返回参数">{{ state.data[state.idx].jsonResult }}</el-descriptions-item>
+      <el-descriptions-item :span="2" label="请求参数">
+        <fd-code-editor v-model="state.operParam" language="application/json" readonly />
+      </el-descriptions-item>
+      <el-descriptions-item :span="2" label="返回参数">
+        <fd-code-editor v-model="state.jsonResult" language="application/json" readonly />
+      </el-descriptions-item>
       <el-descriptions-item :span="2" label="错误消息">{{ state.data[state.idx].errorMsg }}</el-descriptions-item>
       <template #extra>
         <el-button v-show="state.ifEditable" size="medium" type="primary" @click="onEdit">编辑</el-button>
@@ -54,6 +58,7 @@ export default {
 <script setup lang="ts">
 import useDetail, { OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
 import { operLogFields } from '@/api/system/oper-log'
+import FdCodeEditor from '@/components/code-editor/index.vue'
 
 const emit = defineEmits([OPEN_EDIT_EVENT])
 
@@ -77,12 +82,34 @@ const stateOption = {
     statusDict: '',
     errorMsg: '',
     operTime: ''
-  }
+  },
+
+  operParam: '',
+  jsonResult: ''
 }
 
 const { mixState: state, mixComputed, mixMethods } = useDetail(stateOption, emit)
 const { prevDisabled, nextDisabled } = mixComputed
-const { open, dictVal, dateTimeStr, onEdit, onPrev, onNext, close } = mixMethods
+const { open, dictVal, dateTimeStr, onEdit, onPrev, onNext, close, onCurrentChanged } = mixMethods
+
+const formatJson = (idx: number) => {
+  if (state.data && state.data[idx]) {
+    try {
+      state.operParam = JSON.stringify(JSON.parse(state.data[idx].operParam), null, 2)
+    } catch {
+      state.operParam = state.data[idx].operParam
+    }
+    try {
+      state.jsonResult = JSON.stringify(JSON.parse(state.data[idx].jsonResult), null, 2)
+    } catch {
+      state.jsonResult = state.data[idx].jsonResult
+    }
+  }
+}
+
+onCurrentChanged(async (idx: number) => {
+  formatJson(idx)
+})
 
 defineExpose({
   open,
@@ -97,8 +124,11 @@ defineExpose({
   }
 
   ::v-deep(.el-descriptions__body) {
-    .el-descriptions__table .el-descriptions__cell {
-      word-break: break-all;
+    .el-descriptions__table {
+      table-layout: fixed;
+      .el-descriptions__cell {
+        word-break: break-all;
+      }
     }
   }
 }

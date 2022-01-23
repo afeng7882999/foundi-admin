@@ -1,5 +1,5 @@
 import { cloneDeep, merge } from 'lodash-es'
-import { computed, onBeforeUnmount, onMounted, reactive } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive, watch } from 'vue'
 import useDict, { IDictList } from '@/components/crud/use-dict'
 import { AnyFunction, AnyObject } from '@/utils'
 import { off, on } from '@/utils/dom'
@@ -52,6 +52,10 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
     // 显示之前
     beforeOpen: async (data: AnyObject[], idx: number, extra?: AnyObject) => {
       return
+    },
+    // 改变当前项之后
+    currentChanged: async (idx: number) => {
+      return
     }
   }
 
@@ -65,9 +69,22 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
     return mixState.idx >= mixState.data.length - 1
   })
 
+  // idx改变时
+  watch(
+    () => mixState.idx,
+    async (val: number) => {
+      await mixHandlers.currentChanged(val)
+    }
+  )
+
   // 显示之前
   const onBeforeOpen = (fn: (data: AnyObject[], idx: number, extra?: AnyObject) => Promise<void>) => {
     mixHandlers.beforeOpen = fn
+  }
+
+  // 改变当前项之后
+  const onCurrentChanged = async (fn: (idx: number) => Promise<void>) => {
+    mixHandlers.currentChanged = fn
   }
 
   // 字典 utils
@@ -86,6 +103,7 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
     if (extra && extra.dicts) {
       mixState.dicts = { ...mixState.dicts, ...extra.dicts }
     }
+    await mixHandlers.currentChanged(idx)
     mixState.visible = true
   }
 
@@ -146,6 +164,7 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
     },
     mixMethods: {
       onBeforeOpen,
+      onCurrentChanged,
       open,
       resetForm,
       getDictData,
