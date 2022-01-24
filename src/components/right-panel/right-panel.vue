@@ -11,8 +11,9 @@
   >
     <div class="fd-right-panel__content">
       <div class="fd-right-panel__title">
-        <fd-icon-button class="title-button" icon="close-small" @click="hide"></fd-icon-button>
+        <fd-icon class="title-icon" :icon="currentIcon"></fd-icon>
         <span class="title-text">{{ title }}</span>
+        <fd-icon-button class="title-button" icon="close-small" @click="hide"></fd-icon-button>
       </div>
       <el-scrollbar :style="scrollbarStyle">
         <div class="fd-right-panel__main">
@@ -42,6 +43,10 @@ const props = defineProps({
     default: false
   },
   title: {
+    type: String,
+    default: ''
+  },
+  icon: {
     type: String,
     default: ''
   },
@@ -76,11 +81,15 @@ const objClass = computed(() => {
   return clazz.join(' ')
 })
 
-const { getBodyHeight } = usePage()
+const { pageState, getBodyHeight } = usePage()
 
 const scrollbarStyle = computed(() => {
-  const remove = useSlots().footer ? 116 : 50
-  return { height: getBodyHeight(remove, 'px') }
+  const remove = useSlots().footer ? 126 : 50
+  return { maxHeight: getBodyHeight(remove, 'px') }
+})
+
+const currentIcon = computed(() => {
+  return props.icon ? props.icon : pageState.icon
 })
 
 const show = () => {
@@ -104,7 +113,8 @@ const showOrHide = (val: boolean) => {
 }
 
 defineExpose({
-  show
+  show,
+  hide
 })
 </script>
 
@@ -128,14 +138,17 @@ defineExpose({
   }
 
   &__title {
-    padding: 15px;
+    padding: 15px 20px;
     display: flex;
-    align-items: center;
     height: 50px;
-    border-bottom: 1px solid var(--el-border-color-base);
+
+    .title-icon {
+      font-size: 24px;
+      margin-right: 10px;
+      align-self: center;
+    }
 
     .title-text {
-      flex: 1;
       text-align: center;
       font-size: $font-size-large;
     }
@@ -143,14 +156,14 @@ defineExpose({
     .title-button {
       position: absolute !important;
       top: 10px;
-      left: 15px;
+      right: 15px;
     }
   }
 
   &__main {
     flex: 1;
-    height: calc(100% - 116px);
-    padding: 30px 20px;
+    max-height: calc(100% - 126px);
+    padding: 30px 20px 20px 20px;
   }
 
   &.has-footer {
@@ -161,20 +174,21 @@ defineExpose({
       .drawer-container {
         height: calc(100% - 106px);
       }
+      .el-scrollbar {
+        height: auto;
+      }
     }
 
     .fd-right-panel__footer {
-      height: 66px;
-      padding: 15px;
-      border-top: 1px solid var(--el-border-color-base);
+      height: 76px;
+      padding: 20px;
     }
   }
 
   &__footer {
-    margin-top: auto;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: flex-end;
   }
 }
 </style>

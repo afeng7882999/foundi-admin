@@ -187,6 +187,17 @@ defineExpose({
     }
   }
 
+  .fd-right-panel__icon {
+    display: none;
+  }
+
+  .fd-right-panel__title {
+    justify-content: center;
+    .title-icon {
+      display: none;
+    }
+  }
+
   .el-select-dropdown__item {
     height: auto;
   }

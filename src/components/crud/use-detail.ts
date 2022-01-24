@@ -4,6 +4,7 @@ import useDict, { IDictList } from '@/components/crud/use-dict'
 import { AnyFunction, AnyObject } from '@/utils'
 import { off, on } from '@/utils/dom'
 import { formatTimestamp2 } from '@/utils/time'
+import usePage from "@/components/crud/use-page";
 
 export interface IDetailStateOption {
   // 主键
@@ -156,6 +157,8 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
     }
   }
 
+  const { hasAuth } = usePage()
+
   return {
     mixState,
     mixComputed: {
@@ -174,7 +177,8 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
       onPrev,
       onNext,
       onKeyEvent,
-      close
+      close,
+      hasAuth
     }
   }
 }

@@ -4,6 +4,7 @@ import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { isAuth } from '@/app/account'
 import useDict, { IDictList } from '@/components/crud/use-dict'
+import usePage from '@/components/crud/use-page'
 
 export interface IListEditStateOption {
   // 主键
@@ -184,15 +185,12 @@ export default function <T extends IListEditStateOption>(stateOption: T, emit: A
     await mixHandlers.afterClose()
   }
 
-  // 判断权限
-  const hasAuth = (key: string) => {
-    return isAuth(key)
-  }
-
   // 获取弹窗的标题
   const getFormTitle = () => {
     return mixState.isCreate ? `新增${mixState.title}` : `编辑${mixState.title}`
   }
+
+  const { hasAuth } = usePage()
 
   return {
     mixRefs: {

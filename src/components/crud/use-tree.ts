@@ -345,7 +345,7 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
     getDocHeight,
     hasAuth,
     setViewTitle,
-    currentViewTitle
+    getViewTitle
   } = usePage()
 
   // 显示、隐藏查询表单
@@ -386,7 +386,7 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
       onBeforeDel,
       onAfterDel,
       setViewTitle,
-      currentViewTitle,
+      getViewTitle,
       getBodyWidth,
       getBodyHeight,
       getDocWidth,

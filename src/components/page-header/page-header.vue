@@ -1,7 +1,7 @@
 <template>
   <div class="fd-page-header">
     <div v-show="showBack" class="fd-page-header__back">
-      <fd-icon-button icon="left" @click="onGoBackClick"></fd-icon-button>
+      <fd-icon-button icon="left" @click="goBack"></fd-icon-button>
     </div>
     <el-divider v-show="showBack" class="fd-page-header__divider" direction="vertical"></el-divider>
     <div class="fd-page-header__title">
@@ -22,11 +22,8 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { getTreeNode } from '@/utils/data-tree'
-import { computed, onMounted, reactive } from 'vue'
-import {onBeforeRouteUpdate, useRoute, useRouter} from 'vue-router'
-import { useStore } from 'vuex'
-import { AllState } from '@/store'
+import { computed } from 'vue'
+import usePage from '@/components/crud/use-page'
 
 const props = defineProps({
   icon: {
@@ -47,56 +44,19 @@ const props = defineProps({
   }
 })
 
-const state = reactive({
-  theTitle: '',
-  theIcon: '',
-  theDesc: ''
-})
-
-const route = useRoute()
-const router = useRouter()
-const store = useStore<AllState>()
-const storeState = store.state as AllState
+const { pageState: state, goBack } = usePage()
 
 const currentTitle = computed(() => {
-  return props.title ? props.title : state.theTitle
+  return props.title ? props.title : state.title
 })
 
 const currentIcon = computed(() => {
-  return props.icon ? props.icon : state.theIcon
+  return props.icon ? props.icon : state.icon
 })
 
 const currentDesc = computed(() => {
-  return props.desc ? props.desc : state.theDesc
+  return props.desc ? props.desc : state.desc
 })
-
-onBeforeRouteUpdate(() => {
-  getPageHeader()
-})
-
-onMounted(() => {
-  getPageHeader()
-})
-
-const onGoBackClick = () => {
-  router.back()
-}
-
-const getPageHeader = () => {
-  const current = storeState.view.visitedViews.find((v) => v.path === route.path)
-  if (current) {
-    state.theIcon = current?.meta.icon as string
-    state.theDesc = current?.meta.remark as string
-    state.theTitle = (current as any).title
-  } else if (storeState.user.menu) {
-    const menu = getTreeNode(storeState.user.menu, (m) => m.url === route.path)
-    if (menu) {
-      state.theIcon = menu.icon
-      state.theTitle = menu.name
-      state.theDesc = menu.remark
-    }
-  }
-}
 </script>
 
 <style lang="scss" scoped>

@@ -362,7 +362,7 @@ export default function <T extends IListStateOption>(stateOption: T) {
     getDocHeight,
     hasAuth,
     setViewTitle,
-    currentViewTitle
+    getViewTitle
   } = usePage()
 
   return {
@@ -398,7 +398,7 @@ export default function <T extends IListStateOption>(stateOption: T) {
       onBeforeDel,
       onAfterDel,
       setViewTitle,
-      currentViewTitle,
+      getViewTitle,
       colEmptyFormatter,
       sortChanged,
       getBodyWidth,
