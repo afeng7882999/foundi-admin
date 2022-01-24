@@ -95,13 +95,12 @@ const { form } = mixRefs
 const { open, submit, hideDialog, onBeforeOpen, onBeforeSubmitData } = mixMethods
 
 onBeforeOpen(async () => {
-  if (state.isCreate) {
-    nextFrame(() => {
-      ;(jsonEditor.value as any).refresh()
-    })
-  } else {
+  if (!state.isCreate) {
     state.formData.configValue = formatJson(state.formData.configValue)
   }
+  nextFrame(() => {
+    ;(jsonEditor.value as any).refresh()
+  })
 })
 
 onBeforeSubmitData(async () => {
