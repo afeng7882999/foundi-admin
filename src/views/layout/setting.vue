@@ -155,8 +155,6 @@ defineExpose({
 
 .fd-setting {
   &__inner {
-    width: 320px;
-    padding: 24px 20px 0 15px;
   }
 
   &__item {
