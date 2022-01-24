@@ -20,7 +20,7 @@ const { getDocWidth, getDocHeight } = usePage()
 
 const iframeStyle = computed(() => {
   return {
-    width: getDocWidth(0, 'ps'),
+    width: getDocWidth(0, 'px'),
     height: getDocHeight(4, 'px')
   }
 })
