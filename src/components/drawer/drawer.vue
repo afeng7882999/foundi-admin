@@ -9,18 +9,18 @@
     @closed="onClosed"
     @update:model-value="showOrHide"
   >
-    <div class="fd-right-panel__content">
-      <div class="fd-right-panel__title">
+    <div class="fd-drawer__content">
+      <div class="fd-drawer__title">
         <fd-icon class="title-icon" :icon="currentIcon"></fd-icon>
         <span class="title-text">{{ title }}</span>
         <fd-icon-button class="title-button" icon="close-small" @click="hide"></fd-icon-button>
       </div>
       <el-scrollbar :style="scrollbarStyle">
-        <div class="fd-right-panel__main">
+        <div class="fd-drawer__main">
           <slot />
         </div>
       </el-scrollbar>
-      <div class="fd-right-panel__footer">
+      <div class="fd-drawer__footer">
         <slot name="footer" />
       </div>
     </div>
@@ -29,7 +29,7 @@
 
 <script lang="ts">
 export default {
-  name: 'FdRightPanel'
+  name: 'FdDrawer'
 }
 </script>
 
@@ -71,7 +71,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'closed'])
 
 const objClass = computed(() => {
-  const clazz = ['fd-right-panel']
+  const clazz = ['fd-drawer']
   if (props.customClass) {
     clazz.push(props.customClass)
   }
@@ -121,7 +121,7 @@ defineExpose({
 <style lang="scss">
 @use 'src/assets/style/variable' as *;
 
-.fd-right-panel {
+.fd-drawer {
   .el-drawer__body {
     flex: 1;
     flex-direction: column;
@@ -167,7 +167,7 @@ defineExpose({
   }
 
   &.has-footer {
-    .fd-right-panel__content {
+    .fd-drawer__content {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -179,7 +179,7 @@ defineExpose({
       }
     }
 
-    .fd-right-panel__footer {
+    .fd-drawer__footer {
       height: 76px;
       padding: 20px;
     }

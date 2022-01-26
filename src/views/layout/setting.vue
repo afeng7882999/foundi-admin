@@ -1,5 +1,5 @@
 <template>
-  <fd-right-panel ref="rightPanel" v-model="state.visible" custom-class="fd-setting" title="定制FOUNDi" size="320px">
+  <fd-drawer ref="drawer" v-model="state.visible" custom-class="fd-setting" title="定制FOUNDi" size="320px">
     <el-scrollbar class="fd-setting__scrollbar">
       <div class="fd-setting__inner">
         <div class="fd-setting__item">
@@ -45,7 +45,7 @@
         </div>
       </div>
     </el-scrollbar>
-  </fd-right-panel>
+  </fd-drawer>
 </template>
 
 <script lang="ts">
@@ -139,7 +139,7 @@ onMounted(() => {
   state.sidebarShowUser = !!storeState.app.sidebarMode?.showUser
 })
 
-const rightPanel = ref()
+const drawer = ref()
 
 const show = () => {
   state.visible = true
@@ -187,11 +187,11 @@ defineExpose({
     }
   }
 
-  .fd-right-panel__icon {
+  .fd-drawer__icon {
     display: none;
   }
 
-  .fd-right-panel__title {
+  .fd-drawer__title {
     justify-content: center;
     .title-icon {
       display: none;

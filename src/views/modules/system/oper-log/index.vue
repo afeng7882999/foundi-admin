@@ -22,7 +22,7 @@
             <el-form-item label="IP" prop="operIp">
               <el-input v-model="query.operIp" clearable placeholder="请输入IP" style="width: 150px" />
             </el-form-item>
-            <el-form-item label="时间" prop="operTime">
+            <el-form-item label="时间" prop="operTime" style="height: 36px">
               <el-date-picker
                 v-model="query.operTime"
                 :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
@@ -58,10 +58,37 @@
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
+        <el-divider class="action-divider" direction="vertical"></el-divider>
+        <el-button v-show="hasAuth('system:operLog:export')" v-waves size="medium" @click="exportData()">
+          导出数据
+        </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:operLog:export')" v-waves size="medium" @click="exportData()">
-            导出数据
-          </el-button>
+          <el-form
+            v-show="!queryFormShow"
+            ref="queryFormQuick"
+            :inline="true"
+            :model="query"
+            size="medium"
+            @keyup.enter="queryList()"
+          >
+            <el-form-item label="时间" prop="operTime" style="height: 36px">
+              <el-date-picker
+                v-model="query.operTime"
+                :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
+                end-placeholder="结束日期"
+                format="YYYY-MM-DD"
+                value-format="x"
+                range-separator="-"
+                start-placeholder="开始日期"
+                type="daterange"
+                style="width: 280px"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-button plain type="primary" @click="queryList()">查询</el-button>
+              <el-button @click="resetQuery">清空</el-button>
+            </el-form-item>
+          </el-form>
           <el-divider class="action-divider" direction="vertical"></el-divider>
           <el-tooltip
             :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'"
@@ -70,7 +97,7 @@
             placement="top"
           >
             <el-badge :hidden="queryFormShow || !queryLen" :value="queryLen" class="action-badge">
-              <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
+              <fd-icon-button class="action-icon-btn" icon="search-more" @click="toggleQueryForm()"></fd-icon-button>
             </el-badge>
           </el-tooltip>
         </div>
@@ -240,7 +267,7 @@
         :current-page="current"
         :page-count="total"
         :page-size="size"
-        :page-sizes="[10, 20, 50, 100]"
+        :page-sizes="[10, 15, 20, 50, 100]"
         :total="count"
         layout="total, sizes, prev, pager, next, jumper"
         @current-change="pageChange"
@@ -248,6 +275,10 @@
       ></el-pagination>
     </div>
     <el-backtop></el-backtop>
+    <fd-contextmenu ref="contextMenu" event-type="click">
+      <fd-contextmenu-item @click="exportDictItemData()">导出当前页数据</fd-contextmenu-item>
+      <fd-contextmenu-item @click="exportDictItemData('all')">导出全部数据</fd-contextmenu-item>
+    </fd-contextmenu>
     <detail v-if="detailShow" ref="detailDialog"></detail>
   </div>
 </template>

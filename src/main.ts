@@ -17,7 +17,7 @@ import FdContextmenu from '@/components/contextmenu'
 import FdIconButton from '@/components/icon-button'
 import FdTreeSelect from '@/components/tree-select'
 import FdTableSortHeader from '@/components/table-sort-header'
-import FdRightPanel from '@/components/right-panel'
+import FdDrawer from '@/components/drawer'
 
 const app = createApp(App)
 app.use(store)
@@ -32,6 +32,6 @@ app
   .use(FdIconButton)
   .use(FdTreeSelect)
   .use(FdTableSortHeader)
-  .use(FdRightPanel)
+  .use(FdDrawer)
 
 app.mount('#app')

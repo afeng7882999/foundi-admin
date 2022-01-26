@@ -1,5 +1,5 @@
 <template>
-  <fd-right-panel
+  <fd-drawer
     v-model="state.visible"
     :close-on-click-modal="false"
     :modal="false"
@@ -48,7 +48,7 @@
         <el-button size="medium" type="primary" @click="submit">确定</el-button>
       </span>
     </template>
-  </fd-right-panel>
+  </fd-drawer>
 </template>
 
 <script lang="ts">
