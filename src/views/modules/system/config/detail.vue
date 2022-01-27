@@ -1,12 +1,12 @@
 <template>
-  <div class="fd-page__form">
-    <el-descriptions
-      :column="2"
-      :title="`系统配置详细 - ${state.data[state.idx].configKey}`"
-      border
-      direction="vertical"
-      size="medium"
-    >
+  <fd-drawer
+    v-model="state.visible"
+    :close-on-click-modal="false"
+    :modal="false"
+    :title="`系统配置详细 (${state.idx + 1} / ${state.data.length})`"
+    size="600px"
+  >
+    <el-descriptions :column="2" border direction="vertical" size="medium">
       <el-descriptions-item label="配置分类">
         {{ dictVal(state.dicts.sysConfigType, state.data[state.idx].configTypeDict) }}
       </el-descriptions-item>
@@ -19,8 +19,28 @@
         <fd-code-editor v-model="state.configValue" language="application/json" readonly />
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="备注">{{ state.data[state.idx].remark }}</el-descriptions-item>
+      <template #extra>
+        <el-button
+          v-show="state.ifEditable"
+          plain
+          size="medium"
+          type="primary"
+          style="margin-right: auto"
+          @click="onEdit"
+        >
+          编辑
+        </el-button>
+        <el-button v-show="state.ifShowNavigation" :disabled="prevDisabled" size="medium" @click="onPrev">
+          <fd-icon class="is-in-btn" icon="left-small"></fd-icon>
+          上一个
+        </el-button>
+        <el-button v-show="state.ifShowNavigation" :disabled="nextDisabled" size="medium" @click="onNext">
+          下一个
+          <fd-icon class="is-in-btn right" icon="right-small"></fd-icon>
+        </el-button>
+      </template>
     </el-descriptions>
-  </div>
+  </fd-drawer>
 </template>
 
 <script lang="ts">
@@ -31,12 +51,13 @@ export default {
 
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
-import useDetail, { OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
+import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
 import { configFields } from '@/api/system/config'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { formatJson } from '@/utils/lang'
 
 const stateOption = {
+  ifEditable: true,
   idField: configFields.idField,
   resetFormData: {
     id: '',
@@ -49,11 +70,11 @@ const stateOption = {
   configValue: ''
 }
 
-const emit = defineEmits([OPEN_EDIT_EVENT])
+const emit = defineEmits([OPEN_EDIT_EVENT, NAVIGATE_EVENT])
 
-const { mixState: state, mixMethods } = useDetail(stateOption, emit)
-
-const { open, resetForm, dictVal, close, onCurrentChanged } = mixMethods
+const { mixState: state, mixComputed, mixMethods } = useDetail(stateOption, emit)
+const { prevDisabled, nextDisabled } = mixComputed
+const { open, resetForm, dictVal, close, onCurrentChanged, onEdit, onPrev, onNext } = mixMethods
 
 onBeforeMount(async () => {
   resetForm()

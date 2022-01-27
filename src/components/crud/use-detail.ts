@@ -4,7 +4,7 @@ import useDict, { IDictList } from '@/components/crud/use-dict'
 import { AnyFunction, AnyObject } from '@/utils'
 import { off, on } from '@/utils/dom'
 import { formatTimestamp2 } from '@/utils/time'
-import usePage from "@/components/crud/use-page";
+import usePage from '@/components/crud/use-page'
 
 export interface IDetailStateOption {
   // 主键
@@ -24,6 +24,7 @@ export interface IDetailStateOption {
 }
 
 export const OPEN_EDIT_EVENT = 'open-edit-dialog'
+export const NAVIGATE_EVENT = 'navigate'
 
 export default function <T extends IDetailStateOption>(stateOption: T, emit: AnyFunction) {
   const defaultState = {
@@ -124,6 +125,7 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
   const onPrev = () => {
     if (mixState.idx > 0) {
       mixState.idx -= 1
+      emit(NAVIGATE_EVENT, mixState.data[mixState.idx].id)
     }
   }
 
@@ -131,6 +133,7 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
   const onNext = () => {
     if (mixState.idx < mixState.data.length - 1) {
       mixState.idx += 1
+      emit(NAVIGATE_EVENT, mixState.data[mixState.idx].id)
     }
   }
 

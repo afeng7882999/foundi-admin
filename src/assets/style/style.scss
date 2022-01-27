@@ -26,24 +26,29 @@
   .fd-tb-icon {
     margin-top: 4px;
     font-size: $icon-size-middle;
+    
     &.fd-tb-icon-success {
       color: var(--el-color-success);
     }
-
+    
     &.fd-tb-icon-danger {
       color: var(--el-color-danger);
     }
+    
     &:not(:first-child) {
       margin-left: 4px;
     }
   }
+  
   .fd-tb-act {
     font-size: $icon-size-tiny;
     padding: 0 6px;
+    
     &__caption {
       margin-left: 5px;
     }
   }
+  
   .fd-tb-avatar {
     display: flex;
     justify-items: center;
@@ -78,24 +83,31 @@
   border: none;
   border-radius: 0 0 var(--el-border-radius-base) var(--el-border-radius-base);
   color: var(--el-color-white);
+  
   .el-message__icon {
     color: var(--el-color-white);
   }
+  
   .el-message__content {
     color: var(--el-color-white);
+    
     p {
       padding: 0 0 0 0;
     }
   }
+  
   &--success {
     background-color: var(--el-color-success);
   }
+  
   &--warning {
     background-color: var(--el-color-warning);
   }
+  
   &--error {
     background-color: var(--el-color-danger);
   }
+  
   &--info {
     background-color: var(--el-color-info);
   }
@@ -124,6 +136,7 @@
 .el-pagination {
   margin-top: 15px;
   text-align: right;
+  
   &.is-background {
     .btn-next,
     .btn-prev,
@@ -141,8 +154,10 @@
 // el-drawer
 .el-drawer {
   box-shadow: $box-shadow-dark;
+  
   .el-drawer__body {
     display: flex;
+    
     .drawer-content {
       flex: 1;
     }
@@ -152,13 +167,16 @@
 // el-color-picker
 .el-color-picker {
   height: 32px;
+  
   .el-color-picker__trigger {
     width: 32px;
     height: 32px;
     border: none;
     padding: 0;
+    
     .el-color-picker__color {
       border: none;
+      
       .el-color-picker__color-inner {
         width: 32px;
         height: 32px;
@@ -166,6 +184,7 @@
         border-radius: var(--el-border-radius-base);
       }
     }
+    
     &:hover {
       .el-color-picker__color {
         .el-color-picker__color-inner {
@@ -234,6 +253,7 @@
   .bar {
     background: var(--el-color-primary) !important;
   }
+  
   .peg {
     display: none !important;
   }
@@ -283,7 +303,7 @@
     display: flex;
     flex-direction: column;
   }
-
+  
   &__sub-title {
     display: flex;
     align-items: center;
@@ -297,6 +317,7 @@
     
     &.is-has-icon {
       border: none;
+      
       .fd-icon {
         font-size: 24px;
         margin-right: 5px;
@@ -310,14 +331,14 @@
       line-height: 20px;
       overflow: hidden;
     }
-  
+    
     .title-brief {
       height: 20px;
       overflow: hidden;
       font-weight: normal;
     }
   }
-
+  
   &__form {
     padding: 15px 15px;
     border: 1px solid var(--el-border-color-lighter);
@@ -340,8 +361,8 @@
       display: flex;
       align-items: center;
     }
-  
-    .action-query-toggle {
+    
+    .action-icon-btn {
       color: var(--el-text-color-placeholder);
       
       &:hover {
@@ -350,7 +371,6 @@
     }
     
     .action-badge {
-      margin-right: 10px;
       sup {
         height: 12px;
         line-height: 12px;
@@ -358,13 +378,17 @@
         border-radius: 10px;
       }
     }
-  
+    
     .action-divider {
       margin: 0 10px;
       height: 30px;
     }
+    
+    .el-form-item {
+      margin-bottom: 0;
+    }
   }
-
+  
   &__pagination {
     padding: 9px 15px 24px 15px;
     border: 1px solid var(--el-border-color-lighter);
@@ -372,14 +396,14 @@
     background-color: var(--el-fill-base);
     margin-top: 0;
   }
-
+  
   &__table {
     width: 100%;
     padding: 24px 15px 24px 15px;
     background-color: var(--el-fill-base);
     border-radius: var(--el-border-radius-base);
     // margin-bottom: 15px;
-
+    
     &.is-bordered {
       border: 1px solid var(--el-border-color-lighter);
     }
@@ -393,21 +417,23 @@
   vertical-align: -0.15em;
   fill: currentColor;
   overflow: hidden;
-
+  
   &.success {
     color: var(--el-color-success);
   }
+  
   &.danger {
     color: var(--el-color-danger);
   }
-
+  
   &:focus {
     outline: 0;
   }
-
+  
   &.is-in-btn {
     margin: -1px 5px -1px 0;
     font-size: $icon-size-small;
+    
     &.right {
       margin: -1px 0 -1px 5px;
     }
@@ -448,12 +474,13 @@
   &__inner {
     margin: 0;
     padding: 0;
+    
     li {
       padding: 10px;
       display: flex;
       align-items: center;
       border-bottom: 1px solid var(--el-border-color-base);
-
+      
       &:last-child {
         border: none;
       }
@@ -495,7 +522,7 @@
 }
 
 // sortable
-.sortable-ghost{
+.sortable-ghost {
   opacity: .3;
   color: #fff !important;
   background: var(--el-color-primary) !important;
