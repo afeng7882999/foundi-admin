@@ -13,7 +13,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { scrollTo } from '@/utils/smooth-scroll'
+import { scrollElementH } from '@/utils/smooth-scroll'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 const props = defineProps({
@@ -63,18 +63,6 @@ const emitScroll = () => {
   emit('scroll')
 }
 
-const scrollByLeft = (val: number) => {
-  const $wrapper = scrollWrapper.value
-  scrollTo(
-    $wrapper.scrollLeft,
-    val,
-    (val) => {
-      $wrapper.scrollLeft = val
-    },
-    500
-  )
-}
-
 const pageRight = () => {
   const $container = scrollContainer.value
   const $items = getScrollItems()
@@ -84,12 +72,12 @@ const pageRight = () => {
   let idx = 0
   for (; idx < len; idx++) {
     if ($items[idx].offsetLeft > scrollWidth) {
-      scrollByLeft($items[idx - 1].offsetLeft)
+      scrollElementH(scrollWrapper.value, $items[idx - 1].offsetLeft)
       break
     }
   }
   if (idx === len) {
-    scrollByLeft(scrollWidth)
+    scrollElementH(scrollWrapper.value, scrollWidth)
   }
 }
 
@@ -99,13 +87,13 @@ const pageLeft = () => {
   const containerWidth = $container.offsetWidth
   const scrollWidth = scrollWrapper.value.scrollLeft - containerWidth
   if (scrollWidth <= 0) {
-    scrollByLeft(0)
+    scrollElementH(scrollWrapper.value, 0)
     return
   }
   const len = $items.length
   for (let idx = 0; idx < len; idx++) {
     if ($items[idx].offsetLeft > scrollWidth) {
-      scrollByLeft($items[idx].offsetLeft)
+      scrollElementH(scrollWrapper.value, $items[idx].offsetLeft)
       break
     }
   }
@@ -127,9 +115,9 @@ const moveToTarget = (target: HTMLElement) => {
   }
 
   if (first === target) {
-    scrollByLeft(0)
+    scrollElementH(scrollWrapper.value, 0)
   } else if (last === target) {
-    scrollByLeft($wrapper.scrollWidth - containerWidth)
+    scrollElementH(scrollWrapper.value, $wrapper.scrollWidth - containerWidth)
   } else {
     // find previous and next one
     const currentIdx = $items.findIndex((item) => item === target)
@@ -143,9 +131,9 @@ const moveToTarget = (target: HTMLElement) => {
     const beforePrevOffsetLeft = prev.offsetLeft
 
     if (afterNextOffsetLeft > $wrapper.scrollLeft + containerWidth) {
-      scrollByLeft(afterNextOffsetLeft - containerWidth)
+      scrollElementH(scrollWrapper.value, afterNextOffsetLeft - containerWidth)
     } else if (beforePrevOffsetLeft < $wrapper.scrollLeft) {
-      scrollByLeft(beforePrevOffsetLeft)
+      scrollElementH(scrollWrapper.value, beforePrevOffsetLeft)
     }
   }
 }
@@ -158,9 +146,9 @@ const moveToIdx = (idx: number) => {
   const containerWidth = $container.offsetWidth
 
   if (idx === 0) {
-    scrollByLeft(0)
+    scrollElementH(scrollWrapper.value, 0)
   } else if (idx === $items.length - 1) {
-    scrollByLeft($wrapper.scrollWidth - containerWidth)
+    scrollElementH(scrollWrapper.value, $wrapper.scrollWidth - containerWidth)
   } else {
     const prev = $items[idx - 1]
     const next = $items[idx + 1]
@@ -172,9 +160,9 @@ const moveToIdx = (idx: number) => {
     const beforePrevOffsetLeft = prev.offsetLeft
 
     if (afterNextOffsetLeft > $wrapper.scrollLeft + containerWidth) {
-      scrollByLeft(afterNextOffsetLeft - containerWidth)
+      scrollElementH(scrollWrapper.value, afterNextOffsetLeft - containerWidth)
     } else if (beforePrevOffsetLeft < $wrapper.scrollLeft) {
-      scrollByLeft(beforePrevOffsetLeft)
+      scrollElementH(scrollWrapper.value, beforePrevOffsetLeft)
     }
   }
 }

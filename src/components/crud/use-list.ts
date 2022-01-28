@@ -4,7 +4,7 @@ import { merge } from 'lodash-es'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import usePage from './use-page'
 import useDict, { IDictList } from './use-dict'
-import { scrollToTop } from '@/utils/smooth-scroll'
+import { scrollDocToTop } from '@/utils/smooth-scroll'
 import { nextFrame } from '@/utils/next-frame'
 import { formatTimestamp2 } from '@/utils/time'
 
@@ -216,7 +216,7 @@ export default function <T extends IListStateOption>(stateOption: T) {
   const pageChange = async (val: number) => {
     mixState.current = val
     await getList()
-    scrollToTop()
+    scrollDocToTop()
   }
 
   // 改变每页显示数
@@ -224,7 +224,7 @@ export default function <T extends IListStateOption>(stateOption: T) {
     mixState.current = 0
     mixState.size = val
     await getList()
-    scrollToTop()
+    scrollDocToTop()
   }
 
   // 查询方法

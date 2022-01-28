@@ -2,29 +2,29 @@
   <div ref="pageRoot" :style="docMinHeight" class="page-operLog fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList()">
+      <el-form ref="queryForm" :inline="true" :model="state.query" size="medium" @keyup.enter="queryList()">
         <transition
           name="expand"
           @enter="expandEnter"
           @after-enter="expandAfterEnter"
           @before-leave="expandBeforeLeave"
         >
-          <div v-show="queryFormShow" class="fd-page__query">
+          <div v-show="state.queryFormShow" class="fd-page__query">
             <el-form-item label="模块" prop="title">
-              <el-input v-model="query.title" clearable placeholder="请输入模块标题" style="width: 150px" />
+              <el-input v-model="state.query.title" clearable placeholder="请输入模块标题" style="width: 150px" />
             </el-form-item>
             <el-form-item label="方法" prop="method">
-              <el-input v-model="query.method" clearable placeholder="请输入方法名称" style="width: 150px" />
+              <el-input v-model="state.query.method" clearable placeholder="请输入方法名称" style="width: 150px" />
             </el-form-item>
             <el-form-item label="账号" prop="operUserName">
-              <el-input v-model="query.operUserName" clearable placeholder="请输入账号" style="width: 150px" />
+              <el-input v-model="state.query.operUserName" clearable placeholder="请输入账号" style="width: 150px" />
             </el-form-item>
             <el-form-item label="IP" prop="operIp">
-              <el-input v-model="query.operIp" clearable placeholder="请输入IP" style="width: 150px" />
+              <el-input v-model="state.query.operIp" clearable placeholder="请输入IP" style="width: 150px" />
             </el-form-item>
             <el-form-item label="时间" prop="operTime" style="height: 36px">
               <el-date-picker
-                v-model="query.operTime"
+                v-model="state.query.operTime"
                 :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
                 end-placeholder="结束日期"
                 format="YYYY-MM-DD"
@@ -49,7 +49,7 @@
         <el-button
           v-show="hasAuth('system:operLog:delete')"
           v-waves
-          :disabled="selectedNodes.length <= 0"
+          :disabled="state.selectedNodes.length <= 0"
           plain
           size="medium"
           type="danger"
@@ -64,16 +64,16 @@
         </el-button>
         <div class="action-right">
           <el-form
-            v-show="!queryFormShow"
+            v-show="!state.queryFormShow"
             ref="queryFormQuick"
             :inline="true"
-            :model="query"
+            :model="state.query"
             size="medium"
             @keyup.enter="queryList()"
           >
             <el-form-item label="时间" prop="operTime" style="height: 36px">
               <el-date-picker
-                v-model="query.operTime"
+                v-model="state.query.operTime"
                 :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
                 end-placeholder="结束日期"
                 format="YYYY-MM-DD"
@@ -91,20 +91,28 @@
           </el-form>
           <el-divider class="action-divider" direction="vertical"></el-divider>
           <el-tooltip
-            :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'"
+            :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'"
             :show-after="500"
             effect="dark"
             placement="top"
           >
-            <el-badge :hidden="queryFormShow || !queryLen" :value="queryLen" class="action-badge">
+            <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
               <fd-icon-button class="action-icon-btn" icon="search-more" @click="toggleQueryForm()"></fd-icon-button>
             </el-badge>
           </el-tooltip>
         </div>
       </div>
     </div>
-    <div class="fd-page__table is-bordered">
-      <el-table v-loading="loading" :data="data" row-key="id" @selection-change="onSelectionChange">
+    <div ref="pageTable" class="fd-page__table is-bordered">
+      <el-table
+        ref="table"
+        v-loading="state.loading"
+        highlight-current-row
+        :data="state.data"
+        row-key="id"
+        @selection-change="onSelectionChange"
+        @row-click="onTableRowClick"
+      >
         <el-table-column align="left" header-align="left" type="selection" width="40"></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
@@ -161,7 +169,7 @@
           prop="statusDict"
         >
           <template #default="scope">
-            <span>{{ dictVal(dicts.sysOperLogStatus, scope.row.statusDict) }}</span>
+            <span>{{ dictVal(state.dicts.sysOperLogStatus, scope.row.statusDict) }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -237,7 +245,7 @@
           <template #default="scope">
             <el-tooltip :show-after="500" content="详细" placement="top">
               <el-button
-                v-show="hasAuth('system:operLog:delete')"
+                v-show="hasAuth('system:operLog:list')"
                 class="fd-tb-act fd-tb-act-detail"
                 plain
                 size="mini"
@@ -264,22 +272,18 @@
       </el-table>
       <el-pagination
         :background="true"
-        :current-page="current"
-        :page-count="total"
-        :page-size="size"
+        :current-page="state.current"
+        :page-count="state.total"
+        :page-size="state.size"
         :page-sizes="[10, 15, 20, 50, 100]"
-        :total="count"
+        :total="state.count"
         layout="total, sizes, prev, pager, next, jumper"
         @current-change="pageChange"
         @size-change="sizeChange"
       ></el-pagination>
     </div>
     <el-backtop></el-backtop>
-    <fd-contextmenu ref="contextMenu" event-type="click">
-      <fd-contextmenu-item @click="exportDictItemData()">导出当前页数据</fd-contextmenu-item>
-      <fd-contextmenu-item @click="exportDictItemData('all')">导出全部数据</fd-contextmenu-item>
-    </fd-contextmenu>
-    <detail v-if="detailShow" ref="detailDialog"></detail>
+    <detail v-if="state.detailShow" ref="detailDialog" @navigate="onDetailNavigate"></detail>
   </div>
 </template>
 
@@ -292,6 +296,7 @@ export default {
 <script setup lang="ts">
 import useList from '@/components/crud/use-list'
 import {
+  IOperLog,
   operLogDel,
   operLogDicts,
   operLogExport,
@@ -301,7 +306,10 @@ import {
 } from '@/api/system/oper-log'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import Detail from './detail.vue'
-import { toRefs } from 'vue'
+import { nextTick, ref } from 'vue'
+import useRowFocus from '@/components/table/use-row-focus'
+
+const pageTable = ref()
 
 const stateOption = {
   idField: operLogFields.idField,
@@ -309,13 +317,12 @@ const stateOption = {
   delApi: operLogDel,
   exportApi: operLogExport,
   dicts: operLogDicts,
-  query: operLogQuery
+  query: operLogQuery,
+  currentId: ''
 }
 
-const { mixRefs, mixState, mixComputed, mixMethods } = useList(stateOption)
-const { queryForm, detailDialog } = mixRefs
-const { data, query, queryLen, dicts, queryFormShow, selectedNodes, loading, current, total, size, count, detailShow } =
-  toRefs(mixState)
+const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
+const { queryForm, table, detailDialog } = mixRefs
 const { docMinHeight, showPageHeader } = mixComputed
 const {
   queryList,
@@ -330,8 +337,38 @@ const {
   showDetail,
   pageChange,
   sizeChange,
-  onSelectionChange
+  onSelectionChange,
+  onAfterGetList
 } = mixMethods
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
+
+const { highlightCurrent } = useRowFocus(table, pageTable)
+
+const onTableRowClick = (row: IOperLog) => {
+  setCurrentData(row?.id)
+}
+
+onAfterGetList(async () => {
+  if (state.currentId) {
+    setCurrentData(state.currentId)
+  }
+})
+
+const onDetailNavigate = (id: string) => {
+  const current = state.data.find((d) => d.id === id) as IOperLog
+  ;(table.value as any).setCurrentRow(current)
+  setCurrentData(id)
+}
+
+const setCurrentData = (id: string) => {
+  if (!id) {
+    state.currentId = ''
+  } else {
+    state.currentId = id
+  }
+  nextTick(() => {
+    highlightCurrent()
+  })
+}
 </script>

@@ -47,10 +47,10 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useDetail, { OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
+import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
 import { loginLogFields } from '@/api/system/login-log'
 
-const emit = defineEmits([OPEN_EDIT_EVENT])
+const emit = defineEmits([OPEN_EDIT_EVENT, NAVIGATE_EVENT])
 
 const stateOption = {
   idField: loginLogFields.idField,

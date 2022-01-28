@@ -103,9 +103,6 @@ const state = reactive({
 
 const { showPageHeader, docHeight, getDocHeight } = usePage()
 
-const store = useStore<AllState>()
-const storeState = store.state as AllState
-
 const previewHeight = computed(() => {
   return { height: getDocHeight(105, 'px') }
 })
@@ -187,6 +184,8 @@ const onTreeNodeClick = (node: ICodePreviewNode) => {
     })
   }
 }
+
+const store = useStore<AllState>()
 
 const close = () => {
   store.dispatch('view/delView', route)

@@ -32,20 +32,64 @@ export function scrollTo(start: number, end: number, move: (val: number) => void
 }
 
 /**
- * 滚动到页面顶端
+ * 横向滚动
  */
-export function scrollToTop(end = 0, duration = 500) {
-  const move = function (val: number) {
-    document.documentElement.scrollTop = val
-    ;(document.body.parentNode as Element).scrollTop = val
-    document.body.scrollTop = val
-  }
+export function scrollElementH(target: HTMLElement, end: HTMLElement | number, duration = 500) {
+  const endNum = typeof end === 'number' ? end : end.scrollLeft
+  scrollTo(
+    target.scrollLeft,
+    endNum,
+    (val) => {
+      target.scrollLeft = val
+    },
+    duration
+  )
+}
 
-  const start = function () {
-    return (
-      document.documentElement.scrollTop || (document.body.parentNode as Element).scrollTop || document.body.scrollTop
-    )
-  }
+/**
+ * 纵向滚动
+ */
+export function scrollElementV(target: HTMLElement, end: HTMLElement | number, duration = 500) {
+  const endNum = typeof end === 'number' ? end : end.scrollTop
+  scrollTo(
+    target.scrollTop,
+    endNum,
+    (val) => {
+      target.scrollTop = val
+    },
+    duration
+  )
+}
 
-  scrollTo(start(), end, (val) => move(val), duration)
+/**
+ * 获取页面的scrollTop
+ */
+export function getDocumentTop(): number {
+  return (
+    document.documentElement.scrollTop || (document.body.parentNode as Element).scrollTop || document.body.scrollTop
+  )
+}
+
+/**
+ * 设置页面的scrollTop
+ */
+function setDocumentTop(val: number) {
+  document.documentElement.scrollTop = val
+  ;(document.body.parentNode as Element).scrollTop = val
+  document.body.scrollTop = val
+}
+
+/**
+ * 页面纵向滚动
+ */
+export function scrollDocH(end: HTMLElement | number, duration = 500) {
+  const endNum = typeof end === 'number' ? end : end.scrollTop
+  scrollTo(getDocumentTop(), endNum, (val) => setDocumentTop(val), duration)
+}
+
+/**
+ * 页面滚动到顶端
+ */
+export function scrollDocToTop(duration = 500) {
+  scrollDocH(0, duration)
 }

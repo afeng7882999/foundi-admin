@@ -98,8 +98,16 @@
         </div>
       </div>
     </div>
-    <div class="fd-page__table is-bordered">
-      <el-table v-loading="state.loading" :data="state.data" row-key="id" @selection-change="onSelectionChange">
+    <div ref="pageTable" class="fd-page__table is-bordered">
+      <el-table
+        ref="table"
+        v-loading="state.loading"
+        highlight-current-row
+        :data="state.data"
+        row-key="id"
+        @selection-change="onSelectionChange"
+        @row-click="onTableRowClick"
+      >
         <el-table-column align="left" header-align="left" type="selection" width="40"></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
@@ -113,22 +121,23 @@
             <span>{{ dateTimeStr(scope.row.operTime) }}</span>
           </template>
         </el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="类型" prop="typeDict">
-          <template #default="scope">
-            <span>{{ dictVal(state.dicts.sysLoginLogType, scope.row.typeDict) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
+        <table-column
+          :show-overflow-tooltip="true"
+          align="left"
+          header-align="left"
+          label="类型"
+          prop="typeDict"
+          :dicts="state.dicts.sysLoginLogType"
+          width="100"
+        ></table-column>
+        <table-column
           :show-overflow-tooltip="true"
           align="left"
           header-align="left"
           label="登录方式"
           prop="authcTypeDict"
-        >
-          <template #default="scope">
-            <span>{{ dictVal(state.dicts.sysAuthcType, scope.row.authcTypeDict) }}</span>
-          </template>
-        </el-table-column>
+          :dicts="state.dicts.sysAuthcType"
+        ></table-column>
         <el-table-column
           :show-overflow-tooltip="true"
           align="left"
@@ -153,13 +162,13 @@
             <fd-table-sort-header :column="scope.column" @sort-changed="sortChanged"></fd-table-sort-header>
           </template>
         </el-table-column>
-        <el-table-column
+        <table-column
           :show-overflow-tooltip="true"
           align="left"
           header-align="left"
           label="地点"
           prop="location"
-        ></el-table-column>
+        ></table-column>
         <el-table-column
           :show-overflow-tooltip="true"
           align="left"
@@ -228,7 +237,7 @@
       ></el-pagination>
     </div>
     <el-backtop></el-backtop>
-    <detail v-if="state.detailShow" ref="detailDialog"></detail>
+    <detail v-if="state.detailShow" ref="detailDialog" @navigate="onDetailNavigate"></detail>
   </div>
 </template>
 
@@ -246,10 +255,16 @@ import {
   loginLogQuery,
   loginLogList,
   loginLogDel,
-  loginLogExport
+  loginLogExport,
+  ILoginLog
 } from '@/api/system/login-log'
 import Detail from './detail.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
+import TableColumn from '@/components/table-column/table-column.vue'
+import useRowFocus from '@/components/table/use-row-focus'
+import { nextTick, ref } from 'vue'
+
+const pageTable = ref()
 
 const stateOption = {
   idField: loginLogFields.idField,
@@ -257,11 +272,12 @@ const stateOption = {
   delApi: loginLogDel,
   exportApi: loginLogExport,
   dicts: loginLogDicts,
-  query: loginLogQuery
+  query: loginLogQuery,
+  currentId: ''
 }
 
 const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
-const { queryForm, detailDialog } = mixRefs
+const { queryForm, table, detailDialog } = mixRefs
 const { docMinHeight, showPageHeader } = mixComputed
 const {
   queryList,
@@ -276,8 +292,38 @@ const {
   del,
   onSelectionChange,
   hasAuth,
-  exportData
+  exportData,
+  onAfterGetList
 } = mixMethods
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
+
+const { highlightCurrent } = useRowFocus(table, pageTable)
+
+const onTableRowClick = (row: ILoginLog) => {
+  setCurrentData(row?.id)
+}
+
+onAfterGetList(async () => {
+  if (state.currentId) {
+    setCurrentData(state.currentId)
+  }
+})
+
+const onDetailNavigate = (id: string) => {
+  const current = state.data.find((d) => d.id === id) as ILoginLog
+  ;(table.value as any).setCurrentRow(current)
+  setCurrentData(id)
+}
+
+const setCurrentData = (id: string) => {
+  if (!id) {
+    state.currentId = ''
+  } else {
+    state.currentId = id
+  }
+  nextTick(() => {
+    highlightCurrent()
+  })
+}
 </script>
