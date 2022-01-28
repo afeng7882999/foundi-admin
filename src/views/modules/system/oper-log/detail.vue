@@ -9,7 +9,7 @@
     <el-descriptions :column="2" :title="`ID: ${state.data[state.idx].id}`" border size="medium">
       <el-descriptions-item :span="2" label="模块标题">{{ state.data[state.idx].title }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="操作时间">
-        {{ dateTimeStr(state.data[state.idx].operTime) }}
+        {{ formatTimestamp(state.data[state.idx].operTime) }}
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="操作人员ID">{{ state.data[state.idx].operUserId }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="操作人员账号">
@@ -60,6 +60,7 @@ import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/us
 import { operLogFields } from '@/api/system/oper-log'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { formatJson } from '@/utils/lang'
+import { formatTimestamp } from '@/utils/time'
 
 const emit = defineEmits([OPEN_EDIT_EVENT, NAVIGATE_EVENT])
 
@@ -91,7 +92,7 @@ const stateOption = {
 
 const { mixState: state, mixComputed, mixMethods } = useDetail(stateOption, emit)
 const { prevDisabled, nextDisabled } = mixComputed
-const { open, dictVal, dateTimeStr, onEdit, onPrev, onNext, close, onCurrentChanged } = mixMethods
+const { open, dictVal, onEdit, onPrev, onNext, close, onCurrentChanged } = mixMethods
 
 onCurrentChanged(async (idx: number) => {
   state.operParam = formatJson(state.data[idx].operParam)

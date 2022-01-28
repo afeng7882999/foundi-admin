@@ -43,9 +43,7 @@
                     <fd-icon class="is-in-btn" icon="search"></fd-icon>
                     查询
                   </el-button>
-                  <el-button @click="resetQuery">
-                    清空
-                  </el-button>
+                  <el-button @click="resetQuery">清空</el-button>
                 </el-form-item>
               </div>
             </transition>
@@ -299,6 +297,7 @@ import { arrayToTree } from '@/utils/data-tree'
 import { IRole, roleList } from '@/api/system/role'
 import { localOrRemoteUrl } from '@/utils/query'
 import { useRouter } from 'vue-router'
+import usePage from '@/components/crud/use-page'
 
 export default defineComponent({
   name: 'SystemUser',
@@ -324,7 +323,9 @@ export default defineComponent({
       treeField: { labelField: 'name' }
     }
 
-    const { mixRefs, mixState, mixComputed, mixMethods } = useList(stateOption)
+    const { mixRefs, mixState, mixMethods } = useList(stateOption)
+
+    const { docMinHeight, showPageHeader, hasAuth, setViewTitle } = usePage()
 
     const test = () => {
       mixState.treeField.labelField = 'id'
@@ -404,7 +405,7 @@ export default defineComponent({
         const id = row.id
         const name = row.username
         // path: system/oauthUser/:id
-        await mixMethods.setViewTitle(`/system/oauthUser/${id}`, `用户 ${name} OAuth2账号`)
+        await setViewTitle(`/system/oauthUser/${id}`, `用户 ${name} OAuth2账号`)
         await router.push({ name: 'SystemOauthUser', params: { id: id } })
       }
     }
@@ -412,7 +413,10 @@ export default defineComponent({
     return {
       ...mixRefs,
       ...toRefs(mixState),
-      ...mixComputed,
+      docMinHeight,
+      showPageHeader,
+      hasAuth,
+      setViewTitle,
       ...mixMethods,
       ...useExpandTransition(),
       getGroupName,

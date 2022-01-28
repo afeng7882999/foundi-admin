@@ -40,7 +40,7 @@
       <el-table-column :show-overflow-tooltip="true" label="表描述" prop="tableComment"></el-table-column>
       <el-table-column label="创建时间" prop="tableCreateTime">
         <template #default="scope">
-          {{ dateTimeStr(scope.row.tableCreateTime) }}
+          {{ formatTimestamp(scope.row.tableCreateTime) }}
         </template>
       </el-table-column>
     </el-table>
@@ -75,6 +75,7 @@ import useList from '@/components/crud/use-list'
 import { genTableImportDb, genTableListDb } from '@/api/generator/gen-table'
 import { ElMessage } from 'element-plus'
 import { AnyObject } from '@/utils'
+import { formatTimestamp } from '@/utils/time'
 
 const emit = defineEmits(['generator-imported'])
 
@@ -90,7 +91,7 @@ const stateOption = {
 
 const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
 const { queryForm, table } = mixRefs
-const { getList, dateTimeStr, pageChange, sizeChange, queryList, resetQuery, onSelectionChange } = mixMethods
+const { getList, pageChange, sizeChange, queryList, resetQuery, onSelectionChange } = mixMethods
 
 // 显示弹框
 const open = () => {

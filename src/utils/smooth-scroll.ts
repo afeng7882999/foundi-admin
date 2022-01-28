@@ -15,7 +15,7 @@ function easeInOutQuad(t: number, b: number, c: number, d: number): number {
 /**
  * 平滑滚动
  */
-export function scrollTo(start: number, end: number, move: (val: number) => void, duration = 500) {
+export function scrollTo(start: number, end: number, move: (val: number) => void, duration = 300) {
   const change = end - start
   const increment = 20
   let currentTime = 0
@@ -28,13 +28,13 @@ export function scrollTo(start: number, end: number, move: (val: number) => void
       rAF(animateScroll)
     }
   }
-  animateScroll()
+  duration > 1000 / 60 ? animateScroll() : move(end)
 }
 
 /**
  * 横向滚动
  */
-export function scrollElementH(target: HTMLElement, end: HTMLElement | number, duration = 500) {
+export function scrollElementH(target: HTMLElement, end: HTMLElement | number, duration = 300) {
   const endNum = typeof end === 'number' ? end : end.scrollLeft
   scrollTo(
     target.scrollLeft,
@@ -49,7 +49,7 @@ export function scrollElementH(target: HTMLElement, end: HTMLElement | number, d
 /**
  * 纵向滚动
  */
-export function scrollElementV(target: HTMLElement, end: HTMLElement | number, duration = 500) {
+export function scrollElementV(target: HTMLElement, end: HTMLElement | number, duration = 300) {
   const endNum = typeof end === 'number' ? end : end.scrollTop
   scrollTo(
     target.scrollTop,
@@ -82,7 +82,7 @@ function setDocumentTop(val: number) {
 /**
  * 页面纵向滚动
  */
-export function scrollDocH(end: HTMLElement | number, duration = 500) {
+export function scrollDocH(end: HTMLElement | number, duration = 300) {
   const endNum = typeof end === 'number' ? end : end.scrollTop
   scrollTo(getDocumentTop(), endNum, (val) => setDocumentTop(val), duration)
 }
@@ -90,6 +90,6 @@ export function scrollDocH(end: HTMLElement | number, duration = 500) {
 /**
  * 页面滚动到顶端
  */
-export function scrollDocToTop(duration = 500) {
+export function scrollDocToTop(duration = 300) {
   scrollDocH(0, duration)
 }

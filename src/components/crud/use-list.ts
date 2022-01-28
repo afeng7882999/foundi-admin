@@ -1,12 +1,10 @@
 import { AnyFunction, AnyObject, needImplFunc } from '@/utils'
-import { computed, nextTick, onMounted, reactive, ref } from 'vue'
+import { nextTick, onMounted, reactive, ref } from 'vue'
 import { merge } from 'lodash-es'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import usePage from './use-page'
 import useDict, { IDictList } from './use-dict'
 import { scrollDocToTop } from '@/utils/smooth-scroll'
 import { nextFrame } from '@/utils/next-frame'
-import { formatTimestamp2 } from '@/utils/time'
 
 export interface IListStateOption {
   // 主键
@@ -141,11 +139,6 @@ export default function <T extends IListStateOption>(stateOption: T) {
 
   // 字典方法
   const { getDictData, dictVal } = useDict(mixState.dicts)
-
-  // 时间戳格式化
-  const dateTimeStr = (timestamp: string, shape = 'datetime' as 'time' | 'date' | 'datetime') => {
-    return formatTimestamp2(Number(timestamp), shape)
-  }
 
   // 显示页面即获取数据
   onMounted(async () => {
@@ -352,19 +345,6 @@ export default function <T extends IListStateOption>(stateOption: T) {
     }
   }
 
-  const {
-    docMinHeight,
-    docHeight,
-    showPageHeader,
-    getBodyWidth,
-    getBodyHeight,
-    getDocWidth,
-    getDocHeight,
-    hasAuth,
-    setViewTitle,
-    getViewTitle
-  } = usePage()
-
   return {
     mixRefs: {
       queryForm,
@@ -373,11 +353,6 @@ export default function <T extends IListStateOption>(stateOption: T) {
       detailDialog
     },
     mixState,
-    mixComputed: {
-      docMinHeight,
-      docHeight,
-      showPageHeader
-    },
     mixMethods: {
       getList,
       pageChange,
@@ -386,8 +361,6 @@ export default function <T extends IListStateOption>(stateOption: T) {
       resetQuery,
       del,
       dictVal,
-      dateTimeStr,
-      hasAuth,
       exportData,
       showEdit,
       showDetail,
@@ -397,14 +370,8 @@ export default function <T extends IListStateOption>(stateOption: T) {
       onAfterGetList,
       onBeforeDel,
       onAfterDel,
-      setViewTitle,
-      getViewTitle,
       colEmptyFormatter,
-      sortChanged,
-      getBodyWidth,
-      getBodyHeight,
-      getDocWidth,
-      getDocHeight
+      sortChanged
     }
   }
 }

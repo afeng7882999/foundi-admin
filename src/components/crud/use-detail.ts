@@ -3,8 +3,6 @@ import { computed, onBeforeUnmount, onMounted, reactive, watch } from 'vue'
 import useDict, { IDictList } from '@/components/crud/use-dict'
 import { AnyFunction, AnyObject } from '@/utils'
 import { off, on } from '@/utils/dom'
-import { formatTimestamp2 } from '@/utils/time'
-import usePage from '@/components/crud/use-page'
 
 export interface IDetailStateOption {
   // 主键
@@ -89,14 +87,6 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
     mixHandlers.currentChanged = fn
   }
 
-  // 字典 utils
-  const { getDictData, dictVal } = useDict(mixState.dicts)
-
-  // 时间戳格式化
-  const dateTimeStr = (timestamp: string, shape = 'datetime' as 'time' | 'date' | 'datetime') => {
-    return formatTimestamp2(Number(timestamp), shape)
-  }
-
   // 显示
   const open = async (data: AnyObject[], idx: number, extra?: AnyObject) => {
     await mixHandlers.beforeOpen(data, idx, extra)
@@ -107,6 +97,12 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
     }
     await mixHandlers.currentChanged(idx)
     mixState.visible = true
+  }
+
+  // 隐藏
+  const close = () => {
+    mixState.visible = false
+    resetForm()
   }
 
   // 清除表单数据
@@ -137,12 +133,6 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
     }
   }
 
-  // 隐藏
-  const close = () => {
-    mixState.visible = false
-    resetForm()
-  }
-
   onMounted(() => {
     on(document, 'keyup', onKeyEvent)
   })
@@ -160,7 +150,8 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
     }
   }
 
-  const { hasAuth } = usePage()
+  // 字典 utils
+  const { getDictData, dictVal } = useDict(mixState.dicts)
 
   return {
     mixState,
@@ -175,13 +166,11 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
       resetForm,
       getDictData,
       dictVal,
-      dateTimeStr,
       onEdit,
       onPrev,
       onNext,
       onKeyEvent,
-      close,
-      hasAuth
+      close
     }
   }
 }

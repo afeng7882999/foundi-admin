@@ -23,9 +23,7 @@
                     <fd-icon class="is-in-btn" icon="search" plain></fd-icon>
                     查询
                   </el-button>
-                  <el-button @click="resetQuery">
-                    清空
-                  </el-button>
+                  <el-button @click="resetQuery">清空</el-button>
                 </el-form-item>
               </div>
             </transition>
@@ -172,6 +170,7 @@ import useExpandTransition from '@/components/transition/use-expand-transition'
 import { AnyObject } from '@/utils'
 import { useRouter } from 'vue-router'
 import FdSplitPane from '@/components/split-pane/index.vue'
+import usePage from '@/components/crud/use-page'
 
 const stateOption = {
   idField: dictFields.idField,
@@ -184,9 +183,8 @@ const stateOption = {
 
 const router = useRouter()
 
-const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
 const { queryForm, editDialog, detailDialog } = mixRefs
-const { docMinHeight, showPageHeader } = mixComputed
 const {
   getList,
   pageChange,
@@ -194,12 +192,13 @@ const {
   queryList,
   resetQuery,
   del,
-  hasAuth,
   exportData,
   showEdit,
   onSelectionChange,
   toggleQueryForm
 } = mixMethods
+
+const { docMinHeight, showPageHeader, hasAuth, setViewTitle } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 
@@ -209,7 +208,7 @@ const handleEdit = async (row: AnyObject) => {
     const id = row.id
     const name = row.name
     // path: system/dict-item/:id
-    await mixMethods.setViewTitle(`/system/dictItem/${id}`, `字典 ${name} 条目修改`)
+    await setViewTitle(`/system/dictItem/${id}`, `字典 ${name} 条目修改`)
     await router.push({ name: 'SystemDictItem', params: { id: id } })
   }
 }
@@ -228,10 +227,10 @@ mixMethods.onAfterGetList(async () => {
 const setCurrentData = async (dict: IDict) => {
   if (!dict) {
     state.currentId = ''
-    ;(mixRefs.detailDialog.value as any).close()
+    ;(detailDialog.value as any).close()
     return
   }
   state.currentId = dict.id
-  ;(mixRefs.detailDialog.value as any).open([dict], 0)
+  ;(detailDialog.value as any).open([dict], 0)
 }
 </script>

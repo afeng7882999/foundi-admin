@@ -23,9 +23,7 @@
                     <fd-icon class="is-in-btn" icon="search"></fd-icon>
                     查询
                   </el-button>
-                  <el-button @click="resetQuery">
-                    清空
-                  </el-button>
+                  <el-button @click="resetQuery">清空</el-button>
                 </el-form-item>
               </div>
             </transition>
@@ -172,6 +170,7 @@ import useExpandTransition from '@/components/transition/use-expand-transition'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { groupList, IGroup } from '@/api/system/group'
 import { IMenu, menuList } from '@/api/system/menu'
+import usePage from '@/components/crud/use-page'
 
 const stateOption = {
   idField: roleFields.idField,
@@ -186,9 +185,8 @@ const stateOption = {
   currentId: ''
 }
 
-const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
 const { queryForm, editDialog, detailDialog } = mixRefs
-const { docMinHeight, showPageHeader } = mixComputed
 const {
   getList,
   pageChange,
@@ -197,7 +195,6 @@ const {
   resetQuery,
   del,
   dictVal,
-  hasAuth,
   exportData,
   showEdit,
   onSelectionChange,
@@ -205,6 +202,8 @@ const {
   onBeforeGetList,
   onAfterGetList
 } = mixMethods
+
+const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 

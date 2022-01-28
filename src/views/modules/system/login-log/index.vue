@@ -118,7 +118,7 @@
           width="200"
         >
           <template #default="scope">
-            <span>{{ dateTimeStr(scope.row.operTime) }}</span>
+            <span>{{ formatTimestamp(scope.row.operTime) }}</span>
           </template>
         </el-table-column>
         <table-column
@@ -263,6 +263,8 @@ import useExpandTransition from '@/components/transition/use-expand-transition'
 import TableColumn from '@/components/table-column/table-column.vue'
 import useRowFocus from '@/components/table/use-row-focus'
 import { nextTick, ref } from 'vue'
+import { formatTimestamp } from '@/utils/time'
+import usePage from '@/components/crud/use-page'
 
 const pageTable = ref()
 
@@ -276,25 +278,24 @@ const stateOption = {
   currentId: ''
 }
 
-const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
 const { queryForm, table, detailDialog } = mixRefs
-const { docMinHeight, showPageHeader } = mixComputed
 const {
   queryList,
   resetQuery,
   toggleQueryForm,
   dictVal,
-  dateTimeStr,
   showDetail,
   sortChanged,
   pageChange,
   sizeChange,
   del,
   onSelectionChange,
-  hasAuth,
   exportData,
   onAfterGetList
 } = mixMethods
+
+const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 

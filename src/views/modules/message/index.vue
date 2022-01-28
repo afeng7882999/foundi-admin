@@ -7,7 +7,13 @@
       </el-form-item>
     </el-form>
     <!-- 表格 -->
-    <el-table v-loading="loading" :data="data" :row-class-name="rowClass" style="width: 100%" @selection-change="onSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="data"
+      :row-class-name="rowClass"
+      style="width: 100%"
+      @selection-change="onSelectionChange"
+    >
       <el-table-column align="center" header-align="center" width="30">
         <template #default="scope">
           <fd-icon :icon="unread(scope.row) ? 'email2' : 'email-open'"></fd-icon>
@@ -25,13 +31,33 @@
           <span>{{ dictVal(dicts.sysMessageType, scope.row.typeDict) }}</span>
         </template>
       </el-table-column>
-      <el-table-column :show-overflow-tooltip="true" align="left" header-align="center" label="标题" prop="title" width="300">
+      <el-table-column
+        :show-overflow-tooltip="true"
+        align="left"
+        header-align="center"
+        label="标题"
+        prop="title"
+        width="300"
+      >
         <template #default="scope">
           <span class="title-link" @click="showEdit(scope.row)">{{ scope.row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column :show-overflow-tooltip="true" align="left" header-align="center" label="内容" prop="content"></el-table-column>
-      <el-table-column :show-overflow-tooltip="true" align="left" header-align="center" label="发送时间" prop="createAt" width="160"></el-table-column>
+      <el-table-column
+        :show-overflow-tooltip="true"
+        align="left"
+        header-align="center"
+        label="内容"
+        prop="content"
+      ></el-table-column>
+      <el-table-column
+        :show-overflow-tooltip="true"
+        align="left"
+        header-align="center"
+        label="发送时间"
+        prop="createAt"
+        width="160"
+      ></el-table-column>
       <el-table-column align="center" fixed="right" header-align="center" label="删除" width="50">
         <template #default="scope">
           <el-tooltip :show-after="500" class="item" content="删除" effect="dark" placement="top">
@@ -43,9 +69,23 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination :background="true" :current-page="current" :page-count="total" :page-size="size" :page-sizes="[10, 20, 50, 100]" :total="count" layout="total, sizes, prev, pager, next, jumper" @current-change="pageChange" @size-change="sizeChange"></el-pagination>
+    <el-pagination
+      :background="true"
+      :current-page="current"
+      :page-count="total"
+      :page-size="size"
+      :page-sizes="[10, 20, 50, 100]"
+      :total="count"
+      layout="total, sizes, prev, pager, next, jumper"
+      @current-change="pageChange"
+      @size-change="sizeChange"
+    ></el-pagination>
     <!-- 添加删除 -->
-    <system-message-content-dialog v-if="editShow" ref="editDialog" @refresh-data-list="getList"></system-message-content-dialog>
+    <system-message-content-dialog
+      v-if="editShow"
+      ref="editDialog"
+      @refresh-data-list="getList"
+    ></system-message-content-dialog>
   </div>
 </template>
 
@@ -55,7 +95,14 @@ import useList from '@/components/crud/use-list'
 import SystemMessageContentDialog from './message-content.vue'
 import { ElMessage } from 'element-plus'
 import { AnyObject } from '@/utils'
-import { DelMessageOfCurrent, listMessageOfCurrent, SetMessageReadOfCurrent, userMessageDicts, userMessageQuery } from '@/api/system/message'
+import {
+  DelMessageOfCurrent,
+  listMessageOfCurrent,
+  SetMessageReadOfCurrent,
+  userMessageDicts,
+  userMessageQuery
+} from '@/api/system/message'
+import usePage from "@/components/crud/use-page";
 
 export default defineComponent({
   name: 'SystemMessage',
@@ -71,7 +118,9 @@ export default defineComponent({
       query: userMessageQuery
     }
 
-    const { mixRefs, mixState, mixComputed, mixMethods } = useList<typeof stateOption>(stateOption)
+    const { mixRefs, mixState, mixMethods } = useList(stateOption)
+
+    const { docMinHeight } = usePage()
 
     const setAllReadHandle = async () => {
       let ids = mixState.data.filter((m) => unread(m)).map((m) => m.id)
@@ -102,9 +151,9 @@ export default defineComponent({
 
     return {
       ...mixRefs,
-      ...mixComputed,
       ...toRefs(mixState),
       ...mixMethods,
+      docMinHeight,
       setAllReadHandle,
       rowClass,
       unread

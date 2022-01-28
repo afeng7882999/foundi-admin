@@ -3,10 +3,8 @@ import { AnyFunction, AnyObject, needImplFunc } from '@/utils'
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import { merge } from 'lodash-es'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import usePage from '@/components/crud/use-page'
 import { nextFrame } from '@/utils/next-frame'
 import useDict, { IDictList } from '@/components/crud/use-dict'
-import { formatTimestamp2 } from '@/utils/time'
 
 interface ITreeStateOption {
   // 主键
@@ -153,11 +151,6 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
 
   // 字典方法
   const { getDictData, dictVal } = useDict(mixState.dicts)
-
-  // 时间戳格式化
-  const dateTimeStr = (timestamp: string, shape = 'datetime' as 'time' | 'date' | 'datetime') => {
-    return formatTimestamp2(Number(timestamp), shape)
-  }
 
   // 显示页面即获取数据
   onMounted(async () => {
@@ -335,19 +328,6 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
     onSelect(selection)
   }
 
-  const {
-    docMinHeight,
-    docHeight,
-    showPageHeader,
-    getBodyWidth,
-    getBodyHeight,
-    getDocWidth,
-    getDocHeight,
-    hasAuth,
-    setViewTitle,
-    getViewTitle
-  } = usePage()
-
   // 显示、隐藏查询表单
   const toggleQueryForm = () => {
     mixState.queryFormShow = !mixState.queryFormShow
@@ -362,19 +342,12 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
       detailDialog
     },
     mixState,
-    mixComputed: {
-      docMinHeight,
-      docHeight,
-      showPageHeader
-    },
     mixMethods: {
       getList,
       queryList,
       resetQuery,
       del,
       dictVal,
-      dateTimeStr,
-      hasAuth,
       exportData,
       showEdit,
       showDetail,
@@ -384,13 +357,7 @@ export default function <T extends ITreeStateOption>(stateOption: T) {
       onBeforeGetList,
       onAfterGetList,
       onBeforeDel,
-      onAfterDel,
-      setViewTitle,
-      getViewTitle,
-      getBodyWidth,
-      getBodyHeight,
-      getDocWidth,
-      getDocHeight
+      onAfterDel
     }
   }
 }

@@ -53,25 +53,21 @@ const useRowFocus = (table: Ref<InstanceType<typeof ElTable>>, parent: Ref<HTMLE
       const bodyH = getBodyHeight(0) as number
       const titleH = bodyH - (getDocHeight(0) as number)
       if (colRect.top < titleH + colRect.height * 2) {
-        scrollDocH(getDocumentTop() - (titleH + colRect.height * 2 - colRect.top))
+        scrollDocH(getDocumentTop() - (titleH + colRect.height * 2 - colRect.top), 0)
         return
       }
       if (colRect.top + colRect.height * 2 > bodyH) {
-        scrollDocH(getDocumentTop() + (bodyH - colRect.top))
+        scrollDocH(getDocumentTop() + (bodyH - colRect.top), 0)
         return
       }
-    }
-  }
-
-  const bindHighlight = () => {
-    if (parent && parent.value) {
-      createBox(parent.value as HTMLElement)
-      addResizeListener(wrapper as ResizableElement, resizeHighlightBox)
     }
   }
 
   onMounted(() => {
-    bindHighlight()
+    if (parent && parent.value) {
+      createBox(parent.value as HTMLElement)
+      addResizeListener(wrapper as ResizableElement, resizeHighlightBox)
+    }
   })
 
   onUnmounted(() => {

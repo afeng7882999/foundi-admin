@@ -132,6 +132,7 @@ import ChangePassword from './change-password.vue'
 import { arrayToTree } from '@/utils/data-tree'
 import { IRole, roleList } from '@/api/system/role'
 import { DEFAULT_AVATAR } from '@/store/modules/user'
+import { RegionObj } from '@/components/region-cascader/types'
 
 export default defineComponent({
   name: 'SystemUserEdit',
@@ -154,7 +155,7 @@ export default defineComponent({
             callback()
           }
         } catch (e) {
-          callback(new Error(e.msg))
+          callback(new Error((e as any).msg))
         }
       }
     }
@@ -190,7 +191,7 @@ export default defineComponent({
               callback()
             }
           } catch (e) {
-            callback(new Error(e.msg))
+            callback(new Error((e as any).msg))
           }
         }
       }
@@ -209,7 +210,7 @@ export default defineComponent({
               callback()
             }
           } catch (e) {
-            callback(new Error(e.msg))
+            callback(new Error((e as any).msg))
           }
         }
       }

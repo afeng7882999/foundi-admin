@@ -21,9 +21,7 @@
                 <fd-icon class="is-in-btn" icon="search" plain></fd-icon>
                 查询
               </el-button>
-              <el-button @click="resetQuery">
-                清空
-              </el-button>
+              <el-button @click="resetQuery">清空</el-button>
             </el-form-item>
           </div>
         </transition>
@@ -169,6 +167,7 @@ import useExpandTransition from '@/components/transition/use-expand-transition'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { dictGetOne } from '@/api/system/dict'
+import usePage from '@/components/crud/use-page'
 
 const contextMenu = ref()
 
@@ -186,9 +185,8 @@ const route = useRoute()
 const router = useRouter()
 const store = useStore()
 
-const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
 const { queryForm, editDialog } = mixRefs
-const { docMinHeight, showPageHeader } = mixComputed
 const {
   getList,
   pageChange,
@@ -196,11 +194,12 @@ const {
   queryList,
   resetQuery,
   del,
-  hasAuth,
   onSelectionChange,
   toggleQueryForm,
   onAfterGetList
 } = mixMethods
+
+const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 
@@ -221,7 +220,7 @@ onBeforeMount(async () => {
 const showDictItemEdit = (id?: string) => {
   state.editShow = true
   nextTick(() => {
-    ;(mixRefs.editDialog.value as any).openDictItemEdit(state.query.dictId as string, id)
+    ;(editDialog.value as any).openDictItemEdit(state.query.dictId as string, id)
   })
 }
 

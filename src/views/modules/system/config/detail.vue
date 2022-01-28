@@ -21,7 +21,7 @@
       <el-descriptions-item :span="2" label="备注">{{ state.data[state.idx].remark }}</el-descriptions-item>
       <template #extra>
         <el-button
-          v-show="state.ifEditable"
+          v-show="state.ifEditable && hasAuth('system:config:edit')"
           plain
           size="medium"
           type="primary"
@@ -55,6 +55,7 @@ import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/us
 import { configFields } from '@/api/system/config'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { formatJson } from '@/utils/lang'
+import usePage from '@/components/crud/use-page'
 
 const stateOption = {
   ifEditable: true,
@@ -75,6 +76,8 @@ const emit = defineEmits([OPEN_EDIT_EVENT, NAVIGATE_EVENT])
 const { mixState: state, mixComputed, mixMethods } = useDetail(stateOption, emit)
 const { prevDisabled, nextDisabled } = mixComputed
 const { open, resetForm, dictVal, close, onCurrentChanged, onEdit, onPrev, onNext } = mixMethods
+
+const { hasAuth } = usePage()
 
 onBeforeMount(async () => {
   resetForm()

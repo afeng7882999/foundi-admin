@@ -3,9 +3,7 @@ import { AnyFunction, AnyObject, needImplFunc } from '@/utils'
 import { reactive, ref } from 'vue'
 import { cloneDeep, merge } from 'lodash-es'
 import { ElMessage } from 'element-plus'
-import { isAuth } from '@/app/account'
 import useDict, { IDictList } from '@/components/crud/use-dict'
-import usePage from "@/components/crud/use-page";
 
 export interface ITreeEditStateOption {
   // 主键
@@ -224,8 +222,6 @@ export default function <T extends ITreeEditStateOption>(stateOption: T, emit: A
     return mixState.isCreate ? `新增${mixState.title}` : `编辑${mixState.title}`
   }
 
-  const { hasAuth } = usePage()
-
   return {
     mixRefs: {
       form
@@ -237,7 +233,6 @@ export default function <T extends ITreeEditStateOption>(stateOption: T, emit: A
       resetForm,
       submit,
       hideDialog,
-      hasAuth,
       getFormTitle,
       onAfterGetData,
       onBeforeOpen,

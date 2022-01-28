@@ -150,7 +150,7 @@
           width="200"
         >
           <template #default="scope">
-            <span>{{ dateTimeStr(scope.row.createAt) }}</span>
+            <span>{{ formatTimestamp(scope.row.createAt) }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" fixed="right" header-align="center" label="操作" width="130">
@@ -239,6 +239,8 @@ import Detail from './detail.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import { nextTick, ref } from 'vue'
 import useRowFocus from '@/components/table/use-row-focus'
+import { formatTimestamp } from '@/utils/time'
+import usePage from '@/components/crud/use-page'
 
 const stateOption = {
   idField: configFields.idField,
@@ -252,9 +254,8 @@ const stateOption = {
 
 const pageTable = ref()
 
-const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
 const { queryForm, table, editDialog, detailDialog } = mixRefs
-const { docMinHeight, showPageHeader } = mixComputed
 const {
   getList,
   pageChange,
@@ -263,8 +264,6 @@ const {
   resetQuery,
   del,
   dictVal,
-  dateTimeStr,
-  hasAuth,
   exportData,
   showEdit,
   showDetail,
@@ -272,6 +271,8 @@ const {
   toggleQueryForm,
   onAfterGetList
 } = mixMethods
+
+const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 

@@ -172,6 +172,7 @@ import Edit from './edit.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import { arrayToTree } from '@/utils/data-tree'
 import { AnyObject } from '@/utils'
+import usePage from '@/components/crud/use-page'
 
 export default defineComponent({
   name: 'SystemMenu',
@@ -189,7 +190,9 @@ export default defineComponent({
       parentList: [] as AnyObject[]
     }
 
-    const { mixRefs, mixState, mixComputed, mixMethods } = useTree(stateOption)
+    const { mixRefs, mixState, mixMethods } = useTree(stateOption)
+
+    const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
     const getParentList = async () => {
       try {
@@ -208,7 +211,9 @@ export default defineComponent({
     return {
       ...mixRefs,
       ...toRefs(mixState),
-      ...mixComputed,
+      docMinHeight,
+      showPageHeader,
+      hasAuth,
       ...mixMethods,
       ...useExpandTransition(),
       getParentList

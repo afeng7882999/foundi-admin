@@ -116,6 +116,7 @@ import useTree from '@/components/crud/use-tree'
 import { groupFields, groupTreeFields, groupList, groupDel, groupExport, IGroup } from '@/api/system/group'
 import Edit from './edit.vue'
 import { getTreeNode } from '@/utils/data-tree'
+import usePage from '@/components/crud/use-page'
 
 const stateOption = {
   idField: groupFields.idField,
@@ -125,10 +126,11 @@ const stateOption = {
   exportApi: groupExport
 }
 
-const { mixRefs, mixState: state, mixComputed, mixMethods } = useTree(stateOption)
+const { mixRefs, mixState: state, mixMethods } = useTree(stateOption)
 const { editDialog } = mixRefs
-const { docMinHeight, showPageHeader } = mixComputed
-const { showEdit, getList, del, onSelect, onSelectAll, hasAuth, exportData } = mixMethods
+const { showEdit, getList, del, onSelect, onSelectAll, exportData } = mixMethods
+
+const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const getParentName = (parentId: string) => {
   const parent = getTreeNode(state.data, (n) => n.id === parentId)

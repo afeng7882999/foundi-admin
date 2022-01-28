@@ -33,9 +33,7 @@
                 <fd-icon class="is-in-btn" icon="search"></fd-icon>
                 查询
               </el-button>
-              <el-button @click="resetQuery">
-                清空
-              </el-button>
+              <el-button @click="resetQuery">清空</el-button>
             </el-form-item>
           </div>
         </transition>
@@ -153,7 +151,7 @@
           width="200"
         >
           <template #default="scope">
-            {{ dateTimeStr(scope.row.tableCreateTime) }}
+            {{ formatTimestamp(scope.row.tableCreateTime) }}
           </template>
         </el-table-column>
         <el-table-column align="center" fixed="right" header-align="center" label="操作" width="250">
@@ -243,6 +241,8 @@ import GeneratorImport from './import.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { AnyObject } from '@/utils'
 import { ElMessage } from 'element-plus'
+import { formatTimestamp } from '@/utils/time'
+import usePage from '@/components/crud/use-page'
 
 const generatorImport = ref()
 
@@ -258,22 +258,11 @@ const stateOption = {
 const router = useRouter()
 const route = useRoute()
 
-const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
 const { queryForm } = mixRefs
-const { docMinHeight, showPageHeader } = mixComputed
-const {
-  getList,
-  pageChange,
-  sizeChange,
-  queryList,
-  resetQuery,
-  del,
-  dateTimeStr,
-  hasAuth,
-  onSelectionChange,
-  toggleQueryForm,
-  setViewTitle
-} = mixMethods
+const { getList, pageChange, sizeChange, queryList, resetQuery, del, onSelectionChange, toggleQueryForm } = mixMethods
+
+const { docMinHeight, showPageHeader, hasAuth, setViewTitle } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 

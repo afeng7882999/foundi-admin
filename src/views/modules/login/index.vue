@@ -17,7 +17,15 @@
               关闭
             </el-button>
           </div>
-          <el-form v-if="!showQrcode" ref="loginForm" :model="loginParam" :rules="loginRules" auto-complete="on" class="form-main" label-position="left">
+          <el-form
+            v-if="!showQrcode"
+            ref="loginForm"
+            :model="loginParam"
+            :rules="loginRules"
+            auto-complete="on"
+            class="form-main"
+            label-position="left"
+          >
             <el-form-item v-if="loginType === 'password'" class="form-main__item" prop="username">
               <span class="item-svg">
                 <fd-icon icon="people"></fd-icon>
@@ -28,7 +36,14 @@
               <span class="item-svg">
                 <fd-icon icon="lock"></fd-icon>
               </span>
-              <el-input v-model="loginParam.password" :type="pwdType" auto-complete="on" name="password" placeholder="密码" @keyup.enter="login" />
+              <el-input
+                v-model="loginParam.password"
+                :type="pwdType"
+                auto-complete="on"
+                name="password"
+                placeholder="密码"
+                @keyup.enter="login"
+              />
             </el-form-item>
             <el-form-item v-if="loginType === 'mobile'" :error="mobileError" class="form-main__item" prop="mobile">
               <span class="item-svg">
@@ -41,7 +56,12 @@
                 <fd-icon icon="message-one"></fd-icon>
               </span>
               <el-input v-model="loginParam.validCode" placeholder="验证码"></el-input>
-              <fd-count-down-button ref="countDownButton" :button-prop="{ type: 'primary' }" :disable-time="20" @click="getMobileValidCode"></fd-count-down-button>
+              <fd-count-down-button
+                ref="countDownButton"
+                :button-prop="{ type: 'primary' }"
+                :disable-time="20"
+                @click="getMobileValidCode"
+              ></fd-count-down-button>
             </el-form-item>
             <el-checkbox v-model="loginParam.rememberMe" class="login-form__remember-me">记住我</el-checkbox>
             <el-form-item>
@@ -80,7 +100,16 @@ import FdCountDownButton from '@/components/count-down-button/index.vue'
 import { computed, defineComponent, nextTick, onBeforeUnmount, onMounted, reactive, ref, toRefs, watch } from 'vue'
 import { validMobile } from '@/utils/validate'
 import { useRoute, useRouter } from 'vue-router'
-import { getQQUrl, getWeiboUrl, getWeixinUrl, loginByMobile as _loginByMobile, loginByQQ, loginByWeibo, loginByWeixin, sendMobileCode } from '@/api/system/login'
+import {
+  getQQUrl,
+  getWeiboUrl,
+  getWeixinUrl,
+  loginByMobile as _loginByMobile,
+  loginByQQ,
+  loginByWeibo,
+  loginByWeixin,
+  sendMobileCode
+} from '@/api/system/login'
 import settings from '@/app/settings'
 import Config from '@/app/settings'
 import { ElMessage } from 'element-plus'
@@ -311,8 +340,8 @@ export default defineComponent({
       try {
         const { authzUrl, state } = await getWeixinUrl(settings.appName)
         if (authzUrl && state) {
-          ;(fdQrcode.value as FdQrcode).refresh(authzUrl)
-          await nextTick(() => {
+          ;(fdQrcode.value as any).refresh(authzUrl)
+          nextTick(() => {
             checkAuthc(state, loginByWeixin)
           })
         }
@@ -326,7 +355,7 @@ export default defineComponent({
         const { authzUrl, state } = await getQQUrl(settings.appName)
         if (authzUrl && state) {
           window.open(authzUrl, '_blank')
-          await nextTick(() => {
+          nextTick(() => {
             checkAuthc(state, loginByQQ)
           })
         }
@@ -340,7 +369,7 @@ export default defineComponent({
         const { authzUrl, state } = await getWeiboUrl(settings.appName)
         if (authzUrl && state) {
           window.open(authzUrl, '_blank')
-          await nextTick(() => {
+          nextTick(() => {
             checkAuthc(state, loginByWeibo)
           })
         }

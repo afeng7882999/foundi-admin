@@ -1,12 +1,20 @@
 <template>
   <div :style="docMinHeight" class="page-user-profile fd-page">
-    <fd-page-header :title="state.currentUser.username + '的资料'" v-show="showPageHeader"></fd-page-header>
+    <fd-page-header v-show="showPageHeader" :title="state.currentUser.username + '的资料'"></fd-page-header>
     <el-row :gutter="20">
       <el-col :span="6">
         <el-card shadow="hover">
           <div class="main-card">
             <el-tooltip :open-delay="500" content="点击更换头像" effect="dark" placement="right">
-              <fd-image-cropper ref="avatarCropper" :default-img="DEFAULT_AVATAR" :img-ratio="[1, 1]" :show-circle="true" :modelValue="localOrRemoteUrl(state.currentUser.avatar, 'upload')" class="main-avatar" @img-uploaded="avatarChanged"></fd-image-cropper>
+              <fd-image-cropper
+                ref="avatarCropper"
+                :default-img="DEFAULT_AVATAR"
+                :img-ratio="[1, 1]"
+                :show-circle="true"
+                :model-value="localOrRemoteUrl(state.currentUser.avatar, 'upload')"
+                class="main-avatar"
+                @img-uploaded="avatarChanged"
+              ></fd-image-cropper>
             </el-tooltip>
             <div class="main-name">{{ state.currentUser.username }}</div>
             <div class="main-roles">
@@ -99,7 +107,11 @@
               <span class="list-item">{{ state.currentUser.noPassword ? '未设定' : '已设定' }}</span>
               <span class="list-desc">使用账号密码登录</span>
               <span class="list-act">
-                <el-button :type="state.currentUser.noPassword ? 'danger' : 'primary'" size="mini" @click="onChangePasswordClick">
+                <el-button
+                  :type="state.currentUser.noPassword ? 'danger' : 'primary'"
+                  size="mini"
+                  @click="onChangePasswordClick"
+                >
                   {{ state.currentUser.noPassword ? '设定' : '修改' }}
                 </el-button>
               </span>
@@ -110,8 +122,14 @@
               <span class="list-item">{{ state.currentUser.mobile ? state.currentUser.mobile : '未绑定' }}</span>
               <span class="list-desc">使用手机登录; 通过手机找回密码</span>
               <span class="list-act">
-                <el-button v-if="state.currentUser.mobile" plain size="mini" type="warning" @click="onClearMobileClick">清除</el-button>
-                <el-button :type="state.currentUser.mobile ? 'primary' : 'danger'" size="mini" @click="onChangeMobileClick">
+                <el-button v-if="state.currentUser.mobile" plain size="mini" type="warning" @click="onClearMobileClick">
+                  清除
+                </el-button>
+                <el-button
+                  :type="state.currentUser.mobile ? 'primary' : 'danger'"
+                  size="mini"
+                  @click="onChangeMobileClick"
+                >
                   {{ state.currentUser.mobile ? '修改' : '绑定' }}
                 </el-button>
               </span>
@@ -122,8 +140,14 @@
               <span class="list-item">{{ state.currentUser.email ? state.currentUser.email : '未绑定' }}</span>
               <span class="list-desc">通过邮箱找回密码</span>
               <span class="list-act">
-                <el-button v-if="state.currentUser.email" plain size="mini" type="warning" @click="onClearEmailClick">清除</el-button>
-                <el-button :type="state.currentUser.email ? 'primary' : 'danger'" size="mini" @click="onChangeEmailClick">
+                <el-button v-if="state.currentUser.email" plain size="mini" type="warning" @click="onClearEmailClick">
+                  清除
+                </el-button>
+                <el-button
+                  :type="state.currentUser.email ? 'primary' : 'danger'"
+                  size="mini"
+                  @click="onChangeEmailClick"
+                >
                   {{ state.currentUser.email ? '修改' : '绑定' }}
                 </el-button>
               </span>
@@ -134,8 +158,20 @@
               <span class="list-item">{{ state.currentUser.noWeixin ? '未绑定' : '已绑定' }}</span>
               <span class="list-desc">使用微信扫码登录</span>
               <span class="list-act">
-                <el-button v-if="!state.currentUser.noWeixin" plain size="mini" type="warning" @click="onClearWeixinClick">清除</el-button>
-                <el-button :type="state.currentUser.noWeixin ? 'danger' : 'primary'" size="mini" @click="onBindWeixinClick">
+                <el-button
+                  v-if="!state.currentUser.noWeixin"
+                  plain
+                  size="mini"
+                  type="warning"
+                  @click="onClearWeixinClick"
+                >
+                  清除
+                </el-button>
+                <el-button
+                  :type="state.currentUser.noWeixin ? 'danger' : 'primary'"
+                  size="mini"
+                  @click="onBindWeixinClick"
+                >
                   {{ state.currentUser.noWeixin ? '绑定' : '修改' }}
                 </el-button>
               </span>
@@ -146,7 +182,9 @@
               <span class="list-item">{{ state.currentUser.noQQ ? '未绑定' : '已绑定' }}</span>
               <span class="list-desc">使用QQ第三方登录</span>
               <span class="list-act">
-                <el-button v-if="!state.currentUser.noQQ" plain size="mini" type="warning" @click="onClearQQClick">清除</el-button>
+                <el-button v-if="!state.currentUser.noQQ" plain size="mini" type="warning" @click="onClearQQClick">
+                  清除
+                </el-button>
                 <el-button :type="state.currentUser.noQQ ? 'danger' : 'primary'" size="mini" @click="onBindQQClick">
                   {{ state.currentUser.noQQ ? '绑定' : '修改' }}
                 </el-button>
@@ -158,8 +196,20 @@
               <span class="list-item">{{ state.currentUser.noWeibo ? '未绑定' : '已绑定' }}</span>
               <span class="list-desc">使用微博第三方登录</span>
               <span class="list-act">
-                <el-button v-if="!state.currentUser.noWeibo" plain size="mini" type="warning" @click="onClearWeiboClick">清除</el-button>
-                <el-button :type="state.currentUser.noWeibo ? 'danger' : 'primary'" size="mini" @click="onBindWeiboClick">
+                <el-button
+                  v-if="!state.currentUser.noWeibo"
+                  plain
+                  size="mini"
+                  type="warning"
+                  @click="onClearWeiboClick"
+                >
+                  清除
+                </el-button>
+                <el-button
+                  :type="state.currentUser.noWeibo ? 'danger' : 'primary'"
+                  size="mini"
+                  @click="onBindWeiboClick"
+                >
                   {{ state.currentUser.noWeibo ? '绑定' : '修改' }}
                 </el-button>
               </span>
@@ -197,7 +247,17 @@ import ChangeEmailDialog from './change-email.vue'
 import BindWeixinDialog from './bind-weixin.vue'
 import { IDictItem } from '@/api/system/dict-item'
 import { AnyFunction, AnyObject } from '@/utils'
-import { currentBindQQ, currentBindWeibo, currentChangeAvatar, currentClearEmail, currentClearMobile, currentClearQQ, currentClearWeibo, currentClearWeixin, getCurrentInfo } from '@/api/system/user'
+import {
+  currentBindQQ,
+  currentBindWeibo,
+  currentChangeAvatar,
+  currentClearEmail,
+  currentClearMobile,
+  currentClearQQ,
+  currentClearWeibo,
+  currentClearWeixin,
+  getCurrentInfo
+} from '@/api/system/user'
 import { groupList, IGroup } from '@/api/system/group'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
@@ -299,7 +359,7 @@ const onLogoutClick = async () => {
   }
 }
 
-const changeProfileDlg = ref<ChangeProfileDialog>()
+const changeProfileDlg = ref()
 const onEditClick = () => {
   changeProfileDlg.value.open(state.currentUser.id)
 }
@@ -411,7 +471,6 @@ const clearClock = () => {
 }
 
 const { docMinHeight, showPageHeader } = usePage()
-
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>

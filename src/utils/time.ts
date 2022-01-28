@@ -8,9 +8,32 @@ export const DEFAULT_DATE_FORMAT = 'YYYY[年]MM[月]DD[日]'
 export const DEFAULT_TIME_FORMAT = 'HH:mm:ss'
 
 /**
+ * 时间戳转日期时间字符串
+ */
+export function formatTimestamp(
+  timestamp: number | string,
+  shape = 'datetime' as 'time' | 'date' | 'datetime'
+): string {
+  let ts = typeof timestamp === 'string' ? Number(timestamp) : timestamp
+  if (('' + ts).length === 10) {
+    ts = ts * 1000
+  } else {
+    ts = +ts
+  }
+  let option = DEFAULT_DATETIME_FORMAT
+  if (shape === 'time') {
+    option = DEFAULT_TIME_FORMAT
+  } else if (shape === 'date') {
+    option = DEFAULT_DATE_FORMAT
+  }
+  const d = dayjs(ts)
+  return d.format(option)
+}
+
+/**
  * 语义化时间戳
  */
-export function formatTimestamp(timestamp: number, option = DEFAULT_DATETIME_FORMAT): string {
+export function formatTimestamp2(timestamp: number, option = DEFAULT_DATETIME_FORMAT): string {
   if (('' + timestamp).length === 10) {
     timestamp = timestamp * 1000
   } else {
@@ -29,25 +52,6 @@ export function formatTimestamp(timestamp: number, option = DEFAULT_DATETIME_FOR
     return '1天前'
   }
 
-  return d.format(option)
-}
-
-/**
- * 时间戳转日期时间字符串
- */
-export function formatTimestamp2(timestamp: number, shape = 'datetime' as 'time' | 'date' | 'datetime'): string {
-  if (('' + timestamp).length === 10) {
-    timestamp = timestamp * 1000
-  } else {
-    timestamp = +timestamp
-  }
-  let option = DEFAULT_DATETIME_FORMAT
-  if (shape === 'time') {
-    option = DEFAULT_TIME_FORMAT
-  } else if (shape === 'date') {
-    option = DEFAULT_DATE_FORMAT
-  }
-  const d = dayjs(timestamp)
   return d.format(option)
 }
 

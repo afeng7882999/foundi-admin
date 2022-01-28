@@ -2,9 +2,7 @@ import { AnyFunction, AnyObject, needImplFunc } from '@/utils'
 import { cloneDeep, merge } from 'lodash-es'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { isAuth } from '@/app/account'
 import useDict, { IDictList } from '@/components/crud/use-dict'
-import usePage from '@/components/crud/use-page'
 
 export interface IListEditStateOption {
   // 主键
@@ -190,8 +188,6 @@ export default function <T extends IListEditStateOption>(stateOption: T, emit: A
     return mixState.isCreate ? `新增${mixState.title}` : `编辑${mixState.title}`
   }
 
-  const { hasAuth } = usePage()
-
   return {
     mixRefs: {
       form
@@ -204,7 +200,6 @@ export default function <T extends IListEditStateOption>(stateOption: T, emit: A
       resetForm,
       submit,
       hideDialog,
-      hasAuth,
       getFormTitle,
       onAfterGetData,
       onBeforeOpen,

@@ -37,9 +37,7 @@
                 <fd-icon class="is-in-btn" icon="search"></fd-icon>
                 查询
               </el-button>
-              <el-button @click="resetQuery">
-                清空
-              </el-button>
+              <el-button @click="resetQuery">清空</el-button>
             </el-form-item>
           </div>
         </transition>
@@ -119,7 +117,7 @@
           width="200"
         >
           <template #default="scope">
-            {{ dateTimeStr(scope.row.createAt) }}
+            {{ formatTimestamp(scope.row.createAt) }}
           </template>
         </el-table-column>
         <el-table-column
@@ -190,6 +188,8 @@ import { configListOss, IConfig } from '@/api/system/config'
 import Upload from './upload.vue'
 import { localOrRemoteUrl } from '@/utils/query'
 import handleClipboard from '@/utils/clipboard'
+import { formatTimestamp } from '@/utils/time'
+import usePage from '@/components/crud/use-page'
 
 const stateOption = {
   idField: fileFields.idField,
@@ -200,24 +200,23 @@ const stateOption = {
   configList: [] as IConfig[]
 }
 
-const { mixRefs, mixState: state, mixComputed, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
 const { queryForm, editDialog } = mixRefs
-const { docMinHeight, showPageHeader } = mixComputed
 const {
   getList,
   queryList,
   resetQuery,
   toggleQueryForm,
   dictVal,
-  dateTimeStr,
   pageChange,
   sizeChange,
   del,
   onSelectionChange,
-  hasAuth,
   showEdit,
   onBeforeGetList
 } = mixMethods
+
+const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 

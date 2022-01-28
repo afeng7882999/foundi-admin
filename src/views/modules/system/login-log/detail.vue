@@ -8,7 +8,7 @@
   >
     <el-descriptions :column="2" :title="`ID: ${state.data[state.idx].id}`" border size="medium">
       <el-descriptions-item :span="2" label="访问时间">
-        {{ dateTimeStr(state.data[state.idx].operTime) }}
+        {{ formatTimestamp(state.data[state.idx].operTime) }}
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="类型">
         {{ dictVal(state.dicts.sysLoginLogType, state.data[state.idx].typeDict) }}
@@ -49,6 +49,7 @@ export default {
 <script setup lang="ts">
 import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
 import { loginLogFields } from '@/api/system/login-log'
+import { formatTimestamp } from '@/utils/time'
 
 const emit = defineEmits([OPEN_EDIT_EVENT, NAVIGATE_EVENT])
 
@@ -62,7 +63,7 @@ const stateOption = {
 
 const { mixState: state, mixComputed, mixMethods } = useDetail(stateOption, emit)
 const { prevDisabled, nextDisabled } = mixComputed
-const { open, dictVal, dateTimeStr, onEdit, onPrev, onNext, close } = mixMethods
+const { open, dictVal, onEdit, onPrev, onNext, close } = mixMethods
 
 defineExpose({
   open,
