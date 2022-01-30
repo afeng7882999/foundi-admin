@@ -7,7 +7,7 @@ export interface IDictList {
   [key: string]: IDictItem[]
 }
 
-export default function (dictOption: IDictList) {
+export default function (dictOption?: IDictList) {
   // 获取字典数据
   const getDictData = async () => {
     const names = [] as string[]

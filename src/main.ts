@@ -18,6 +18,7 @@ import FdIconButton from '@/components/icon-button'
 import FdTreeSelect from '@/components/tree-select'
 import FdTableSortHeader from '@/components/table-sort-header'
 import FdDrawer from '@/components/drawer'
+import FdTable from '@/components/table'
 
 const app = createApp(App)
 app.use(store)
@@ -33,5 +34,6 @@ app
   .use(FdTreeSelect)
   .use(FdTableSortHeader)
   .use(FdDrawer)
+  .use(FdTable)
 
 app.mount('#app')

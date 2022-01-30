@@ -3,12 +3,7 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="state.query" size="medium" @keyup.enter="queryList()">
-        <transition
-          name="expand"
-          @enter="expandEnter"
-          @after-enter="expandAfterEnter"
-          @before-leave="expandBeforeLeave"
-        >
+        <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
           <div v-show="state.queryFormShow" class="fd-page__query">
             <el-form-item label="访问时间" prop="operTime">
               <el-date-picker
@@ -24,12 +19,7 @@
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="登录方式" prop="authcTypeDict">
-              <el-select
-                v-model="state.query.authcTypeDict"
-                clearable
-                placeholder="请选择登录方式"
-                style="width: 150px"
-              >
+              <el-select v-model="state.query.authcTypeDict" clearable placeholder="请选择登录方式" style="width: 150px">
                 <el-option
                   v-for="item in state.dicts.sysAuthcType"
                   :key="item.itemKey"
@@ -81,16 +71,9 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:loginLog:export')" v-waves plain size="medium" @click="exportData()">
-            导出数据
-          </el-button>
+          <el-button v-show="hasAuth('system:loginLog:export')" v-waves plain size="medium" @click="exportData()">导出数据</el-button>
           <el-divider direction="vertical" class="action-divider"></el-divider>
-          <el-tooltip
-            :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'"
-            :show-after="500"
-            effect="dark"
-            placement="top"
-          >
+          <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
               <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
             </el-badge>
@@ -108,121 +91,18 @@
         @selection-change="onSelectionChange"
         @row-click="onTableRowClick"
       >
-        <el-table-column align="left" header-align="left" type="selection" width="40"></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="访问时间"
-          prop="operTime"
-          width="200"
-        >
-          <template #default="scope">
-            <span>{{ formatTimestamp(scope.row.operTime) }}</span>
-          </template>
-        </el-table-column>
-        <table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="类型"
-          prop="typeDict"
-          :dicts="state.dicts.sysLoginLogType"
-          width="100"
-        ></table-column>
-        <table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="登录方式"
-          prop="authcTypeDict"
-          :dicts="state.dicts.sysAuthcType"
-        ></table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="用户账号"
-          prop="userName"
-          width="200"
-        >
-          <template #header="scope">
-            <fd-table-sort-header :column="scope.column" @sort-changed="sortChanged"></fd-table-sort-header>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="IP地址"
-          prop="ip"
-          width="200"
-        >
-          <template #header="scope">
-            <fd-table-sort-header :column="scope.column" @sort-changed="sortChanged"></fd-table-sort-header>
-          </template>
-        </el-table-column>
-        <table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="地点"
-          prop="location"
-        ></table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="浏览器"
-          prop="browser"
-        ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="操作系统"
-          prop="os"
-        ></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="状态" prop="statusDict">
-          <template #default="scope">
-            <span>{{ dictVal(state.dicts.sysLoginLogStatus, scope.row.statusDict) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="提示消息"
-          prop="message"
-        ></el-table-column>
-        <el-table-column align="left" fixed="right" header-align="left" label="操作" width="100">
-          <template #default="scope">
-            <el-tooltip content="详细" placement="top" :show-after="500">
-              <el-button
-                v-show="hasAuth('system:loginLog:delete')"
-                class="fd-tb-act"
-                plain
-                size="mini"
-                type="primary"
-                @click="showDetail(scope.$index)"
-              >
-                <fd-icon icon="view-grid-detail"></fd-icon>
-              </el-button>
-            </el-tooltip>
-            <el-tooltip content="删除" placement="top" :show-after="500">
-              <el-button
-                v-show="hasAuth('system:loginLog:delete')"
-                class="fd-tb-act"
-                plain
-                size="mini"
-                type="danger"
-                @click="del(scope.row, scope.row.k)"
-              >
-                <fd-icon icon="close"></fd-icon>
-              </el-button>
-            </el-tooltip>
-          </template>
-        </el-table-column>
+        <fd-col typ="selection"></fd-col>
+        <fd-col typ="datetime" label="访问时间" prop="operTime"></fd-col>
+        <fd-col typ="dict" label="类型" prop="typeDict" align="left" :dict="state.dicts.sysLoginLogType" width="50"></fd-col>
+        <fd-col typ="dict" label="登录方式" prop="authcTypeDict" :dict="state.dicts.sysAuthcType" width="100"></fd-col>
+        <fd-col label="用户账号" prop="userName" sortable width="150" @sort-changed="sortChanged"></fd-col>
+        <fd-col label="IP地址" prop="ip" width="130" sortable @sort-changed="sortChanged"></fd-col>
+        <fd-col label="地点" prop="location" width="150"></fd-col>
+        <fd-col label="浏览器" prop="browser" width="150"></fd-col>
+        <fd-col label="操作系统" prop="os" width="150"></fd-col>
+        <fd-col typ="dict" label="状态" prop="statusDict" :dict="state.dicts.sysLoginLogStatus" width="50"></fd-col>
+        <fd-col label="提示消息" prop="message"></fd-col>
+        <fd-col typ="act" detail="system:loginLog:list" del="system:loginLog:delete" width="100" @detail="showDetail" @del="del"></fd-col>
       </el-table>
       <el-pagination
         :background="true"
@@ -249,21 +129,11 @@ export default {
 
 <script setup lang="ts">
 import useList from '@/components/crud/use-list'
-import {
-  loginLogFields,
-  loginLogDicts,
-  loginLogQuery,
-  loginLogList,
-  loginLogDel,
-  loginLogExport,
-  ILoginLog
-} from '@/api/system/login-log'
+import { loginLogFields, loginLogDicts, loginLogQuery, loginLogList, loginLogDel, loginLogExport, ILoginLog } from '@/api/system/login-log'
 import Detail from './detail.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
-import TableColumn from '@/components/table-column/table-column.vue'
 import useRowFocus from '@/components/table/use-row-focus'
 import { nextTick, ref } from 'vue'
-import { formatTimestamp } from '@/utils/time'
 import usePage from '@/components/crud/use-page'
 
 const pageTable = ref()
@@ -284,12 +154,11 @@ const {
   queryList,
   resetQuery,
   toggleQueryForm,
-  dictVal,
-  showDetail,
+  showDetail: _showDetail,
   sortChanged,
   pageChange,
   sizeChange,
-  del,
+  del: _del,
   onSelectionChange,
   exportData,
   onAfterGetList
@@ -300,6 +169,14 @@ const { docMinHeight, showPageHeader, hasAuth } = usePage()
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 
 const { highlightCurrent } = useRowFocus(table, pageTable)
+
+const showDetail = (row: ILoginLog, idx: number) => {
+  _showDetail(idx)
+}
+
+const del = (row: ILoginLog, idx: number) => {
+  _del(row, row.id)
+}
 
 const onTableRowClick = (row: ILoginLog) => {
   setCurrentData(row?.id)
