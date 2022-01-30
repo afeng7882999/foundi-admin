@@ -1,13 +1,12 @@
 <template>
   <el-drawer
-    :model-value="modelValue"
+    v-bind="$attrs"
+    ref="drawer"
     :custom-class="objClass"
     :with-header="false"
     :size="size"
     :close-on-click-modal="closeOnClickModal"
     :modal="modal"
-    @closed="onClosed"
-    @update:model-value="showOrHide"
   >
     <div class="fd-drawer__content">
       <div class="fd-drawer__title">
@@ -29,19 +28,16 @@
 
 <script lang="ts">
 export default {
-  name: 'FdDrawer'
+  name: 'FdDrawer',
+  inheritAttrs: false
 }
 </script>
 
 <script setup lang="ts">
-import { computed, useSlots } from 'vue'
+import { computed, ref, useSlots } from 'vue'
 import usePage from '@/components/crud/use-page'
 
 const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false
-  },
   title: {
     type: String,
     default: ''
@@ -68,7 +64,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:modelValue', 'closed'])
+const drawer = ref()
 
 const objClass = computed(() => {
   const clazz = ['fd-drawer']
@@ -92,30 +88,9 @@ const currentIcon = computed(() => {
   return props.icon ? props.icon : pageState.icon
 })
 
-const show = () => {
-  emit('update:modelValue', true)
-}
-
 const hide = () => {
-  emit('update:modelValue', false)
+  ;(drawer.value as any).handleClose()
 }
-
-const onClosed = () => {
-  emit('closed')
-}
-
-const showOrHide = (val: boolean) => {
-  if (val) {
-    show()
-  } else {
-    hide()
-  }
-}
-
-defineExpose({
-  show,
-  hide
-})
 </script>
 
 <style lang="scss">
