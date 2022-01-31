@@ -81,43 +81,32 @@
         </div>
       </div>
     </div>
-    <div ref="pageTable" class="fd-page__table is-bordered">
-      <el-table
-        ref="table"
-        v-loading="state.loading"
-        highlight-current-row
-        :data="state.data"
-        row-key="id"
-        @selection-change="onSelectionChange"
-        @row-click="onTableRowClick"
-      >
-        <fd-col typ="selection"></fd-col>
-        <fd-col typ="datetime" label="访问时间" prop="operTime"></fd-col>
-        <fd-col typ="dict" label="类型" prop="typeDict" align="left" :dict="state.dicts.sysLoginLogType" width="50"></fd-col>
-        <fd-col typ="dict" label="登录方式" prop="authcTypeDict" :dict="state.dicts.sysAuthcType" width="100"></fd-col>
-        <fd-col label="用户账号" prop="userName" sortable width="150" @sort-changed="sortChanged"></fd-col>
-        <fd-col label="IP地址" prop="ip" width="130" sortable @sort-changed="sortChanged"></fd-col>
-        <fd-col label="地点" prop="location" width="150"></fd-col>
-        <fd-col label="浏览器" prop="browser" width="150"></fd-col>
-        <fd-col label="操作系统" prop="os" width="150"></fd-col>
-        <fd-col typ="dict" label="状态" prop="statusDict" :dict="state.dicts.sysLoginLogStatus" width="50"></fd-col>
-        <fd-col label="提示消息" prop="message"></fd-col>
-        <fd-col typ="act" detail="system:loginLog:list" del="system:loginLog:delete" width="100" @detail="showDetail" @del="del"></fd-col>
+    <div ref="tableWrapper" class="fd-page__table is-bordered">
+      <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs">
+        <fd-column typ="selection"></fd-column>
+        <fd-column typ="datetime" label="访问时间" prop="operTime"></fd-column>
+        <fd-column typ="dict" label="类型" prop="typeDict" align="left" :dict="state.dicts.sysLoginLogType" width="50"></fd-column>
+        <fd-column typ="dict" label="登录方式" prop="authcTypeDict" :dict="state.dicts.sysAuthcType" width="100"></fd-column>
+        <fd-column label="用户账号" prop="userName" sortable width="150" @sort-changed="sortChanged"></fd-column>
+        <fd-column label="IP地址" prop="ip" width="130" sortable @sort-changed="sortChanged"></fd-column>
+        <fd-column label="地点" prop="location" width="150"></fd-column>
+        <fd-column label="浏览器" prop="browser" width="150"></fd-column>
+        <fd-column label="操作系统" prop="os" width="150"></fd-column>
+        <fd-column typ="dict" label="状态" prop="statusDict" :dict="state.dicts.sysLoginLogStatus" width="50"></fd-column>
+        <fd-column label="提示消息" prop="message"></fd-column>
+        <fd-column
+          typ="act"
+          detail="system:loginLog:list"
+          del="system:loginLog:delete"
+          width="100"
+          @detail="showDetail"
+          @del="del"
+        ></fd-column>
       </el-table>
-      <el-pagination
-        :background="true"
-        :current-page="state.current"
-        :page-count="state.total"
-        :page-size="state.size"
-        :page-sizes="[10, 20, 50, 100, 200]"
-        :total="state.count"
-        layout="total, sizes, prev, pager, next, jumper"
-        @current-change="pageChange"
-        @size-change="sizeChange"
-      ></el-pagination>
+      <el-pagination v-bind="pageAttrs"></el-pagination>
     </div>
     <el-backtop></el-backtop>
-    <detail v-if="state.detailShow" ref="detailDialog" @navigate="onDetailNavigate"></detail>
+    <detail v-if="state.detailShow" ref="detailDialog" v-bind="detailAttrs"></detail>
   </div>
 </template>
 
@@ -132,11 +121,7 @@ import useList from '@/components/crud/use-list'
 import { loginLogFields, loginLogDicts, loginLogQuery, loginLogList, loginLogDel, loginLogExport, ILoginLog } from '@/api/system/login-log'
 import Detail from './detail.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
-import useRowFocus from '@/components/table/use-row-focus'
-import { nextTick, ref } from 'vue'
 import usePage from '@/components/crud/use-page'
-
-const pageTable = ref()
 
 const stateOption = {
   idField: loginLogFields.idField,
@@ -145,30 +130,17 @@ const stateOption = {
   exportApi: loginLogExport,
   dicts: loginLogDicts,
   query: loginLogQuery,
-  currentId: ''
+  tableRowSelectable: true
 }
 
-const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
-const { queryForm, table, detailDialog } = mixRefs
-const {
-  queryList,
-  resetQuery,
-  toggleQueryForm,
-  showDetail: _showDetail,
-  sortChanged,
-  pageChange,
-  sizeChange,
-  del: _del,
-  onSelectionChange,
-  exportData,
-  onAfterGetList
-} = mixMethods
+const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList(stateOption)
+const { queryForm, tableWrapper, table, detailDialog } = mixRefs
+const { queryList, resetQuery, toggleQueryForm, showDetail: _showDetail, sortChanged, del: _del, exportData } = mixMethods
+const { tableAttrs, pageAttrs, detailAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
-
-const { highlightCurrent } = useRowFocus(table, pageTable)
 
 const showDetail = (row: ILoginLog, idx: number) => {
   _showDetail(idx)
@@ -176,32 +148,5 @@ const showDetail = (row: ILoginLog, idx: number) => {
 
 const del = (row: ILoginLog, idx: number) => {
   _del(row, row.id)
-}
-
-const onTableRowClick = (row: ILoginLog) => {
-  setCurrentData(row?.id)
-}
-
-onAfterGetList(async () => {
-  if (state.currentId) {
-    setCurrentData(state.currentId)
-  }
-})
-
-const onDetailNavigate = (id: string) => {
-  const current = state.data.find((d) => d.id === id) as ILoginLog
-  ;(table.value as any).setCurrentRow(current)
-  setCurrentData(id)
-}
-
-const setCurrentData = (id: string) => {
-  if (!id) {
-    state.currentId = ''
-  } else {
-    state.currentId = id
-  }
-  nextTick(() => {
-    highlightCurrent()
-  })
 }
 </script>

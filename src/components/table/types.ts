@@ -1,1 +1,1 @@
-export type ColType = 'default' | 'datetime' | 'dict' | 'list' | 'act' | 'selection'
+export type ColType = 'default' | 'custom' | 'datetime' | 'dict' | 'list' | 'act' | 'selection'

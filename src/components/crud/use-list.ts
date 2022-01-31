@@ -1,10 +1,11 @@
 import { AnyFunction, AnyObject, needImplFunc } from '@/utils'
-import { nextTick, onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { merge } from 'lodash-es'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import useDict, { IDictList } from './use-dict'
 import { scrollDocToTop } from '@/utils/smooth-scroll'
 import { nextFrame } from '@/utils/next-frame'
+import useRow from '@/components/table/use-row'
 
 export interface IListStateOption {
   // 主键
@@ -28,7 +29,7 @@ export interface IListStateOption {
   queryLen?: number
 
   // 每页数据条数
-  size?: number
+  siz?: number
 
   // 导出Excel文件名前缀
   exportTitle?: string
@@ -40,10 +41,19 @@ export interface IListStateOption {
 }
 
 export default function <T extends IListStateOption>(stateOption: T) {
+  //===============================================================================
+  // ref
+  //===============================================================================
+
   const queryForm = ref()
+  const tableWrapper = ref()
   const table = ref()
   const editDialog = ref()
   const detailDialog = ref()
+
+  //===============================================================================
+  // state
+  //===============================================================================
 
   const defaultState = {
     // 主键
@@ -68,10 +78,12 @@ export default function <T extends IListStateOption>(stateOption: T) {
     queryLen: 0,
     // 排序规则，支持多字段排序 { id: 'desc', createTime: 'asc' }
     sort: {} as AnyObject,
+    // 当前ID
+    currentId: '',
     // 页码
     current: 0,
     // 每页数据条数
-    size: 20,
+    siz: 20,
     // 总页数
     total: 0,
     // 数据总数
@@ -84,6 +96,8 @@ export default function <T extends IListStateOption>(stateOption: T) {
     exportLoading: false,
     // 表格 Loading 属性
     loading: true,
+    // 表格行是否可选
+    tableRowSelectable: false,
     // 删除 Loading 属性
     delLoading: false,
     // 选择的项目
@@ -97,6 +111,10 @@ export default function <T extends IListStateOption>(stateOption: T) {
   }
 
   const mixState = reactive(merge({}, defaultState, stateOption) as typeof defaultState & T)
+
+  //===============================================================================
+  // handler
+  //===============================================================================
 
   const mixHandlers = {
     // 获取数据列表之前
@@ -137,16 +155,12 @@ export default function <T extends IListStateOption>(stateOption: T) {
     mixHandlers.afterDel = fn
   }
 
+  //===============================================================================
+  // list
+  //===============================================================================
+
   // 字典方法
   const { getDictData, dictVal } = useDict(mixState.dicts)
-
-  // 显示页面即获取数据
-  onMounted(async () => {
-    mixState.loading = true
-    await nextFrame(async () => {
-      await getList()
-    })
-  })
 
   // 获取数据列表
   const getList = async () => {
@@ -165,6 +179,9 @@ export default function <T extends IListStateOption>(stateOption: T) {
       mixState.data = data
       mixState.selectedNodes = []
       await mixHandlers.afterGetList(resData)
+      if (mixState.currentId) {
+        setCurrentData(mixState.currentId)
+      }
       setTimeout(() => {
         mixState.loading = false
       }, mixState.waitAfterGet)
@@ -173,6 +190,18 @@ export default function <T extends IListStateOption>(stateOption: T) {
       console.log(e)
     }
   }
+
+  // 显示页面即获取数据
+  onMounted(async () => {
+    mixState.loading = true
+    await nextFrame(async () => {
+      await getList()
+    })
+  })
+
+  //===============================================================================
+  // query
+  //===============================================================================
 
   // 构造查询参数和分页
   const getQueryParam = () => {
@@ -198,26 +227,11 @@ export default function <T extends IListStateOption>(stateOption: T) {
 
     return {
       current: mixState.current,
-      size: mixState.size,
+      size: mixState.siz,
       ...mixState.params,
       ...mixState.query,
       orderByList
     }
-  }
-
-  // 改变页码
-  const pageChange = async (val: number) => {
-    mixState.current = val
-    await getList()
-    scrollDocToTop()
-  }
-
-  // 改变每页显示数
-  const sizeChange = async (val: number) => {
-    mixState.current = 0
-    mixState.size = val
-    await getList()
-    scrollDocToTop()
   }
 
   // 查询方法
@@ -232,6 +246,44 @@ export default function <T extends IListStateOption>(stateOption: T) {
     mixState.sort = {}
     await queryList()
   }
+
+  //===============================================================================
+  // page
+  //===============================================================================
+
+  // 改变页码
+  const pageChange = async (val: number) => {
+    mixState.current = val
+    await getList()
+    scrollDocToTop()
+  }
+
+  // 改变每页显示数
+  const sizeChange = async (val: number) => {
+    mixState.current = 0
+    mixState.siz = val
+    await getList()
+    scrollDocToTop()
+  }
+
+  // el-pagination默认参数
+  const pageAttrs = computed(() => {
+    return {
+      background: 'background',
+      currentPage: mixState.current,
+      pageCount: mixState.total,
+      pageSize: mixState.siz,
+      pageSizes: [10, 15, 20, 50, 100, 200],
+      total: mixState.count,
+      layout: 'total, sizes, prev, pager, next, jumper',
+      onCurrentChange: pageChange,
+      onSizeChange: sizeChange
+    }
+  })
+
+  //===============================================================================
+  // del
+  //===============================================================================
 
   // 删除
   const del = async (row?: AnyObject, prompt?: string) => {
@@ -282,6 +334,10 @@ export default function <T extends IListStateOption>(stateOption: T) {
     }
   }
 
+  //===============================================================================
+  // export
+  //===============================================================================
+
   // 通用导出
   const exportData = async () => {
     if (mixState.exportApi === needImplFunc) {
@@ -300,6 +356,10 @@ export default function <T extends IListStateOption>(stateOption: T) {
     }
   }
 
+  //===============================================================================
+  // edit
+  //===============================================================================
+
   // 显示添加、修改对话框
   const showEdit = async (id?: string) => {
     mixState.editShow = true
@@ -310,6 +370,10 @@ export default function <T extends IListStateOption>(stateOption: T) {
       ;(editDialog.value as any).open(id)
     })
   }
+
+  //===============================================================================
+  // detail
+  //===============================================================================
 
   // 显示详细内容
   const showDetail = async (idx: number) => {
@@ -322,14 +386,36 @@ export default function <T extends IListStateOption>(stateOption: T) {
     })
   }
 
-  // 表格选择
-  const onSelectionChange = (val: AnyObject[]) => {
-    mixState.selectedNodes = val
+  // 详细对话框导航时
+  const onDetailNavigate = (id: string) => {
+    const current = mixState.data.find((d) => d.id === id)
+    ;(table.value as any).setCurrentRow(current)
+    setCurrentData(id)
   }
+
+  // 详情对话框默认参数
+  const detailAttrs = computed(() => {
+    return {
+      onNavigate: onDetailNavigate
+    }
+  })
+
+  //===============================================================================
+  // form
+  //===============================================================================
 
   // 显示、隐藏查询表单
   const toggleQueryForm = () => {
     mixState.queryFormShow = !mixState.queryFormShow
+  }
+
+  //===============================================================================
+  // table
+  //===============================================================================
+
+  // 表格选择
+  const onSelectionChange = (val: AnyObject[]) => {
+    mixState.selectedNodes = val
   }
 
   // 表格列内容空formatter
@@ -345,9 +431,43 @@ export default function <T extends IListStateOption>(stateOption: T) {
     }
   }
 
+  // 表格行点击
+  const onTableRowClick = (row: AnyObject) => {
+    setCurrentData(row?.id)
+  }
+
+  // 表格行高亮
+  const { highlightCurrent } = useRow(table, tableWrapper)
+
+  // 设置当前行
+  const setCurrentData = (id: string) => {
+    if (mixState.tableRowSelectable) {
+      if (!id) {
+        mixState.currentId = ''
+      } else {
+        mixState.currentId = id
+      }
+      nextTick(() => {
+        highlightCurrent()
+      })
+    }
+  }
+
+  // el-table默认参数
+  const tableAttrs = computed(() => {
+    return {
+      highlightCurrentRow: mixState.tableRowSelectable,
+      data: mixState.data,
+      rowKey: mixState.idField,
+      onSelectionChange: onSelectionChange,
+      onRowClick: onTableRowClick
+    }
+  })
+
   return {
     mixRefs: {
       queryForm,
+      tableWrapper,
       table,
       editDialog,
       detailDialog
@@ -372,6 +492,11 @@ export default function <T extends IListStateOption>(stateOption: T) {
       onAfterDel,
       colEmptyFormatter,
       sortChanged
+    },
+    mixAttrs: {
+      tableAttrs,
+      pageAttrs,
+      detailAttrs
     }
   }
 }
