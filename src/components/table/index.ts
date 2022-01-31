@@ -1,6 +1,6 @@
 import { App } from 'vue'
-import FdCol from './col.vue'
+import FdColumn from './column.vue'
 
 export default function install(app: App) {
-  app.component(FdCol.name, FdCol)
+  app.component(FdColumn.name, FdColumn)
 }
