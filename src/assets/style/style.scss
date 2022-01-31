@@ -75,6 +75,16 @@
   }
 }
 
+.el-table {
+  .row-focus-box {
+    position: absolute;
+    display: none;
+    border: 1px solid var(--el-color-primary);
+    z-index: 5;
+    pointer-events: none;
+  }
+}
+
 // el-message
 .el-message {
   top: 0 !important;

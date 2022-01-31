@@ -1,12 +1,11 @@
 import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus'
 import { addResizeListener, removeResizeListener, ResizableElement } from '@/utils/resize-event'
-import './row-focus.css'
 import { onMounted, onUnmounted } from 'vue'
 import { getDocumentTop, scrollDocH } from '@/utils/smooth-scroll'
 import usePage from '@/components/crud/use-page'
 
-const useRowFocus = (table: Ref<InstanceType<typeof ElTable>>, parent: Ref<HTMLElement | undefined>) => {
+const useRow = (table: Ref<InstanceType<typeof ElTable>>, parent: Ref<HTMLElement | undefined>) => {
   let wrapper = null as HTMLElement | null
   let col = null as HTMLElement | null
   let box = null as HTMLElement | null
@@ -86,4 +85,4 @@ const useRowFocus = (table: Ref<InstanceType<typeof ElTable>>, parent: Ref<HTMLE
   }
 }
 
-export default useRowFocus
+export default useRow
