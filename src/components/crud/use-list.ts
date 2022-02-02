@@ -7,7 +7,6 @@ import { scrollDocToTop } from '@/utils/smooth-scroll'
 import { nextFrame } from '@/utils/next-frame'
 import useRow from '@/components/table/use-row'
 import { arrayToTree, getTreeNode, getTreeNodes, ITreeFields, traverseTree } from '@/utils/data-tree'
-import { IGroup } from '@/api/system/group'
 
 export interface IListStateOption {
   // 主键

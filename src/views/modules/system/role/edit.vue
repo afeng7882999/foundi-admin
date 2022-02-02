@@ -43,7 +43,7 @@
                 <el-tooltip :show-after="500" content="清空当前项与下级" effect="dark" placement="top">
                   <el-button size="mini" @click="menuTreeClearAll">
                     <fd-icon class="is-in-btn" icon="close"></fd-icon>
-                    清空
+                    重置
                   </el-button>
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="展开所有节点" effect="dark" placement="top">
@@ -98,7 +98,7 @@
                 <el-tooltip :show-after="500" content="清空当前项本级与下级" effect="dark" placement="top">
                   <el-button size="mini" @click="groupTreeClearAll">
                     <fd-icon class="is-in-btn" icon="close"></fd-icon>
-                    清空
+                    重置
                   </el-button>
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="展开所有节点" effect="dark" placement="top">

@@ -35,7 +35,7 @@
                 <fd-icon class="is-in-btn" icon="search"></fd-icon>
                 查询
               </el-button>
-              <el-button @click="resetQuery">清空</el-button>
+              <el-button @click="resetQuery">重置</el-button>
             </el-form-item>
           </div>
         </transition>
@@ -186,7 +186,7 @@
                 plain
                 size="mini"
                 type="danger"
-                @click="del(scope.row, scope.row.k)"
+                @click="del(scope.row, scope.row.configKey)"
               >
                 <fd-icon icon="close"></fd-icon>
               </el-button>
@@ -238,7 +238,7 @@ import Edit from './edit.vue'
 import Detail from './detail.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import { nextTick, ref } from 'vue'
-import useRowFocus from '@/components/table/use-row-focus'
+import useRow from '@/components/table/use-row'
 import { formatTimestamp } from '@/utils/time'
 import usePage from '@/components/crud/use-page'
 
@@ -276,7 +276,7 @@ const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 
-const { highlightCurrent } = useRowFocus(table, pageTable)
+const { highlightCurrent } = useRow(table, pageTable)
 
 const onTableRowClick = (row: IConfig) => {
   setCurrentData(row?.id)

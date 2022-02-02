@@ -51,7 +51,7 @@
               </el-button>
               <el-button @click="resetQuery">
                 <fd-icon icon="refresh" class="is-in-btn"></fd-icon>
-                清空
+                重置
               </el-button>
             </el-form-item>
           </div>
@@ -82,7 +82,7 @@
       </div>
     </div>
     <div ref="tableWrapper" class="fd-page__table is-bordered">
-      <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs">
+      <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs" @sort-change="sort">
         <fd-column typ="selection"></fd-column>
         <fd-column typ="datetime" label="访问时间" prop="operTime"></fd-column>
         <fd-column typ="dict" label="类型" prop="typeDict" align="left" :dict="state.dicts.sysLoginLogType" width="50"></fd-column>
@@ -148,5 +148,9 @@ const showDetail = (row: ILoginLog, idx: number) => {
 
 const del = (row: ILoginLog, idx: number) => {
   _del(row, row.id)
+}
+
+const sort = (a: any, b: any) => {
+  console.log(a, b)
 }
 </script>

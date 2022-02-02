@@ -23,7 +23,7 @@
                     <fd-icon class="is-in-btn" icon="search"></fd-icon>
                     查询
                   </el-button>
-                  <el-button @click="resetQuery">清空</el-button>
+                  <el-button @click="resetQuery">重置</el-button>
                 </el-form-item>
               </div>
             </transition>

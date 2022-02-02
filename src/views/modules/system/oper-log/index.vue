@@ -3,12 +3,7 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="state.query" size="medium" @keyup.enter="queryList()">
-        <transition
-          name="expand"
-          @enter="expandEnter"
-          @after-enter="expandAfterEnter"
-          @before-leave="expandBeforeLeave"
-        >
+        <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
           <div v-show="state.queryFormShow" class="fd-page__query">
             <el-form-item label="模块" prop="title">
               <el-input v-model="state.query.title" clearable placeholder="请输入模块标题" style="width: 150px" />
@@ -40,7 +35,7 @@
                 <fd-icon class="is-in-btn" icon="search"></fd-icon>
                 查询
               </el-button>
-              <el-button @click="resetQuery">清空</el-button>
+              <el-button @click="resetQuery">重置</el-button>
             </el-form-item>
           </div>
         </transition>
@@ -59,9 +54,7 @@
           删除
         </el-button>
         <el-divider class="action-divider" direction="vertical"></el-divider>
-        <el-button v-show="hasAuth('system:operLog:export')" v-waves size="medium" @click="exportData()">
-          导出数据
-        </el-button>
+        <el-button v-show="hasAuth('system:operLog:export')" v-waves size="medium" @click="exportData()">导出数据</el-button>
         <div class="action-right">
           <el-form
             v-show="!state.queryFormShow"
@@ -86,16 +79,11 @@
             </el-form-item>
             <el-form-item>
               <el-button plain type="primary" @click="queryList()">查询</el-button>
-              <el-button @click="resetQuery">清空</el-button>
+              <el-button @click="resetQuery">重置</el-button>
             </el-form-item>
           </el-form>
           <el-divider class="action-divider" direction="vertical"></el-divider>
-          <el-tooltip
-            :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'"
-            :show-after="500"
-            effect="dark"
-            placement="top"
-          >
+          <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
               <fd-icon-button class="action-icon-btn" icon="search-more" @click="toggleQueryForm()"></fd-icon-button>
             </el-badge>
@@ -103,7 +91,7 @@
         </div>
       </div>
     </div>
-    <div ref="pageTable" class="fd-page__table is-bordered">
+    <div ref="tableWrapper" class="fd-page__table is-bordered">
       <el-table
         ref="table"
         v-loading="state.loading"
@@ -114,26 +102,12 @@
         @row-click="onTableRowClick"
       >
         <el-table-column align="left" header-align="left" type="selection" width="40"></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="center"
-          header-align="center"
-          label="时间"
-          prop="operTime"
-          width="200"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="时间" prop="operTime" width="200">
           <template #default="scope">
             {{ formatTimestamp(scope.row.operTime) }}
           </template>
         </el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="请求URL"
-          prop="operUrl"
-          width="400"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="请求URL" prop="operUrl" width="400">
           <template #header="scope">
             <fd-table-sort-header :column="scope.column" @sort-changed="sortChanged"></fd-table-sort-header>
           </template>
@@ -161,13 +135,7 @@
           label="请求方式"
           prop="requestMethod"
         ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="操作状态"
-          prop="statusDict"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="操作状态" prop="statusDict">
           <template #default="scope">
             <span>{{ dictVal(state.dicts.sysOperLogStatus, scope.row.statusDict) }}</span>
           </template>
@@ -196,27 +164,9 @@
           prop="operUserRoles"
           width="150"
         ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="用户组"
-          prop="groupName"
-        ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="IP"
-          prop="operIp"
-        ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="地点"
-          prop="operLocation"
-        ></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="用户组" prop="groupName"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="IP" prop="operIp"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="地点" prop="operLocation"></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
           align="left"
@@ -295,19 +245,11 @@ export default {
 
 <script setup lang="ts">
 import useList from '@/components/crud/use-list'
-import {
-  IOperLog,
-  operLogDel,
-  operLogDicts,
-  operLogExport,
-  operLogFields,
-  operLogList,
-  operLogQuery
-} from '@/api/system/oper-log'
+import { IOperLog, operLogDel, operLogDicts, operLogExport, operLogFields, operLogList, operLogQuery } from '@/api/system/oper-log'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import Detail from './detail.vue'
 import { nextTick, ref } from 'vue'
-import useRowFocus from '@/components/table/use-row-focus'
+import useRow from '@/components/table/use-row'
 import { formatTimestamp } from '@/utils/time'
 import usePage from '@/components/crud/use-page'
 
@@ -344,7 +286,7 @@ const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 
-const { highlightCurrent } = useRowFocus(table, pageTable)
+const { highlightCurrent } = useRow(table, pageTable)
 
 const onTableRowClick = (row: IOperLog) => {
   setCurrentData(row?.id)
