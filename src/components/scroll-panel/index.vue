@@ -139,7 +139,6 @@ const moveToTarget = (target: HTMLElement) => {
 }
 
 const moveToIdx = (idx: number) => {
-  console.log(idx)
   const $container = scrollContainer.value
   const $wrapper = scrollWrapper.value
   const $items = getScrollItems()

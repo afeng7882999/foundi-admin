@@ -3,12 +3,7 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="state.query" size="medium" @keyup.enter="queryList()">
-        <transition
-          name="expand"
-          @enter="expandEnter"
-          @after-enter="expandAfterEnter"
-          @before-leave="expandBeforeLeave"
-        >
+        <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
           <div v-show="state.queryFormShow" class="fd-page__query">
             <el-form-item label="字典项键值" prop="itemKey">
               <el-input v-model="state.query.itemKey" clearable placeholder="请输入字典项键值" />
@@ -44,26 +39,12 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button
-            v-show="hasAuth('system:dictItem:add')"
-            v-waves
-            plain
-            size="medium"
-            type="primary"
-            @click="showDictItemEdit()"
-          >
+          <el-button v-show="hasAuth('system:dictItem:add')" v-waves plain size="medium" type="primary" @click="showDictItemEdit()">
             新增
           </el-button>
-          <el-button v-show="hasAuth('system:dictItem:export')" size="medium" @click.prevent.stop="openMenu($event)">
-            导出数据
-          </el-button>
+          <el-button v-show="hasAuth('system:dictItem:export')" size="medium" @click.prevent.stop="openMenu($event)">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
-          <el-tooltip
-            :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'"
-            :show-after="500"
-            effect="dark"
-            placement="top"
-          >
+          <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
               <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
             </el-badge>
@@ -74,34 +55,10 @@
     <div class="fd-page__table is-bordered">
       <el-table v-loading="state.loading" :data="state.data" row-key="id" @selection-change="onSelectionChange">
         <el-table-column align="left" header-align="left" type="selection" width="40"></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="字典项键值"
-          prop="itemKey"
-        ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="字典项值"
-          prop="itemValue"
-        ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="备注信息"
-          prop="remarks"
-        ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="排序"
-          prop="sort"
-        ></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="字典项键值" prop="itemKey"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="字典项值" prop="itemValue"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="备注信息" prop="remarks"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="排序" prop="sort"></el-table-column>
         <el-table-column align="center" fixed="right" header-align="center" label="操作" width="100">
           <template #default="scope">
             <el-tooltip :show-after="500" content="编辑" placement="top">
@@ -161,7 +118,7 @@ export default {
 <script setup lang="ts">
 import { nextTick, onBeforeMount, ref } from 'vue'
 import useList from '@/components/crud/use-list'
-import { dictItemDel, dictItemExport, dictItemFields, dictItemList, dictItemQuery } from '@/api/system/dict-item'
+import { dictItemDel, dictItemExport, dictItemFields, dictItemList, dictItemParams, dictItemQuery } from '@/api/system/dict-item'
 import Edit from './edit.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import { useRoute, useRouter } from 'vue-router'
@@ -177,6 +134,7 @@ const stateOption = {
   delApi: dictItemDel,
   exportApi: dictItemExport,
   query: dictItemQuery,
+  params: dictItemParams,
 
   dictName: ''
 }
@@ -187,17 +145,7 @@ const store = useStore()
 
 const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
 const { queryForm, editDialog } = mixRefs
-const {
-  getList,
-  pageChange,
-  sizeChange,
-  queryList,
-  resetQuery,
-  del,
-  onSelectionChange,
-  toggleQueryForm,
-  onAfterGetList
-} = mixMethods
+const { getList, pageChange, sizeChange, queryList, resetQuery, del, onSelectionChange, toggleQueryForm, onAfterGetList } = mixMethods
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
@@ -206,7 +154,7 @@ const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition
 onBeforeMount(async () => {
   const { id } = route.params
   if (id) {
-    state.query.dictId = id as string
+    state.params.dictId = id as string
     try {
       const data = await dictGetOne(id as string)
       state.dictName = data.name
@@ -220,7 +168,7 @@ onBeforeMount(async () => {
 const showDictItemEdit = (id?: string) => {
   state.editShow = true
   nextTick(() => {
-    ;(editDialog.value as any).openDictItemEdit(state.query.dictId as string, id)
+    ;(editDialog.value as any).openDictItemEdit(state.params.dictId as string, id)
   })
 }
 
@@ -231,7 +179,7 @@ const exportDictItemData = async (type?: string) => {
     if (type && type === 'all') {
       await state.exportApi('字典条目数据', {})
     } else {
-      await state.exportApi(`字典${state.dictName}数据`, { dictId: state.query.dictId })
+      await state.exportApi(`字典${state.dictName}数据`, { dictId: state.params.dictId })
     }
     state.exportLoading = false
   } catch (e) {
@@ -239,12 +187,6 @@ const exportDictItemData = async (type?: string) => {
     state.exportLoading = false
   }
 }
-
-onAfterGetList(async (resData: any) => {
-  if (state.queryLen > 0) {
-    state.queryLen = state.queryLen - 1
-  }
-})
 
 // open context menu
 const openMenu = (e: MouseEvent) => {

@@ -32,8 +32,11 @@ export const dictItemFields = {
   idField: 'id'
 }
 
+export const dictItemParams = {
+  dictId: undefined as string | undefined
+}
+
 export const dictItemQuery = {
-  dictId: undefined as string | undefined,
   itemKey: undefined,
   itemValue: undefined
 }
