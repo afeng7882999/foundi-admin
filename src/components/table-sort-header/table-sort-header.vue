@@ -1,6 +1,8 @@
 <template>
   <div class="fd-table-sort-header" :class="headerClass" @click="onHeaderClick">
-    {{ column.label }}
+    <el-tooltip :show-after="tipShowAfter" :content="tip" placement="top">
+      <span class="fd-table-sort-header__label">{{ column.label }}</span>
+    </el-tooltip>
     <span class="caret-wrapper">
       <i class="sort-caret ascending" @click.stop="onAscClick"></i>
       <i class="sort-caret descending" @click.stop="onDescClick"></i>
@@ -20,10 +22,16 @@ import { AnyObject } from '@/utils'
 
 const props = defineProps({
   column: Object as PropType<AnyObject>,
-  default: null
+  default: null,
+  tipShowAfter: {
+    type: Number,
+    default: 500
+  }
 })
 
 const sortOrder = ref('')
+
+const tip = ref('点击切换降序')
 
 const headerClass = computed(() => {
   return {
@@ -41,6 +49,7 @@ const onHeaderClick = () => {
     sortOrder.value = 'desc'
   }
   sortedEmit()
+  setTip()
 }
 
 const onAscClick = () => {
@@ -50,6 +59,7 @@ const onAscClick = () => {
     sortOrder.value = 'asc'
   }
   sortedEmit()
+  setTip()
 }
 
 const onDescClick = () => {
@@ -59,6 +69,7 @@ const onDescClick = () => {
     sortOrder.value = 'desc'
   }
   sortedEmit()
+  setTip()
 }
 
 const emit = defineEmits(['sort-changed'])
@@ -68,10 +79,31 @@ const sortedEmit = () => {
     emit('sort-changed', { prop: props.column.property, order: sortOrder.value })
   }
 }
+
+const setTip = () => {
+  setTimeout(() => {
+    if (sortOrder.value === 'desc') {
+      tip.value = '点击切换升序'
+    } else if (sortOrder.value === 'asc') {
+      tip.value = '点击取消排序'
+    } else {
+      tip.value = '点击切换降序'
+    }
+  }, props.tipShowAfter)
+}
 </script>
 
 <style lang="scss">
 .fd-table-sort-header {
+  display: flex;
+  height: 30px;
+  align-items: center;
   cursor: pointer;
+
+  &:hover {
+    .fd-table-sort-header__label {
+      color: var(--el-color-primary);
+    }
+  }
 }
 </style>
