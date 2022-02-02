@@ -6,6 +6,8 @@ import useDict, { IDictList } from './use-dict'
 import { scrollDocToTop } from '@/utils/smooth-scroll'
 import { nextFrame } from '@/utils/next-frame'
 import useRow from '@/components/table/use-row'
+import { arrayToTree, getTreeNode, getTreeNodes, ITreeFields, traverseTree } from '@/utils/data-tree'
+import { IGroup } from '@/api/system/group'
 
 export interface IListStateOption {
   // 主键
@@ -18,7 +20,6 @@ export interface IListStateOption {
   delApi?: AnyFunction
   // 导出数据的api
   exportApi?: AnyFunction
-
   // 字典
   dicts?: IDictList
   // 获取数据的固定参数
@@ -27,20 +28,28 @@ export interface IListStateOption {
   query?: AnyObject
   // 查询数据的条件个数
   queryLen?: number
-
   // 每页数据条数
   siz?: number
-
   // 导出Excel文件名前缀
   exportTitle?: string
-
   // 等待时间
   waitAfterGet?: number
 
   [key: string]: any
 }
 
-export default function <T extends IListStateOption>(stateOption: T) {
+interface ITreeStateOption extends IListStateOption {
+  // 是否是树表
+  treeTable?: boolean
+  // 树表字段
+  treeFields?: ITreeFields
+  // 默认展开所有树
+  defaultExpandAll?: boolean
+  // 根节点名称
+  rootName?: string
+}
+
+export default function <T extends IListStateOption | ITreeStateOption>(stateOption: T) {
   //===============================================================================
   // ref
   //===============================================================================
@@ -110,7 +119,34 @@ export default function <T extends IListStateOption>(stateOption: T) {
     queryFormShow: false
   }
 
-  const mixState = reactive(merge({}, defaultState, stateOption) as typeof defaultState & T)
+  const defaultTreeState = {
+    ...defaultState,
+    // 是否是树表
+    treeTable: true,
+    // 树表字段
+    treeFields: {
+      // 编码字段
+      idField: 'id',
+      // 树名称字段
+      labelField: 'name',
+      // 父字段
+      parentIdField: 'parentId',
+      // 排序字段
+      sortField: 'sort',
+      // 下级字段
+      childrenField: 'children'
+    } as ITreeFields,
+    // 默认展开所有树
+    defaultExpandAll: true,
+    // 选择的树节点
+    selectedNodes: [] as AnyObject[],
+    // 根节点名称
+    rootName: '根节点'
+  }
+
+  const mixState = stateOption.treeTable
+    ? reactive(merge({}, defaultTreeState, stateOption) as typeof defaultTreeState & T)
+    : reactive(merge({}, defaultState, stateOption) as typeof defaultState & T)
 
   //===============================================================================
   // handler
@@ -122,6 +158,7 @@ export default function <T extends IListStateOption>(stateOption: T) {
       return true
     },
     // 获取数据列表之后
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     afterGetList: async (resData: AnyObject) => {
       return
     },
@@ -173,10 +210,15 @@ export default function <T extends IListStateOption>(stateOption: T) {
     try {
       mixState.loading = true
       await getDictData()
-      const { data, total, count, resData } = await mixState.listApi(getQueryParam())
-      mixState.total = total
-      mixState.count = count
-      mixState.data = data
+      const query = getQueryParam()
+      const { data, total, count, resData } = await mixState.listApi(query)
+      if (stateOption.treeTable) {
+        setTreeData(data)
+      } else {
+        mixState.total = total
+        mixState.count = count
+        mixState.data = data
+      }
       mixState.selectedNodes = []
       await mixHandlers.afterGetList(resData)
       if (mixState.currentId) {
@@ -205,6 +247,13 @@ export default function <T extends IListStateOption>(stateOption: T) {
 
   // 构造查询参数和分页
   const getQueryParam = () => {
+    if (stateOption.treeTable) {
+      return {
+        ...mixState.query,
+        ...mixState.params
+      }
+    }
+
     const orderByList = [] as string[]
     Object.keys(mixState.sort).forEach((key) => {
       if (mixState.sort[key]) {
@@ -282,6 +331,70 @@ export default function <T extends IListStateOption>(stateOption: T) {
   })
 
   //===============================================================================
+  // tree table
+  //===============================================================================
+
+  // 处理树状数据
+  const setTreeData = (data: any[]) => {
+    const treeData = arrayToTree(data, mixState.treeFields)
+    mixState.data = traverseTree(
+      treeData,
+      (item) => {
+        const node = getTreeNode(
+          treeData,
+          (n) => n[mixState.treeFields.idField as string] === item[mixState.treeFields.parentIdField as string],
+          mixState.treeFields
+        )
+        item.parentName = node ? node.name : mixState.rootName
+      },
+      mixState.treeFields
+    )
+  }
+
+  // 树节点选中
+  const onTreeSelect = (selection: AnyObject[]) => {
+    const tbl = table.value as any
+    if (selection.length > mixState.selectedNodes.length) {
+      const selected = selection.filter(
+        (item) => !mixState.selectedNodes.some((item2) => item2[mixState.idField] === item[mixState.idField])
+      )
+      traverseTree(
+        selected,
+        (item) => {
+          tbl.toggleRowSelection(item, true)
+          if (!mixState.selectedNodes.some((item2) => item2[mixState.idField] === item[mixState.idField])) {
+            mixState.selectedNodes.push(item)
+          }
+        },
+        mixState.treeFields
+      )
+    } else {
+      const selected = mixState.selectedNodes.filter(
+        (item) => !selection.some((item2) => item2[mixState.idField] === item[mixState.idField])
+      )
+      traverseTree(
+        selected,
+        (item) => {
+          tbl.toggleRowSelection(item, false)
+          mixState.selectedNodes = mixState.selectedNodes.filter((item2) => item2[mixState.idField] !== item[mixState.idField])
+        },
+        mixState.treeFields
+      )
+    }
+  }
+
+  // 树节点全选
+  const onTreeSelectAll = (selection: AnyObject[]) => {
+    onTreeSelect(selection)
+  }
+
+  // 获取上级节点名称
+  const getParentName = (parentId: string, nameField = 'name') => {
+    const parent = getTreeNode(mixState.data, (n) => n[mixState.idField] === parentId)
+    return parent ? parent[nameField] : '无'
+  }
+
+  //===============================================================================
   // del
   //===============================================================================
 
@@ -309,7 +422,9 @@ export default function <T extends IListStateOption>(stateOption: T) {
         cancelButtonText: '取消',
         type: 'warning'
       })
-      const ids = rows.map((item: AnyObject) => item[mixState.idField])
+      const ids = stateOption.treeTable
+        ? [...new Set(getTreeNodes(rows, () => true, mixState.treeFields))].map((item) => item[mixState.idField])
+        : rows.map((item: AnyObject) => item[mixState.idField])
       mixState.delLoading = true
       await mixState.delApi(ids)
       ElMessage({
@@ -357,7 +472,7 @@ export default function <T extends IListStateOption>(stateOption: T) {
   }
 
   //===============================================================================
-  // edit
+  // edit dialog
   //===============================================================================
 
   // 显示添加、修改对话框
@@ -372,7 +487,7 @@ export default function <T extends IListStateOption>(stateOption: T) {
   }
 
   //===============================================================================
-  // detail
+  // detail dialog
   //===============================================================================
 
   // 显示详细内容
@@ -401,7 +516,7 @@ export default function <T extends IListStateOption>(stateOption: T) {
   })
 
   //===============================================================================
-  // form
+  // query form
   //===============================================================================
 
   // 显示、隐藏查询表单
@@ -413,17 +528,17 @@ export default function <T extends IListStateOption>(stateOption: T) {
   // table
   //===============================================================================
 
-  // 表格选择
-  const onSelectionChange = (val: AnyObject[]) => {
-    mixState.selectedNodes = val
-  }
-
   // 表格列内容空formatter
   const colEmptyFormatter = (row: any, column: any, cellValue: any) => {
     return cellValue ? cellValue : '无'
   }
 
-  // 可排序表格排序
+  // 表格选择
+  const onSelectionChange = (val: AnyObject[]) => {
+    mixState.selectedNodes = val
+  }
+
+  // 表格排序
   const sortChanged = async ({ prop, order }: { prop: string; order: string }) => {
     if (prop) {
       mixState.sort[prop] = order
@@ -455,12 +570,26 @@ export default function <T extends IListStateOption>(stateOption: T) {
 
   // el-table默认参数
   const tableAttrs = computed(() => {
-    return {
-      highlightCurrentRow: mixState.tableRowSelectable,
-      data: mixState.data,
-      rowKey: mixState.idField,
-      onSelectionChange: onSelectionChange,
-      onRowClick: onTableRowClick
+    if (stateOption.treeTable) {
+      return {
+        highlightCurrentRow: mixState.tableRowSelectable,
+        data: mixState.data,
+        rowKey: mixState.idField,
+        defaultExpandAll: false,
+        indent: 15,
+        onSelectionChange: onSelectionChange,
+        onRowClick: onTableRowClick,
+        onSelect: onTreeSelect,
+        onSelectAll: onTreeSelectAll
+      }
+    } else {
+      return {
+        highlightCurrentRow: mixState.tableRowSelectable,
+        data: mixState.data,
+        rowKey: mixState.idField,
+        onSelectionChange: onSelectionChange,
+        onRowClick: onTableRowClick
+      }
     }
   })
 
@@ -485,6 +614,10 @@ export default function <T extends IListStateOption>(stateOption: T) {
       showEdit,
       showDetail,
       onSelectionChange,
+      onTreeSelect,
+      onTreeSelectAll,
+      onTableRowClick,
+      getParentName,
       toggleQueryForm,
       onBeforeGetList,
       onAfterGetList,

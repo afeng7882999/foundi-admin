@@ -16,60 +16,21 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button
-            v-show="hasAuth('system:group:add')"
-            v-waves
-            plain
-            size="medium"
-            type="primary"
-            @click="showEdit()"
-          >
-            新增
-          </el-button>
-          <el-button v-show="hasAuth('system:group:export')" v-waves plain size="medium" @click="exportData()">
-            导出数据
-          </el-button>
+          <el-button v-show="hasAuth('system:group:add')" v-waves plain size="medium" type="primary" @click="showEdit()">新增</el-button>
+          <el-button v-show="hasAuth('system:group:export')" v-waves plain size="medium" @click="exportData()">导出数据</el-button>
         </div>
       </div>
     </div>
-    <div class="fd-page__table is-bordered">
-      <el-table
-        ref="table"
-        v-loading="state.loading"
-        :data="state.data"
-        :default-expand-all="true"
-        :indent="15"
-        row-key="id"
-        style="width: 100%"
-        @select="onSelect"
-        @select-all="onSelectAll"
-      >
+    <div ref="tableWrapper" class="fd-page__table is-bordered">
+      <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs" default-expand-all>
         <el-table-column align="left" header-align="left" type="selection" width="40"></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="用户组名称"
-          prop="name"
-        ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="上级用户组"
-          prop="parentId"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="用户组名称" prop="name"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="上级用户组" prop="parentId">
           <template #default="scope">
             {{ getParentName(scope.row.parentId) }}
           </template>
         </el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="排序"
-          prop="sort"
-        ></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="排序" prop="sort"></el-table-column>
         <el-table-column align="left" fixed="right" header-align="left" label="操作" width="100">
           <template #default="scope">
             <el-tooltip content="编辑" placement="top" :show-after="500">
@@ -112,13 +73,13 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useTree from '@/components/crud/use-tree'
-import { groupFields, groupTreeFields, groupList, groupDel, groupExport, IGroup } from '@/api/system/group'
+import { groupFields, groupTreeFields, groupList, groupDel, groupExport } from '@/api/system/group'
 import Edit from './edit.vue'
-import { getTreeNode } from '@/utils/data-tree'
 import usePage from '@/components/crud/use-page'
+import useList from '@/components/crud/use-list'
 
 const stateOption = {
+  treeTable: true,
   idField: groupFields.idField,
   treeFields: groupTreeFields,
   listApi: groupList,
@@ -126,14 +87,10 @@ const stateOption = {
   exportApi: groupExport
 }
 
-const { mixRefs, mixState: state, mixMethods } = useTree(stateOption)
-const { editDialog } = mixRefs
-const { showEdit, getList, del, onSelect, onSelectAll, exportData } = mixMethods
+const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList(stateOption)
+const { tableWrapper, table, editDialog } = mixRefs
+const { showEdit, getList, del, onTreeSelect, onTreeSelectAll, getParentName, exportData } = mixMethods
+const { tableAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
-
-const getParentName = (parentId: string) => {
-  const parent = getTreeNode(state.data, (n) => n.id === parentId)
-  return parent ? (parent as IGroup).name : '无'
-}
 </script>

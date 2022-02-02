@@ -16,27 +16,13 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:menu:add')" v-waves plain size="medium" type="primary" @click="showEdit()">
-            新增
-          </el-button>
-          <el-button v-show="hasAuth('system:menu:export')" v-waves size="medium" @click="exportData()">
-            导出数据
-          </el-button>
+          <el-button v-show="hasAuth('system:menu:add')" v-waves plain size="medium" type="primary" @click="showEdit()">新增</el-button>
+          <el-button v-show="hasAuth('system:menu:export')" v-waves size="medium" @click="exportData()">导出数据</el-button>
         </div>
       </div>
     </div>
-    <div class="fd-page__table is-bordered">
-      <el-table
-        ref="table"
-        v-loading="loading"
-        :data="data"
-        :default-expand-all="true"
-        :indent="15"
-        row-key="id"
-        style="width: 100%"
-        @select="onSelect"
-        @select-all="onSelectAll"
-      >
+    <div ref="tableWrapper" class="fd-page__table is-bordered">
+      <el-table ref="table" v-loading="loading" v-bind="tableAttrs">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
@@ -70,26 +56,12 @@
           prop="perms"
           width="300"
         ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="center"
-          header-align="center"
-          label="类型"
-          prop="typeDict"
-          width="80"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="类型" prop="typeDict" width="80">
           <template #default="scope">
             <span>{{ dictVal(dicts.sysMenuType, scope.row.typeDict) }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="center"
-          header-align="center"
-          label="菜单图标"
-          prop="icon"
-          width="80"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="菜单图标" prop="icon" width="80">
           <template #default="scope">
             <fd-icon :icon="scope.row.icon" class="fd-tb-icon"></fd-icon>
           </template>
@@ -110,25 +82,12 @@
           prop="sort"
           width="80"
         ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="center"
-          header-align="center"
-          label="是否显示"
-          prop="visible"
-          width="80"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="是否显示" prop="visible" width="80">
           <template #default="scope">
             <fd-icon v-show="scope.row.visible" class="fd-tb-icon fd-tb-icon-success" icon="tick"></fd-icon>
           </template>
         </el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="注释"
-          prop="remark"
-        ></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="注释" prop="remark"></el-table-column>
         <el-table-column align="center" fixed="right" header-align="center" label="操作" width="100">
           <template #default="scope">
             <el-tooltip :show-after="500" content="编辑" placement="top">
@@ -166,19 +125,20 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useTree from '@/components/crud/use-tree'
 import { menuDel, menuDicts, menuExport, menuFields, menuList, menuQuery, menuTreeFields } from '@/api/system/menu'
 import Edit from './edit.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import { arrayToTree } from '@/utils/data-tree'
 import { AnyObject } from '@/utils'
 import usePage from '@/components/crud/use-page'
+import useList from '@/components/crud/use-list'
 
 export default defineComponent({
   name: 'SystemMenu',
   components: { Edit },
   setup() {
     const stateOption = {
+      treeTable: true,
       idField: menuFields.idField,
       treeFields: menuTreeFields,
       listApi: menuList,
@@ -190,7 +150,7 @@ export default defineComponent({
       parentList: [] as AnyObject[]
     }
 
-    const { mixRefs, mixState, mixMethods } = useTree(stateOption)
+    const { mixRefs, mixState, mixMethods, mixAttrs } = useList(stateOption)
 
     const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
@@ -215,6 +175,7 @@ export default defineComponent({
       showPageHeader,
       hasAuth,
       ...mixMethods,
+      ...mixAttrs,
       ...useExpandTransition(),
       getParentList
     }
