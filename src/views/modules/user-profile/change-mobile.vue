@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useListEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-list-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
 import { validMobile } from '@/utils/validate'
 import FdCountDownButton from '@/components/count-down-button/index.vue'
 import { currentChangeMobile, currentChangeMobileValid, currentCheckMobile } from '@/api/system/user'
@@ -68,7 +68,7 @@ export default defineComponent({
       }
     }
 
-    const { mixRefs, mixState, mixMethods } = useListEdit(stateOption, emit)
+    const { mixRefs, mixState, mixMethods } = useEdit(stateOption, emit)
 
     mixMethods.open = async () => {
       mixState.isCreate = true

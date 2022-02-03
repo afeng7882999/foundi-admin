@@ -9,7 +9,7 @@ export default {
   fixedHeader: true,
   // 记住密码状态下的token在Cookie中存储的天数，默认1天
   tokenCookieExpires: 1,
-  // 记住密码状态下的密码在Cookie中存储的天数，默认1天s
+  // 记住密码状态下的密码在Cookie中存储的天数，默认1天
   passCookieExpires: 1,
   // 是否只保持一个子菜单的展开
   uniqueOpened: true,

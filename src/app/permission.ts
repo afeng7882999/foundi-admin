@@ -1,17 +1,16 @@
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import store from '@/store'
-import router, {ANON_LIST, DEFAULT_AFFIX_ROUTE, staticRoutes, importModules, dynamicRoutes} from '@/router'
+import router, { ANON_LIST, DEFAULT_AFFIX_ROUTE, importModules, dynamicRoutes } from '@/router'
 import config from './settings'
-import {clearUserInfo, getToken, getUserInfo, isAdmin} from '@/app/account'
-import {ElMessage} from 'element-plus'
-import {Router, RouteRecordRaw} from "vue-router";
-import {ITreeNodeDefault, traverseTree} from "@/utils/data-tree";
-import {camelToDash, urlToCamel} from "@/utils/lang";
+import { clearUserInfo, getToken, getUserInfo, isAdmin } from '@/app/account'
+import { ElMessage } from 'element-plus'
+import { Router, RouteRecordRaw } from 'vue-router'
+import { ITreeNodeDefault, traverseTree } from '@/utils/data-tree'
+import { camelToDash, urlToCamel } from '@/utils/lang'
 
 export function createRouterGuards(router: Router) {
-
-  NProgress.configure({showSpinner: false})
+  NProgress.configure({ showSpinner: false })
 
   router.beforeEach(async (to, from, next) => {
     if (to.meta.title) {
@@ -32,7 +31,7 @@ export function createRouterGuards(router: Router) {
     }
 
     if (to.path === '/login') {
-      next({path: '/'})
+      next({ path: '/' })
       NProgress.done()
       return
     }
@@ -50,15 +49,15 @@ export function createRouterGuards(router: Router) {
         // check perm to access admin background
         if (!isAdmin()) {
           await clearUserInfo()
-          ElMessage({message: '登录失败，无权限!', type: 'error', duration: 1500})
-          next({path: '/'})
+          ElMessage({ message: '登录失败，无权限!', type: 'error', duration: 1500 })
+          next({ path: '/' })
           return
         }
       } catch (e) {
         console.log(e)
         await clearUserInfo()
-        ElMessage({message: '认证失败, 请登录!', type: 'error', duration: 1500})
-        next({path: '/'})
+        ElMessage({ message: '认证失败, 请登录!', type: 'error', duration: 1500 })
+        next({ path: '/' })
         return
       }
     }
@@ -66,7 +65,7 @@ export function createRouterGuards(router: Router) {
     // has not initialized menu
     if (store.state.user.menu && !store.state.router.routeLoaded) {
       await initDynamicRoutes(store.state.user.menu)
-      next({...to, replace: true})
+      next({ ...to, replace: true })
       return
     }
 
@@ -76,7 +75,6 @@ export function createRouterGuards(router: Router) {
   router.afterEach(() => {
     NProgress.done()
   })
-
 }
 
 /**
@@ -96,7 +94,7 @@ export async function initDynamicRoutes(menus: ITreeNodeDefault[]): Promise<void
         // router's name must be equal to component's name for caching
         name: urlToCamel(urlNoParam),
         redirect: item.redirect,
-        meta: {id: item.id, title: item.name, icon: item.icon, remark: item.remark, isDynamic: true, affix: fixed}
+        meta: { id: item.id, title: item.name, icon: item.icon, remark: item.remark, isDynamic: true, affix: fixed }
       } as RouteRecordRaw
       const urlDash = camelToDash(urlNoParam)
       try {
@@ -111,10 +109,9 @@ export async function initDynamicRoutes(menus: ITreeNodeDefault[]): Promise<void
       routes.push(route)
     }
   })
-
   ;(dynamicRoutes.children as RouteRecordRaw[]).push(...routes)
   router.addRoute(dynamicRoutes)
-  router.addRoute({path: '/:catchAll(.*)', redirect: '/404'})
+  router.addRoute({ path: '/:catchAll(.*)', redirect: '/404' })
   await store.dispatch('router/setRoutes', routes)
   await store.dispatch('router/setRouteLoaded', true)
 }

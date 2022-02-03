@@ -45,7 +45,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useListEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-list-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
 import { dictItemFields, dictItemGetOne, dictItemPostOne, dictItemPutOne } from '@/api/system/dict-item'
 
 const emit = defineEmits([REFRESH_DATA_EVENT])
@@ -70,7 +70,7 @@ const stateOption = {
   }
 }
 
-const { mixRefs, mixState: state, mixMethods } = useListEdit(stateOption, emit)
+const { mixRefs, mixState: state, mixMethods } = useEdit(stateOption, emit)
 const { form } = mixRefs
 const { open, resetForm, submit } = mixMethods
 

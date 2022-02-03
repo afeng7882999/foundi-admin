@@ -80,7 +80,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useTreeEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-tree-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
 import { menuDicts, menuFields, menuGetOne, menuList, menuPostOne, menuPutOne, menuTreeFields } from '@/api/system/menu'
 import FdTagInput from '@/components/tag-input/index.vue'
 import FdIconSelector from '@/components/icon/icon-selector.vue'
@@ -91,6 +91,7 @@ export default defineComponent({
   emits: [REFRESH_DATA_EVENT],
   setup(props, { emit }) {
     const stateOption = {
+      treeTable: true,
       idField: menuFields.idField,
       treeFields: menuTreeFields,
       getApi: menuGetOne,
@@ -120,7 +121,7 @@ export default defineComponent({
       perms: [] as string[]
     }
 
-    const { mixRefs, mixState, mixMethods } = useTreeEdit(stateOption, emit)
+    const { mixRefs, mixState, mixMethods } = useEdit(stateOption, emit)
 
     mixMethods.onBeforeOpen(async () => {
       mixState.perms = mixState.formData.perms ? mixState.formData.perms.split(',') : []

@@ -59,7 +59,7 @@ export default {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import useListEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-list-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
 import { configDicts, configFields, configGetOne, configPostOne, configPutOne } from '@/api/system/config'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { nextFrame } from '@/utils/next-frame'
@@ -90,7 +90,7 @@ const stateOption = {
 
 const emit = defineEmits([REFRESH_DATA_EVENT])
 
-const { mixRefs, mixState: state, mixMethods } = useListEdit(stateOption, emit)
+const { mixRefs, mixState: state, mixMethods } = useEdit(stateOption, emit)
 const { form } = mixRefs
 const { open, submit, hideDialog, onBeforeOpen, onBeforeSubmitData } = mixMethods
 

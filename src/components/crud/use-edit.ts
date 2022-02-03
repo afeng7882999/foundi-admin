@@ -1,27 +1,21 @@
-import { arrayToTree, ITreeFields } from '@/utils/data-tree'
 import { AnyFunction, AnyObject, needImplFunc } from '@/utils'
-import { reactive, ref } from 'vue'
 import { cloneDeep, merge } from 'lodash-es'
+import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import useDict, { IDictList } from '@/components/crud/use-dict'
+import { arrayToTree, ITreeFields } from '@/utils/data-tree'
 
-export interface ITreeEditStateOption {
+export interface IListEditStateOption {
   // 主键
   idField?: string
-  // 树表字段
-  treeFields?: ITreeFields
-
   // 请求单独数据的api
   getApi?: AnyFunction
-  // 请求数据列表的api
-  listApi?: AnyFunction
   // 添加数据的api
   postApi?: AnyFunction
   //修改数据的api
   putApi?: AnyFunction
   // 是否为新增类型的表单
   isCreate?: boolean
-
   // 字典
   dicts?: IDictList
   // 重置表单
@@ -32,29 +26,33 @@ export interface ITreeEditStateOption {
   [key: string]: any
 }
 
+export interface ITreeEditStateOption extends IListEditStateOption {
+  // 是否是树表
+  treeTable?: boolean
+  // 树表字段
+  treeFields?: ITreeFields
+  // 请求数据列表的api
+  listApi?: AnyFunction
+}
+
 export const REFRESH_DATA_EVENT = 'refresh-data-list'
 
-export default function <T extends ITreeEditStateOption>(stateOption: T, emit: AnyFunction) {
+export default function <T extends IListEditStateOption | ITreeEditStateOption>(stateOption: T, emit: AnyFunction) {
+  //===============================================================================
+  // ref
+  //===============================================================================
+
   const form = ref()
+
+  //===============================================================================
+  // state
+  //===============================================================================
 
   const defaultState = {
     // 主键
     idField: 'id',
-    // 树表字段
-    treeFields: {
-      // 编码字段
-      treeIdField: 'id',
-      // 树名称字段
-      treeNameField: 'name',
-      // 父字段
-      treeParentIdField: 'parentId',
-      // 排序字段
-      treeSortField: 'sort'
-    } as ITreeFields,
     // 请求单独数据的api
     getApi: needImplFunc,
-    // 请求数据列表的api
-    listApi: needImplFunc,
     // 添加数据的api
     postApi: needImplFunc,
     //修改数据的api
@@ -69,16 +67,46 @@ export default function <T extends ITreeEditStateOption>(stateOption: T, emit: A
     resetFormData: {} as AnyObject,
     // 标题
     title: '',
+    // 选择的项目
+    selectedNodes: [] as AnyObject[],
     // 是否显示
-    visible: false,
+    visible: false
+  }
+
+  const defaultTreeState = {
+    ...defaultState,
+    // 是否是树表
+    treeTable: true,
+    // 树表字段
+    treeFields: {
+      // 编码字段
+      idField: 'id',
+      // 树名称字段
+      labelField: 'name',
+      // 父字段
+      parentIdField: 'parentId',
+      // 排序字段
+      sortField: 'sort',
+      // 下级字段
+      childrenField: 'children'
+    } as ITreeFields,
+    // 请求数据列表的api
+    listApi: needImplFunc,
     // 上级节点
     parentList: [] as AnyObject[]
   }
 
-  const mixState = reactive(merge({}, defaultState, stateOption) as typeof defaultState & T)
+  const mixState = stateOption.treeTable
+    ? reactive(merge({}, defaultTreeState, stateOption) as typeof defaultTreeState & T)
+    : reactive(merge({}, defaultState, stateOption) as typeof defaultState & T)
+
+  //===============================================================================
+  // handler
+  //===============================================================================
 
   const mixHandlers = {
     // 处理获取的数据
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     afterGetData: async (data: AnyObject) => {
       return
     },
@@ -125,12 +153,18 @@ export default function <T extends ITreeEditStateOption>(stateOption: T, emit: A
     mixHandlers.afterClose = fn
   }
 
+  //===============================================================================
+  // open
+  //===============================================================================
+
   const { getDictData } = useDict(mixState.dicts)
 
   // 添加、编辑对话框
   const open = async (id: string) => {
     mixState.isCreate = !id || id === '-1'
-    mixState.parentList = (await getParentList()) as AnyObject[]
+    if (mixState.treeTable) {
+      mixState.parentList = (await getParentList()) as AnyObject[]
+    }
     resetForm()
     await getDictData()
     if (!mixState.isCreate) {
@@ -139,6 +173,36 @@ export default function <T extends ITreeEditStateOption>(stateOption: T, emit: A
     await mixHandlers.beforeOpen()
     mixState.visible = true
   }
+
+  // 清除表单数据
+  const resetForm = () => {
+    ;(form.value as any)?.clearValidate()
+    mixState.formData = cloneDeep(mixState.resetFormData) // JSON.parse(JSON.stringify(mixState.resetFormData))
+    console.log(mixState.formData)
+  }
+
+  // 根据id获取数据
+  const getFormData = async (id: string) => {
+    if (mixState.getApi === needImplFunc) {
+      return
+    }
+    try {
+      mixState.formData[mixState.idField] = id
+      const data = await mixState.getApi(id)
+      if (mixState.treeTable) {
+        data[mixState.treeFields.treeParentIdField] =
+          data[mixState.treeFields.treeParentIdField] === '0' ? '' : data[mixState.treeFields.treeParentIdField]
+      }
+      await mixHandlers.afterGetData(data)
+      mixState.formData = data
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  //===============================================================================
+  // tree table
+  //===============================================================================
 
   // 获取上级节点
   const getParentList = async () => {
@@ -153,28 +217,9 @@ export default function <T extends ITreeEditStateOption>(stateOption: T, emit: A
     }
   }
 
-  // 根据id获取数据
-  const getFormData = async (id: string) => {
-    if (mixState.getApi === needImplFunc) {
-      return
-    }
-    try {
-      mixState.formData[mixState.idField] = id
-      const data = await mixState.getApi(id)
-      data[mixState.treeFields.treeParentIdField] =
-        data[mixState.treeFields.treeParentIdField] === '0' ? '' : data[mixState.treeFields.treeParentIdField]
-      await mixHandlers.afterGetData(data)
-      mixState.formData = data
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  // 清除表单数据
-  const resetForm = () => {
-    ;(form.value as any)?.clearValidate()
-    mixState.formData = cloneDeep(mixState.resetFormData) // JSON.parse(JSON.stringify(mixState.resetFormData))
-  }
+  //===============================================================================
+  // submit
+  //===============================================================================
 
   // 提交
   const submit = async () => {
@@ -184,7 +229,7 @@ export default function <T extends ITreeEditStateOption>(stateOption: T, emit: A
     if (!mixState.isCreate && mixState.putApi === needImplFunc) {
       return
     }
-    if (!mixState.formData[mixState.treeFields.treeParentIdField]) {
+    if (mixState.treeTable && !mixState.formData[mixState.treeFields.treeParentIdField]) {
       mixState.formData[mixState.treeFields.treeParentIdField] = '0'
     }
     if (!(await mixHandlers.beforeSubmit())) {
@@ -217,6 +262,10 @@ export default function <T extends ITreeEditStateOption>(stateOption: T, emit: A
     await mixHandlers.afterClose()
   }
 
+  //===============================================================================
+  // utils
+  //===============================================================================
+
   // 获取弹窗的标题
   const getFormTitle = () => {
     return mixState.isCreate ? `新增${mixState.title}` : `编辑${mixState.title}`
@@ -229,6 +278,7 @@ export default function <T extends ITreeEditStateOption>(stateOption: T, emit: A
     mixState,
     mixMethods: {
       open,
+      getDictData,
       getFormData,
       resetForm,
       submit,

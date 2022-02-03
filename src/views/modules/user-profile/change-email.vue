@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useListEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-list-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
 import { validEmail } from '@/utils/validate'
 import { currentChangeEmail, currentCheckEmail } from '@/api/system/user'
 import { AnyObject } from '@/utils'
@@ -54,7 +54,7 @@ export default defineComponent({
       }
     }
 
-    const { mixRefs, mixState, mixMethods } = useListEdit(stateOption, emit)
+    const { mixRefs, mixState, mixMethods } = useEdit(stateOption, emit)
 
     mixMethods.open = async () => {
       mixState.isCreate = true

@@ -1,10 +1,5 @@
 <template>
-  <el-dialog
-    v-model="state.visible"
-    :close-on-click-modal="false"
-    :title="state.isCreate ? '新增' : '修改'"
-    @closed="hideDialog"
-  >
+  <el-dialog v-model="state.visible" :close-on-click-modal="false" :title="state.isCreate ? '新增' : '修改'" @closed="hideDialog">
     <el-form ref="form" :model="state.formData" :rules="state.formRule" label-width="100px" size="medium">
       <el-form-item label="上级用户组" prop="parentId">
         <fd-tree-select
@@ -37,12 +32,13 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useTreeEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-tree-edit'
 import { groupFields, groupTreeFields, groupList, groupGetOne, groupPostOne, groupPutOne } from '@/api/system/group'
+import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
 
 const emit = defineEmits([REFRESH_DATA_EVENT])
 
 const stateOption = {
+  treeTable: true,
   idField: groupFields.idField,
   treeFields: groupTreeFields,
   getApi: groupGetOne,
@@ -61,7 +57,7 @@ const stateOption = {
   }
 }
 
-const { mixRefs, mixState: state, mixMethods } = useTreeEdit(stateOption, emit)
+const { mixRefs, mixState: state, mixMethods } = useEdit(stateOption, emit)
 const { form } = mixRefs
 const { open, submit, hideDialog } = mixMethods
 

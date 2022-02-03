@@ -113,7 +113,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref, toRefs } from 'vue'
-import useListEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-list-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
 import {
   checkEmail,
   checkMobile,
@@ -259,7 +259,7 @@ export default defineComponent({
 
     const defaultAvatar = computed(() => DEFAULT_AVATAR)
 
-    const { mixRefs, mixState, mixMethods } = useListEdit(stateOption, emit)
+    const { mixRefs, mixState, mixMethods } = useEdit(stateOption, emit)
 
     mixMethods.onBeforeOpen(async () => {
       const { data: groups } = await groupList()

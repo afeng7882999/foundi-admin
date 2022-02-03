@@ -149,7 +149,7 @@ export default {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import useListEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-list-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
 import { roleDicts, roleFields, roleGetOne, rolePostOne, rolePutOne } from '@/api/system/role'
 import { groupList, IGroup } from '@/api/system/group'
 import { IMenu, menuList } from '@/api/system/menu'
@@ -190,7 +190,7 @@ const stateOption = {
   tabName: '1'
 }
 
-const { mixRefs, mixState: state, mixMethods } = useListEdit(stateOption, emit)
+const { mixRefs, mixState: state, mixMethods } = useEdit(stateOption, emit)
 const { form } = mixRefs
 const { open, submit, onAfterGetData, onBeforeOpen, onBeforeSubmitData, onAfterClose } = mixMethods
 
