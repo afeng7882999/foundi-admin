@@ -7,6 +7,7 @@
     :align="align"
     :header-align="headerAlign"
     :width="width"
+    :label-class-name="sortable ? 'is-custom' : ''"
   >
     <template v-if="sortable" #header="scope">
       <fd-table-sort-header :column="scope.column" @sort-changed="onSortChanged"></fd-table-sort-header>
@@ -20,6 +21,7 @@
     :align="align"
     :header-align="headerAlign"
     :width="width"
+    :label-class-name="sortable ? 'is-custom' : ''"
   >
     <template #default="scope">
       <slot :row="scope.row" :idx="scope.$index"></slot>
@@ -38,7 +40,14 @@
     width="40"
   ></el-table-column>
   <!-- datetime -->
-  <el-table-column v-else-if="typ === 'datetime' && visible" v-bind="$attrs" :align="align" :header-align="headerAlign" :width="widthCo">
+  <el-table-column
+    v-else-if="typ === 'datetime' && visible"
+    v-bind="$attrs"
+    :align="align"
+    :header-align="headerAlign"
+    :width="widthCo"
+    :label-class-name="sortable ? 'is-custom' : ''"
+  >
     <template #default="scope">
       <span>{{ formatTimestamp(scope.row.operTime) }}</span>
     </template>
@@ -47,7 +56,14 @@
     </template>
   </el-table-column>
   <!-- dictionary -->
-  <el-table-column v-else-if="typ === 'dict' && visible" v-bind="$attrs" :align="align" :header-align="headerAlign" :width="widthCo">
+  <el-table-column
+    v-else-if="typ === 'dict' && visible"
+    v-bind="$attrs"
+    :align="align"
+    :header-align="headerAlign"
+    :width="widthCo"
+    :label-class-name="sortable ? 'is-custom' : ''"
+  >
     <template #default="scope">
       <span>{{ dictVal(dict, scope.row[attrs.prop]) }}</span>
     </template>

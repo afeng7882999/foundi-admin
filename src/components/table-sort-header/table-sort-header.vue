@@ -1,13 +1,13 @@
 <template>
-  <div class="fd-table-sort-header" :class="headerClass" @click="onHeaderClick">
-    <el-tooltip :show-after="tipShowAfter" :content="tip" placement="top">
+  <el-tooltip :show-after="tipShowAfter" :content="tip" placement="top">
+    <div class="fd-table-sort-header" :class="headerClass" @click="onHeaderClick">
       <span class="fd-table-sort-header__label">{{ column.label }}</span>
-    </el-tooltip>
-    <span class="caret-wrapper">
-      <i class="sort-caret ascending" @click.stop="onAscClick"></i>
-      <i class="sort-caret descending" @click.stop="onDescClick"></i>
-    </span>
-  </div>
+      <span class="caret-wrapper">
+        <i class="sort-caret ascending" @click.stop="onAscClick" @mousemove="onAscOver" @mouseleave="setTip"></i>
+        <i class="sort-caret descending" @click.stop="onDescClick" @mouseover="onDescOver" @mouseleave="setTip"></i>
+      </span>
+    </div>
+  </el-tooltip>
 </template>
 
 <script lang="ts">
@@ -49,7 +49,7 @@ const onHeaderClick = () => {
     sortOrder.value = 'desc'
   }
   sortedEmit()
-  setTip()
+  setTimeout(setTip, props.tipShowAfter)
 }
 
 const onAscClick = () => {
@@ -59,7 +59,7 @@ const onAscClick = () => {
     sortOrder.value = 'asc'
   }
   sortedEmit()
-  setTip()
+  setTimeout(setTip, props.tipShowAfter)
 }
 
 const onDescClick = () => {
@@ -69,7 +69,7 @@ const onDescClick = () => {
     sortOrder.value = 'desc'
   }
   sortedEmit()
-  setTip()
+  setTimeout(setTip, props.tipShowAfter)
 }
 
 const emit = defineEmits(['sort-changed'])
@@ -81,29 +81,43 @@ const sortedEmit = () => {
 }
 
 const setTip = () => {
-  setTimeout(() => {
-    if (sortOrder.value === 'desc') {
-      tip.value = '点击切换升序'
-    } else if (sortOrder.value === 'asc') {
-      tip.value = '点击取消排序'
-    } else {
-      tip.value = '点击切换降序'
-    }
-  }, props.tipShowAfter)
+  if (sortOrder.value === 'desc') {
+    tip.value = '点击切换升序'
+  } else if (sortOrder.value === 'asc') {
+    tip.value = '点击取消排序'
+  } else {
+    tip.value = '点击切换降序'
+  }
+}
+
+const onAscOver = () => {
+  if (sortOrder.value === 'asc') {
+    tip.value = '点击取消排序'
+  } else {
+    tip.value = '点击切换升序'
+  }
+}
+
+const onDescOver = () => {
+  if (sortOrder.value === 'desc') {
+    tip.value = '点击取消排序'
+  } else {
+    tip.value = '点击切换降序'
+  }
 }
 </script>
 
 <style lang="scss">
 .fd-table-sort-header {
   display: flex;
-  height: 30px;
+  flex: 1;
+  height: 100%;
+  padding: 10px;
   align-items: center;
   cursor: pointer;
 
   &:hover {
-    .fd-table-sort-header__label {
-      color: var(--el-color-primary);
-    }
+    background-color: var(--el-background-color-base);
   }
 }
 </style>

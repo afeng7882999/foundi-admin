@@ -6,10 +6,6 @@
   display: table-cell !important;
 }
 
-.el-table .el-table__body tr td {
-  padding: 10px 0;
-}
-
 .el-table th:first-child .cell, .el-table td:first-child .cell {
   padding: 0 10px;
 }
@@ -82,6 +78,20 @@
     border: 1px solid var(--el-color-primary);
     z-index: 5;
     pointer-events: none;
+  }
+}
+
+.el-table {
+  th.el-table__cell.is-custom {
+    padding: 0;
+    > .cell {
+      position: absolute;
+      display: flex;
+      padding: 0;
+      top: 0;
+      bottom: 0;
+      align-items: stretch;
+    }
   }
 }
 
