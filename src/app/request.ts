@@ -44,7 +44,6 @@ http.interceptors.request.use(
 
     // set token in headers
     if (getToken()) {
-      console.log('readToken', getToken())
       headers['Authorization'] = 'Bearer ' + getToken()
     }
 
@@ -91,7 +90,6 @@ http.interceptors.response.use(
 
     // set token
     if (res.token) {
-      console.log('setToken', res.token)
       await setToken(res.token)
     }
 

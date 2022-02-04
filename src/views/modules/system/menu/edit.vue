@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="visible" :close-on-click-modal="false" :title="isCreate ? '新增' : '修改'" @closed="hideDialog">
-    <el-form ref="form" :model="formData" :rules="formRule" label-width="80px" size="medium" @keyup.enter="submit()">
+    <el-form ref="form" :model="formData" :rules="formRule" label-width="110px" size="medium" @keyup.enter="submit()">
       <el-form-item label="父菜单" prop="parentId">
         <fd-tree-select
           v-model="formData.parentId"
@@ -17,6 +17,9 @@
       </el-form-item>
       <el-form-item label="菜单跳转" prop="redirect">
         <el-input v-model="formData.redirect" placeholder="请输入菜单跳转"></el-input>
+      </el-form-item>
+      <el-form-item label="页面文件路径" prop="pagePath">
+        <el-input v-model="formData.pagePath" placeholder="请输入页面文件路径"></el-input>
       </el-form-item>
       <el-form-item label="授权" prop="perms">
         <fd-tag-input v-model="perms"></fd-tag-input>
@@ -105,6 +108,7 @@ export default defineComponent({
         name: '',
         url: '',
         redirect: '',
+        pagePath: '',
         perms: '',
         typeDict: '',
         icon: '',

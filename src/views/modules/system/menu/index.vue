@@ -52,6 +52,14 @@
           :show-overflow-tooltip="true"
           align="left"
           header-align="left"
+          label="页面文件路径"
+          prop="pagePath"
+          width="180"
+        ></el-table-column>
+        <el-table-column
+          :show-overflow-tooltip="true"
+          align="left"
+          header-align="left"
           label="授权"
           prop="perms"
           width="300"

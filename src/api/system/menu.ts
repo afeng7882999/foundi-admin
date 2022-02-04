@@ -13,6 +13,8 @@ export interface IMenu extends IResData {
   url: string
   // 菜单跳转
   redirect: string
+  // 页面文件路径
+  pagePath: string
   // 授权（多个用逗号分隔，如：user:list,user:create）
   perms: string
   // 类型（字典：SysMenuType，0：目录，1：菜单，2：按钮）
