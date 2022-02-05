@@ -16,7 +16,6 @@ import FdPageHeader from '@/components/page-header'
 import FdContextmenu from '@/components/contextmenu'
 import FdIconButton from '@/components/icon-button'
 import FdTreeSelect from '@/components/tree-select'
-import FdTableSortHeader from '@/components/table-sort-header'
 import FdDrawer from '@/components/drawer'
 import FdTable from '@/components/table'
 
@@ -32,7 +31,6 @@ app
   .use(FdContextmenu)
   .use(FdIconButton)
   .use(FdTreeSelect)
-  .use(FdTableSortHeader)
   .use(FdDrawer)
   .use(FdTable)
 
