@@ -32,19 +32,15 @@
       </el-tooltip>
     </div>
     <fd-contextmenu ref="contextMenu" class="fd-tags__context-menu">
-      <fd-contextmenu-item
-        icon="refresh"
-        label="刷新"
-        @click="refreshSelectedTag(state.selectedTag)"
-      ></fd-contextmenu-item>
+      <fd-contextmenu-item icon="refresh" label="刷新" @click="refreshSelectedTag(state.selectedTag)"></fd-contextmenu-item>
       <fd-contextmenu-item
         v-if="state.closable"
         icon="close"
         label="关闭"
         @click="closeSelectedTag(state.selectedTag)"
       ></fd-contextmenu-item>
-      <fd-contextmenu-item label="关闭其他" icon="blank" @click="closeOthersTags"></fd-contextmenu-item>
-      <fd-contextmenu-item label="关闭所有" icon="blank" @click="closeAllTags(state.selectedTag)"></fd-contextmenu-item>
+      <fd-contextmenu-item label="关闭其他" icon="close-other" @click="closeOthersTags"></fd-contextmenu-item>
+      <fd-contextmenu-item label="关闭所有" icon="close-all" @click="closeAllTags(state.selectedTag)"></fd-contextmenu-item>
     </fd-contextmenu>
   </div>
 </template>
