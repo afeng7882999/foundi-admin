@@ -4,6 +4,11 @@ import useDict, { IDictList } from '@/components/crud/use-dict'
 import { AnyFunction, AnyObject } from '@/utils'
 import { off, on } from '@/utils/dom'
 
+export interface IDetailDialog {
+  open: (data: AnyObject[], idx: number, extra?: AnyObject) => void
+  close: () => void
+}
+
 export interface IDetailStateOption {
   // 主键
   idField?: string

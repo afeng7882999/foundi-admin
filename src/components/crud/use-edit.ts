@@ -5,6 +5,10 @@ import { ElMessage } from 'element-plus'
 import useDict, { IDictList } from '@/components/crud/use-dict'
 import { arrayToTree, ITreeFields } from '@/utils/data-tree'
 
+export interface IEditDialog {
+  open: (id: string) => void
+}
+
 export interface IListEditStateOption {
   // 主键
   idField?: string
