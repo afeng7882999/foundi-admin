@@ -1,12 +1,16 @@
 import { AnyFunction, AnyObject, needImplFunc } from '@/utils'
 import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { merge } from 'lodash-es'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElForm, ElMessage, ElMessageBox } from 'element-plus'
 import useDict, { IDictList } from './use-dict'
 import { scrollDocToTop } from '@/utils/smooth-scroll'
 import { nextFrame } from '@/utils/next-frame'
-import useRow from '@/components/table/use-row'
+import useTable from '@/components/table/use-table'
 import { arrayToTree, getTreeNode, getTreeNodes, ITreeFields, traverseTree } from '@/utils/data-tree'
+import { Ref } from '@vue/reactivity'
+import { ElTable } from 'element-plus/es'
+import { IDetailDialog } from '@/components/crud/use-detail'
+import { IEditDialog } from '@/components/crud/use-edit'
 
 export interface IListStateOption {
   // 主键
@@ -48,16 +52,34 @@ interface ITreeStateOption extends IListStateOption {
   rootName?: string
 }
 
-export default function <T extends IListStateOption | ITreeStateOption>(stateOption: T) {
+interface IRefs {
+  queryForm: Ref<InstanceType<typeof ElForm> | undefined>
+  tableWrapper: Ref<HTMLElement | undefined>
+  table: Ref<InstanceType<typeof ElTable> | undefined>
+  editDialog: Ref<IDetailDialog | undefined>
+  detailDialog: Ref<IEditDialog | undefined>
+}
+
+export default function <T extends IListStateOption | ITreeStateOption>(stateOption: T, refs?: IRefs) {
   //===============================================================================
   // ref
   //===============================================================================
 
-  const queryForm = ref()
-  const tableWrapper = ref()
-  const table = ref()
-  const editDialog = ref()
-  const detailDialog = ref()
+  if (!refs) {
+    const queryForm = ref()
+    const tableWrapper = ref()
+    const table = ref()
+    const editDialog = ref()
+    const detailDialog = ref()
+
+    refs = {
+      queryForm: queryForm,
+      tableWrapper: tableWrapper,
+      table: table,
+      editDialog: editDialog,
+      detailDialog: detailDialog
+    }
+  }
 
   //===============================================================================
   // state
@@ -290,9 +312,11 @@ export default function <T extends IListStateOption | ITreeStateOption>(stateOpt
 
   // 重置查询
   const resetQuery = async () => {
-    ;(queryForm.value as any).resetFields()
-    mixState.sort = {}
-    await queryList()
+    if (refs) {
+      ;(refs.queryForm.value as any).resetFields()
+      mixState.sort = {}
+      await queryList()
+    }
   }
 
   //===============================================================================
@@ -352,7 +376,10 @@ export default function <T extends IListStateOption | ITreeStateOption>(stateOpt
 
   // 树节点选中
   const onTreeSelect = (selection: AnyObject[]) => {
-    const tbl = table.value as any
+    if (!refs) {
+      return
+    }
+    const tbl = refs.table.value as any
     if (selection.length > mixState.selectedNodes.length) {
       const selected = selection.filter(
         (item) => !mixState.selectedNodes.some((item2) => item2[mixState.idField] === item[mixState.idField])
@@ -478,10 +505,10 @@ export default function <T extends IListStateOption | ITreeStateOption>(stateOpt
   const showEdit = async (id?: string) => {
     mixState.editShow = true
     await nextTick(() => {
-      if (!editDialog.value) {
+      if (!refs?.editDialog.value) {
         return
       }
-      ;(editDialog.value as any).open(id)
+      ;(refs.editDialog.value as any).open(id)
     })
   }
 
@@ -493,17 +520,19 @@ export default function <T extends IListStateOption | ITreeStateOption>(stateOpt
   const showDetail = async (idx: number) => {
     mixState.detailShow = true
     await nextTick(() => {
-      if (!detailDialog.value) {
+      if (!refs?.detailDialog.value) {
         return
       }
-      ;(detailDialog.value as any).open(mixState.data, idx, { dicts: mixState.dicts })
+      ;(refs.detailDialog.value as any).open(mixState.data, idx, { dicts: mixState.dicts })
     })
   }
 
   // 详细对话框导航时
   const onDetailNavigate = (id: string) => {
     const current = mixState.data.find((d) => d.id === id)
-    ;(table.value as any).setCurrentRow(current)
+    if (refs) {
+      ;(refs.table.value as any).setCurrentRow(current)
+    }
     setCurrentData(id)
   }
 
@@ -551,7 +580,7 @@ export default function <T extends IListStateOption | ITreeStateOption>(stateOpt
   }
 
   // 表格行高亮
-  const { highlightCurrent } = useRow(table, tableWrapper)
+  const { getColumns, highlightCurrentRow, sortColumns } = useTable(refs.table, refs.tableWrapper)
 
   // 设置当前行
   const setCurrentData = (id: string) => {
@@ -562,7 +591,7 @@ export default function <T extends IListStateOption | ITreeStateOption>(stateOpt
         mixState.currentId = id
       }
       nextTick(() => {
-        highlightCurrent()
+        highlightCurrentRow()
       })
     }
   }
@@ -593,13 +622,7 @@ export default function <T extends IListStateOption | ITreeStateOption>(stateOpt
   })
 
   return {
-    mixRefs: {
-      queryForm,
-      tableWrapper,
-      table,
-      editDialog,
-      detailDialog
-    },
+    mixRefs: refs,
     mixState,
     mixMethods: {
       getList,
@@ -623,7 +646,9 @@ export default function <T extends IListStateOption | ITreeStateOption>(stateOpt
       onBeforeDel,
       onAfterDel,
       colEmptyFormatter,
-      sortChanged
+      sortChanged,
+      getColumns,
+      sortColumns
     },
     mixAttrs: {
       tableAttrs,

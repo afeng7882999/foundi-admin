@@ -427,6 +427,18 @@
     &.is-bordered {
       border: 1px solid var(--el-border-color-lighter);
     }
+    
+    &.is-den-high {
+      .el-table .el-table__body tr td {
+        padding: 0;
+      }
+    }
+    
+    &.is-den-low {
+      .el-table .el-table__body tr td {
+        padding: 4px 0;
+      }
+    }
   }
 }
 

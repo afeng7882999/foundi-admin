@@ -1,5 +1,6 @@
 import { AnyObject } from '@/utils/index'
 import { cleanArray } from '@/utils/lang'
+import {RouteLocationNormalizedLoaded} from "vue-router";
 
 /**
  * 判断url是本地还是远端，自动添加服务器地址
@@ -36,9 +37,7 @@ export function obj2Param(json: AnyObject): string {
   if (!json) {
     return ''
   }
-  const params = Object.keys(json).map((k) =>
-    json[k] !== undefined ? encodeURIComponent(k) + '=' + encodeURIComponent(json[k]) : ''
-  )
+  const params = Object.keys(json).map((k) => (json[k] !== undefined ? encodeURIComponent(k) + '=' + encodeURIComponent(json[k]) : ''))
   return cleanArray(params).join('&')
 }
 
@@ -51,9 +50,7 @@ export function param2Obj(url: string): AnyObject {
     return {}
   }
   return JSON.parse(
-    '{"' +
-      decodeURIComponent(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"').replace(/\+/g, ' ') +
-      '"}'
+    '{"' + decodeURIComponent(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"').replace(/\+/g, ' ') + '"}'
   )
 }
 
@@ -81,4 +78,12 @@ export function getQueryObj(url: string): AnyObject {
 export function addOrRemoveSlash(url: string, ifAdd: boolean): string {
   const result = url.replace(/\/$/g, '')
   return ifAdd ? result + '/' : result
+}
+
+/**
+ * 根据当前Route获取页面ID
+ */
+export function getPageIdFromRoute(route: RouteLocationNormalizedLoaded): string {
+  const fullPath = route.fullPath.replace(/^\//, '')
+  return fullPath.replace(/\//g, '_')
 }
