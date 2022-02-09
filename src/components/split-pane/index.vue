@@ -10,7 +10,7 @@
     <div class="fd-split-pane__pane is-left" :style="leftStyle">
       <slot name="left"></slot>
     </div>
-    <div class="fd-split-pane__resizer" @mousedown="onMouseDown"></div>
+    <div v-show="resizerVisible" class="fd-split-pane__resizer" @mousedown="onMouseDown"></div>
     <div v-show="state.active" class="fd-split-pane__resizer-ghost" :style="{ [resizeType]: state.pos + 'px' }"></div>
     <div class="fd-split-pane__pane is-right" :style="rightStyle">
       <slot name="right"></slot>
@@ -26,7 +26,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, PropType, reactive, ref } from 'vue'
+import { computed, PropType, reactive, ref, watch } from 'vue'
 
 const props = defineProps({
   // min width of left or min height of top
@@ -50,6 +50,16 @@ const props = defineProps({
     default: 'right',
     validator: (val: string) => ['left', 'right'].includes(val)
   },
+  // shrink to zero
+  shrinkAll: {
+    type: Boolean,
+    default: false
+  },
+  // hide the resize when shrink to zero
+  shrinkToHide: {
+    type: Boolean,
+    default: false
+  },
   // the pane is vertical or horizontal, vertical by default
   split: {
     type: String as PropType<'vertical' | 'horizontal'>,
@@ -58,7 +68,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['resize'])
+const emit = defineEmits(['resize', 'update:shrinkAll'])
 
 const wrapper = ref()
 
@@ -76,13 +86,7 @@ const type = computed(() => {
 })
 
 const resizeType = computed(() => {
-  return props.split === 'vertical'
-    ? props.shrink === 'right'
-      ? 'left'
-      : 'right'
-    : props.shrink === 'right'
-      ? 'top'
-      : 'bottom'
+  return props.split === 'vertical' ? (props.shrink === 'right' ? 'left' : 'right') : props.shrink === 'right' ? 'top' : 'bottom'
 })
 
 const userSelect = computed(() => {
@@ -111,6 +115,27 @@ const rightStyle = computed(() => {
   return { [type.value]: state.finalPos + 'px', display: state.finalPos ? 'block' : 'none' }
 })
 
+const resizerVisible = computed(() => {
+  if (props.shrinkToHide) {
+    return state.finalPos !== 0
+  }
+  return true
+})
+
+watch(
+  () => props.shrinkAll,
+  (val) => {
+    if (val && state.finalPos !== 0) {
+      state.reservedPos = state.finalPos
+      state.pos = 0
+      state.finalPos = state.pos
+    } else if (!val && state.finalPos === 0) {
+      state.pos = state.reservedPos
+      state.finalPos = state.pos
+    }
+  }
+)
+
 const onMouseDown = () => {
   state.mouseDownTime = new Date().getTime()
   state.active = true
@@ -129,6 +154,7 @@ const onMouseUp = () => {
   }
   state.active = false
   state.finalPos = state.pos
+  emit('update:shrinkAll', state.finalPos === 0)
 }
 
 const onMouseMove = (e: MouseEvent) => {
@@ -151,9 +177,7 @@ const onMouseMove = (e: MouseEvent) => {
     }
     const pagePos = props.split === 'vertical' ? e.pageX : e.pageY
     const targetWidth =
-      props.split === 'vertical'
-        ? (e.currentTarget as HTMLElement).offsetWidth
-        : (e.currentTarget as HTMLElement).offsetHeight
+      props.split === 'vertical' ? (e.currentTarget as HTMLElement).offsetWidth : (e.currentTarget as HTMLElement).offsetHeight
     const toLeft = pagePos - pageOffset
 
     if (toLeft > props.leftMin && toLeft < targetWidth - props.rightMin) {

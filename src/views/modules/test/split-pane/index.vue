@@ -1,7 +1,13 @@
 <template>
   <div v-if="hasAuth('test:splitPane:list')" :style="docMinHeight" class="page-test-split-pane fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <fd-split-pane :default-pos="400" shrink="right">
+    <div class="fd-page__form">
+      <div class="fd-page__action">
+        <el-button @click="onLeftShrinkClick">{{ state.leftShrinkAll ? '展开左侧' : '收缩左侧' }}</el-button>
+        <el-checkbox v-model="state.leftShrinkToHide" style="margin-left: 16px">收缩时隐藏手柄</el-checkbox>
+      </div>
+    </div>
+    <fd-split-pane v-model:shrink-all="state.leftShrinkAll" :default-pos="400" shrink="right" :shrink-to-hide="state.leftShrinkToHide">
       <template #left>
         <div class="fd-page__form is-left">
           <div class="fd-page__sub-title"><span class="title-text">form1</span></div>
@@ -34,6 +40,16 @@ export default {
 <script setup lang="ts">
 import usePage from '@/components/crud/use-page'
 import FdSplitPane from '@/components/split-pane/index.vue'
+import { reactive } from 'vue'
+
+const state = reactive({
+  leftShrinkAll: false,
+  leftShrinkToHide: false
+})
+
+const onLeftShrinkClick = () => {
+  state.leftShrinkAll = !state.leftShrinkAll
+}
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 </script>
