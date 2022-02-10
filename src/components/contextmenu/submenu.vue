@@ -1,9 +1,15 @@
 <template>
-  <li class="fd-contextmenu__item fd-contextmenu__submenu" :class="classname" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave" ref="submenu">
-    <fd-icon class="fd-contextmenu__item-icon" :icon="icon"></fd-icon>
+  <li
+    ref="submenu"
+    class="fd-contextmenu__item fd-contextmenu__submenu"
+    :class="classname"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
+  >
+    <fd-icon v-if="icon" class="fd-contextmenu__item-icon" :icon="icon"></fd-icon>
     <span class="fd-contextmenu__item-text">{{ label }}</span>
     <fd-icon class="fd-contextmenu__item-icon" icon="right"></fd-icon>
-    <ul v-show="state.hover" :class="submenuClass" ref="submenu">
+    <ul v-show="state.hover" ref="submenu" :class="submenuClass">
       <slot />
     </ul>
   </li>
@@ -19,10 +25,7 @@ export default {
 import { computed, nextTick, reactive, ref } from 'vue'
 
 const props = defineProps({
-  icon: {
-    type: String,
-    default: 'blank'
-  },
+  icon: String,
   label: {
     type: String,
     default: ''
