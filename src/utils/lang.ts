@@ -94,19 +94,6 @@ export function getPageTitle(pageTitle: string): string {
 }
 
 /**
- * 字符串是否有特定结尾
- */
-export function endsWith(str: string, ...searches: string[]): boolean {
-  const len = str.length
-  for (const search of searches) {
-    if (str.substring(len - search.length) === search) {
-      return true
-    }
-  }
-  return false
-}
-
-/**
  * 生成ID
  */
 export function generateId(): number {
