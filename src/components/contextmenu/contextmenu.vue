@@ -144,7 +144,7 @@ defineExpose({
     display: flex;
     align-items: center;
     height: 38px;
-    padding: 10px 15px;
+    padding: 8px 4px 8px 15px;
     min-width: 150px;
     cursor: pointer;
 
