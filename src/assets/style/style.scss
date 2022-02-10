@@ -554,6 +554,14 @@
 }
 
 // sortable
+.sortable-drag {
+  span {
+    display: flex;
+    font-size: 18px;
+    color: var(--el-border-color-base);
+  }
+}
+
 .sortable-ghost {
   opacity: .3;
   color: #fff !important;
