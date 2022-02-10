@@ -1,6 +1,14 @@
 <template>
   <li v-if="divider" class="fd-contextmenu__divider"></li>
-  <li v-else class="fd-contextmenu__item" :class="classname" @click="onClick" @mouseenter="onMouseenter" @mouseleave="onMouseleave" ref="item">
+  <li
+    v-else
+    ref="item"
+    class="fd-contextmenu__item"
+    :class="classname"
+    @click="onClick"
+    @mouseenter="onMouseenter"
+    @mouseleave="onMouseleave"
+  >
     <fd-icon v-if="icon" class="fd-contextmenu__item-icon" :icon="icon"></fd-icon>
     <span v-if="label" class="fd-contextmenu__item-text">{{ label }}</span>
     <slot />
