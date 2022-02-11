@@ -66,7 +66,9 @@ onBeforeUnmount(() => {
 })
 
 const show = (e: MouseEvent) => {
-  bus.emit(ContextmenuShowEvent, { event: e, id: state.elId })
+  if (!props.disabled) {
+    bus.emit(ContextmenuShowEvent, { event: e, id: state.elId })
+  }
 }
 
 const calcContextMenuPos = (x: number, y: number) => {
@@ -159,7 +161,7 @@ defineExpose({
   }
 
   &__item-icon {
-    margin-right: 5px;
+    margin-right: 8px;
     font-size: $icon-size-middle;
   }
 

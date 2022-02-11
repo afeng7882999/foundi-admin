@@ -9,7 +9,7 @@
     @mouseenter="onMouseenter"
     @mouseleave="onMouseleave"
   >
-    <fd-icon v-if="icon" class="fd-contextmenu__item-icon" :icon="icon"></fd-icon>
+    <fd-icon v-if="icon || actAs !== 'default'" class="fd-contextmenu__item-icon" :icon="iconName"></fd-icon>
     <span v-if="label" class="fd-contextmenu__item-text">{{ label }}</span>
     <slot />
   </li>
@@ -22,7 +22,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, inject, reactive, ref } from 'vue'
+import { computed, inject, PropType, reactive, ref } from 'vue'
 import { AnyFunction } from '@/utils'
 
 const props = defineProps({
@@ -30,6 +30,23 @@ const props = defineProps({
   label: String,
   divider: Boolean,
   disabled: Boolean,
+  actAs: {
+    type: String as PropType<'checkbox' | 'radioGroup' | 'default'>,
+    default: 'default',
+    validator: (val: string) => ['checkbox', 'radioGroup', 'default'].includes(val)
+  },
+  checkValue: {
+    type: Boolean,
+    default: false
+  },
+  radioValue: {
+    type: String,
+    default: ''
+  },
+  radioLabel: {
+    type: String,
+    default: ''
+  },
   autoHide: {
     type: Boolean,
     default: true
@@ -49,10 +66,20 @@ const classname = computed(() => {
   }
 })
 
+const iconName = computed(() => {
+  if (props.actAs === 'checkbox') {
+    return props.checkValue ? 'check-small' : 'blank'
+  }
+  if (props.actAs === 'radioGroup') {
+    return props.radioValue === props.radioLabel ? 'check-small' : 'blank'
+  }
+  return props.icon
+})
+
 // parent hide
 const contextmenuHide = inject('contextmenuHide') as AnyFunction
 
-const emit = defineEmits(['mouseenter', 'mouseleave', 'click'])
+const emit = defineEmits(['mouseenter', 'mouseleave', 'click', 'update:checkValue', 'update:radioValue'])
 
 // mouse enter
 const onMouseenter = (event: MouseEvent) => {
@@ -72,6 +99,11 @@ const onMouseleave = (event: MouseEvent) => {
 const onClick = (event: MouseEvent) => {
   if (props.disabled) return
   emit('click', item.value, event)
+  if (props.actAs === 'checkbox') {
+    emit('update:checkValue', !props.checkValue)
+  } else if (props.actAs === 'radioGroup') {
+    emit('update:radioValue', props.radioLabel)
+  }
   if (props.autoHide) {
     contextmenuHide()
   }
