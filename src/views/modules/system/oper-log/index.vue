@@ -249,7 +249,7 @@ import { IOperLog, operLogDel, operLogDicts, operLogExport, operLogFields, operL
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import Detail from './detail.vue'
 import { nextTick, ref } from 'vue'
-import useRow from '@/components/table/use-row'
+import useTable from '@/components/table/use-table'
 import { formatTimestamp } from '@/utils/time'
 import usePage from '@/components/crud/use-page'
 
@@ -286,7 +286,7 @@ const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 
-const { highlightCurrent } = useRow(table, pageTable)
+const { highlightCurrentRow } = useTable(table, pageTable)
 
 const onTableRowClick = (row: IOperLog) => {
   setCurrentData(row?.id)
@@ -311,7 +311,7 @@ const setCurrentData = (id: string) => {
     state.currentId = id
   }
   nextTick(() => {
-    highlightCurrent()
+    highlightCurrentRow()
   })
 }
 </script>

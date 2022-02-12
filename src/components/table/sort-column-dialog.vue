@@ -1,21 +1,38 @@
 <template>
-  <el-dialog v-model="state.visible" :close-on-click-modal="false" title="排序">
-    <el-table :data="state.tableColumns" row-key="id">
-      <el-table-column label="显示" prop="visible">
-        <template #default="scope">
-          <el-checkbox v-model="scope.row.visible"></el-checkbox>
-        </template>
-      </el-table-column>
-      <el-table-column label="属性" prop="property"></el-table-column>
-      <el-table-column label="列名" prop="label"></el-table-column>
-      <el-table-column label="类型" prop="type"></el-table-column>
-    </el-table>
+  <el-dialog v-model="state.visible" :close-on-click-modal="false" title="表格列设置" width="650px">
+    <div ref="tableWrapper">
+      <el-table ref="table" v-bind="tableAttrs" stripe>
+        <el-table-column class-name="sortable-drag" label="" width="38">
+          <template #default>
+            <el-tooltip content="拖动排序当前行" placement="left">
+              <span><fd-icon icon="drag"></fd-icon></span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+        <el-table-column label="显示" prop="visible" width="80">
+          <template #header="scope">
+            <div class="sort-column-dlg__header-check">
+              <el-checkbox :model-value="selectAll" :indeterminate="selectPart" @change="onSelectAllChange"></el-checkbox>
+              {{ scope.column.label }}
+            </div>
+          </template>
+          <template #default="scope">
+            <el-checkbox v-model="scope.row.visible"></el-checkbox>
+          </template>
+        </el-table-column>
+        <el-table-column label="属性" prop="property" :formatter="colEmptyFormatter"></el-table-column>
+        <el-table-column label="列名" prop="label" :formatter="colEmptyFormatter"></el-table-column>
+        <el-table-column label="类型" prop="type" width="100"></el-table-column>
+      </el-table>
+    </div>
     <template #footer>
-      <span class="fd-dialog-footer">
-        <el-button size="medium" @click="reset">重置</el-button>
-        <el-button size="medium" type="primary" @click="submit">排序</el-button>
+      <div class="fd-dialog-footer">
+        <div class="fd-dialog-footer__right">
+          <el-button size="medium" @click="reset">重置</el-button>
+        </div>
+        <el-button size="medium" type="primary" @click="submit">设置</el-button>
         <el-button size="medium" @click="state.visible = false">取消</el-button>
-      </span>
+      </div>
     </template>
   </el-dialog>
 </template>
@@ -27,20 +44,43 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { TableColumn } from '@/components/table/use-table'
+import { computed, reactive, ref } from 'vue'
+import useTable from '@/components/table/use-table'
+import { TableColumn } from '@/components/table/types'
+
+const tableWrapper = ref()
+const table = ref()
 
 const state = reactive({
   visible: false,
   tableColumns: [] as TableColumn[]
 })
 
+const selectAll = computed(() => {
+  return !state.tableColumns.some((c) => c.visible === false)
+})
+
+const selectPart = computed(() => {
+  const len = state.tableColumns.filter((c) => c.visible === true).length
+  return len !== 0 && len !== state.tableColumns.length
+})
+
+const onSelectAllChange = (val: boolean) => {
+  if (val) {
+    state.tableColumns.forEach((c) => (c.visible = true))
+  } else {
+    state.tableColumns.forEach((c) => (c.visible = false))
+  }
+}
+
+const { tableAttrs } = useTable(table, tableWrapper, { data: () => state.tableColumns, configurable: false, rowDraggable: true })
+
 const open = (tableColumns: TableColumn[]) => {
   state.tableColumns = tableColumns
   state.visible = true
 }
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit', 'reset'])
 
 const submit = () => {
   emit('submit', state.tableColumns)
@@ -48,10 +88,27 @@ const submit = () => {
 }
 
 const reset = () => {
-  console.log('reset')
+  state.tableColumns.sort((a, b) => a.id - b.id)
+  state.tableColumns.forEach((c) => (c.visible = true))
+}
+
+const colEmptyFormatter = (row: any, column: any, cellValue: any) => {
+  return cellValue ? cellValue : '无'
 }
 
 defineExpose({
   open
 })
 </script>
+
+<style lang="scss">
+.sort-column-dlg {
+  &__header-check {
+    display: flex;
+    align-items: center;
+    .el-checkbox {
+      margin-right: 8px;
+    }
+  }
+}
+</style>

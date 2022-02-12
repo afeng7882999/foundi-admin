@@ -1,14 +1,14 @@
 import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus'
 import { addResizeListener, removeResizeListener, ResizableElement } from '@/utils/resize-event'
-import { computed, nextTick, onMounted, onUnmounted, reactive, unref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, onUpdated } from 'vue'
 import { getDocumentTop, scrollDocH } from '@/utils/smooth-scroll'
 import usePage from '@/components/crud/use-page'
-import { merge } from 'lodash-es'
+import { cloneDeep, merge } from 'lodash-es'
 import { TableColumnCtx } from 'element-plus/lib/components/table/src/table-column/defaults'
 import { AnyObject } from '@/utils'
 import Sortable, { SortableEvent } from 'sortablejs'
-import { RowDensity, TABLE_ID_PREFIX } from '@/components/table/types'
+import { RowDensity, TABLE_ID_PREFIX, TableColumn } from '@/components/table/types'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { useRoute } from 'vue-router'
@@ -17,23 +17,31 @@ import { addClass, removeClass } from '@/utils/dom'
 
 export interface TableOption {
   // 数据
-  data?: AnyObject[]
+  data?: () => AnyObject[]
   // 行键值
   rowKey?: string
+
   // 是否是树表
   treeTable?: boolean
-  // 树表缩进
+  // 缩进（树表）
   indent?: number
-  // 表格是否可配置
+
+  // 是否可配置
   configurable?: boolean
-  // 列可排序时表的别名
+  // 表的别名（可配置时）
   alias?: string
-  // 行是否可拖动
-  rowDraggable?: boolean
-  // 行拖动元素类名
-  rowDragClass?: string
+
   // 行是否可选
   rowSelectable?: boolean
+
+  // 行是否可拖动
+  rowDraggable?: boolean
+  // 行拖动元素类名（可拖动时）
+  rowDragClass?: string
+  // 数据排序字段（可拖动时）
+  sortField?: string
+  // 行拖动完成时（可拖动时）
+  onRowDragEnd?: (e: SortableEvent) => void
 
   // 选择项发生变化时
   onSelectionChange?: (selection: AnyObject[]) => void
@@ -43,16 +51,6 @@ export interface TableOption {
   onSelect?: (selection: AnyObject[]) => void
   // 勾选全选 Checkbox 时
   onSelectAll?: (selection: AnyObject[]) => void
-  // 行拖动完成时
-  onRowDragEnd?: (e: SortableEvent) => void
-}
-
-export interface TableColumn {
-  id: number
-  visible: boolean
-  property?: string
-  label?: string
-  type?: string
 }
 
 const useTable = (
@@ -65,46 +63,72 @@ const useTable = (
   //===============================================================================
 
   const defaultOption = {
+    // 行键值
+    rowKey: 'id',
     // 表格行是否可选
-    tableRowSelectable: false,
-    // 表格是否可配置
+    rowSelectable: false,
+    // 树表缩进
+    indent: 15,
+    // 是否可配置
     configurable: true,
-    // 列可排序时表的别名
+    // 表的别名（可配置时）
     alias: '_0',
     // 行是否可拖动
     rowDraggable: false,
-    // 树表缩进
-    indent: 15,
-    // 行拖动元素类名
-    rowDragClass: '.allowDrag'
+    // 数据排序字段（可拖动时）
+    sortField: 'sort',
+    // 行拖动元素类名（可拖动时）
+    rowDragClass: '.sortable-drag'
   }
 
-  const option = reactive(merge({}, defaultOption, tableOption))
+  const option = merge({}, defaultOption, tableOption)
 
   //===============================================================================
   // ref
   //===============================================================================
 
-  let wrapperEl = null as HTMLElement | null
-  let tableEl = null as HTMLElement | null
-  let bodyWrapperEl = null as HTMLElement | null
   let colEl = null as HTMLElement | null
   let boxEl = null as HTMLElement | null
   let colRect = null as DOMRect | null
+
+  const tableElCo = computed(() => {
+    const wrapperEl = wrapper.value as HTMLElement
+    return wrapperEl?.querySelector('.el-table') as HTMLElement
+  })
+
+  const bodyWrapperElCo = computed(() => {
+    return tableElCo.value?.querySelector('.el-table__body-wrapper') as HTMLElement
+  })
 
   //===============================================================================
   // draggable row
   //===============================================================================
 
+  // 排序行数据
+  const _onRowDragEnd = (e: SortableEvent) => {
+    if (option.data) {
+      const data = option.data()
+      const targetRow = data.splice(e.oldIndex as number, 1)[0]
+      data.splice(e.newIndex as number, 0, targetRow)
+      if (option.sortField) {
+        for (let i = 0; i < data.length; i++) {
+          data[i][option.sortField] = i + 1
+        }
+      }
+    }
+    option.onRowDragEnd && option.onRowDragEnd(e)
+  }
+
+  // 初始化可拖动行
   const initRowDrag = () => {
-    if (!bodyWrapperEl) {
+    if (!bodyWrapperElCo.value) {
       return
     }
-    const tBodyEl = bodyWrapperEl.querySelector('table > tbody') as HTMLElement
+    const tBodyEl = bodyWrapperElCo.value.querySelector('table > tbody') as HTMLElement
     Sortable.create(tBodyEl, {
       handle: option.rowDragClass,
       animation: 150,
-      onEnd: option.onRowDragEnd
+      onEnd: _onRowDragEnd
     })
   }
 
@@ -114,14 +138,14 @@ const useTable = (
 
   // 插入focus边框
   const createHighlightBox = () => {
-    if (!tableEl || !bodyWrapperEl) {
+    if (!tableElCo.value || !bodyWrapperElCo.value) {
       return
     }
-    boxEl = bodyWrapperEl.querySelector('.row-focus-box') as HTMLElement
+    boxEl = bodyWrapperElCo.value.querySelector('.row-focus-box') as HTMLElement
     if (!boxEl) {
       boxEl = document.createElement('div')
       boxEl.className = 'row-focus-box'
-      tableEl.appendChild(boxEl)
+      tableElCo.value.appendChild(boxEl)
     } else {
       boxEl.className = 'row-focus-box'
     }
@@ -129,15 +153,15 @@ const useTable = (
 
   // 设置focus边框的位置和大小
   const resizeHighlightBox = () => {
-    if (!wrapper.value || !bodyWrapperEl || !boxEl) {
+    if (!wrapper.value || !bodyWrapperElCo.value || !boxEl) {
       return
     }
-    colEl = bodyWrapperEl.querySelector('tr.current-row') as HTMLElement
+    colEl = bodyWrapperElCo.value.querySelector('tr.current-row') as HTMLElement
     if (colEl) {
-      const wrapperRect = bodyWrapperEl.getBoundingClientRect()
+      const wrapperRect = bodyWrapperElCo.value.getBoundingClientRect()
       colRect = colEl.getBoundingClientRect()
-      boxEl.style.top = colEl.offsetTop + bodyWrapperEl.offsetTop - 1 + 'px'
-      boxEl.style.left = bodyWrapperEl.offsetLeft + 'px'
+      boxEl.style.top = colEl.offsetTop + bodyWrapperElCo.value.offsetTop - 1 + 'px'
+      boxEl.style.left = bodyWrapperElCo.value.offsetLeft + 'px'
       boxEl.style.width = wrapperRect.width + 'px'
       boxEl.style.height = colRect.height + 1 + 'px'
       boxEl.style.display = 'block'
@@ -178,6 +202,8 @@ const useTable = (
   const storeState = store.state as AllState
   const route = useRoute()
 
+  let _originalColumns = [] as TableColumnCtx<any>[]
+
   // 表格ID
   const tableId = computed(() => {
     return TABLE_ID_PREFIX + getPageIdFromRoute(route) + option.alias
@@ -194,7 +220,7 @@ const useTable = (
     },
     set: async (columns) => {
       if (columns) {
-        sortColumns(columns)
+        await sortColumns(columns)
         await store.dispatch('table/setColumns', { id: tableId.value, columns })
       }
     }
@@ -207,7 +233,7 @@ const useTable = (
       if (item && item.setting && item.setting.rowDensity) {
         return item.setting.rowDensity
       }
-      return undefined
+      return null
     },
     set: async (density) => {
       if (density) {
@@ -222,9 +248,9 @@ const useTable = (
     get: () => {
       const item = storeState.table.settings.find((s) => s.id === tableId.value)
       if (item && item.setting && item.setting.expandAll) {
-        return item.setting.expandAll
+        return item.setting.expandAll as boolean
       }
-      return undefined
+      return null
     },
     set: async (expandAll) => {
       if (expandAll) {
@@ -234,9 +260,9 @@ const useTable = (
   })
 
   // 获取表格列数组
-  const getColumnsFromTable = () => {
+  const getColumnsFromTable = (): TableColumn[] | null => {
     if (!table || !table.value) {
-      return
+      return null
     }
     const cols = table.value.store.states._columns.value
     let i = 0
@@ -252,23 +278,23 @@ const useTable = (
   }
 
   // 重新排序表格列
-  const sortColumns = (columns: TableColumn[]) => {
+  const sortColumns = async (columns: TableColumn[]) => {
     if (!table || !table.value) {
       return
     }
     // 多级表头仅处理第一级
-    const tableCols = table.value.store.states._columns.value as TableColumnCtx<any>[]
-    const temp = [...tableCols]
+    const tableCols = [] as TableColumnCtx<any>[]
     const visibleCols = columns.filter((c: TableColumn) => c.visible)
-    for (let i = 0; i < temp.length; i++) {
+    for (let i = 0; i < _originalColumns.length; i++) {
       const idx = visibleCols.findIndex((c: TableColumn) => c.id === i)
       if (idx != -1) {
-        tableCols[idx] = temp[i]
+        tableCols[idx] = _originalColumns[i]
       }
     }
     tableCols.length = visibleCols.length
+    table.value.store.states._columns.value = tableCols
     table.value.store.updateColumns()
-    nextTick(() => {
+    await nextTick(() => {
       if (table && table.value) {
         table.value.doLayout()
       }
@@ -277,6 +303,7 @@ const useTable = (
 
   // 改变表格行密度
   const changeRowDensity = (density: RowDensity) => {
+    const wrapperEl = wrapper.value as HTMLElement
     if (wrapperEl) {
       if (density === 'high') {
         removeClass(wrapperEl, 'is-den-low')
@@ -295,8 +322,11 @@ const useTable = (
 
   // 根据配置初始化表格
   const initConfigurableTable = () => {
-    const id = TABLE_ID_PREFIX + getPageIdFromRoute(route) + option.alias
-    const item = storeState.table.settings.find((s) => s.id === id)
+    if (!table || !table.value) {
+      return
+    }
+    _originalColumns = cloneDeep(table.value.store.states._columns.value as TableColumnCtx<any>[])
+    const item = storeState.table.settings.find((s) => s.id === tableId.value)
     if (item && item.setting) {
       item.setting.rowDensity && changeRowDensity(item.setting.rowDensity)
       item.setting.columns && sortColumns(item.setting.columns)
@@ -307,27 +337,33 @@ const useTable = (
   // life hooks
   //===============================================================================
 
-  onMounted(() => {
-    if (unref(wrapper)) {
-      wrapperEl = wrapper.value as HTMLElement
-      tableEl = wrapperEl?.querySelector('.el-table') as HTMLElement
-      bodyWrapperEl = tableEl.querySelector('.el-table__body-wrapper') as HTMLElement
-    }
-    if (option.rowDraggable) {
+  let rowDragInitialized = false
+  let rowSelectableInitialized = false
+  let configurableInitialized = false
+
+  const init = () => {
+    if (option.rowDraggable && !rowDragInitialized) {
       initRowDrag()
+      rowDragInitialized = true
     }
-    if (option.tableRowSelectable && bodyWrapperEl) {
+    if (option.rowSelectable && bodyWrapperElCo.value && !rowSelectableInitialized) {
       createHighlightBox()
-      addResizeListener(bodyWrapperEl as ResizableElement, resizeHighlightBox)
+      addResizeListener(bodyWrapperElCo.value as ResizableElement, resizeHighlightBox)
+      rowSelectableInitialized = true
     }
-    if (option.configurable) {
+    if (option.configurable && !configurableInitialized) {
       initConfigurableTable()
+      configurableInitialized = true
     }
+  }
+
+  onUpdated(() => {
+    init()
   })
 
   onUnmounted(() => {
-    if (option.tableRowSelectable && bodyWrapperEl) {
-      removeResizeListener(bodyWrapperEl as ResizableElement, resizeHighlightBox)
+    if (option.rowSelectable && bodyWrapperElCo.value) {
+      removeResizeListener(bodyWrapperElCo.value as ResizableElement, resizeHighlightBox)
     }
   })
 
@@ -336,27 +372,23 @@ const useTable = (
   //===============================================================================
 
   const tableAttrs = computed(() => {
+    const result = {
+      highlightCurrentRow: option.rowSelectable,
+      rowKey: option.rowKey
+    } as AnyObject
+
+    option.data && (result.data = option.data())
+    option.onSelectionChange && (result.onSelectionChange = option.onSelectionChange)
+    option.onRowClick && (result.onRowClick = option.onRowClick)
+
     if (option.treeTable) {
-      return {
-        highlightCurrentRow: option.tableRowSelectable,
-        data: option.data,
-        rowKey: option.rowKey,
-        defaultExpandAll: expandAll.value,
-        indent: option.indent,
-        onSelectionChange: option.onSelectionChange,
-        onRowClick: option.onRowClick,
-        onSelect: option.onSelect,
-        onSelectAll: option.onSelectAll
-      }
-    } else {
-      return {
-        highlightCurrentRow: option.tableRowSelectable,
-        data: option.data,
-        rowKey: option.rowKey,
-        onSelectionChange: option.onSelectionChange,
-        onRowClick: option.onRowClick
-      }
+      result.defaultExpandAll = expandAll.value
+      result.indent = option.indent
+      option.onSelect && (result.onSelect = option.onSelect)
+      option.onSelectAll && (result.onSelectAll = option.onSelectAll)
     }
+
+    return result
   })
 
   return {

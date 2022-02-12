@@ -4,21 +4,10 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="state.query" size="medium" @keyup.enter="queryList()">
-        <transition
-          name="expand"
-          @enter="expandEnter"
-          @after-enter="expandAfterEnter"
-          @before-leave="expandBeforeLeave"
-        >
+        <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
           <div v-show="state.queryFormShow" class="fd-page__query">
             <el-form-item label="配置分类" prop="configTypeDict">
-              <el-select
-                v-model="state.query.configTypeDict"
-                multiple
-                clearable
-                placeholder="请选择配置分类"
-                style="width: 200px"
-              >
+              <el-select v-model="state.query.configTypeDict" multiple clearable placeholder="请选择配置分类" style="width: 200px">
                 <el-option
                   v-for="item in state.dicts.sysConfigType"
                   :key="item.itemKey"
@@ -54,27 +43,13 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button
-            v-show="hasAuth('system:config:add')"
-            v-waves
-            type="primary"
-            plain
-            size="medium"
-            @click="showEdit()"
-          >
+          <el-button v-show="hasAuth('system:config:add')" v-waves type="primary" plain size="medium" @click="showEdit()">
             <fd-icon class="is-in-btn" icon="plus"></fd-icon>
             新增
           </el-button>
-          <el-button v-show="hasAuth('system:config:export')" v-waves size="medium" @click="exportData()">
-            导出数据
-          </el-button>
+          <el-button v-show="hasAuth('system:config:export')" v-waves size="medium" @click="exportData()">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
-          <el-tooltip
-            :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'"
-            :show-after="500"
-            effect="dark"
-            placement="top"
-          >
+          <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
               <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
             </el-badge>
@@ -82,7 +57,7 @@
         </div>
       </div>
     </div>
-    <div ref="pageTable" class="fd-page__table is-bordered">
+    <div ref="tableWrapper" class="fd-page__table is-bordered">
       <el-table
         ref="table"
         v-loading="state.loading"
@@ -93,27 +68,13 @@
         @row-click="onTableRowClick"
       >
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="启用"
-          prop="enabled"
-          width="60"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="启用" prop="enabled" width="60">
           <template #default="scope">
             <el-tag v-if="scope.row.enabled" size="mini" type="success">启用</el-tag>
             <el-tag v-else size="mini" type="danger">禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="配置分类"
-          prop="configTypeDict"
-          width="150"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="配置分类" prop="configTypeDict" width="150">
           <template #default="scope">
             <span>{{ dictVal(state.dicts.sysConfigType, scope.row.configTypeDict) }}</span>
           </template>
@@ -134,21 +95,8 @@
           prop="configValue"
           width="600"
         ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="备注"
-          prop="remark"
-        ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="创建时间"
-          prop="createAt"
-          width="200"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="备注" prop="remark"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="创建时间" prop="createAt" width="200">
           <template #default="scope">
             <span>{{ formatTimestamp(scope.row.createAt) }}</span>
           </template>
@@ -207,12 +155,7 @@
       ></el-pagination>
     </div>
     <el-backtop></el-backtop>
-    <detail
-      v-if="state.detailShow"
-      ref="detailDialog"
-      @open-edit-dialog="showEdit(state.currentId)"
-      @navigate="onDetailNavigate"
-    ></detail>
+    <detail v-if="state.detailShow" ref="detailDialog" @open-edit-dialog="showEdit(state.currentId)" @navigate="onDetailNavigate"></detail>
     <edit v-if="state.editShow" ref="editDialog" @refresh-data-list="getList"></edit>
   </div>
 </template>
@@ -225,20 +168,11 @@ export default {
 
 <script setup lang="ts">
 import useList from '@/components/crud/use-list'
-import {
-  configDel,
-  configDicts,
-  configExport,
-  configFields,
-  configList,
-  configQuery,
-  IConfig
-} from '@/api/system/config'
+import { configDel, configDicts, configExport, configFields, configList, configQuery, IConfig } from '@/api/system/config'
 import Edit from './edit.vue'
 import Detail from './detail.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import { nextTick, ref } from 'vue'
-import useRow from '@/components/table/use-row'
 import { formatTimestamp } from '@/utils/time'
 import usePage from '@/components/crud/use-page'
 
@@ -249,13 +183,14 @@ const stateOption = {
   exportApi: configExport,
   dicts: configDicts,
   query: configQuery,
-  currentId: ''
+  currentId: '',
+  tableRowSelectable: true
 }
 
 const pageTable = ref()
 
 const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
-const { queryForm, table, editDialog, detailDialog } = mixRefs
+const { queryForm, table, tableWrapper, editDialog, detailDialog } = mixRefs
 const {
   getList,
   pageChange,
@@ -269,14 +204,13 @@ const {
   showDetail,
   onSelectionChange,
   toggleQueryForm,
-  onAfterGetList
+  onAfterGetList,
+  highlightCurrentRow
 } = mixMethods
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
-
-const { highlightCurrent } = useRow(table, pageTable)
 
 const onTableRowClick = (row: IConfig) => {
   setCurrentData(row?.id)
@@ -301,7 +235,7 @@ const setCurrentData = (id: string) => {
     state.currentId = id
   }
   nextTick(() => {
-    highlightCurrent()
+    highlightCurrentRow()
   })
 }
 </script>

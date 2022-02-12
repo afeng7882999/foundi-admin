@@ -25,8 +25,8 @@ const settingsDefault = () => {
     if (id && id.startsWith(TABLE_ID_PREFIX)) {
       const val = window.localStorage.getItem(id)
       if (val) {
-        const setting = JSON.parse(val)
-        result.push({ id, setting })
+        const item = JSON.parse(val)
+        result.push(item)
       }
     }
   }
@@ -85,7 +85,7 @@ const mutations = {
 }
 
 const actions = {
-  setRowSize({ commit }: ActionContext<TableState, unknown>, params: { id: string; rowDensity?: RowDensity }) {
+  setRowDensity({ commit }: ActionContext<TableState, unknown>, params: { id: string; rowDensity?: RowDensity }) {
     commit('SET_ROW_DENSITY', params)
   },
   setColumns({ commit }: ActionContext<TableState, unknown>, params: { id: string; columns?: TableColumn[] }) {
@@ -94,7 +94,7 @@ const actions = {
   setExpandAll({ commit }: ActionContext<TableState, unknown>, params: { id: string; expandAll?: boolean }) {
     commit('SET_EXPAND_ALL', params)
   },
-  deleteRowSize({ commit }: ActionContext<TableState, unknown>, id: string) {
+  deleteRowDensity({ commit }: ActionContext<TableState, unknown>, id: string) {
     commit('DELETE_ROW_DENSITY', id)
   },
   deleteColumns({ commit }: ActionContext<TableState, unknown>, id: string) {

@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <el-form ref="tableForm" :model="state.data.table" :rules="state.rules" label-width="150px" size="medium">
+    <el-form ref="form" :model="state.data.table" :rules="state.rules" label-width="150px" size="medium">
       <div class="fd-page__form">
         <div class="fd-page__sub-title"><span class="title-text">基本信息</span></div>
         <el-row>
@@ -181,10 +181,10 @@
       </div>
     </el-form>
 
-    <div class="fd-page__table is-bordered">
+    <div ref="tableWrapper" class="fd-page__table is-bordered">
       <div class="fd-page__sub-title"><span class="title-text">字段信息</span></div>
-      <el-table :data="state.data.columns" row-key="id">
-        <el-table-column class-name="allowDrag" label="" width="38">
+      <el-table ref="table" :data="state.data.columns" row-key="id">
+        <el-table-column class-name="sortable-drag" label="" width="38">
           <template #default>
             <el-tooltip content="拖动排序当前行" placement="right">
               <span><fd-icon icon="drag"></fd-icon></span>
@@ -251,7 +251,7 @@
           <template #default="scope">
             <el-select v-model="scope.row.queryType" size="medium">
               <el-option
-                v-for="item in queryTypes"
+                v-for="item in DEFAULT_QUERY_TYPES"
                 :key="item.value"
                 :label="`${item.label}: ${item.value}`"
                 :value="item.value"
@@ -263,7 +263,7 @@
           <template #default="scope">
             <el-select v-model="scope.row.htmlType" size="medium">
               <el-option
-                v-for="item in htmlTypes"
+                v-for="item in DEFAULT_HTML_TYPES"
                 :key="item.value"
                 :label="`${item.label}: ${item.value}`"
                 :value="item.value"
@@ -285,47 +285,22 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, onBeforeMount, onMounted, reactive, ref } from 'vue'
+import { computed, onBeforeMount, reactive, ref } from 'vue'
 import usePage from '@/components/crud/use-page'
-import Sortable, { SortableEvent } from 'sortablejs'
 import { filterTree, ITreeNodeDefault } from '@/utils/data-tree'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElForm, ElMessage, ElMessageBox, ElTable } from 'element-plus'
 import { AnyObject } from '@/utils'
 import { genTableGetOne, genTablePutOne, genTableSyncDb, IGenTable, IGenTableColumn } from '@/api/generator/gen-table'
 import { dictList, IDict } from '@/api/system/dict'
+import { DEFAULT_HTML_TYPES, DEFAULT_QUERY_TYPES } from '@/views/modules/generator/types'
+import useTable from '@/components/table/use-table'
 
-const DEFAULT_QUERY_TYPES = [
-  { label: '相等', value: 'EQUAL' },
-  { label: '不等于', value: 'NOT_EQUAL' },
-  { label: '大于', value: 'GREATER_THAN_NQ' },
-  { label: '小于', value: 'LESS_THAN_NQ' },
-  { label: '大于等于', value: 'GREATER_THAN' },
-  { label: '小于等于', value: 'LESS_THAN' },
-  { label: '中模糊查询', value: 'INNER_LIKE' },
-  { label: '左模糊查询', value: 'LEFT_LIKE' },
-  { label: '右模糊查询', value: 'RIGHT_LIKE' },
-  { label: '包含', value: 'IN' },
-  { label: '不为空', value: 'NOT_NULL' },
-  { label: '范围', value: 'BETWEEN' }
-]
-
-const DEFAULT_HTML_TYPES = [
-  { label: '文本框', value: 'input' },
-  { label: '文本域', value: 'textarea' },
-  { label: '下拉框（字典）', value: 'select' },
-  { label: '单选框（字典）', value: 'radio' },
-  { label: '复选框（字典或Boolean）', value: 'checkbox' },
-  { label: '日期控件', value: 'datetime' },
-  { label: '图片上传', value: 'image' },
-  { label: '文件上传', value: 'upload' },
-  { label: '富文本', value: 'editor' }
-]
-
-const tableForm = ref()
-const pageRoot = ref<HTMLElement | null>(null)
+const form = ref<InstanceType<typeof ElForm>>()
+const tableWrapper = ref<HTMLElement>()
+const table = ref<InstanceType<typeof ElTable>>()
 
 const state = reactive({
   // 表信息
@@ -353,11 +328,6 @@ const storeState = store.state as AllState
 
 const { docMinHeight, showPageHeader } = usePage()
 
-const tableCo = computed(() => {
-  const $moduleRoot = pageRoot.value as HTMLElement
-  return $moduleRoot.getElementsByClassName('el-table')[0] as HTMLElement
-})
-
 const parentMenuList = computed(() => {
   return filterTree(storeState.user.menu as ITreeNodeDefault[], (item) => item.typeDict === '0')
 })
@@ -366,14 +336,6 @@ const fieldNames = computed(() => {
   return state.data.columns.map((item: AnyObject) => {
     return { id: item.fieldName, name: item.fieldName + ': ' + item.columnComment }
   })
-})
-
-const queryTypes = computed(() => {
-  return DEFAULT_QUERY_TYPES
-})
-
-const htmlTypes = computed(() => {
-  return DEFAULT_HTML_TYPES
 })
 
 onBeforeMount(async () => {
@@ -390,14 +352,10 @@ onBeforeMount(async () => {
   }
 })
 
-onMounted(() => {
-  initSortTable()
-})
-
 // 提交按钮
 const submitForm = async () => {
   try {
-    await (tableForm.value as any).validate()
+    await (form.value as any).validate()
     await genTablePutOne(state.data)
     close()
     ElMessage({
@@ -438,31 +396,6 @@ const handleSyncFromDb = async () => {
   }
 }
 
-// 初始化 SortTable
-const initSortTable = () => {
-  const $el = tableCo.value.querySelectorAll('.el-table__body-wrapper > table > tbody')[0] as HTMLElement
-  Sortable.create($el, {
-    handle: '.allowDrag',
-    animation: 150,
-    onEnd: (evt: SortableEvent) => {
-      const targetRow = state.data.columns.splice(evt.oldIndex as number, 1)[0]
-      state.data.columns.splice(evt.newIndex as number, 0, targetRow)
-      for (let i = 0; i < state.data.columns.length; i++) {
-        state.data.columns[i].sort = i + 1
-      }
-    }
-  })
-}
+// table drag to sort
+useTable(table, tableWrapper, { data: () => state.data.columns, configurable: false, rowDraggable: true })
 </script>
-
-<style lang="scss" scoped>
-@use 'src/assets/style/variable' as *;
-
-.allowDrag {
-  span {
-    display: flex;
-    font-size: 18px;
-    color: var(--el-border-color-base);
-  }
-}
-</style>

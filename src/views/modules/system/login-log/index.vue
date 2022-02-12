@@ -71,21 +71,23 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:loginLog:export')" v-waves plain size="medium" @click="exportData()">导出数据</el-button>
+          <el-button v-show="hasAuth('system:loginLog:export')" v-waves plain size="medium" @click="exportData">导出数据</el-button>
           <el-divider direction="vertical" class="action-divider"></el-divider>
           <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
               <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
             </el-badge>
           </el-tooltip>
+
+          <fd-table-setting :option="tableSettingOpt"></fd-table-setting>
         </div>
       </div>
     </div>
     <div ref="tableWrapper" class="fd-page__table is-bordered">
-      <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs" @sort-change="sort">
+      <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs">
         <fd-column typ="selection"></fd-column>
         <fd-column typ="datetime" label="访问时间" prop="operTime"></fd-column>
-        <fd-column typ="dict" label="类型" prop="typeDict" align="left" :dict="state.dicts.sysLoginLogType" width="50"></fd-column>
+        <fd-column typ="dict" label="类型" prop="typeDict" :dict="state.dicts.sysLoginLogType" width="50"></fd-column>
         <fd-column typ="dict" label="登录方式" prop="authcTypeDict" :dict="state.dicts.sysAuthcType" width="100"></fd-column>
         <fd-column label="用户账号" prop="userName" sortable width="150" @sort-changed="sortChanged"></fd-column>
         <fd-column label="IP地址" prop="ip" width="130" sortable @sort-changed="sortChanged"></fd-column>
@@ -98,7 +100,8 @@
           typ="act"
           detail="system:loginLog:list"
           del="system:loginLog:delete"
-          width="100"
+          header-align="center"
+          width="90"
           @detail="showDetail"
           @del="del"
         ></fd-column>
@@ -122,6 +125,8 @@ import { loginLogFields, loginLogDicts, loginLogQuery, loginLogList, loginLogDel
 import Detail from './detail.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import usePage from '@/components/crud/use-page'
+import { TableColumn } from '@/components/table/types'
+import FdTableSetting from '@/components/table/table-setting.vue'
 
 const stateOption = {
   idField: loginLogFields.idField,
@@ -130,27 +135,23 @@ const stateOption = {
   exportApi: loginLogExport,
   dicts: loginLogDicts,
   query: loginLogQuery,
-  tableRowSelectable: true
+
+  tableColumns: [] as TableColumn[]
 }
 
-const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList(stateOption)
+const { mixRefs, mixState: state, mixComputed, mixMethods, mixAttrs } = useList(stateOption)
 const { queryForm, tableWrapper, table, detailDialog } = mixRefs
-const { queryList, resetQuery, toggleQueryForm, showDetail: _showDetail, sortChanged, del: _del, exportData } = mixMethods
+const { rowDensity, columns, expandAll } = mixComputed
+const { queryList, resetQuery, toggleQueryForm, showDetail: _showDetail, sortChanged, del, exportData } = mixMethods
 const { tableAttrs, pageAttrs, detailAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 
+const tableSettingOpt = { expandAll: () => expandAll, rowDensity: () => rowDensity, columns: () => columns }
+
 const showDetail = (row: ILoginLog, idx: number) => {
   _showDetail(idx)
-}
-
-const del = (row: ILoginLog, idx: number) => {
-  _del(row, row.id)
-}
-
-const sort = (a: any, b: any) => {
-  console.log(a, b)
 }
 </script>

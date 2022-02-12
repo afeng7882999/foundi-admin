@@ -580,7 +580,9 @@ export default function <T extends IListStateOption | ITreeStateOption>(stateOpt
   }
 
   // 表格行高亮
-  const { getColumns, highlightCurrentRow, sortColumns } = useTable(refs.table, refs.tableWrapper)
+  const { columns, rowDensity, expandAll, highlightCurrentRow } = useTable(refs.table, refs.tableWrapper, {
+    rowSelectable: mixState.tableRowSelectable
+  })
 
   // 设置当前行
   const setCurrentData = (id: string) => {
@@ -624,6 +626,11 @@ export default function <T extends IListStateOption | ITreeStateOption>(stateOpt
   return {
     mixRefs: refs,
     mixState,
+    mixComputed: {
+      columns,
+      rowDensity,
+      expandAll
+    },
     mixMethods: {
       getList,
       pageChange,
@@ -647,8 +654,7 @@ export default function <T extends IListStateOption | ITreeStateOption>(stateOpt
       onAfterDel,
       colEmptyFormatter,
       sortChanged,
-      getColumns,
-      sortColumns
+      highlightCurrentRow
     },
     mixAttrs: {
       tableAttrs,

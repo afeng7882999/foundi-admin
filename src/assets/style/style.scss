@@ -536,6 +536,22 @@
   }
 }
 
+// fd-dialog-footer
+.fd-dialog-footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  
+  &__right {
+    margin-right: 10px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+}
+
 // fd-tree-panel
 .fd-tree-panel {
   width: 100%;
