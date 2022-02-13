@@ -1,14 +1,19 @@
 <template>
   <el-tooltip :content="tip" :disabled="!tip" :show-after="500" effect="dark" placement="top">
-    <fd-icon-button class="action-icon-btn" icon="more" @click.stop="openMenu"></fd-icon-button>
+    <el-button v-if="label" v-waves plain size="medium" @click.stop="openMenu">
+      {{ label }}
+      <fd-icon class="is-in-btn is-right" icon="more"></fd-icon>
+    </el-button>
+    <fd-icon-button v-else class="action-icon-btn" icon="more" @click.stop="openMenu"></fd-icon-button>
   </el-tooltip>
   <fd-contextmenu ref="contextMenu">
     <fd-contextmenu-item
       v-if="option.treeTable"
+      icon="row-height"
       :label="expandAll ? '收缩所有行' : '展开所有行'"
       @click="toggleExpandAll"
     ></fd-contextmenu-item>
-    <fd-contextmenu-submenu icon="form" label="表格行密度">
+    <fd-contextmenu-submenu icon="table-row" label="表格行密度">
       <fd-contextmenu-item v-model:radio-value="rowDensity" act-as="radioGroup" radio-label="high">高</fd-contextmenu-item>
       <fd-contextmenu-item v-model:radio-value="rowDensity" act-as="radioGroup" radio-label="low">低</fd-contextmenu-item>
       <fd-contextmenu-item v-model:radio-value="rowDensity" act-as="radioGroup" radio-label="default">默认</fd-contextmenu-item>
@@ -37,6 +42,10 @@ const props = defineProps({
   tip: {
     type: String,
     default: '设置表格'
+  },
+  label: {
+    type: String,
+    default: ''
   }
 })
 

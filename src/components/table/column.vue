@@ -72,6 +72,12 @@
         <fd-table-sort-header :column="scope.column" @sort-changed="onSortChanged"></fd-table-sort-header>
       </template>
     </el-table-column>
+    <!-- icon -->
+    <el-table-column v-else-if="typ === 'icon'" v-bind="$attrs" :align="align" :header-align="headerAlign" :width="widthCo">
+      <template #default="scope">
+        <fd-icon :icon="scope.row[attrs.prop]" class="fd-tb-icon"></fd-icon>
+      </template>
+    </el-table-column>
     <!-- action -->
     <el-table-column
       v-else-if="typ === 'act'"
@@ -213,6 +219,9 @@ const widthCo = computed(() => {
   }
   if (props.typ === 'act') {
     return '130'
+  }
+  if (props.typ === 'icon') {
+    return '80'
   }
   return ''
 })

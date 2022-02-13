@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { ActionContext } from 'vuex'
-import { TableColumn } from '@/components/table/use-table'
-import { RowDensity, TABLE_ID_PREFIX } from '@/components/table/types'
+import { RowDensity, TABLE_ID_PREFIX, TableColumn } from '@/components/table/types'
 
 export interface TableSetting {
   rowDensity?: RowDensity
@@ -42,7 +41,7 @@ const setSettings = (state: TableState, id: string, setting: TableSetting) => {
     }
     setting.rowDensity && (item.setting.rowDensity = setting.rowDensity)
     setting.columns && (item.setting.columns = setting.columns)
-    setting.expandAll && (item.setting.expandAll = setting.expandAll)
+    setting.expandAll !== undefined && (item.setting.expandAll = setting.expandAll)
     window.localStorage.setItem(id, JSON.stringify(item))
   }
 }

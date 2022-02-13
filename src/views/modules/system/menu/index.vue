@@ -92,7 +92,7 @@
         ></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="是否显示" prop="visible" width="80">
           <template #default="scope">
-            <fd-icon v-show="scope.row.visible" class="fd-tb-icon fd-tb-icon-success" icon="tick"></fd-icon>
+            <fd-icon v-show="scope.row.visible" class="fd-tb-icon fd-tb-icon-success" icon="check"></fd-icon>
           </template>
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="注释" prop="remark"></el-table-column>

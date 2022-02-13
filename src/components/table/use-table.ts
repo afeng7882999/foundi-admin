@@ -253,8 +253,12 @@ const useTable = (
       return null
     },
     set: async (expandAll) => {
-      if (expandAll) {
-        await store.dispatch('table/setExpandAll', { id: tableId.value, expandAll })
+      if (expandAll !== null) {
+        if (option.data) {
+          const data = option.data()
+          data.forEach((d) => (table.value as InstanceType<typeof ElTable>).toggleRowExpansion(d, expandAll))
+          await store.dispatch('table/setExpandAll', { id: tableId.value, expandAll })
+        }
       }
     }
   })
@@ -341,7 +345,7 @@ const useTable = (
   let rowSelectableInitialized = false
   let configurableInitialized = false
 
-  const init = () => {
+  const tryInit = () => {
     if (option.rowDraggable && !rowDragInitialized) {
       initRowDrag()
       rowDragInitialized = true
@@ -357,8 +361,13 @@ const useTable = (
     }
   }
 
+  onMounted(() => {
+    console.log('init')
+    tryInit()
+  })
+
   onUpdated(() => {
-    init()
+    tryInit()
   })
 
   onUnmounted(() => {
