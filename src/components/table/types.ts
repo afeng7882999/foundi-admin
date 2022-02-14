@@ -9,10 +9,13 @@ export interface TableColumn {
   property?: string
   label?: string
   type?: string
+  fixed?: boolean | string
 }
 export interface TableSettingOption {
   treeTable?: boolean
   expandAll: () => WritableComputedRef<boolean | null>
   rowDensity: () => WritableComputedRef<RowDensity | null>
   columns: () => WritableComputedRef<TableColumn[] | null>
+  stripe: () => WritableComputedRef<boolean | null>
+  border: () => WritableComputedRef<boolean | null>
 }

@@ -1,100 +1,6 @@
 @use "variable" as *;
 @use "mixin" as *;
 
-// el-table
-.el-table th.gutter {
-  display: table-cell !important;
-}
-
-.el-table th:first-child .cell, .el-table td:first-child .cell {
-  padding: 0 10px;
-}
-
-.el-table thead {
-  color: var(--el-text-color-regular);
-}
-
-.el-table .el-table__body tr td {
-  padding: 2px 0;
-}
-
-.el-table .cell {
-  .fd-tb-icon {
-    margin-top: 4px;
-    font-size: $icon-size-middle;
-    
-    &.fd-tb-icon-success {
-      color: var(--el-color-success);
-    }
-    
-    &.fd-tb-icon-danger {
-      color: var(--el-color-danger);
-    }
-    
-    &:not(:first-child) {
-      margin-left: 4px;
-    }
-  }
-  
-  .fd-tb-act {
-    font-size: $icon-size-tiny;
-    padding: 0 6px;
-    
-    &__caption {
-      margin-left: 5px;
-    }
-  }
-  
-  .fd-tb-avatar {
-    display: flex;
-    justify-items: center;
-  }
-}
-
-.el-table__body-wrapper::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-.el-table__body-wrapper::-webkit-scrollbar-thumb {
-  background-color: var(--el-text-color-placeholder);
-  border-radius: var(--el-border-radius-base);
-}
-
-.el-table__fixed-right {
-  height: 100% !important;
-}
-
-.el-table__row:last-child {
-  td.el-table__cell {
-    border-bottom: none;
-  }
-}
-
-.el-table {
-  .row-focus-box {
-    position: absolute;
-    display: none;
-    border: 1px solid var(--el-color-primary);
-    z-index: 5;
-    pointer-events: none;
-  }
-}
-
-.el-table {
-  th.el-table__cell.is-custom {
-    padding: 0;
-    > .cell {
-      position: absolute;
-      display: flex;
-      padding: 0;
-      top: 0;
-      bottom: 0;
-      align-items: stretch;
-    }
-  }
-}
-
 // el-message
 .el-message {
   top: 0 !important;
@@ -416,28 +322,107 @@
     background-color: var(--el-fill-base);
     margin-top: 0;
   }
+}
+
+// fd-page__table
+.fd-page__table {
+  width: 100%;
+  padding: 24px 15px 24px 15px;
+  background-color: var(--el-fill-base);
+  border-radius: var(--el-border-radius-base);
   
-  &__table {
-    width: 100%;
-    padding: 24px 15px 24px 15px;
-    background-color: var(--el-fill-base);
-    border-radius: var(--el-border-radius-base);
-    // margin-bottom: 15px;
-    
-    &.is-bordered {
-      border: 1px solid var(--el-border-color-lighter);
+  &.is-bordered {
+    border: 1px solid var(--el-border-color-lighter);
+  }
+  
+  // style fix
+  .el-table th.gutter {
+    display: table-cell !important;
+  }
+  
+  .el-table thead {
+    color: var(--el-text-color-regular);
+  }
+  
+  // row focus box
+  .el-table {
+    .row-focus-box {
+      position: absolute;
+      display: none;
+      border: 1px solid var(--el-color-primary);
+      z-index: 5;
+      pointer-events: none;
     }
-    
-    &.is-den-high {
-      .el-table .el-table__body tr td {
+  }
+  
+  // custom column
+  .el-table {
+    th.el-table__cell.is-custom {
+      padding: 0;
+      
+      > .cell {
+        position: absolute;
+        display: flex;
         padding: 0;
+        top: 0;
+        bottom: 0;
+        align-items: stretch;
+      }
+    }
+  }
+  
+  // icon, button
+  .el-table .cell {
+    .fd-tb-icon {
+      margin-top: 4px;
+      font-size: $icon-size-middle;
+      
+      &.fd-tb-icon-success {
+        color: var(--el-color-success);
+      }
+      
+      &.fd-tb-icon-danger {
+        color: var(--el-color-danger);
+      }
+      
+      &:not(:first-child) {
+        margin-left: 4px;
       }
     }
     
-    &.is-den-low {
-      .el-table .el-table__body tr td {
-        padding: 4px 0;
+    .fd-tb-act {
+      font-size: $icon-size-tiny;
+      padding: 0 6px;
+      
+      &__caption {
+        margin-left: 5px;
       }
+    }
+    
+    .fd-tb-avatar {
+      display: flex;
+      justify-items: center;
+    }
+  }
+  
+  // row density
+  .el-table .cell .el-checkbox {
+    height: 24px;
+  }
+  
+  .el-table .el-table__body tr td {
+    padding: 4px 0;
+  }
+  
+  &.is-den-high {
+    .el-table .el-table__body tr td {
+      padding: 2px 0;
+    }
+  }
+  
+  &.is-den-low {
+    .el-table .el-table__body tr td {
+      padding: 8px 0;
     }
   }
 }
@@ -571,6 +556,7 @@
 
 // sortable
 .sortable-drag {
+  cursor: move;
   span {
     display: flex;
     font-size: 18px;

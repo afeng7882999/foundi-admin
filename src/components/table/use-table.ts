@@ -1,7 +1,7 @@
 import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus'
 import { addResizeListener, removeResizeListener, ResizableElement } from '@/utils/resize-event'
-import { computed, nextTick, onMounted, onUnmounted, onUpdated } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, onUpdated, ref } from 'vue'
 import { getDocumentTop, scrollDocH } from '@/utils/smooth-scroll'
 import usePage from '@/components/crud/use-page'
 import { cloneDeep, merge } from 'lodash-es'
@@ -14,6 +14,7 @@ import { AllState } from '@/store'
 import { useRoute } from 'vue-router'
 import { getPageIdFromRoute } from '@/utils/query'
 import { addClass, removeClass } from '@/utils/dom'
+import { ITreeNode, traverseTree } from '@/utils/data-tree'
 
 export interface TableOption {
   // 数据
@@ -247,7 +248,7 @@ const useTable = (
   const expandAll = computed({
     get: () => {
       const item = storeState.table.settings.find((s) => s.id === tableId.value)
-      if (item && item.setting && item.setting.expandAll) {
+      if (item && item.setting && item.setting.expandAll !== null) {
         return item.setting.expandAll as boolean
       }
       return null
@@ -255,10 +256,44 @@ const useTable = (
     set: async (expandAll) => {
       if (expandAll !== null) {
         if (option.data) {
-          const data = option.data()
-          data.forEach((d) => (table.value as InstanceType<typeof ElTable>).toggleRowExpansion(d, expandAll))
+          const data = option.data() as ITreeNode[]
+          traverseTree(data, (d) => {
+            ;(table.value as InstanceType<typeof ElTable>).toggleRowExpansion(d, expandAll)
+          })
           await store.dispatch('table/setExpandAll', { id: tableId.value, expandAll })
         }
+      }
+    }
+  })
+
+  // 表格是否显示斑马纹
+  const stripe = computed({
+    get: () => {
+      const item = storeState.table.settings.find((s) => s.id === tableId.value)
+      if (item && item.setting && item.setting.stripe !== null) {
+        return item.setting.stripe as boolean
+      }
+      return null
+    },
+    set: async (stripe) => {
+      if (stripe !== null) {
+        await store.dispatch('table/setStripe', { id: tableId.value, stripe })
+      }
+    }
+  })
+
+  // 表格是否显示竖边框
+  const border = computed({
+    get: () => {
+      const item = storeState.table.settings.find((s) => s.id === tableId.value)
+      if (item && item.setting && item.setting.border !== null) {
+        return item.setting.border as boolean
+      }
+      return null
+    },
+    set: async (border) => {
+      if (border != null) {
+        await store.dispatch('table/setBorder', { id: tableId.value, border })
       }
     }
   })
@@ -276,7 +311,8 @@ const useTable = (
         visible: true,
         property: item.property,
         label: item.label,
-        type: item.type
+        type: item.type,
+        fixed: item.fixed
       } as TableColumn
     })
   }
@@ -293,6 +329,9 @@ const useTable = (
       const idx = visibleCols.findIndex((c: TableColumn) => c.id === i)
       if (idx != -1) {
         tableCols[idx] = _originalColumns[i]
+        if (visibleCols[idx].fixed !== undefined) {
+          tableCols[idx].fixed = visibleCols[idx].fixed as boolean | string
+        }
       }
     }
     tableCols.length = visibleCols.length
@@ -346,7 +385,7 @@ const useTable = (
   let configurableInitialized = false
 
   const tryInit = () => {
-    if (option.rowDraggable && !rowDragInitialized) {
+    if (option.rowDraggable && bodyWrapperElCo.value && !rowDragInitialized) {
       initRowDrag()
       rowDragInitialized = true
     }
@@ -362,7 +401,6 @@ const useTable = (
   }
 
   onMounted(() => {
-    console.log('init')
     tryInit()
   })
 
@@ -383,7 +421,8 @@ const useTable = (
   const tableAttrs = computed(() => {
     const result = {
       highlightCurrentRow: option.rowSelectable,
-      rowKey: option.rowKey
+      rowKey: option.rowKey,
+      border: border.value
     } as AnyObject
 
     option.data && (result.data = option.data())
@@ -395,6 +434,8 @@ const useTable = (
       result.indent = option.indent
       option.onSelect && (result.onSelect = option.onSelect)
       option.onSelectAll && (result.onSelectAll = option.onSelectAll)
+    } else {
+      result.stripe = stripe.value
     }
 
     return result
@@ -405,6 +446,8 @@ const useTable = (
     columns,
     rowDensity,
     expandAll,
+    stripe,
+    border,
     highlightCurrentRow
   }
 }

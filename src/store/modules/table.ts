@@ -6,6 +6,8 @@ export interface TableSetting {
   rowDensity?: RowDensity
   columns?: TableColumn[]
   expandAll?: boolean
+  stripe?: boolean
+  border?: boolean
 }
 
 interface TableSettingItem {
@@ -42,17 +44,21 @@ const setSettings = (state: TableState, id: string, setting: TableSetting) => {
     setting.rowDensity && (item.setting.rowDensity = setting.rowDensity)
     setting.columns && (item.setting.columns = setting.columns)
     setting.expandAll !== undefined && (item.setting.expandAll = setting.expandAll)
+    setting.stripe !== undefined && (item.setting.stripe = setting.stripe)
+    setting.border !== undefined && (item.setting.border = setting.border)
     window.localStorage.setItem(id, JSON.stringify(item))
   }
 }
 
-const deleteSettings = (state: TableState, id: string, key: 'rowDensity' | 'columns' | 'expandAll') => {
+const deleteSettings = (state: TableState, id: string, key: 'rowDensity' | 'columns' | 'expandAll' | 'stripe' | 'border') => {
   if (id) {
     const item = state.settings.find((s) => s.id === id)
     if (item) {
       key === 'rowDensity' && (item.setting.rowDensity = undefined)
       key === 'columns' && (item.setting.columns = undefined)
       key === 'expandAll' && (item.setting.expandAll = undefined)
+      key === 'stripe' && (item.setting.stripe = undefined)
+      key === 'border' && (item.setting.border = undefined)
       window.localStorage.setItem(id, JSON.stringify(item))
     }
   }
@@ -72,6 +78,12 @@ const mutations = {
   SET_EXPAND_ALL: (state: TableState, params: { id: string; expandAll: boolean }) => {
     setSettings(state, params.id, { expandAll: params.expandAll })
   },
+  SET_STRIPE: (state: TableState, params: { id: string; stripe: boolean }) => {
+    setSettings(state, params.id, { stripe: params.stripe })
+  },
+  SET_BORDER: (state: TableState, params: { id: string; border: boolean }) => {
+    setSettings(state, params.id, { border: params.border })
+  },
   DELETE_ROW_DENSITY: (state: TableState, id: string) => {
     deleteSettings(state, id, 'rowDensity')
   },
@@ -80,6 +92,12 @@ const mutations = {
   },
   DELETE_EXPAND_ALL: (state: TableState, id: string) => {
     deleteSettings(state, id, 'expandAll')
+  },
+  DELETE_STRIPE: (state: TableState, id: string) => {
+    deleteSettings(state, id, 'stripe')
+  },
+  DELETE_BORDER: (state: TableState, id: string) => {
+    deleteSettings(state, id, 'border')
   }
 }
 
@@ -93,6 +111,12 @@ const actions = {
   setExpandAll({ commit }: ActionContext<TableState, unknown>, params: { id: string; expandAll?: boolean }) {
     commit('SET_EXPAND_ALL', params)
   },
+  setStripe({ commit }: ActionContext<TableState, unknown>, params: { id: string; stripe?: boolean }) {
+    commit('SET_STRIPE', params)
+  },
+  setBorder({ commit }: ActionContext<TableState, unknown>, params: { id: string; border?: boolean }) {
+    commit('SET_BORDER', params)
+  },
   deleteRowDensity({ commit }: ActionContext<TableState, unknown>, id: string) {
     commit('DELETE_ROW_DENSITY', id)
   },
@@ -101,6 +125,12 @@ const actions = {
   },
   deleteExpandAll({ commit }: ActionContext<TableState, unknown>, id: string) {
     commit('DELETE_EXPAND_ALL', id)
+  },
+  deleteStripe({ commit }: ActionContext<TableState, unknown>, id: string) {
+    commit('DELETE_STRIPE', id)
+  },
+  deleteBorder({ commit }: ActionContext<TableState, unknown>, id: string) {
+    commit('DELETE_BORDER', id)
   }
 }
 

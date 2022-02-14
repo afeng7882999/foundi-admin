@@ -105,14 +105,23 @@ const {
   rowDensity,
   columns,
   expandAll,
+  stripe,
+  border,
   highlightCurrentRow
 } = useTable(operLogTb, operLogTbWrapper, {
+  alias: '_1',
   data: () => state.operLogs,
   rowSelectable: true,
   onRowClick: onTableRowClick
 })
 
-const tableSettingOpt = { expandAll: () => expandAll, rowDensity: () => rowDensity, columns: () => columns }
+const tableSettingOpt = {
+  expandAll: () => expandAll,
+  rowDensity: () => rowDensity,
+  columns: () => columns,
+  stripe: () => stripe,
+  border: () => border
+}
 
 const setCurrentData = (idx?: number) => {
   if (idx !== undefined) {
@@ -137,10 +146,6 @@ const onPrev = () => {
   setCurrentData(state.currentIdx)
 }
 
-onMounted(() => {
-  console.log('init')
-})
-
 const onNext = () => {
   const lastIdx = state.operLogs.length - 1
   if (state.currentIdx === null) {
@@ -163,13 +168,23 @@ const {
   tableAttrs: menuTbAttrs,
   rowDensity: rowDensity2,
   columns: columns2,
-  expandAll: expandAll2
+  expandAll: expandAll2,
+  stripe: stripe2,
+  border: border2
 } = useTable(menuTb, menuTbWrapper, {
+  alias: '_2',
   treeTable: true,
   data: () => state.menus
 })
 
-const tableSettingOpt2 = { treeTable: true, expandAll: () => expandAll2, rowDensity: () => rowDensity2, columns: () => columns2 }
+const tableSettingOpt2 = {
+  treeTable: true,
+  expandAll: () => expandAll2,
+  rowDensity: () => rowDensity2,
+  columns: () => columns2,
+  stripe: () => stripe2,
+  border: () => border2
+}
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 </script>

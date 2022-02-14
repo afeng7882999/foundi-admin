@@ -13,6 +13,13 @@
       :label="expandAll ? '收缩所有行' : '展开所有行'"
       @click="toggleExpandAll"
     ></fd-contextmenu-item>
+    <fd-contextmenu-item
+      v-if="!option.treeTable"
+      icon="table-stripe"
+      :label="stripe ? '隐藏斑马纹' : '显示斑马纹'"
+      @click="toggleStripe"
+    ></fd-contextmenu-item>
+    <fd-contextmenu-item icon="table" :label="border ? '隐藏边框' : '显示边框'" @click="toggleBorder"></fd-contextmenu-item>
     <fd-contextmenu-submenu icon="table-row" label="表格行密度">
       <fd-contextmenu-item v-model:radio-value="rowDensity" act-as="radioGroup" radio-label="high">高</fd-contextmenu-item>
       <fd-contextmenu-item v-model:radio-value="rowDensity" act-as="radioGroup" radio-label="low">低</fd-contextmenu-item>
@@ -55,6 +62,8 @@ const contextMenu = ref()
 const expandAll = props.option.expandAll()
 const rowDensity = props.option.rowDensity()
 const columns = props.option.columns()
+const stripe = props.option.stripe()
+const border = props.option.border()
 
 const openMenu = (e: Event) => {
   contextMenu.value.show(e)
@@ -62,6 +71,14 @@ const openMenu = (e: Event) => {
 
 const toggleExpandAll = () => {
   expandAll.value = !expandAll.value
+}
+
+const toggleStripe = () => {
+  stripe.value = !stripe.value
+}
+
+const toggleBorder = () => {
+  border.value = !border.value
 }
 
 const showSortColumnDialog = () => {

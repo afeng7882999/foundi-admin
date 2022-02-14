@@ -90,11 +90,7 @@ export function arrayToTree<T extends ITreeNode>(treeNodes: T[], opt = DEFAULT_T
 /**
  * 遍历树
  */
-export function traverseTree<T extends ITreeNode>(
-  treeNodes: T[],
-  arranger: (node: T) => void,
-  opt = DEFAULT_TREE_FIELDS
-): T[] {
+export function traverseTree<T extends ITreeNode>(treeNodes: T[], arranger: (node: T) => void, opt = DEFAULT_TREE_FIELDS): T[] {
   const { childrenField } = opt
   let stack: T[] = []
   stack = stack.concat(treeNodes)
@@ -113,12 +109,7 @@ export function traverseTree<T extends ITreeNode>(
 /**
  * 设置兄弟节点
  */
-export function setSiblings<T extends ITreeNode>(
-  treeNodes: T[],
-  parent: T,
-  props: AnyObject,
-  opt = DEFAULT_TREE_FIELDS
-): void {
+export function setSiblings<T extends ITreeNode>(treeNodes: T[], parent: T, props: AnyObject, opt = DEFAULT_TREE_FIELDS): void {
   const { parentIdField } = opt
   traverseTree<T>(
     treeNodes,
@@ -135,11 +126,7 @@ export function setSiblings<T extends ITreeNode>(
  * 树筛选
  * 父节点不满足条件即不遍历子节点
  */
-export function filterTree<T extends ITreeNode>(
-  treeNodes: T[],
-  matcher: (node: T) => boolean,
-  opt = DEFAULT_TREE_FIELDS
-): T[] {
+export function filterTree<T extends ITreeNode>(treeNodes: T[], matcher: (node: T) => boolean, opt = DEFAULT_TREE_FIELDS): T[] {
   const { childrenField } = opt
   const result = [] as T[]
   for (const root of treeNodes) {
@@ -164,11 +151,7 @@ export function filterTree<T extends ITreeNode>(
 /**
  * 获取多个树节点
  */
-export function getTreeNodes<T extends ITreeNode>(
-  treeNodes: T[],
-  matcher: (node: T) => boolean,
-  opt = DEFAULT_TREE_FIELDS
-): T[] {
+export function getTreeNodes<T extends ITreeNode>(treeNodes: T[], matcher: (node: T) => boolean, opt = DEFAULT_TREE_FIELDS): T[] {
   const { childrenField } = opt
   let stack: T[] = []
   const result = []
@@ -188,11 +171,7 @@ export function getTreeNodes<T extends ITreeNode>(
 /**
  * 获取一个树节点
  */
-export function getTreeNode<T extends ITreeNode>(
-  treeNodes: T[],
-  matcher: (node: T) => boolean,
-  opt = DEFAULT_TREE_FIELDS
-): T | null {
+export function getTreeNode<T extends ITreeNode>(treeNodes: T[], matcher: (node: T) => boolean, opt = DEFAULT_TREE_FIELDS): T | null {
   const { childrenField } = opt
   let stack: T[] = []
   stack = stack.concat(treeNodes)

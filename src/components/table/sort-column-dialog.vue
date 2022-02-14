@@ -1,10 +1,10 @@
 <template>
-  <el-dialog v-model="state.visible" :close-on-click-modal="false" title="表格列设置" width="650px">
-    <div ref="tableWrapper">
+  <el-dialog v-model="state.visible" :close-on-click-modal="false" title="表格列设置" width="700px">
+    <div ref="tableWrapper" class="fd-page__table is-den-high">
       <el-table ref="table" v-bind="tableAttrs" stripe>
         <el-table-column class-name="sortable-drag" label="" width="38">
           <template #default>
-            <el-tooltip content="拖动排序当前行" placement="left">
+            <el-tooltip content="拖动排序当前行" :show-after="500" placement="left">
               <span><fd-icon icon="drag"></fd-icon></span>
             </el-tooltip>
           </template>
@@ -23,6 +23,19 @@
         <el-table-column label="属性" prop="property" :formatter="colEmptyFormatter"></el-table-column>
         <el-table-column label="列名" prop="label" :formatter="colEmptyFormatter"></el-table-column>
         <el-table-column label="类型" prop="type" width="100"></el-table-column>
+        <el-table-column label="左侧固定" prop="visible" width="80">
+          <template #default="scope">
+            <el-checkbox
+              :model-value="scope.row.fixed === 'left' || scope.row.fixed === true"
+              @change="changeFixed(scope.row, 'left')"
+            ></el-checkbox>
+          </template>
+        </el-table-column>
+        <el-table-column label="右侧固定" prop="visible" width="80">
+          <template #default="scope">
+            <el-checkbox :model-value="scope.row.fixed === 'right'" @change="changeFixed(scope.row, 'right')"></el-checkbox>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <template #footer>
@@ -73,7 +86,24 @@ const onSelectAllChange = (val: boolean) => {
   }
 }
 
-const { tableAttrs } = useTable(table, tableWrapper, { data: () => state.tableColumns, configurable: false, rowDraggable: true })
+const changeFixed = (row: TableColumn, fixed: 'left' | 'right') => {
+  if (row.fixed === true || row.fixed === 'left') {
+    row.fixed = fixed === 'left' ? false : 'right'
+    return
+  }
+  if (row.fixed === 'right') {
+    row.fixed = fixed === 'right' ? false : 'left'
+    return
+  }
+  row.fixed = fixed
+}
+
+const { tableAttrs } = useTable(table, tableWrapper, {
+  alias: '_d0',
+  data: () => state.tableColumns,
+  configurable: false,
+  rowDraggable: true
+})
 
 const open = (tableColumns: TableColumn[]) => {
   state.tableColumns = tableColumns
