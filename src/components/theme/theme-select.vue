@@ -81,7 +81,6 @@ const onClickOutside = () => {
 .fd-theme-select__popper.el-popover {
   min-width: 220px;
   padding: 10px 0;
-  overflow: hidden;
 
   .fd-theme-select__list {
     display: flex;
