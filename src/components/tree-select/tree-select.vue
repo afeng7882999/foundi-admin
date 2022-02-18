@@ -5,7 +5,7 @@
       popper-class="fd-tree-select__popper"
       :disabled="disabled"
       :placement="placement"
-      :show-arrow="false"
+      :show-arrow="true"
       :width="state.width"
       @hide="onPopoverHide"
       @show="onPopoverShow"
@@ -197,19 +197,14 @@ let selectEl = null as HTMLElement | null
 
 onMounted(() => {
   selectEl = (treeSelect.value as HTMLElement).firstElementChild as HTMLElement
-  const { multiple } = selectParamsCo.value
-  if (multiple) {
-    nextTick(() => {
-      on(document, 'mouseup', clickOutSideOfPopover)
-    })
-  }
+  nextTick(() => {
+    on(document, 'mouseup', clickOutSideOfPopover)
+  })
 })
 
 onBeforeUnmount(() => {
   const { multiple } = selectParamsCo.value
-  if (multiple) {
-    off(document, 'mouseup', clickOutSideOfPopover)
-  }
+  off(document, 'mouseup', clickOutSideOfPopover)
 })
 
 const onFilterChange = () => {
@@ -274,9 +269,11 @@ const onTreeNodeClick = (data: ITreeNode, node: any, com: any) => {
       state.ids.push(data[idField as string])
     }
   }
-  updatePopoverTop()
   emitValue()
   emit('node-click', data, node, com)
+  nextTick(() => {
+    updatePopoverTop()
+  })
 }
 
 const onTreeCheck = (data: ITreeNode, node: any, com: any) => {
@@ -285,9 +282,11 @@ const onTreeCheck = (data: ITreeNode, node: any, com: any) => {
   node.checkedNodes.forEach((item: ITreeNode) => {
     state.ids.push(item[idField as string])
   })
-  updatePopoverTop()
   emit('node-check', data, node, com)
   emitValue()
+  nextTick(() => {
+    updatePopoverTop()
+  })
 }
 
 const onRemoveTag = (tag: string) => {
@@ -326,31 +325,8 @@ const toggleVisible = () => {
     state.visible = false
     return
   }
-  state.width = selectEl ? selectEl.getBoundingClientRect().width : 150
+  state.width = selectEl ? selectEl.offsetWidth : 150
   state.visible = true
-}
-
-let popoverEl = null as HTMLElement | null
-
-const onPopoverShow = () => {
-  state.popoverElId = selectEl?.getAttribute('aria-describedby') as string
-  popoverEl = document.getElementById(state.popoverElId)?.parentElement as HTMLElement
-}
-
-const updatePopoverTop = () => {
-  if (selectEl && popoverEl) {
-    const rect = selectEl.getBoundingClientRect()
-    popoverEl.style.top = selectEl.offsetTop + rect.height + 'px'
-  }
-}
-
-const clickOutSideOfPopover = (e: Event) => {
-  if (popoverEl) {
-    const isInter = e.composedPath().some((item) => (item as HTMLElement) === popoverEl)
-    if (!isInter) {
-      state.visible = false
-    }
-  }
 }
 
 const treeDataUpdate = (data: ITreeNode[]) => {
@@ -362,6 +338,33 @@ const treeDataUpdate = (data: ITreeNode[]) => {
 
 const onPopoverHide = () => {
   ;(selectCom.value as any).blur()
+}
+
+let popoverEl = null as HTMLElement | null
+
+const onPopoverShow = () => {
+  state.popoverElId = selectEl?.getAttribute('aria-describedby') as string
+  popoverEl = document.getElementById(state.popoverElId)?.parentElement as HTMLElement
+}
+
+const updatePopoverTop = () => {
+  if (selectEl && popoverEl) {
+    if (popoverEl.style.transform) {
+      const top = selectEl.getBoundingClientRect().top + 8 + selectEl.offsetHeight
+      popoverEl.style.transform = popoverEl.style.transform.replace(/(?<=translate3d\([\d|.]*px,\s)[\d|.]*/, top + '')
+    }
+  }
+}
+
+const clickOutSideOfPopover = (e: Event) => {
+  if (popoverEl) {
+    const isInter = e.composedPath().some((item) => {
+      return (item as HTMLElement) === popoverEl || (item as HTMLElement) === selectEl
+    })
+    if (!isInter) {
+      state.visible = false
+    }
+  }
 }
 </script>
 
@@ -377,7 +380,7 @@ const onPopoverHide = () => {
 
   &__popper {
     max-height: 280px;
-    padding: 5px 0 5px 0 !important;
+    padding: 8px 0 8px 0 !important;
   }
 
   &__tree {
@@ -388,16 +391,16 @@ const onPopoverHide = () => {
     .el-tree {
       .el-tree-node {
         &__content {
-          height: 34px;
-          padding-right: 20px;
+          height: 32px;
+          padding-right: 16px;
         }
       }
     }
   }
 
   &__filter {
-    padding: 0 10px 0 10px;
-    margin-bottom: 10px;
+    padding: 0 8px 0 8px;
+    margin-bottom: 8px;
   }
 
   &__no-data {

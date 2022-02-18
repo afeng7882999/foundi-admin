@@ -113,6 +113,7 @@
                 v-model="state.data.table.menuParentId"
                 :data-list="parentMenuList"
                 :select-params="{ placeholder: '请选择上级菜单' }"
+                style="width: 100%"
               ></fd-tree-select>
             </el-form-item>
           </el-col>
@@ -132,6 +133,7 @@
                 v-model="state.data.table.treeId"
                 :data-list="fieldNames"
                 :select-params="{ placeholder: '请选择' }"
+                style="width: 100%"
               ></fd-tree-select>
             </el-form-item>
           </el-col>
@@ -149,6 +151,7 @@
                 v-model="state.data.table.treeParentId"
                 :data-list="fieldNames"
                 :select-params="{ placeholder: '请选择' }"
+                style="width: 100%"
               ></fd-tree-select>
             </el-form-item>
           </el-col>
@@ -166,6 +169,7 @@
                 v-model="state.data.table.treeName"
                 :data-list="fieldNames"
                 :select-params="{ placeholder: '请选择' }"
+                style="width: 100%"
               ></fd-tree-select>
             </el-form-item>
           </el-col>
