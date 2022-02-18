@@ -246,19 +246,19 @@ const openMenu = (tag: _RouteLocationBase, e: MouseEvent) => {
 @use 'src/assets/style/variable.scss' as *;
 @use 'src/assets/style/mixin.scss' as *;
 
-$tags-inner-height: $app-tags-height - 10;
+$tags-inner-height: $app-tags-height - 8;
 
 .fd-tags {
   display: flex;
-  padding-top: 10px;
-  background-color: var(--fd-app-tags-back-color);
+  padding-top: 8px;
+  background-color: var(--fd-app-tags-bg-color);
   width: 100%;
   height: $app-tags-height;
 
   &__ops {
     display: flex;
     align-items: center;
-    margin-right: 15px;
+    margin-right: 16px;
     color: var(--el-text-color-placeholder);
 
     .el-button {
@@ -266,7 +266,7 @@ $tags-inner-height: $app-tags-height - 10;
     }
 
     &.is-left {
-      margin: 0 0 0 15px;
+      margin: 0 0 0 16px;
     }
   }
 
@@ -282,7 +282,7 @@ $tags-inner-height: $app-tags-height - 10;
     }
 
     .el-scrollbar__wrap {
-      height: 57px;
+      height: 56px;
     }
 
     .scrollbar-track-x {
@@ -310,12 +310,12 @@ $tags-inner-height: $app-tags-height - 10;
     border-radius: $app-tags-radius $app-tags-radius 0 0;
 
     &.is-active {
-      background-color: var(--fd-body-background-color);
+      background-color: var(--el-body-bg-color);
       color: var(--el-text-color-primary);
-      border-color: var(--fd-body-background-color);
+      border-color: var(--el-body-bg-color);
 
       &:hover {
-        background-color: var(--fd-body-background-color);
+        background-color: var(--el-body-bg-color);
       }
     }
 
@@ -325,7 +325,7 @@ $tags-inner-height: $app-tags-height - 10;
     }
 
     &:first-child {
-      margin-left: 10px;
+      margin-left: 8px;
     }
   }
 
@@ -334,7 +334,7 @@ $tags-inner-height: $app-tags-height - 10;
     display: inline-block;
     height: $tags-inner-height;
     line-height: $tags-inner-height;
-    padding: 0 10px 0 40px;
+    padding: 0 8px 0 36px;
     cursor: pointer;
   }
 
@@ -343,7 +343,7 @@ $tags-inner-height: $app-tags-height - 10;
     display: inline-block;
     height: $tags-inner-height;
     line-height: $tags-inner-height;
-    padding: 0 10px 0 10px;
+    padding: 0 12px 0 4px;
     vertical-align: bottom;
     cursor: pointer;
 
@@ -355,7 +355,7 @@ $tags-inner-height: $app-tags-height - 10;
     &:hover {
       .close-icon {
         padding: 2px;
-        color: var(--fd-body-background-color);
+        color: var(--el-body-bg-color);
         background-color: var(--el-text-color-placeholder);
       }
     }
@@ -365,14 +365,14 @@ $tags-inner-height: $app-tags-height - 10;
     display: inline-block;
     height: $tags-inner-height;
     vertical-align: bottom;
-    width: 33px;
+    width: 32px;
   }
 
   &:after {
     content: ' ';
     flex-shrink: 0;
     height: $tags-inner-height;
-    width: 18px;
+    width: 16px;
   }
 }
 
@@ -386,7 +386,7 @@ $tags-inner-height: $app-tags-height - 10;
     width: 20px;
     height: 20px;
     border-radius: 100%;
-    box-shadow: 0 0 0 40px var(--fd-body-background-color);
+    box-shadow: 0 0 0 40px var(--el-body-bg-color);
   }
 
   &:before {
@@ -407,7 +407,7 @@ $tags-inner-height: $app-tags-height - 10;
     &:hover {
       &:before,
       &:after {
-        box-shadow: 0 0 0 40px var(--fd-body-background-color);
+        box-shadow: 0 0 0 40px var(--el-body-bg-color);
       }
     }
   }

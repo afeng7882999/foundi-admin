@@ -88,7 +88,7 @@ const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  padding: 15px;
+  padding: 16px;
   border-radius: var(--el-border-radius-base);
   background-color: var(--el-color-white);
   overflow: hidden;
@@ -114,7 +114,7 @@ const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition
   }
 
   &__header {
-    height: 45px;
+    height: 32px;
     display: flex;
     align-items: center;
     color: var(--el-text-color-regular);
@@ -124,7 +124,7 @@ const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition
 
   &__icon {
     font-size: $icon-size-base;
-    margin-right: 15px;
+    margin-right: 16px;
   }
 
   &__title {
@@ -138,7 +138,7 @@ const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition
   }
 
   &__minimize {
-    margin-left: 15px;
+    margin-left: 16px;
     color: var(--el-text-color-placeholder);
 
     .fd-icon {
@@ -148,7 +148,7 @@ const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition
   }
 
   &__main {
-    padding-top: 10px;
+    padding-top: 8px;
     @include expandTransition($default-transition-time);
   }
 

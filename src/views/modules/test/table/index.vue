@@ -7,8 +7,8 @@
           <el-form>
             <div class="fd-page__action">
               <div class="action-right">
-                <el-button v-waves plain size="medium" @click.stop="onPrev">上一项</el-button>
-                <el-button v-waves plain size="medium" @click.stop="onNext">下一项</el-button>
+                <el-button v-waves plain @click.stop="onPrev">上一项</el-button>
+                <el-button v-waves plain @click.stop="onNext">下一项</el-button>
                 <fd-table-setting :option="tableSettingOpt"></fd-table-setting>
               </div>
             </div>
@@ -24,10 +24,10 @@
             <fd-column label="账号" prop="operUserName" width="150"></fd-column>
             <fd-column label="IP" prop="operIp" width="150"></fd-column>
             <fd-column label="地点" prop="operLocation"></fd-column>
-            <fd-column typ="act" :detail="true" :del="true" :edit="true" header-align="center" align="center" width="200">
+            <fd-column typ="act" :detail="true" :del="true" :edit="true" header-align="center" align="center" width="290">
               <template #prefix>
                 <el-tooltip :show-after="500" content="生成并预览代码" placement="top">
-                  <el-button class="fd-tb-act" plain size="mini" type="warning">
+                  <el-button class="tb-act-btn" plain size="small" type="warning">
                     <fd-icon icon="preview-open"></fd-icon>
                     预览
                   </el-button>
@@ -57,11 +57,11 @@
             <fd-column label="菜单缩写" prop="abbr" width="80"></fd-column>
             <fd-column typ="custom" label="是否显示" prop="visible" width="80">
               <template #default="scope">
-                <fd-icon v-show="scope.row.visible" class="fd-tb-icon fd-tb-icon-success" icon="check"></fd-icon>
+                <fd-icon v-show="scope.row.visible" class="tb-icon is-success" icon="check"></fd-icon>
               </template>
             </fd-column>
             <fd-column label="菜单URL" prop="url"></fd-column>
-            <fd-column typ="act" :edit="true" :del="true" header-align="center" align="center" width="100"></fd-column>
+            <fd-column typ="act" :edit="true" header-align="center" align="center" width="90"></fd-column>
           </el-table>
         </div>
       </el-tab-pane>

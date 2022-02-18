@@ -137,8 +137,7 @@ const resizeHandle = () => {
   align-content: center;
   width: 100% !important;
   height: 100% !important;
-  padding: 2px 0;
-  min-height: 36px;
+  min-height: 32px;
   background-color: var(--el-color-white);
   color: var(--el-text-color-regular);
   border-radius: var(--el-border-radius-base);

@@ -8,7 +8,7 @@
           v-waves
           :disabled="selectedNodes.length <= 0"
           plain
-          size="medium"
+
           type="danger"
           @click="del()"
         >
@@ -16,8 +16,8 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:menu:add')" v-waves plain size="medium" type="primary" @click="showEdit()">新增</el-button>
-          <el-button v-show="hasAuth('system:menu:export')" v-waves size="medium" @click="exportData()">导出数据</el-button>
+          <el-button v-show="hasAuth('system:menu:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
+          <el-button v-show="hasAuth('system:menu:export')" v-waves @click="exportData()">导出数据</el-button>
         </div>
       </div>
     </div>
@@ -71,7 +71,7 @@
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="菜单图标" prop="icon" width="80">
           <template #default="scope">
-            <fd-icon :icon="scope.row.icon" class="fd-tb-icon"></fd-icon>
+            <fd-icon :icon="scope.row.icon" class="tb-icon"></fd-icon>
           </template>
         </el-table-column>
         <el-table-column
@@ -92,7 +92,7 @@
         ></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="是否显示" prop="visible" width="80">
           <template #default="scope">
-            <fd-icon v-show="scope.row.visible" class="fd-tb-icon fd-tb-icon-success" icon="check"></fd-icon>
+            <fd-icon v-show="scope.row.visible" class="tb-icon is-success" icon="check"></fd-icon>
           </template>
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="注释" prop="remark"></el-table-column>
@@ -101,9 +101,9 @@
             <el-tooltip :show-after="500" content="编辑" placement="top">
               <el-button
                 v-show="hasAuth('system:menu:edit')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="success"
                 @click="showEdit(scope.row.id)"
               >
@@ -113,9 +113,9 @@
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
                 v-show="hasAuth('system:menu:delete')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="danger"
                 @click="del(scope.row, scope.row.k)"
               >

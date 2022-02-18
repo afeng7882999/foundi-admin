@@ -1,8 +1,8 @@
 <template>
   <div class="page-dashboard fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <el-row :gutter="10">
-      <el-col :xs="12" :sm="12" :md="6">
+    <el-row :gutter="8">
+      <el-col :xs="24" :sm="12" :md="6">
         <fd-widget-card
           icon="chart-pie-one"
           content="200"
@@ -12,7 +12,7 @@
           desc="一个月内注册的用户"
         ></fd-widget-card>
       </el-col>
-      <el-col :xs="12" :sm="12" :md="6">
+      <el-col :xs="24" :sm="12" :md="6">
         <fd-widget-card
           icon="chart-pie-one"
           content="200"
@@ -22,7 +22,7 @@
           desc="一个月内注册的用户"
         ></fd-widget-card>
       </el-col>
-      <el-col :xs="12" :sm="12" :md="6">
+      <el-col :xs="24" :sm="12" :md="6">
         <fd-widget-card
           icon="chart-pie-one"
           content="200"
@@ -32,7 +32,7 @@
           desc="一个月内注册的用户"
         ></fd-widget-card>
       </el-col>
-      <el-col :xs="12" :sm="12" :md="6">
+      <el-col :xs="24" :sm="12" :md="6">
         <fd-widget-card
           icon="chart-pie-one"
           content="200"
@@ -82,10 +82,10 @@ const showPageHeader = computed(() => {
 
 <style lang="scss">
 .fd-wg-card {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .fd-wg-panel {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 </style>

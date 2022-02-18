@@ -4,13 +4,8 @@
     <fd-split-pane :default-pos="400" shrink="left">
       <template #left>
         <div class="fd-page__form">
-          <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList()">
-            <transition
-              name="expand"
-              @enter="expandEnter"
-              @after-enter="expandAfterEnter"
-              @before-leave="expandBeforeLeave"
-            >
+          <el-form ref="queryForm" :inline="true" :model="query" @keyup.enter="queryList()">
+            <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
               <div v-show="queryFormShow" class="fd-page__query">
                 <el-form-item label="账号" prop="account">
                   <el-input v-model="query.account" clearable placeholder="用户名、手机号、邮箱" />
@@ -54,7 +49,6 @@
               v-waves
               :disabled="selectedNodes.length <= 0"
               plain
-              size="medium"
               type="danger"
               @click="del()"
             >
@@ -62,26 +56,10 @@
               删除
             </el-button>
             <div class="action-right">
-              <el-button
-                v-show="hasAuth('system:user:add')"
-                v-waves
-                plain
-                size="medium"
-                type="primary"
-                @click="showEdit()"
-              >
-                新增
-              </el-button>
-              <el-button v-show="hasAuth('system:user:export')" v-waves size="medium" @click="exportData()">
-                导出数据
-              </el-button>
+              <el-button v-show="hasAuth('system:user:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
+              <el-button v-show="hasAuth('system:user:export')" v-waves @click="exportData()">导出数据</el-button>
               <el-divider class="action-divider" direction="vertical"></el-divider>
-              <el-tooltip
-                :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'"
-                :show-after="500"
-                effect="dark"
-                placement="top"
-              >
+              <el-tooltip :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
                 <fd-icon-button
                   :class="queryFormShow ? 'expanded' : ''"
                   class="action-query-toggle"
@@ -105,7 +83,7 @@
             <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
             <el-table-column align="center" header-align="center" label="头像" prop="avatar" width="50">
               <template #default="scope">
-                <div class="fd-tb-avatar">
+                <div class="tb-avatar">
                   <el-avatar :src="getFullUrl(scope.row.avatar)" icon="el-icon-user-solid" size="small"></el-avatar>
                 </div>
               </template>
@@ -120,13 +98,7 @@
             ></el-table-column>
             <el-table-column align="left" header-align="left" label="角色" prop="roleIdList" width="100">
               <template #default="scope">
-                <el-tag
-                  v-for="item in getRoleNameList(scope.row.roleIdList)"
-                  :key="item"
-                  :menu-item="item"
-                  class="role-tag"
-                  size="mini"
-                >
+                <el-tag v-for="item in getRoleNameList(scope.row.roleIdList)" :key="item" :menu-item="item" class="role-tag" size="small">
                   {{ item }}
                 </el-tag>
               </template>
@@ -149,24 +121,15 @@
               prop="email"
               width="200"
             ></el-table-column>
-            <el-table-column
-              :show-overflow-tooltip="true"
-              align="left"
-              header-align="left"
-              label="用户组"
-              prop="groupId"
-              width="150"
-            >
+            <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="用户组" prop="groupId" width="150">
               <template #default="scope">
                 {{ getGroupName(scope.row.groupId) }}
               </template>
             </el-table-column>
-            <el-table-column align="left" header-align="left" label="状态" prop="status" width="60">
+            <el-table-column align="left" header-align="left" label="状态" prop="status" width="70">
               <template #default="scope">
-                <el-tag v-if="dictVal(dicts.sysUserStatus, scope.row.statusDict) === '正常'" size="mini" type="success">
-                  正常
-                </el-tag>
-                <el-tag v-else size="mini" type="danger">禁用</el-tag>
+                <el-tag v-if="dictVal(dicts.sysUserStatus, scope.row.statusDict) === '正常'" size="small" type="success">正常</el-tag>
+                <el-tag v-else size="small" type="danger">禁用</el-tag>
               </template>
             </el-table-column>
             <el-table-column
@@ -185,14 +148,7 @@
               prop="name"
               width="120"
             ></el-table-column>
-            <el-table-column
-              :show-overflow-tooltip="true"
-              align="left"
-              header-align="left"
-              label="性别"
-              prop="genderDict"
-              width="50"
-            >
+            <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="性别" prop="genderDict" width="50">
               <template #default="scope">
                 {{ dictVal(dicts.gender, scope.row.genderDict) }}
               </template>
@@ -205,42 +161,32 @@
               prop="birthday"
               width="100"
             ></el-table-column>
-            <el-table-column
-              :show-overflow-tooltip="true"
-              align="left"
-              header-align="left"
-              label="所在地市"
-              width="200"
-            >
+            <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="所在地市" width="200">
               <template #default="scope">
                 {{ getDistricts(scope.row) }}
               </template>
             </el-table-column>
-            <el-table-column align="center" fixed="right" header-align="center" label="操作" width="210">
+            <el-table-column align="center" fixed="right" header-align="center" label="操作" width="300">
               <template #default="scope">
-                <el-tooltip
-                  :content="`显示用户 &quot;${scope.row.username}&quot; 绑定的OAuth2账号`"
-                  :show-after="500"
-                  placement="top"
-                >
+                <el-tooltip :content="`显示用户 &quot;${scope.row.username}&quot; 绑定的OAuth2账号`" :show-after="500" placement="top">
                   <el-button
                     v-show="hasAuth('system:user:edit')"
-                    class="fd-tb-act"
+                    class="tb-act-btn"
                     plain
-                    size="mini"
+                    size="default"
                     type="success"
                     @click="onOpenOAuthList(scope.row)"
                   >
                     <fd-icon icon="user-positioning"></fd-icon>
-                    <span class="fd-tb-act__caption">OAuth2账号</span>
+                    <span class="tb-act-btn__caption">OAuth2账号</span>
                   </el-button>
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="编辑" placement="top">
                   <el-button
                     v-show="hasAuth('system:user:edit')"
-                    class="fd-tb-act"
+                    class="tb-act-btn"
                     plain
-                    size="mini"
+                    size="default"
                     type="success"
                     @click="showEdit(scope.row.id)"
                   >
@@ -250,9 +196,9 @@
                 <el-tooltip :show-after="500" content="删除" placement="top">
                   <el-button
                     v-show="hasAuth('system:user:delete')"
-                    class="fd-tb-act"
+                    class="tb-act-btn"
                     plain
-                    size="mini"
+                    size="default"
                     type="danger"
                     @click="del(scope.row, scope.row.username)"
                   >
@@ -266,7 +212,7 @@
             :background="true"
             :current-page="current"
             :page-count="total"
-            :page-size="size"
+            :page-size="siz"
             :page-sizes="[10, 20, 50, 100]"
             :total="count"
             layout="total, sizes, prev, pager, next, jumper"
@@ -326,10 +272,6 @@ export default defineComponent({
     const { mixRefs, mixState, mixMethods } = useList(stateOption)
 
     const { docMinHeight, showPageHeader, hasAuth, setViewTitle } = usePage()
-
-    const test = () => {
-      mixState.treeField.labelField = 'id'
-    }
 
     mixMethods.onBeforeGetList(async () => {
       mixState.groupList = (await groupList()).data
@@ -425,8 +367,7 @@ export default defineComponent({
       getRoleNameList,
       ifOAuthEmpty,
       getDistricts,
-      onOpenOAuthList,
-      test
+      onOpenOAuthList
     }
   }
 })

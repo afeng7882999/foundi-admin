@@ -8,7 +8,7 @@
           v-waves
           :disabled="state.selectedNodes.length <= 0"
           plain
-          size="medium"
+
           type="danger"
           @click="del()"
         >
@@ -16,8 +16,8 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:group:add')" v-waves plain size="medium" type="primary" @click="showEdit()">新增</el-button>
-          <el-button v-show="hasAuth('system:group:export')" v-waves plain size="medium" @click="exportData()">导出数据</el-button>
+          <el-button v-show="hasAuth('system:group:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
+          <el-button v-show="hasAuth('system:group:export')" v-waves plain @click="exportData()">导出数据</el-button>
         </div>
       </div>
     </div>
@@ -36,9 +36,9 @@
             <el-tooltip content="编辑" placement="top" :show-after="500">
               <el-button
                 v-show="hasAuth('system:group:edit')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="success"
                 @click="showEdit(scope.row.id)"
               >
@@ -48,9 +48,9 @@
             <el-tooltip content="删除" placement="top" :show-after="500">
               <el-button
                 v-show="hasAuth('system:group:delete')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="danger"
                 @click="del(scope.row, scope.row.k)"
               >

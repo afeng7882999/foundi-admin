@@ -3,7 +3,7 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page__sub-title"><span class="title-text">UploadInput</span></div>
-      <fd-upload-input v-model="inputVal" size="medium"></fd-upload-input>
+      <fd-upload-input v-model="inputVal"></fd-upload-input>
     </div>
     <div class="fd-page__form">
       <div class="fd-page__sub-title"><span class="title-text">UploadImg</span></div>

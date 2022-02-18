@@ -233,14 +233,14 @@ const onMouseMove = (e: MouseEvent) => {
     flex-direction: row;
 
     .fd-split-pane__resizer {
-      width: 10px;
+      width: 8px;
       height: auto;
       background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAeCAYAAAAGos/EAAAAJklEQVQYlWM8c+bMfwYGBgYmEAECjP//gwUQIixnz54dAWoYGBgAwRIwW7Zq4jkAAAAASUVORK5CYII=');
       cursor: col-resize;
     }
 
     .fd-split-pane__resizer-ghost {
-      width: 10px;
+      width: 8px;
       height: 100%;
     }
   }
@@ -250,14 +250,14 @@ const onMouseMove = (e: MouseEvent) => {
 
     .fd-split-pane__resizer {
       width: auto;
-      height: 10px;
+      height: 8px;
       background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAACCAYAAABPJGxCAAAAJElEQVQImWM8c+bMfwYGBgZjY2NGEH327Fm68JlABN0BAwMDAIKiH2fCZyKfAAAAAElFTkSuQmCC');
       cursor: row-resize;
     }
 
     .fd-split-pane__resizer-ghost {
       width: 100%;
-      height: 10px;
+      height: 8px;
     }
   }
 

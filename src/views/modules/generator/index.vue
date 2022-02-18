@@ -2,7 +2,7 @@
   <div :style="docMinHeight" class="page-generator fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <el-form ref="queryForm" :inline="true" :model="state.query" size="medium" @keyup.enter="queryList">
+      <el-form ref="queryForm" :inline="true" :model="state.query" @keyup.enter="queryList">
         <transition
           name="expand"
           @enter="expandEnter"
@@ -43,7 +43,7 @@
             v-waves
             :disabled="state.selectedNodes.length <= 0"
             plain
-            size="medium"
+
             type="danger"
             @click="del()"
           >
@@ -55,7 +55,7 @@
               v-show="hasAuth('generator:genTable:edit')"
               v-waves
               plain
-              size="medium"
+
               type="primary"
               @click="handleGenerate(null)"
             >
@@ -66,7 +66,7 @@
               v-show="hasAuth('generator:genTable:edit')"
               v-waves
               plain
-              size="medium"
+
               type="warning"
               @click="handlePreview"
             >
@@ -77,7 +77,7 @@
               v-show="hasAuth('generator:genTable:edit')"
               v-waves
               plain
-              size="medium"
+
               type="info"
               @click="openImport"
             >
@@ -159,9 +159,9 @@
             <el-tooltip :show-after="500" content="生成并下载代码" placement="top">
               <el-button
                 v-show="hasAuth('generator:genTable:edit')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="primary"
                 @click="handleGenerate(scope.row)"
               >
@@ -172,9 +172,9 @@
             <el-tooltip :show-after="500" content="生成并预览代码" placement="top">
               <el-button
                 v-show="hasAuth('generator:genTable:edit')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="warning"
                 @click="handlePreview(scope.row)"
               >
@@ -185,9 +185,9 @@
             <el-tooltip :show-after="500" content="编辑" placement="top">
               <el-button
                 v-show="hasAuth('generator:genTable:edit')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="success"
                 @click="handleEdit(scope.row)"
               >
@@ -197,9 +197,9 @@
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
                 v-show="hasAuth('generator:genTable:delete')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="danger"
                 @click="del(scope.row, scope.row.tableName)"
               >
@@ -210,6 +210,7 @@
         </el-table-column>
       </el-table>
       <el-pagination
+        small
         :background="true"
         :current-page="state.current"
         :page-count="state.total"

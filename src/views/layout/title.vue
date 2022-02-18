@@ -79,7 +79,7 @@ const toggleSetting = () => {
 
 .fd-title {
   height: $app-title-height;
-  background: var(--fd-app-title-back-color);
+  background: var(--fd-app-title-bg-color);
   border-bottom: 1px solid var(--el-border-color-base);
   border-radius: 0 !important;
   display: flex;
@@ -87,10 +87,9 @@ const toggleSetting = () => {
   overflow: hidden;
 
   &__left {
-    display: inline-block;
-    height: $app-title-height;
-    margin-left: 15px;
-    line-height: $app-title-height;
+    display: flex;
+    align-items: center;
+    margin-left: 16px;
   }
 
   &__toggle-button {
@@ -106,10 +105,9 @@ const toggleSetting = () => {
   }
 
   &__right {
-    display: inline-block;
-    height: $app-title-height;
-    margin-right: 15px;
-    line-height: $app-title-height;
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
     color: var(--el-color-primary);
   }
 }

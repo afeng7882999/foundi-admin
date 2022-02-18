@@ -1,19 +1,17 @@
 <template>
-  <el-popover
-    v-model:visible="state.visible"
-    popper-class="fd-theme-select__popper"
-    placement="bottom"
-    width="200"
-    trigger="click"
-  >
+  <el-popover :visible="state.visible" popper-class="fd-theme-select__popper" placement="bottom" :show-arrow="true" :hide-after="0">
+    <template #reference>
+      <div class="fd-theme-select">
+        <fd-theme-diagram
+          v-click-outside="onClickOutside"
+          :theme="state.themes[modelValue]"
+          @click="state.visible = !state.visible"
+        ></fd-theme-diagram>
+      </div>
+    </template>
     <div v-for="(theme, idx) in state.themes" :key="idx" class="fd-theme-select__list" @click="selectTheme(idx)">
       <fd-theme-diagram :theme="theme"></fd-theme-diagram>
     </div>
-    <template #reference>
-      <div class="fd-theme-select">
-        <fd-theme-diagram :theme="state.themes[modelValue]"></fd-theme-diagram>
-      </div>
-    </template>
   </el-popover>
 </template>
 
@@ -25,9 +23,9 @@ export default {
 
 <script setup lang="ts">
 import { reactive } from 'vue'
+import { ClickOutside as vClickOutside } from 'element-plus'
 import FdThemeDiagram from './theme-diagram.vue'
-import { DEFAULT_THEMES } from 'element-plus-dynamic-theme/theme'
-import { CUSTOM_THEME } from './theme'
+import { CUSTOM_THEME, DEFAULT_THEMES } from './theme'
 
 const props = defineProps({
   modelValue: {
@@ -45,8 +43,11 @@ const state = reactive({
 })
 
 const selectTheme = (idx: number) => {
-  state.visible = false
   emit('update:modelValue', idx)
+}
+
+const onClickOutside = () => {
+  state.visible = false
 }
 </script>
 
@@ -77,18 +78,10 @@ const selectTheme = (idx: number) => {
   }
 }
 
-.fd-theme-select__popper.el-popover.el-popover {
+.fd-theme-select__popper.el-popover {
   min-width: 220px;
   padding: 10px 0;
   overflow: hidden;
-
-  &[x-placement^='bottom'] {
-    margin-top: 5px;
-
-    .popper__arrow {
-      display: none !important;
-    }
-  }
 
   .fd-theme-select__list {
     display: flex;

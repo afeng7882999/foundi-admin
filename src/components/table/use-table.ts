@@ -1,7 +1,7 @@
 import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus'
 import { addResizeListener, removeResizeListener, ResizableElement } from '@/utils/resize-event'
-import { computed, nextTick, onMounted, onUnmounted, onUpdated, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, onUpdated } from 'vue'
 import { getDocumentTop, scrollDocH } from '@/utils/smooth-scroll'
 import usePage from '@/components/crud/use-page'
 import { cloneDeep, merge } from 'lodash-es'
@@ -294,6 +294,11 @@ const useTable = (
     set: async (border) => {
       if (border != null) {
         await store.dispatch('table/setBorder', { id: tableId.value, border })
+        if (option.rowSelectable) {
+          await nextTick(() => {
+            highlightCurrentRow()
+          })
+        }
       }
     }
   })

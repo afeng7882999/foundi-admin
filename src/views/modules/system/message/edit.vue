@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="visible" :close-on-click-modal="false" :title="isCreate ? '新增' : '修改'">
-    <el-form ref="form" :model="formData" :rules="formRule" label-width="80px" size="medium" @keyup.enter="submit()">
+    <el-form ref="form" :model="formData" :rules="formRule" label-width="80px" @keyup.enter="submit()">
       <el-form-item label="标题" prop="title">
         <el-input v-model="formData.title" placeholder="请输入标题"></el-input>
       </el-form-item>
@@ -21,8 +21,8 @@
     </el-form>
     <template #footer>
       <span class="fd-dialog-footer">
-        <el-button size="medium" @click="visible = false">取消</el-button>
-        <el-button size="medium" type="primary" @click="submit">确定</el-button>
+        <el-button @click="visible = false">取消</el-button>
+        <el-button type="primary" @click="submit">确定</el-button>
       </span>
     </template>
   </el-dialog>

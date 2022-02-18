@@ -2,7 +2,7 @@
   <div ref="moduleRoot" :style="docMinHeight" class="system-page-dictItem fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <el-form ref="queryForm" :inline="true" :model="state.query" size="medium" @keyup.enter="queryList()">
+      <el-form ref="queryForm" :inline="true" :model="state.query" @keyup.enter="queryList()">
         <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
           <div v-show="state.queryFormShow" class="fd-page__query">
             <el-form-item label="字典项键值" prop="itemKey">
@@ -22,7 +22,7 @@
         </transition>
       </el-form>
       <div class="fd-page__action">
-        <el-button size="medium" @click="close()">
+        <el-button @click="close()">
           <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
         </el-button>
@@ -31,7 +31,7 @@
           v-waves
           :disabled="state.selectedNodes.length <= 0"
           plain
-          size="medium"
+
           type="danger"
           @click="del()"
         >
@@ -39,10 +39,10 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:dictItem:add')" v-waves plain size="medium" type="primary" @click="showDictItemEdit()">
+          <el-button v-show="hasAuth('system:dictItem:add')" v-waves plain type="primary" @click="showDictItemEdit()">
             新增
           </el-button>
-          <el-button v-show="hasAuth('system:dictItem:export')" size="medium" @click.prevent.stop="openMenu($event)">导出数据</el-button>
+          <el-button v-show="hasAuth('system:dictItem:export')" @click.prevent.stop="openMenu($event)">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
           <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
@@ -64,9 +64,9 @@
             <el-tooltip :show-after="500" content="编辑" placement="top">
               <el-button
                 v-show="hasAuth('system:dictItem:edit')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="success"
                 @click="showDictItemEdit(scope.row.id)"
               >
@@ -76,9 +76,9 @@
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
                 v-show="hasAuth('system:dictItem:delete')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="danger"
                 @click="del(scope.row)"
               >

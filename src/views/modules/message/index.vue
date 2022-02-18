@@ -21,7 +21,7 @@
       </el-table-column>
       <el-table-column align="center" width="60">
         <template #default="scope">
-          <el-tag :type="unread(scope.row) ? 'danger' : 'info'" effect="dark" size="mini">
+          <el-tag :type="unread(scope.row) ? 'danger' : 'info'" effect="dark" size="small">
             {{ unread(scope.row) ? '未读' : '已读' }}
           </el-tag>
         </template>
@@ -61,7 +61,7 @@
       <el-table-column align="center" fixed="right" header-align="center" label="删除" width="50">
         <template #default="scope">
           <el-tooltip :show-after="500" class="item" content="删除" effect="dark" placement="top">
-            <el-button class="fd-tb-act" plain size="mini" type="danger" @click="del(scope.row)">
+            <el-button class="tb-act-btn" plain size="small" type="danger" @click="del(scope.row)">
               <fd-icon icon="close"></fd-icon>
             </el-button>
           </el-tooltip>
@@ -73,7 +73,7 @@
       :background="true"
       :current-page="current"
       :page-count="total"
-      :page-size="size"
+      :page-size="siz"
       :page-sizes="[10, 20, 50, 100]"
       :total="count"
       layout="total, sizes, prev, pager, next, jumper"

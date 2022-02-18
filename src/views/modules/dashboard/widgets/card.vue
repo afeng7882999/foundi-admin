@@ -104,7 +104,7 @@ const onMoreClick = () => {
   align-items: stretch;
   justify-items: flex-start;
   position: relative;
-  height: 115px;
+  height: 120px;
   color: var(--el-text-color-regular);
   border-radius: var(--el-border-radius-base);
   background-color: var(--el-color-white);
@@ -147,8 +147,8 @@ const onMoreClick = () => {
 
   &__icon {
     position: absolute;
-    top: 15px;
-    left: 30px;
+    top: 16px;
+    left: 16px;
     font-size: 46px;
     color: rgba(0, 0, 0, 0.15);
     z-index: 0;
@@ -159,18 +159,18 @@ const onMoreClick = () => {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    padding: 17px 15px 0 15px;
+    padding: 16px 16px 0 16px;
 
     &:after {
       content: '';
       height: 1px;
-      padding: 0 15px;
+      padding: 0 16px;
       border-bottom: 1px solid var(--el-border-color-light);
     }
   }
 
   &__content {
-    margin: 0 0 12px;
+    margin: 0 0 16px;
     padding: 0;
     font-size: 32px;
     font-weight: 700;
@@ -194,7 +194,7 @@ const onMoreClick = () => {
 
   &__more {
     flex: 1;
-    padding: 8px 15px 0 15px;
+    padding: 8px 16px 0 16px;
     color: var(--el-text-color-secondary);
 
     &:hover {

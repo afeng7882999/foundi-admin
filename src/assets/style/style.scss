@@ -4,7 +4,7 @@
 // el-message
 .el-message {
   top: 0 !important;
-  width: 500px;
+  width: 480px;
   height: $app-title-height;
   border: none;
   border-radius: 0 0 var(--el-border-radius-base) var(--el-border-radius-base);
@@ -60,7 +60,7 @@
 
 // el-pagination
 .el-pagination {
-  margin-top: 15px;
+  margin-top: 16px;
   text-align: right;
   
   &.is-background {
@@ -185,12 +185,12 @@
   }
 }
 
-//fd-icon-button
-.fd-icon-button {
+// fd-icon-btn
+.fd-icon-btn {
   font-size: $icon-size-middle;
   border-radius: var(--el-border-radius-base) !important;
   border: none;
-  padding: 6px !important;
+  padding: 0 7px !important;
   color: inherit;
   background: none;
   
@@ -223,7 +223,7 @@
 
 // fd-page
 .fd-page {
-  padding: 10px 15px 15px 15px;
+  padding: 8px 16px 16px 16px;
   
   &.is-fix-height {
     display: flex;
@@ -235,9 +235,9 @@
     align-items: center;
     flex-wrap: nowrap;
     height: 20px;
-    padding: 0 0 0 15px;
+    padding: 0 0 0 16px;
     border-left: 3px solid var(--el-color-primary);
-    margin-bottom: 30px;
+    margin-bottom: 32px;
     color: var(--el-text-color-regular);
     font-weight: $font-weight-bold;
     
@@ -246,7 +246,7 @@
       
       .fd-icon {
         font-size: 24px;
-        margin-right: 5px;
+        margin-right: 8px;
       }
     }
     
@@ -266,11 +266,11 @@
   }
   
   &__form {
-    padding: 15px 15px;
+    padding: 16px 16px;
     border: 1px solid var(--el-border-color-lighter);
     border-radius: var(--el-border-radius-base);
     background-color: var(--el-fill-base);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
   
   &__query {
@@ -280,7 +280,7 @@
   &__action {
     display: flex;
     align-items: center;
-    height: 38px;
+    height: 32px;
     
     .action-right {
       margin-left: auto;
@@ -306,28 +306,23 @@
     }
     
     .action-divider {
-      margin: 0 10px;
-      height: 30px;
+      margin: 0 8px;
+      height: 32px;
     }
     
     .el-form-item {
       margin-bottom: 0;
     }
   }
-  
-  &__pagination {
-    padding: 9px 15px 24px 15px;
-    border: 1px solid var(--el-border-color-lighter);
-    border-radius: var(--el-border-radius-base);
-    background-color: var(--el-fill-base);
-    margin-top: 0;
-  }
 }
 
 // fd-page__table
 .fd-page__table {
   width: 100%;
-  padding: 24px 15px 24px 15px;
+  padding: 24px 16px 24px 16px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
   background-color: var(--el-fill-base);
   border-radius: var(--el-border-radius-base);
   
@@ -371,40 +366,6 @@
     }
   }
   
-  // icon, button
-  .el-table .cell {
-    .fd-tb-icon {
-      margin-top: 4px;
-      font-size: $icon-size-middle;
-      
-      &.fd-tb-icon-success {
-        color: var(--el-color-success);
-      }
-      
-      &.fd-tb-icon-danger {
-        color: var(--el-color-danger);
-      }
-      
-      &:not(:first-child) {
-        margin-left: 4px;
-      }
-    }
-    
-    .fd-tb-act {
-      font-size: $icon-size-tiny;
-      padding: 0 6px;
-      
-      &__caption {
-        margin-left: 5px;
-      }
-    }
-    
-    .fd-tb-avatar {
-      display: flex;
-      justify-items: center;
-    }
-  }
-  
   // row density
   .el-table .cell .el-checkbox {
     height: 24px;
@@ -424,6 +385,47 @@
     .el-table .el-table__body tr td {
       padding: 8px 0;
     }
+  }
+  
+  // pagination
+  .el-pagination {
+    padding: 24px 0 0;
+    background-color: var(--el-fill-base);
+    margin-top: 0;
+  }
+  
+  // icon, button
+  .tb-icon {
+    margin-top: 4px;
+    font-size: $icon-size-middle;
+  
+    &.is-success {
+      color: var(--el-color-success);
+    }
+  
+    &.is-danger {
+      color: var(--el-color-danger);
+    }
+  }
+  
+  .tb-act-btn {
+    font-size: $icon-size-tiny;
+    height: 28px;
+    padding: 0 6px;
+    
+    &__caption {
+      margin-left: 4px;
+      margin-top: 2px;
+    }
+    
+    & + .el-button {
+      margin-left: 8px;
+    }
+  }
+  
+  .tb-avatar {
+    display: flex;
+    justify-items: center;
   }
 }
 
@@ -448,11 +450,11 @@
   }
   
   &.is-in-btn {
-    margin: -1px 5px -1px 0;
+    margin: -1px 4px -1px 0;
     font-size: $icon-size-small;
     
     &.is-right {
-      margin: -1px 0 -1px 5px;
+      margin: -1px 0 -1px 4px;
     }
   }
   
@@ -467,7 +469,7 @@
 
 // fd-icon in el-input
 .icon-in-input {
-  padding: 0 0 0 5px;
+  padding: 0 0 0 4px;
   color: $color-text-primary;
   font-size: 16px;
   vertical-align: middle;
@@ -478,7 +480,7 @@
 // fd-detail-list
 .fd-detail-list {
   width: 100%;
-  padding: 0 10px;
+  padding: 0 8px;
   
   &__act {
     width: 100%;
@@ -493,7 +495,7 @@
     padding: 0;
     
     li {
-      padding: 10px;
+      padding: 8px;
       display: flex;
       align-items: center;
       border-bottom: 1px solid var(--el-border-color-base);
@@ -509,13 +511,13 @@
   
   &__idx {
     width: 40px;
-    padding-right: 5px;
+    padding-right: 4px;
     color: var(--el-color-primary);
     font-weight: bold;
   }
   
   &__item {
-    padding: 0 5px;
+    padding: 0 4px;
     display: flex;
     align-items: center;
   }
@@ -529,7 +531,7 @@
   justify-content: flex-end;
   
   &__right {
-    margin-right: 10px;
+    margin-right: 8px;
     flex: 1;
     display: flex;
     align-items: center;
@@ -542,14 +544,14 @@
   width: 100%;
   border: 1px solid var(--el-border-color-base);
   border-radius: var(--el-border-radius-base);
-  padding: 10px;
+  padding: 8px;
   
   &__action {
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
     border-bottom: 1px solid var(--el-border-color-base);
   }
 }

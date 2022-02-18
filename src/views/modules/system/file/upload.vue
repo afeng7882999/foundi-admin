@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="state.visible" :close-on-click-modal="false" title="上传文件" @closed="hideDialog">
-    <el-form ref="form" label-width="80px" size="medium">
+    <el-form ref="form" label-width="80px">
       <el-form-item label="OSS配置">
         <fd-tree-select
           v-model="state.oss"
@@ -24,12 +24,12 @@
           name="files"
         >
           <template #trigger>
-            <el-button size="medium" type="primary">选取文件</el-button>
+            <el-button type="primary">选取文件</el-button>
           </template>
           <template #tip>
             <div v-if="!ifHideTip" class="el-upload__tip">{{ tipContent }}</div>
           </template>
-          <el-button size="medium" style="margin-left: 10px" type="success" @click="onUploadSubmit">
+          <el-button style="margin-left: 10px" type="success" @click="onUploadSubmit">
             上传到服务器
           </el-button>
         </el-upload>
@@ -37,7 +37,7 @@
     </el-form>
     <template #footer>
       <span class="fd-dialog-footer">
-        <el-button size="medium" @click="state.visible = false">确定</el-button>
+        <el-button @click="state.visible = false">确定</el-button>
       </span>
     </template>
   </el-dialog>

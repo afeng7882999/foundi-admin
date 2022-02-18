@@ -3,22 +3,22 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page__action">
-        <el-button size="medium" @click="close()">
+        <el-button @click="close()">
           <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
         </el-button>
-        <el-button plain size="medium" type="warning" @click="handleSyncFromDb()">
+        <el-button plain type="warning" @click="handleSyncFromDb()">
           <fd-icon class="is-in-btn" icon="refresh"></fd-icon>
           与数据库同步
         </el-button>
         <div class="action-right">
-          <el-button size="medium" type="primary" @click="submitForm()">提交</el-button>
-          <el-button size="medium" @click="close()">取消</el-button>
+          <el-button type="primary" @click="submitForm()">提交</el-button>
+          <el-button @click="close()">取消</el-button>
         </div>
       </div>
     </div>
 
-    <el-form ref="form" :model="state.data.table" :rules="state.rules" label-width="150px" size="medium">
+    <el-form ref="form" :model="state.data.table" :rules="state.rules" label-width="150px">
       <div class="fd-page__form">
         <div class="fd-page__sub-title"><span class="title-text">基本信息</span></div>
         <el-row>
@@ -195,19 +195,19 @@
         <el-table-column :show-overflow-tooltip="true" label="字段列名" min-width="10%" prop="columnName" />
         <el-table-column label="字段描述" min-width="10%">
           <template #default="scope">
-            <el-input v-model="scope.row.columnComment" size="medium"></el-input>
+            <el-input v-model="scope.row.columnComment"></el-input>
           </template>
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true" label="SQL类型" min-width="10%" prop="columnType" />
         <el-table-column :show-overflow-tooltip="true" label="Java类型" min-width="11%" prop="fieldType" />
         <el-table-column label="字段名称" min-width="10%">
           <template #default="scope">
-            <el-input v-model="scope.row.fieldName" size="medium"></el-input>
+            <el-input v-model="scope.row.fieldName"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="字典类型" min-width="12%">
           <template #default="scope">
-            <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择" size="medium">
+            <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择">
               <el-option
                 v-for="item in state.dictOptions"
                 :key="item.name"
@@ -249,7 +249,7 @@
         </el-table-column>
         <el-table-column label="查询方式" min-width="10%">
           <template #default="scope">
-            <el-select v-model="scope.row.queryType" size="medium">
+            <el-select v-model="scope.row.queryType">
               <el-option
                 v-for="item in DEFAULT_QUERY_TYPES"
                 :key="item.value"
@@ -261,7 +261,7 @@
         </el-table-column>
         <el-table-column label="显示类型" min-width="12%">
           <template #default="scope">
-            <el-select v-model="scope.row.htmlType" size="medium">
+            <el-select v-model="scope.row.htmlType">
               <el-option
                 v-for="item in DEFAULT_HTML_TYPES"
                 :key="item.value"

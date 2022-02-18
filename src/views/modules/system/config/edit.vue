@@ -7,7 +7,7 @@
     size="600px"
     @closed="hideDialog"
   >
-    <el-form ref="form" :model="state.formData" :rules="state.formRule" label-width="80px" size="medium">
+    <el-form ref="form" :model="state.formData" :rules="state.formRule" label-width="80px">
       <el-form-item label="配置分类" prop="configTypeDict">
         <el-select v-model="state.formData.configTypeDict" style="width: 100%">
           <el-option
@@ -44,8 +44,8 @@
     </el-form>
     <template #footer>
       <span class="fd-dialog-footer">
-        <el-button size="medium" @click="state.visible = false">取消</el-button>
-        <el-button size="medium" type="primary" @click="submit">确定</el-button>
+        <el-button @click="state.visible = false">取消</el-button>
+        <el-button type="primary" @click="submit">确定</el-button>
       </span>
     </template>
   </fd-drawer>

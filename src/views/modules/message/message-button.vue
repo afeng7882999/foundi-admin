@@ -132,7 +132,7 @@ export default defineComponent({
     vertical-align: top;
 
     ::v-deep(sup) {
-      transform: translateY(100%);
+      transform: translateY(0);
       height: 12px;
       line-height: 12px;
       border: none;
@@ -152,7 +152,7 @@ export default defineComponent({
     padding: 0 10px;
     line-height: 50px;
     font-size: $font-size-base;
-    background-color: var(--el-background-color-base);
+    background-color: var(--el-bg-color);
   }
 
   .message {
@@ -199,7 +199,7 @@ export default defineComponent({
 
       &:hover {
         color: var(--el-color-primary);
-        background-color: var(--el-background-color-base);
+        background-color: var(--el-bg-color);
       }
     }
   }

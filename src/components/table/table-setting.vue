@@ -1,6 +1,6 @@
 <template>
   <el-tooltip :content="tip" :disabled="!tip" :show-after="500" effect="dark" placement="top">
-    <el-button v-if="label" v-waves plain size="medium" @click.stop="openMenu">
+    <el-button v-if="label" v-waves plain @click.stop="openMenu">
       {{ label }}
       <fd-icon class="is-in-btn is-right" icon="more"></fd-icon>
     </el-button>

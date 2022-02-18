@@ -110,7 +110,7 @@ const clearValue = () => {
   }
 
   &__trigger {
-    padding: 6px 20px;
+    padding: 4px 18px;
   }
 }
 </style>

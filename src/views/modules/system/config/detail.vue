@@ -6,13 +6,13 @@
     :title="`系统配置详细 (${state.idx + 1} / ${state.data.length})`"
     size="600px"
   >
-    <el-descriptions :column="2" border direction="vertical" size="medium">
+    <el-descriptions :column="2" border direction="vertical">
       <el-descriptions-item label="配置分类">
         {{ dictVal(state.dicts.sysConfigType, state.data[state.idx].configTypeDict) }}
       </el-descriptions-item>
       <el-descriptions-item label="是否启用">
-        <el-tag v-if="state.data[state.idx].enabled" size="mini" type="success">启用</el-tag>
-        <el-tag v-else size="mini" type="danger">禁用</el-tag>
+        <el-tag v-if="state.data[state.idx].enabled" size="small" type="success">启用</el-tag>
+        <el-tag v-else size="small" type="danger">禁用</el-tag>
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="键">{{ state.data[state.idx].configKey }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="值">
@@ -23,20 +23,20 @@
         <el-button
           v-show="state.ifEditable && hasAuth('system:config:edit')"
           plain
-          size="medium"
+
           type="primary"
           style="margin-right: auto"
           @click="onEdit"
         >
           编辑
         </el-button>
-        <el-button v-show="state.ifShowNavigation" :disabled="prevDisabled" size="medium" @click="onPrev">
+        <el-button v-show="state.ifShowNavigation" :disabled="prevDisabled" @click="onPrev">
           <fd-icon class="is-in-btn" icon="left-small"></fd-icon>
           上一个
         </el-button>
-        <el-button v-show="state.ifShowNavigation" :disabled="nextDisabled" size="medium" @click="onNext">
+        <el-button v-show="state.ifShowNavigation" :disabled="nextDisabled" @click="onNext">
           下一个
-          <fd-icon class="is-in-btn right" icon="right-small"></fd-icon>
+          <fd-icon class="is-in-btn is-right" icon="right-small"></fd-icon>
         </el-button>
       </template>
     </el-descriptions>

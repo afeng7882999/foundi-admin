@@ -6,7 +6,7 @@
     width="720px"
     @closed="hideDialog"
   >
-    <el-form ref="form" :model="formData" :rules="formRule" label-width="80px" size="medium" @keyup.enter="submit">
+    <el-form ref="form" :model="formData" :rules="formRule" label-width="80px" @keyup.enter="submit">
       <el-row>
         <el-col :span="16">
           <el-row>
@@ -103,8 +103,8 @@
     </el-form>
     <template #footer>
       <span class="fd-dialog-footer">
-        <el-button size="medium" @click="visible = false">取消</el-button>
-        <el-button size="medium" type="primary" @click="submit">确定</el-button>
+        <el-button @click="visible = false">取消</el-button>
+        <el-button type="primary" @click="submit">确定</el-button>
       </span>
     </template>
   </el-dialog>

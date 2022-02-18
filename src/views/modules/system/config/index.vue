@@ -3,7 +3,7 @@
     <!--  系统配置管理 -->
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <el-form ref="queryForm" :inline="true" :model="state.query" size="medium" @keyup.enter="queryList()">
+      <el-form ref="queryForm" :inline="true" :model="state.query" @keyup.enter="queryList()">
         <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
           <div v-show="state.queryFormShow" class="fd-page__query">
             <el-form-item label="配置分类" prop="configTypeDict">
@@ -35,7 +35,6 @@
           v-waves
           :disabled="state.selectedNodes.length <= 0"
           plain
-          size="medium"
           type="danger"
           @click="del()"
         >
@@ -43,11 +42,11 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:config:add')" v-waves type="primary" plain size="medium" @click="showEdit()">
+          <el-button v-show="hasAuth('system:config:add')" v-waves type="primary" plain @click="showEdit()">
             <fd-icon class="is-in-btn" icon="plus"></fd-icon>
             新增
           </el-button>
-          <el-button v-show="hasAuth('system:config:export')" v-waves size="medium" @click="exportData()">导出数据</el-button>
+          <el-button v-show="hasAuth('system:config:export')" v-waves @click="exportData()">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
           <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
@@ -68,10 +67,10 @@
         @row-click="onTableRowClick"
       >
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="启用" prop="enabled" width="60">
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="启用" prop="enabled" width="70">
           <template #default="scope">
-            <el-tag v-if="scope.row.enabled" size="mini" type="success">启用</el-tag>
-            <el-tag v-else size="mini" type="danger">禁用</el-tag>
+            <el-tag v-if="scope.row.enabled" size="small" type="success">启用</el-tag>
+            <el-tag v-else size="small" type="danger">禁用</el-tag>
           </template>
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="配置分类" prop="configTypeDict" width="150">
@@ -106,9 +105,9 @@
             <el-tooltip :show-after="500" content="详细" placement="top">
               <el-button
                 v-show="hasAuth('system:config:list')"
-                class="fd-tb-act fd-tb-act-detail"
+                class="tb-act-btn tb-act-btn-detail"
                 plain
-                size="mini"
+                size="small"
                 type="primary"
                 @click="showDetail(scope.$index)"
               >
@@ -118,9 +117,9 @@
             <el-tooltip :show-after="500" content="编辑" placement="top">
               <el-button
                 v-show="hasAuth('system:config:edit')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="success"
                 @click="showEdit(scope.row.id)"
               >
@@ -130,9 +129,9 @@
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
                 v-show="hasAuth('system:config:delete')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="danger"
                 @click="del(scope.row, scope.row.configKey)"
               >

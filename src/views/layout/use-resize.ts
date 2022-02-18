@@ -6,11 +6,11 @@ import { DeviceType } from '@/store/modules/app'
 const { body } = document
 const WIDTH = 1024
 const RATIO = 3
-const TITLE_HEIGHT = 50
-const TAB_HEIGHT = 50
-const TITLE_PADDING = 10
+const TITLE_HEIGHT = 48
+const TAB_HEIGHT = 48
+const TITLE_PADDING = 8
 const SIDEBAR_MINI_WIDTH = 56
-const SIDEBAR_NORMAL_WIDTH = 250
+const SIDEBAR_NORMAL_WIDTH = 240
 
 export default function useLayoutResize() {
   let bodyRect = {

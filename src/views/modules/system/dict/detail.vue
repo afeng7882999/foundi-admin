@@ -5,7 +5,7 @@
       :title="`系统字典 - ${state.data[state.idx].name}`"
       border
       direction="vertical"
-      size="medium"
+
     >
       <el-descriptions-item label="名称">
         <span>{{ state.data[state.idx].name }}</span>

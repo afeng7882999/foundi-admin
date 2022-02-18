@@ -3,7 +3,7 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="page-monitor-db__act">
-        <el-button @click="dbStatReset" type="primary" v-if="hasAuth('monitor:dataSource:edit')" v-waves size="medium">重置</el-button>
+        <el-button @click="dbStatReset" type="primary" v-if="hasAuth('monitor:dataSource:edit')" v-waves>重置</el-button>
       </div>
     </div>
     <div class="fd-page__table is-bordered">
@@ -379,7 +379,7 @@
         <el-col :span="18">
           <div class="page-monitor-db__act is-in-tab">
             <span>刷新时间</span>
-            <el-select v-model="state.sqlStatRefresh" placeholder="请选择" size="mini" @change="sqlStatRefreshStart">
+            <el-select v-model="state.sqlStatRefresh" placeholder="请选择" size="small" @change="sqlStatRefreshStart">
               <el-option label="停止" value="0"></el-option>
               <el-option label="5S" value="5"></el-option>
               <el-option label="10S" value="10"></el-option>
@@ -387,11 +387,11 @@
               <el-option label="30S" value="30"></el-option>
               <el-option label="60S" value="60"></el-option>
             </el-select>
-            <el-button @click="sqlStatRefreshStop" v-waves size="mini">停止刷新</el-button>
+            <el-button @click="sqlStatRefreshStop" v-waves size="small">停止刷新</el-button>
           </div>
         </el-col>
       </el-row>
-      <el-table :data="state.sqlStatList" size="mini" border style="width: 100%" stripe key="table3" :default-sort="{ prop: 'ID', order: 'ascending' }" v-show="state.activeTab === '3'">
+      <el-table :data="state.sqlStatList" size="small" border style="width: 100%" stripe key="table3" :default-sort="{ prop: 'ID', order: 'ascending' }" v-show="state.activeTab === '3'">
         <el-table-column label="N" prop="ID" width="60" sortable></el-table-column>
         <el-table-column label="SQL" prop="SQL" min-width="400" sortable :show-overflow-tooltip="true">
           <template #default="scope">
@@ -456,7 +456,7 @@
         </li>
       </ul>
       <div class="page-monitor-db__sub-title" v-show="state.activeTab === '4'">表访问统计:</div>
-      <el-table :data="state.wallData.tables" size="mini" border style="width: 100%" stripe :default-sort="{ prop: 'name', order: 'ascending' }" v-show="state.activeTab === '4'">
+      <el-table :data="state.wallData.tables" size="small" border style="width: 100%" stripe :default-sort="{ prop: 'name', order: 'ascending' }" v-show="state.activeTab === '4'">
         <el-table-column label="表名" prop="name" min-width="200" :show-overflow-tooltip="true" sortable></el-table-column>
         <el-table-column label="Select数" prop="selectCount" min-width="80" sortable></el-table-column>
         <el-table-column label="SelectInto数" prop="selectIntoCount" min-width="80" sortable></el-table-column>
@@ -476,12 +476,12 @@
         <el-table-column label="更新行分布" prop="updateHisto" min-width="120" :formatter="arrayFormatter"></el-table-column>
       </el-table>
       <div class="page-monitor-db__sub-title" v-show="state.activeTab === '4'">函数调用统计:</div>
-      <el-table :data="state.wallData.functions" size="mini" border style="width: 100%" stripe :default-sort="{ prop: 'name', order: 'ascending' }" v-show="state.activeTab === '4'">
+      <el-table :data="state.wallData.functions" size="small" border style="width: 100%" stripe :default-sort="{ prop: 'name', order: 'ascending' }" v-show="state.activeTab === '4'">
         <el-table-column label="Function Name" prop="name" :show-overflow-tooltip="true" sortable></el-table-column>
         <el-table-column label="InvokeCount" prop="invokeCount" sortable></el-table-column>
       </el-table>
       <div class="page-monitor-db__sub-title" v-show="state.activeTab === '4'">SQL防御统计 - 白名单:</div>
-      <el-table :data="state.wallData.whiteList" size="mini" border style="width: 100%" stripe v-show="state.activeTab === '4'" :default-sort="{ prop: 'sql', order: 'ascending' }">
+      <el-table :data="state.wallData.whiteList" size="small" border style="width: 100%" stripe v-show="state.activeTab === '4'" :default-sort="{ prop: 'sql', order: 'ascending' }">
         <el-table-column label="SQL" prop="sql" sortable min-width="400"></el-table-column>
         <el-table-column label="样本" prop="example" min-width="400"></el-table-column>
         <el-table-column label="执行数" prop="executeCount" sortable min-width="80"></el-table-column>
@@ -490,7 +490,7 @@
         <el-table-column label="更新行数" prop="updateCount" sortable min-width="80"></el-table-column>
       </el-table>
       <div class="page-monitor-db__sub-title" v-show="state.activeTab === '4'">SQL防御统计 - 黑名单:</div>
-      <el-table :data="state.wallData.blackList" size="mini" border style="width: 100%" stripe v-show="state.activeTab === '4'" :default-sort="{ prop: 'sql', order: 'ascending' }">
+      <el-table :data="state.wallData.blackList" size="small" border style="width: 100%" stripe v-show="state.activeTab === '4'" :default-sort="{ prop: 'sql', order: 'ascending' }">
         <el-table-column label="SQL" prop="sql" sortable min-width="300"></el-table-column>
         <el-table-column label="样本" prop="example" min-width="300"></el-table-column>
         <el-table-column label="violationMessage" prop="violationMessage" sortable min-width="200"></el-table-column>
@@ -764,7 +764,7 @@
         <el-col :span="18">
           <div class="page-monitor-db__act is-in-tab">
             <span>刷新时间</span>
-            <el-select v-model="state.webUriRefresh" placeholder="请选择" size="mini" @change="webUriRefreshStart">
+            <el-select v-model="state.webUriRefresh" placeholder="请选择" size="small" @change="webUriRefreshStart">
               <el-option label="停止" value="0"></el-option>
               <el-option label="5S" value="5"></el-option>
               <el-option label="10S" value="10"></el-option>
@@ -772,11 +772,11 @@
               <el-option label="30S" value="30"></el-option>
               <el-option label="60S" value="60"></el-option>
             </el-select>
-            <el-button @click="webUriRefreshStop" v-waves size="mini">停止刷新</el-button>
+            <el-button @click="webUriRefreshStop" v-waves size="small">停止刷新</el-button>
           </div>
         </el-col>
       </el-row>
-      <el-table :data="state.webUriStatList" size="mini" border style="width: 100%" stripe key="table6" :default-sort="{ prop: 'URI', order: 'ascending' }" v-show="state.activeTab === '6'">
+      <el-table :data="state.webUriStatList" size="small" border style="width: 100%" stripe key="table6" :default-sort="{ prop: 'URI', order: 'ascending' }" v-show="state.activeTab === '6'">
         <el-table-column label="URI" prop="URI" min-width="350" sortable :show-overflow-tooltip="true">
           <template #default="scope">
             <a @click="showWebUriDlg(scope.row.URI)" class="page-monitor-db__link">{{ scope.row.URI }}</a>
@@ -797,7 +797,7 @@
         <el-table-column label="区间分布" prop="Histogram" width="120" :formatter="arrayFormatter"></el-table-column>
       </el-table>
       <div class="page-monitor-db__sub-title" v-show="state.activeTab === '7'">Spring Stat:</div>
-      <el-table :data="state.springStatList" size="mini" border style="width: 100%" stripe key="table7" :default-sort="{ prop: 'Class', order: 'ascending' }" v-show="state.activeTab === '7'">
+      <el-table :data="state.springStatList" size="small" border style="width: 100%" stripe key="table7" :default-sort="{ prop: 'Class', order: 'ascending' }" v-show="state.activeTab === '7'">
         <el-table-column label="Class" prop="Class" min-width="300" sortable></el-table-column>
         <el-table-column label="Method" prop="Method" min-width="300" sortable></el-table-column>
         <el-table-column label="执行数" prop="ExecuteCount" width="70" sortable></el-table-column>
@@ -1118,7 +1118,7 @@ const { docMinHeight, showPageHeader, hasAuth } = usePage()
     font-size: var(--el-font-size-small);
     font-weight: $font-weight-bold;
     border-right: 1px solid var(--el-border-color-base);
-    background-color: var(--el-background-color-base);
+    background-color: var(--el-bg-color);
     box-sizing: border-box;
   }
 

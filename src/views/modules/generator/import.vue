@@ -8,7 +8,7 @@
     width="80%"
     @close="hideDialog"
   >
-    <el-form ref="queryForm" :inline="true" :model="state.query" size="medium">
+    <el-form ref="queryForm" :inline="true" :model="state.query">
       <el-form-item label="表名称" prop="tableName">
         <el-input v-model="state.query.tableName" clearable placeholder="请输入表名称" @keyup.enter="queryList" />
       </el-form-item>
@@ -31,7 +31,7 @@
       v-loading="state.loading"
       :data="state.data"
       height="300px"
-      size="medium"
+
       @row-click="clickRow"
       @selection-change="onSelectionChange"
     >
@@ -57,8 +57,8 @@
     />
     <template #footer>
       <span class="fd-dialog-footer">
-        <el-button size="medium" type="primary" @click="importTableHandle">确 定</el-button>
-        <el-button size="medium" @click="hideDialog">取 消</el-button>
+        <el-button type="primary" @click="importTableHandle">确 定</el-button>
+        <el-button @click="hideDialog">取 消</el-button>
       </span>
     </template>
   </el-dialog>

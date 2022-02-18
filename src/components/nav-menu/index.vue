@@ -197,7 +197,7 @@ defineExpose({
     .fd-nav-menu__menu {
       > .fd-nav-menu-item {
         > .fd-nav-menu-item__inner {
-          padding-left: 15px !important;
+          padding-left: 16px !important;
           margin-left: 0;
           margin-right: 0;
           border-radius: 0;
@@ -245,7 +245,7 @@ defineExpose({
         padding-bottom: 0;
 
         > .fd-nav-menu-item__inner {
-          margin: 10px;
+          margin: 8px;
 
           .fd-nav-menu-item__icon {
             font-size: $icon-size-base;
@@ -269,7 +269,7 @@ defineExpose({
             &:before {
               display: block;
               content: '';
-              width: 20px;
+              width: 16px;
               flex-shrink: 0;
               border-bottom: 1px solid var(--fd-sidebar-text-placeholder-color);
             }
@@ -302,8 +302,8 @@ defineExpose({
     list-style-type: none;
 
     &.is-level-1 {
-      padding: 5px 0 10px 0;
-      margin-top: 5px;
+      padding: 4px 0 12px 0;
+      margin-top: 4px;
       background-color: rgba($color-black, 0.3);
     }
   }
@@ -319,8 +319,8 @@ defineExpose({
     height: 40px;
     position: relative;
     width: auto;
-    padding: 8px 15px;
-    margin: 5px 10px 0 10px;
+    padding: 8px 16px;
+    margin: 6px 8px 0 8px;
     border-radius: var(--el-border-radius-base);
     text-decoration: none;
     white-space: nowrap;
@@ -345,7 +345,7 @@ defineExpose({
   }
 
   &__label {
-    padding-left: 15px;
+    padding-left: 16px;
     font-size: $font-size-base;
     white-space: nowrap;
     transition: opacity $sidebar-transition-time, transform $sidebar-transition-time;
@@ -354,7 +354,7 @@ defineExpose({
   &__action-icon {
     position: absolute;
     top: 11px;
-    right: 15px;
+    right: 16px;
     font-size: $icon-size-middle;
   }
 

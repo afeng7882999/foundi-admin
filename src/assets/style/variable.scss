@@ -36,13 +36,13 @@ $color-text-regular: rgba($color-black, 0.85) !default;
 $color-text-secondary: rgba($color-black, 0.38) !default;
 $color-text-placeholder: rgba($color-black, 0.26) !default;
 
-$background-color-base: #f5f7fa !default;
-$background-color-hover: rgba($color-black, 0.1) !default;
-$body-background-color: rgb(237, 240, 242) !default;
+$bg-color: #f5f7fa !default;
+$bg-color-hover: rgba($color-black, 0.1) !default;
+$body-bg-color: rgb(237, 240, 242) !default;
 $modal-background-color: rgba(0, 0, 0, 0.3) !default;
 
-$scrollbar-background-color: rgba($color-text-secondary, 0.3) !default;
-$scrollbar-hover-background-color: rgba($color-text-secondary, 0.5) !default;
+$scrollbar-bg-color: rgba($color-text-secondary, 0.3) !default;
+$scrollbar-hover-bg-color: rgba($color-text-secondary, 0.5) !default;
 
 // shadow
 $box-shadow-base: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04) !default;
@@ -79,19 +79,19 @@ $border-radius-base: 4px !default;
 $border-radius-small: 3px !default;
 
 // drawer
-$drawer-width: 260px !default;
+$drawer-width: 256px !default;
 
 // appTitle
-$app-title-height: 50px !default;
+$app-title-height: 48px !default;
 $app-title-font-size: $font-size-small !default;
-$app-title-back-color: $color-white !default;
+$app-title-bg-color: $color-white !default;
 
 // appTags
-$app-tags-height: 50px !default;
-$app-tags-padding: 30px !default;
+$app-tags-height: 48px !default;
+$app-tags-padding: 28px !default;
 $app-tags-font-size: $font-size-small !default;
-$app-tags-back-color: $color-white !default;
-$app-tags-radius: 10px !default;
+$app-tags-bg-color: $color-white !default;
+$app-tags-radius: 8px !default;
 
 // icon
 $icon-size-large: 24px !default;
@@ -102,7 +102,7 @@ $icon-size-tiny: 14px !default;
 
 // sidebar
 $sidebar-min-width: 56px !default;
-$sidebar-normal-width: 250px !default;
+$sidebar-normal-width: 240px !default;
 $sidebar-transition-time: 0.1s !default; // 0.3s !default;
 $sidebar-back-color: #343a40 !default;
 $sidebar-text-color: rgba($color-white, 0.9) !default;

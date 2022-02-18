@@ -2,7 +2,7 @@
   <div ref="pageRoot" :style="docMinHeight" class="page-message fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList()">
+      <el-form ref="queryForm" :inline="true" :model="query" @keyup.enter="queryList()">
         <transition
           name="expand"
           @enter="expandEnter"
@@ -134,9 +134,9 @@
             <el-tooltip :show-after="500" content="编辑" placement="top">
               <el-button
                 v-show="hasAuth('system:message:edit')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="success"
                 @click="showEdit(scope.row.id)"
               >
@@ -146,9 +146,9 @@
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
                 v-show="hasAuth('system:message:delete')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="danger"
                 @click="del(scope.row, scope.row.title)"
               >
@@ -162,7 +162,7 @@
         :background="true"
         :current-page="current"
         :page-count="total"
-        :page-size="size"
+        :page-size="siz"
         :page-sizes="[10, 20, 50, 100]"
         :total="count"
         layout="total, sizes, prev, pager, next, jumper"

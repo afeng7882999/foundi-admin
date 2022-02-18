@@ -10,7 +10,7 @@
       :model="state.formData"
       :rules="state.formRule"
       label-width="80px"
-      size="medium"
+
       @keyup.enter="submit"
     >
       <el-tabs v-model="state.tabName" stretch>
@@ -35,25 +35,25 @@
             <div class="fd-tree-panel">
               <div class="fd-tree-panel__action">
                 <el-tooltip :show-after="500" content="选择当前项与下级" effect="dark" placement="top">
-                  <el-button size="mini" @click="menuTreeSelectAll">
+                  <el-button size="small" @click="menuTreeSelectAll">
                     <fd-icon class="is-in-btn" icon="check"></fd-icon>
                     全选
                   </el-button>
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="清空当前项与下级" effect="dark" placement="top">
-                  <el-button size="mini" @click="menuTreeClearAll">
+                  <el-button size="small" @click="menuTreeClearAll">
                     <fd-icon class="is-in-btn" icon="close"></fd-icon>
                     重置
                   </el-button>
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="展开所有节点" effect="dark" placement="top">
-                  <el-button size="mini" @click="menuTreeExpand">
+                  <el-button size="small" @click="menuTreeExpand">
                     <fd-icon class="is-in-btn" icon="add"></fd-icon>
                     展开
                   </el-button>
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="收缩所有节点" effect="dark" placement="top">
-                  <el-button size="mini" @click="menuTreeCollapse">
+                  <el-button size="small" @click="menuTreeCollapse">
                     <fd-icon class="is-in-btn" icon="reduce"></fd-icon>
                     收缩
                   </el-button>
@@ -90,25 +90,25 @@
             <div class="fd-tree-panel">
               <div class="fd-tree-panel__action">
                 <el-tooltip :show-after="500" content="选择当前项本级与下级" effect="dark" placement="top">
-                  <el-button size="mini" @click="groupTreeSelectAll">
+                  <el-button size="small" @click="groupTreeSelectAll">
                     <fd-icon class="is-in-btn" icon="check"></fd-icon>
                     全选
                   </el-button>
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="清空当前项本级与下级" effect="dark" placement="top">
-                  <el-button size="mini" @click="groupTreeClearAll">
+                  <el-button size="small" @click="groupTreeClearAll">
                     <fd-icon class="is-in-btn" icon="close"></fd-icon>
                     重置
                   </el-button>
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="展开所有节点" effect="dark" placement="top">
-                  <el-button size="mini" @click="groupTreeExpand">
+                  <el-button size="small" @click="groupTreeExpand">
                     <fd-icon class="is-in-btn" icon="add"></fd-icon>
                     展开
                   </el-button>
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="收缩所有节点" effect="dark" placement="top">
-                  <el-button size="mini" @click="groupTreeCollapse">
+                  <el-button size="small" @click="groupTreeCollapse">
                     <fd-icon class="is-in-btn" icon="reduce"></fd-icon>
                     收缩
                   </el-button>
@@ -134,8 +134,8 @@
     </el-form>
     <template #footer>
       <span class="fd-dialog-footer">
-        <el-button size="medium" @click="state.visible = false">取消</el-button>
-        <el-button size="medium" type="primary" @click="submit">确定</el-button>
+        <el-button @click="state.visible = false">取消</el-button>
+        <el-button type="primary" @click="submit">确定</el-button>
       </span>
     </template>
   </el-dialog>
@@ -154,7 +154,7 @@ import { roleDicts, roleFields, roleGetOne, rolePostOne, rolePutOne } from '@/ap
 import { groupList, IGroup } from '@/api/system/group'
 import { IMenu, menuList } from '@/api/system/menu'
 import { arrayToTree } from '@/utils/data-tree'
-import { useElTree } from '@/utils/element-plus'
+import { useElTree } from '@/components/tree/use-tree'
 import { ElTree } from 'element-plus'
 
 const emit = defineEmits([REFRESH_DATA_EVENT])

@@ -6,8 +6,8 @@
       <span class="user-roles">{{ userRoles }}</span>
     </div>
     <div class="fd-user-profile__act">
-      <el-button type="primary" size="mini" @click="onInfoClick">用户信息</el-button>
-      <el-button type="danger" size="mini" @click="onLogoutClick">退出登录</el-button>
+      <el-button type="primary" size="small" @click="onInfoClick">用户信息</el-button>
+      <el-button type="danger" size="small" @click="onLogoutClick">退出登录</el-button>
     </div>
     <fd-icon class="fd-user-profile__more" icon="more"></fd-icon>
   </div>
@@ -135,7 +135,7 @@ const onLogoutClick = async () => {
 .fd-user-profile {
   position: relative;
   display: flex;
-  padding: 15px 15px 15px 0;
+  padding: 16px 16px 16px 0;
   overflow: hidden;
 
   &:hover {
@@ -154,7 +154,7 @@ const onLogoutClick = async () => {
 
   &__info {
     width: 130px;
-    padding-top: 5px;
+    padding-top: 4px;
     overflow: hidden;
     transition: width $sidebar-transition-time;
 
@@ -179,7 +179,7 @@ const onLogoutClick = async () => {
   &__act {
     position: absolute;
     left: 130px;
-    top: 25px;
+    top: 28px;
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -190,6 +190,7 @@ const onLogoutClick = async () => {
     position: absolute;
     top: 30px;
     right: 15px;
+    color: var(--fd-sidebar-text-placeholder-color);
     font-size: $icon-size-middle;
   }
 

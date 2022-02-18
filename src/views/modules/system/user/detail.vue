@@ -5,7 +5,7 @@
       :title="`系统用户 - ${data[idx].username}`"
       border
       direction="horizontal"
-      size="medium"
+
     >
       <el-descriptions-item :span="2" label="用户ID">{{ data[idx].id }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="用户名">{{ data[idx].username }}</el-descriptions-item>
@@ -18,17 +18,17 @@
           :key="item"
           :menu-item="item"
           class="page-user-role-tag"
-          size="mini"
+          size="small"
         >
           {{ item }}
         </el-tag>
       </el-descriptions-item>
       <el-descriptions-item label="注册时间">{{ data[idx].createAt }}</el-descriptions-item>
       <el-descriptions-item label="状态">
-        <el-tag v-if="dictVal(dicts?.sysUserStatus, data[idx].statusDict) === '正常'" size="mini" type="success">
+        <el-tag v-if="dictVal(dicts?.sysUserStatus, data[idx].statusDict) === '正常'" size="small" type="success">
           正常
         </el-tag>
-        <el-tag v-if="dictVal(dicts?.sysUserStatus, data[idx].statusDict) === '禁用'" size="mini" type="danger">
+        <el-tag v-if="dictVal(dicts?.sysUserStatus, data[idx].statusDict) === '禁用'" size="small" type="danger">
           禁用
         </el-tag>
       </el-descriptions-item>
@@ -41,7 +41,7 @@
                 <el-avatar :src="item.avatar" icon="el-icon-user-solid" size="small"></el-avatar>
               </span>
               <span class="fd-detail-list__item">
-                <el-tag size="mini">{{ dictVal(dicts?.sysOAuthType, item.oAuthTypeDict) }}</el-tag>
+                <el-tag size="small">{{ dictVal(dicts?.sysOAuthType, item.oAuthTypeDict) }}</el-tag>
               </span>
               <span class="fd-detail-list__item">{{ item.nickName }}</span>
             </li>

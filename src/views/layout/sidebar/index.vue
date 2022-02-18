@@ -1,5 +1,5 @@
 <template>
-  <div :class="classObj" class="fd-sidebar">
+  <div ref="sidebarWrapper" :class="classObj" class="fd-sidebar">
     <div ref="sidebar" class="fd-sidebar__inner" @mouseenter="setExpand(true)" @mouseleave="setExpand(false)">
       <app-logo v-show="state.showLogo" :minimized="minimized"></app-logo>
       <el-scrollbar class="fd-sidebar__scrollbar">
@@ -34,6 +34,9 @@ import { computed, PropType, reactive, ref, watch } from 'vue'
 import { AppState, SidebarMode } from '@/store/modules/app'
 import { UserState } from '@/store/modules/user'
 import { ITreeNodeDefault } from '@/utils/data-tree'
+import { useStore } from 'vuex'
+import { AllState } from '@/store'
+import { setSidebarTheme } from '@/components/theme/theme'
 
 const DEFAULT_LEVEL_PADDING = 10
 
@@ -56,9 +59,11 @@ const props = defineProps({
   }
 })
 
+const sidebarWrapper = ref<HTMLElement>()
+const navMenu = ref()
+
 const emit = defineEmits(['off-screen-click'])
 
-const navMenu = ref()
 const state = reactive({
   minimizeExpand: false,
   minimizeDisable: false,
@@ -117,6 +122,19 @@ watch(
   { immediate: true, deep: true }
 )
 
+const store = useStore<AllState>()
+const storeState = store.state as AllState
+
+watch(
+  () => storeState.app.theme,
+  () => {
+    if (sidebarWrapper.value && storeState.app.theme) {
+      setSidebarTheme(sidebarWrapper.value, storeState.app.theme)
+    }
+  },
+  { immediate: true }
+)
+
 const offScreenClose = () => {
   emit('off-screen-click')
 }
@@ -167,7 +185,7 @@ const setExpand = (ifExpand: boolean) => {
   &.show-logo {
     .fd-sidebar__inner {
       .fd-sidebar__scrollbar {
-        height: calc(100% - 50px);
+        height: calc(100% - 48px);
       }
     }
   }
@@ -185,12 +203,12 @@ const setExpand = (ifExpand: boolean) => {
     max-height: 100%;
     color: var(--fd-sidebar-text-color);
     text-align: left;
-    background-image: var(--fd-sidebar-background-img);
+    background-image: var(--fd-sidebar-bg-img);
     background-size: cover;
-    background-color: var(--fd-sidebar-background-color);
+    background-color: var(--fd-sidebar-bg-color);
     // box-shadow: $real-shadow-base;
-    transition: width $sidebar-transition-time, background-image $sidebar-transition-time,
-      background-color $sidebar-transition-time, transform $sidebar-transition-time;
+    transition: width $sidebar-transition-time, background-image $sidebar-transition-time, background-color $sidebar-transition-time,
+      transform $sidebar-transition-time;
 
     .sidebar-scrollbar {
       height: 100%;
@@ -204,8 +222,8 @@ const setExpand = (ifExpand: boolean) => {
     }
 
     .fd-nav-menu {
-      margin-top: 10px;
-      margin-bottom: 10px;
+      margin-top: 8px;
+      margin-bottom: 8px;
     }
   }
 

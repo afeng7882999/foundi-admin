@@ -1,5 +1,5 @@
 <template>
-  <el-input class="fd-icon-selector" v-model="icon" size="medium" clearable :placeholder="placeholder" @click="onInputClick">
+  <el-input class="fd-icon-selector" v-model="icon" clearable :placeholder="placeholder" @click="onInputClick">
     <template #prefix>
       <fd-icon class="fd-icon-selector__icon" :icon="icon"></fd-icon>
     </template>

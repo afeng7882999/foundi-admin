@@ -2,7 +2,7 @@
   <div ref="moduleRoot" :style="docMinHeight" class="page-task fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <el-form ref="queryForm" :inline="true" :model="query" size="medium" @keyup.enter="queryList()">
+      <el-form ref="queryForm" :inline="true" :model="query" @keyup.enter="queryList()">
         <transition
           name="expand"
           @enter="expandEnter"
@@ -14,7 +14,7 @@
               <el-input v-model="query.jobName" clearable placeholder="请输入任务名" />
             </el-form-item>
             <el-form-item label="任务状态" prop="jobStatus">
-              <el-select v-model="query.jobStatus" clearable filterable placeholder="请选择" size="medium">
+              <el-select v-model="query.jobStatus" clearable filterable placeholder="请选择">
                 <el-option
                   v-for="item in taskStatusDict"
                   :key="item.itemKey"
@@ -39,7 +39,7 @@
           v-waves
           :disabled="selectedNodes.length <= 0"
           plain
-          size="medium"
+
           type="danger"
           @click="del()"
         >
@@ -47,10 +47,10 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:task:add')" v-waves plain size="medium" type="primary" @click="showEdit()">
+          <el-button v-show="hasAuth('system:task:add')" v-waves plain type="primary" @click="showEdit()">
             新增
           </el-button>
-          <el-button v-show="hasAuth('system:task:export')" v-waves size="medium" @click="exportData()">
+          <el-button v-show="hasAuth('system:task:export')" v-waves @click="exportData()">
             导出数据
           </el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
@@ -127,11 +127,11 @@
           prop="description"
           width="350px"
         ></el-table-column>
-        <el-table-column align="center" fixed="right" header-align="center" label="启动/停止" width="100">
+        <el-table-column align="center" fixed="right" header-align="center" label="启动/停止" width="110">
           <template #default="scope">
             <el-tooltip
               :content="ifStart(scope.row.jobStatus) ? '点击停止' : '点击启动'"
-              :open-delay="500"
+              :show-after="500"
               class="item"
               effect="dark"
               placement="top"
@@ -139,26 +139,25 @@
               <el-button
                 v-show="hasAuth('system:task:edit')"
                 :type="ifStart(scope.row.jobStatus) ? 'success' : 'danger'"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
                 @click="onStatusClick(scope.row.id, scope.row.jobStatus)"
               >
-                <fd-icon :icon="ifStart(scope.row.jobStatus) ? 'stopwatch' : 'stopwatch-stop'"></fd-icon>
-                {{ ifStart(scope.row.jobStatus) ? '已启动' : '已停止' }}
+                <fd-icon class="is-in-btn" :icon="ifStart(scope.row.jobStatus) ? 'stopwatch' : 'stopwatch-stop'"></fd-icon>
+                <span class="tb-act-btn__caption">{{ ifStart(scope.row.jobStatus) ? '已启动' : '已停止' }}</span>
               </el-button>
             </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column align="center" fixed="right" header-align="center" label="操作" width="150">
           <template #default="scope">
-            <el-tooltip :open-delay="500" class="item" content="立即执行一次" effect="dark" placement="top">
+            <el-tooltip :show-after="500" class="item" content="立即执行一次" effect="dark" placement="top">
               <el-button
                 v-show="hasAuth('system:task:edit')"
                 :disabled="!ifStart(scope.row.jobStatus)"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="primary"
                 @click="onRunClick(scope.row.id, scope.row.jobName)"
               >
@@ -168,9 +167,9 @@
             <el-tooltip :show-after="500" content="编辑" placement="top">
               <el-button
                 v-show="hasAuth('system:task:edit')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="success"
                 @click="showEdit(scope.row.id)"
               >
@@ -180,9 +179,9 @@
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
                 v-show="hasAuth('system:task:delete')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="danger"
                 @click="del(scope.row, scope.row.k)"
               >
@@ -196,7 +195,7 @@
         :background="true"
         :current-page="current"
         :page-count="total"
-        :page-size="size"
+        :page-size="siz"
         :page-sizes="[10, 20, 50, 100, 200]"
         :total="count"
         layout="total, sizes, prev, pager, next, jumper"

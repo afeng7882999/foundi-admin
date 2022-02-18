@@ -114,7 +114,7 @@ const showAppSetting = () => {
 @use 'src/assets/style/variable' as *;
 
 .fd-layout {
-  background: var(--fd-body-background-color);
+  background: var(--el-body-bg-color);
   @include clearFix;
   position: relative;
   height: 100%;
@@ -124,11 +124,11 @@ const showAppSetting = () => {
     position: relative;
     margin-left: $sidebar-normal-width;
     min-height: 100%;
-    background: var(--fd-body-background-color);
+    background: var(--el-body-bg-color);
   }
 
   &__header {
-    padding-bottom: 10px;
+    padding-bottom: 8px;
   }
 
   &.is-sidebar-minimized {
@@ -145,7 +145,7 @@ const showAppSetting = () => {
 
   &.is-fixed-header {
     .fd-layout__main {
-      padding-top: $app-title-height + 10;
+      padding-top: $app-title-height + 8;
     }
 
     .fd-layout__header {
@@ -154,7 +154,7 @@ const showAppSetting = () => {
       right: 0;
       width: calc(100% - #{$sidebar-normal-width});
       z-index: 9;
-      background-color: var(--fd-body-background-color);
+      background-color: var(--el-body-bg-color);
     }
   }
 
@@ -172,7 +172,7 @@ const showAppSetting = () => {
 
   &.is-fixed-header.is-enable-tags {
     .fd-layout__main {
-      padding-top: $app-title-height + $app-tags-height + 10;
+      padding-top: $app-title-height + $app-tags-height + 8;
     }
   }
 }

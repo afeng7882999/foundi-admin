@@ -2,8 +2,7 @@
 import { ActionContext } from 'vuex'
 import { Theme, setDocumentTheme } from 'element-plus-dynamic-theme/theme'
 
-const DEFAULT_SIDEBAR_MODE =
-  '{"minimized":false,"offScreen":false,"opened":false,"useGrouped":true,"showLogo":true,"showUser":true}'
+const DEFAULT_SIDEBAR_MODE = '{"minimized":false,"offScreen":false,"opened":false,"useGrouped":true,"showLogo":true,"showUser":true}'
 
 export enum DeviceType {
   Mobile,
@@ -44,15 +43,9 @@ const state: AppState = {
   device: DeviceType.Desktop, // mobile
   sidebarMode: JSON.parse(window.localStorage.getItem('app.sidebarMode') || DEFAULT_SIDEBAR_MODE),
   theme: JSON.parse(window.localStorage.getItem('app.theme') || '{}'),
-  enableTags: window.localStorage.getItem('app.enableTags')
-    ? window.localStorage.getItem('app.enableTags') === 'true'
-    : true,
-  showBreadcrumb: window.localStorage.getItem('app.showBreadcrumb')
-    ? window.localStorage.getItem('app.showBreadcrumb') === 'true'
-    : false,
-  fixedHeader: window.localStorage.getItem('app.fixedHeader')
-    ? window.localStorage.getItem('app.fixedHeader') === 'true'
-    : true
+  enableTags: window.localStorage.getItem('app.enableTags') ? window.localStorage.getItem('app.enableTags') === 'true' : true,
+  showBreadcrumb: window.localStorage.getItem('app.showBreadcrumb') ? window.localStorage.getItem('app.showBreadcrumb') === 'true' : false,
+  fixedHeader: window.localStorage.getItem('app.fixedHeader') ? window.localStorage.getItem('app.fixedHeader') === 'true' : true
 }
 
 const mutations = {

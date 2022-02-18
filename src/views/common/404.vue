@@ -6,11 +6,11 @@
     </div>
     <span class="page-error-404__desc">对不起, 您访问的页面不存在, 您可以返回上一页, 或回到首页</span>
     <div class="page-error-404__act">
-      <el-button size="medium" type="info" @click="goBack">
+      <el-button type="info" @click="goBack">
         <fd-icon class="is-in-btn" icon="left"></fd-icon>
         返回上一页
       </el-button>
-      <el-button size="medium" type="primary" @click="goHome">
+      <el-button type="primary" @click="goHome">
         <fd-icon class="is-in-btn" icon="home"></fd-icon>
         回到首页
       </el-button>
@@ -52,7 +52,7 @@ const goHome = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: var(--fd-body-background-color);
+  background-color: var(--el-body-bg-color);
 
   &__title {
     text-align: center;

@@ -4,7 +4,7 @@
     <fd-split-pane :default-pos="500" shrink="left">
       <template #left>
         <div class="fd-page__form">
-          <el-form ref="queryForm" :inline="true" :model="state.query" size="medium" @keyup.enter="queryList()">
+          <el-form ref="queryForm" :inline="true" :model="state.query" @keyup.enter="queryList()">
             <transition
               name="expand"
               @enter="expandEnter"
@@ -34,7 +34,7 @@
               v-waves
               :disabled="state.selectedNodes.length <= 0"
               plain
-              size="medium"
+
               type="danger"
               @click="del()"
             >
@@ -46,13 +46,13 @@
                 v-show="hasAuth('system:role:add')"
                 v-waves
                 plain
-                size="medium"
+
                 type="primary"
                 @click="showEdit()"
               >
                 新增
               </el-button>
-              <el-button v-show="hasAuth('system:role:export')" v-waves size="medium" @click="exportData()">
+              <el-button v-show="hasAuth('system:role:export')" v-waves @click="exportData()">
                 导出数据
               </el-button>
               <el-divider class="action-divider" direction="vertical"></el-divider>
@@ -109,9 +109,9 @@
                 <el-tooltip :show-after="500" content="编辑" placement="top">
                   <el-button
                     v-show="hasAuth('system:role:edit')"
-                    class="fd-tb-act"
+                    class="tb-act-btn"
                     plain
-                    size="mini"
+                    size="small"
                     type="success"
                     @click="showEdit(scope.row.id)"
                   >
@@ -121,9 +121,9 @@
                 <el-tooltip :show-after="500" content="删除" placement="top">
                   <el-button
                     v-show="hasAuth('system:role:delete')"
-                    class="fd-tb-act"
+                    class="tb-act-btn"
                     plain
-                    size="mini"
+                    size="small"
                     type="danger"
                     @click="del(scope.row, scope.row.k)"
                   >

@@ -1,5 +1,5 @@
 <template>
-  <el-button class="fd-icon-button" v-waves circle size="mini">
+  <el-button class="fd-icon-btn" v-waves circle>
     <fd-icon v-if="hasIcon" :icon="icon"></fd-icon>
     <slot />
   </el-button>

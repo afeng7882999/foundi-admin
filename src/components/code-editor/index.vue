@@ -175,7 +175,7 @@ defineExpose({
     .CodeMirror-overlayscroll-horizontal div,
     .CodeMirror-overlayscroll-vertical div {
       position: absolute;
-      background: var(--el-scrollbar-background-color, var(--el-text-color-secondary));
+      background: var(--el-scrollbar-bg-color, var(--el-text-color-secondary));
       opacity: var(--el-scrollbar-opacity, 0.3);
       &:hover {
         opacity: var(--el-scrollbar-hover-opacity, 0.5);

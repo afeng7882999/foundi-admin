@@ -10,7 +10,7 @@
       :model="state.formData"
       :rules="state.formRule"
       label-width="100px"
-      size="medium"
+
       @keyup.enter="submit()"
     >
       <el-form-item label="字典ID" prop="dictId">
@@ -31,8 +31,8 @@
     </el-form>
     <template #footer>
       <span class="fd-dialog-footer">
-        <el-button size="medium" @click="state.visible = false">取消</el-button>
-        <el-button size="medium" type="primary" @click="submit">确定</el-button>
+        <el-button @click="state.visible = false">取消</el-button>
+        <el-button type="primary" @click="submit">确定</el-button>
       </span>
     </template>
   </el-dialog>

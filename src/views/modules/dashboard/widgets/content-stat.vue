@@ -1,20 +1,15 @@
 <template>
   <fd-widget-panel class="widget-content-stat" title="作品数据趋势" icon="analysis">
-    <template #action>
+    <template v-if="false" #action>
       <span class="widget-content-stat__label">时间</span>
-      <el-radio-group
-        v-model="state.dateRange"
-        class="widget-content-stat__radio"
-        size="mini"
-        @change="onRadioGroupChange"
-      >
+      <el-radio-group v-model="state.dateRange" class="widget-content-stat__radio" size="small" @change="onRadioGroupChange">
         <el-radio-button label="7">7天</el-radio-button>
         <el-radio-button label="30">30天</el-radio-button>
       </el-radio-group>
       <el-date-picker
         v-model="state.dateRangeCustom"
         class="widget-content-stat__date-picker"
-        size="mini"
+        size="small"
         :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
         end-placeholder="结束日期"
         format="YYYY-MM-DD"
@@ -35,7 +30,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, reactive, ref } from 'vue'
+import { onMounted, onUnmounted, reactive } from 'vue'
 import FdWidgetPanel from './panel.vue'
 import * as echarts from 'echarts/core'
 import { getContentStat } from '@/api-mock/dashboard'
@@ -93,7 +88,7 @@ const option = {
 let echartsCom = undefined as echarts.ECharts | undefined
 
 const state = reactive({
-  dateRange: 7 as number | 'custom',
+  dateRange: 30 as number | 'custom',
   dateRangeCustom: [] as Date[]
 })
 
@@ -135,12 +130,12 @@ const onDatePickerChange = async () => {
 
 .widget-content-stat {
   &__label {
-    margin: 0 15px 0 0;
+    margin: 0 16px 0 0;
     color: var(--el-text-color-secondary);
   }
 
   &__radio {
-    margin: 0 15px 0 0;
+    margin: 0 16px 0 0;
   }
 
   &__date-picker {

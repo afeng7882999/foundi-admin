@@ -1,5 +1,5 @@
 import { AnyFunction, AnyObject } from '@/utils'
-import { CUSTOM_THEME } from '@/components/theme-select/theme'
+import { CUSTOM_THEME } from '@/components/theme/theme'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { nextTick, ref, watch } from 'vue'

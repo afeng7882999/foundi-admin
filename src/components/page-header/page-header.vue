@@ -64,7 +64,7 @@ const currentDesc = computed(() => {
 
 .fd-page-header {
   display: flex;
-  margin-bottom: 26px;
+  margin: 8px 0 16px;
   line-height: 24px;
 
   &__back {
@@ -75,7 +75,7 @@ const currentDesc = computed(() => {
 
     .fd-icon {
       font-size: var(--el-font-size-base);
-      margin-right: 5px;
+      margin-right: 8px;
     }
   }
 
@@ -84,12 +84,12 @@ const currentDesc = computed(() => {
     align-items: center;
     font-size: var(--el-font-size-large);
     color: var(--el-text-color-primary);
-    margin-right: 5px;
+    margin-right: 8px;
     position: relative;
 
     .fd-icon {
       font-size: $icon-size-large;
-      margin-right: 10px;
+      margin: 0 16px 0 8px;
       align-self: center;
     }
 
@@ -102,11 +102,11 @@ const currentDesc = computed(() => {
 
   &__divider {
     height: 24px;
-    margin: 0 10px;
+    margin: 0 8px;
   }
 
   &__desc {
-    margin-left: 5px;
+    margin-left: 8px;
     color: var(--el-text-color-secondary);
     font-size: var(--el-font-size-small);
     font-weight: 500;

@@ -6,7 +6,7 @@
       v-model="filterText"
       placeholder="查找"
       prefix-icon="el-icon-search"
-      size="medium"
+
       clearable
       @input="onSearchInput"
     />

@@ -5,28 +5,33 @@
         <div class="el-image__error" @click="uploadShow">点击上传</div>
       </template>
     </el-image>
-    <input id="uploads" ref="uploadInput" accept="image/png, image/jpeg, image/gif, image/jpg"
-           style="position: absolute; clip: rect(0 0 0 0)" type="file" @change="uploadImg($event)"/>
-    <el-dialog v-model="dialogVisible" :close-on-click-modal="false" append-to-body custom-class="fd-img-cropper-dialog"
-               title="上传图片">
+    <input
+      id="uploads"
+      ref="uploadInput"
+      accept="image/png, image/jpeg, image/gif, image/jpg"
+      style="position: absolute; clip: rect(0 0 0 0)"
+      type="file"
+      @change="uploadImg($event)"
+    />
+    <el-dialog v-model="dialogVisible" :close-on-click-modal="false" append-to-body custom-class="fd-img-cropper-dialog" title="上传图片">
       <el-row :gutter="20">
         <el-col :span="18">
           <div class="cropper">
             <vueCropper
-                ref="cropper"
-                :auto-crop="true"
-                :auto-crop-height="300"
-                :auto-crop-width="300"
-                :img-scale-by-wheel="true"
-                :img-move-or-rotate="moveRotate"
-                :crop-movable="true"
-                :crop-size-fixed="false"
-                :crop-ratio-fixed="true"
-                :crop-ratio-when-fixed="imgRatio"
-                :crop-show-info="false"
-                :img="image"
-                img-mode="cover"
-                @update-preview="onUpdatePreview"
+              ref="cropper"
+              :auto-crop="true"
+              :auto-crop-height="300"
+              :auto-crop-width="300"
+              :img-scale-by-wheel="true"
+              :img-move-or-rotate="moveRotate"
+              :crop-movable="true"
+              :crop-size-fixed="false"
+              :crop-ratio-fixed="true"
+              :crop-ratio-when-fixed="imgRatio"
+              :crop-show-info="false"
+              :img="image"
+              img-mode="cover"
+              @update-preview="onUpdatePreview"
             ></vueCropper>
           </div>
           <div class="actions">
@@ -62,9 +67,11 @@
             </el-tooltip>
             <el-divider direction="vertical"></el-divider>
             <el-tooltip content="切换鼠标移动/旋转" effect="dark" placement="bottom" :show-after="500">
-              <fd-icon-button class="btn"
-                             :icon="moveRotate === 'move' ? 'direction-adjustment-three' : 'rotating-forward'"
-                             @click="toggleMoveRotate"></fd-icon-button>
+              <fd-icon-button
+                class="btn"
+                :icon="moveRotate === 'move' ? 'direction-adjustment-three' : 'rotating-forward'"
+                @click="toggleMoveRotate"
+              ></fd-icon-button>
             </el-tooltip>
             <el-divider direction="vertical"></el-divider>
             <el-tooltip content="重置图片" effect="dark" placement="bottom" :show-after="500">
@@ -80,7 +87,7 @@
             <div class="preview-inner">
               <div :style="previewStyle">
                 <div :style="previews.div">
-                  <img :src="previews.url" :style="previews.img" alt=""/>
+                  <img :src="previews.url" :style="previews.img" alt="" />
                 </div>
               </div>
             </div>
@@ -89,7 +96,7 @@
             <div class="preview-inner">
               <div :style="previewStyle">
                 <div :style="previews.div">
-                  <img :src="previews.url" :style="previews.img" alt=""/>
+                  <img :src="previews.url" :style="previews.img" alt="" />
                 </div>
               </div>
             </div>
@@ -108,16 +115,16 @@
 
 <script lang="ts">
 import VueCropper from './vue-cropper.vue'
-import {IVueCropper} from './types'
-import {localOrRemoteUrl} from '@/utils/query'
-import {computed, defineComponent, PropType, reactive, ref, toRefs, watch} from 'vue'
-import {AnyObject} from '@/utils'
-import {ElMessage} from 'element-plus'
-import {upload} from '@/api/system/file'
+import { IVueCropper } from './types'
+import { localOrRemoteUrl } from '@/utils/query'
+import { computed, defineComponent, PropType, reactive, ref, toRefs, watch } from 'vue'
+import { AnyObject } from '@/utils'
+import { ElMessage } from 'element-plus'
+import { upload } from '@/api/system/file'
 
 export default defineComponent({
   name: 'FdImageCropper',
-  components: {VueCropper},
+  components: { VueCropper },
   props: {
     // 双向绑定图片地址
     modelValue: {
@@ -165,11 +172,11 @@ export default defineComponent({
     })
 
     watch(
-        () => props.modelValue,
-        (val) => {
-          state.uploadedFilename = val
-        },
-        {immediate: true}
+      () => props.modelValue,
+      (val) => {
+        state.uploadedFilename = val
+      },
+      { immediate: true }
     )
 
     const uploadShow = () => {
@@ -271,7 +278,7 @@ export default defineComponent({
     const saveImg = () => {
       ;(cropper.value as IVueCropper).outputBlob(async (data: Blob) => {
         const downFilename = state.filename ? state.filename + '.png' : 'cropped' + '.png'
-        const file = new File([data], downFilename, {type: 'image/png'})
+        const file = new File([data], downFilename, { type: 'image/png' })
         try {
           const res = await upload([file])
           console.log('res', res)
@@ -349,7 +356,7 @@ export default defineComponent({
   min-width: 700px;
 
   .el-dialog__body {
-    background-color: var(--el-background-color-base);
+    background-color: var(--el-bg-color);
   }
 
   .cropper {

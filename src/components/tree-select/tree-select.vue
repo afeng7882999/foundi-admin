@@ -1,13 +1,14 @@
 <template>
   <div :id="state.treeSelectId" ref="treeSelect" class="fd-tree-select">
     <el-popover
-      v-model:visible="state.visible"
+      :visible="state.visible"
       popper-class="fd-tree-select__popper"
       :disabled="disabled"
       :placement="placement"
-      :show-arrow="true"
-      trigger="click"
+      :show-arrow="false"
+      :width="state.width"
       @hide="onPopoverHide"
+      @show="onPopoverShow"
     >
       <template #reference>
         <el-select
@@ -19,17 +20,16 @@
           :style="styles"
           :disabled="disabled"
           :filterable="false"
-          :popper-append-to-body="false"
           @clear="onSelectClear"
-          @focus="onPopoverShow"
           @remove-tag="onRemoveTag"
+          @click="toggleVisible"
         ></el-select>
       </template>
       <el-input
         v-if="treeParamsCo.filterable"
         v-model="state.keywords"
         class="fd-tree-select__filter"
-        size="mini"
+        size="small"
         @change="onFilterChange"
       >
         <template #append>
@@ -118,12 +118,8 @@ const state = reactive({
   keywords: '',
   labels: '' as string | string[],
   ids: [] as string[],
-  visible: false,
-  width: 150
-})
-
-const selectEl = computed(() => {
-  return (treeSelect.value as HTMLElement).firstElementChild as HTMLElement
+  width: 150,
+  visible: false
 })
 
 const selectParamsCo = computed(() => {
@@ -197,16 +193,23 @@ onBeforeMount(() => {
   state.labels = multiple ? [] : ''
 })
 
+let selectEl = null as HTMLElement | null
+
 onMounted(() => {
-  state.popoverElId = selectEl.value.getAttribute('ariadescribedby') as string
-  updateH()
-  nextTick(() => {
-    on(document, 'mouseup', popoverHide)
-  })
+  selectEl = (treeSelect.value as HTMLElement).firstElementChild as HTMLElement
+  const { multiple } = selectParamsCo.value
+  if (multiple) {
+    nextTick(() => {
+      on(document, 'mouseup', clickOutSideOfPopover)
+    })
+  }
 })
 
 onBeforeUnmount(() => {
-  off(document, 'mouseup', popoverHide)
+  const { multiple } = selectParamsCo.value
+  if (multiple) {
+    off(document, 'mouseup', clickOutSideOfPopover)
+  }
 })
 
 const onFilterChange = () => {
@@ -227,8 +230,7 @@ const setSelectNode = (ids: string[]) => {
   }
   if (multiple) {
     ;(treeCom.value as any).setCheckedKeys(ids)
-    state.labels =
-      (treeCom.value as any).getCheckedNodes().map((item: ITreeNode) => item[treeFieldsCo.value.labelField]) || []
+    state.labels = (treeCom.value as any).getCheckedNodes().map((item: ITreeNode) => item[treeFieldsCo.value.labelField]) || []
   } else {
     ;(treeCom.value as any).setCurrentKey(ids[0])
     if ((treeCom.value as any).getCurrentNode()) {
@@ -272,6 +274,7 @@ const onTreeNodeClick = (data: ITreeNode, node: any, com: any) => {
       state.ids.push(data[idField as string])
     }
   }
+  updatePopoverTop()
   emitValue()
   emit('node-click', data, node, com)
 }
@@ -282,6 +285,7 @@ const onTreeCheck = (data: ITreeNode, node: any, com: any) => {
   node.checkedNodes.forEach((item: ITreeNode) => {
     state.ids.push(item[idField as string])
   })
+  updatePopoverTop()
   emit('node-check', data, node, com)
   emitValue()
 }
@@ -317,28 +321,35 @@ const emitValue = () => {
   emit('update:modelValue', multiple ? state.ids : state.ids.length > 0 ? state.ids[0] : '')
 }
 
-const updateH = () => {
-  nextTick(() => {
-    const $selectEl = selectEl.value
-    state.width = $selectEl.getBoundingClientRect().width
-    const $popper = document.getElementById(state.popoverElId) as HTMLElement
-    if ($popper) {
-      $popper.style.minWidth = state.width + 'px'
-    }
-  })
+const toggleVisible = () => {
+  if (state.visible) {
+    state.visible = false
+    return
+  }
+  state.width = selectEl ? selectEl.getBoundingClientRect().width : 150
+  state.visible = true
 }
+
+let popoverEl = null as HTMLElement | null
 
 const onPopoverShow = () => {
-  updateH()
+  state.popoverElId = selectEl?.getAttribute('aria-describedby') as string
+  popoverEl = document.getElementById(state.popoverElId)?.parentElement as HTMLElement
 }
 
-const popoverHide = (e: Event) => {
-  const isInter = e.composedPath().some((item) => {
-    const elementId = (item as HTMLElement).id
-    return !!elementId && (elementId === state.treeSelectId || elementId === state.popoverElId)
-  })
-  if (!isInter) {
-    state.visible = false
+const updatePopoverTop = () => {
+  if (selectEl && popoverEl) {
+    const rect = selectEl.getBoundingClientRect()
+    popoverEl.style.top = selectEl.offsetTop + rect.height + 'px'
+  }
+}
+
+const clickOutSideOfPopover = (e: Event) => {
+  if (popoverEl) {
+    const isInter = e.composedPath().some((item) => (item as HTMLElement) === popoverEl)
+    if (!isInter) {
+      state.visible = false
+    }
   }
 }
 
@@ -365,18 +376,8 @@ const onPopoverHide = () => {
   }
 
   &__popper {
-    width: auto !important;
     max-height: 280px;
     padding: 5px 0 5px 0 !important;
-    /*overflow: hidden;*/
-
-    &[x-placement^='bottom'] {
-      margin-top: 5px;
-    }
-
-    &[x-placement^='top'] {
-      margin-bottom: 5px;
-    }
   }
 
   &__tree {

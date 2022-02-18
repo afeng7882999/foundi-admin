@@ -14,6 +14,7 @@
         <fd-table-sort-header :column="scope.column" @sort-changed="onSortChanged"></fd-table-sort-header>
       </template>
     </el-table-column>
+
     <!-- custom -->
     <el-table-column
       v-if="typ === 'custom'"
@@ -31,6 +32,7 @@
         <fd-table-sort-header :column="scope.column" @sort-changed="onSortChanged"></fd-table-sort-header>
       </template>
     </el-table-column>
+
     <!-- selection -->
     <el-table-column
       v-else-if="typ === 'selection'"
@@ -40,6 +42,7 @@
       type="selection"
       width="40"
     ></el-table-column>
+
     <!-- datetime -->
     <el-table-column
       v-else-if="typ === 'datetime'"
@@ -56,6 +59,7 @@
         <fd-table-sort-header :column="scope.column" @sort-changed="onSortChanged"></fd-table-sort-header>
       </template>
     </el-table-column>
+
     <!-- dictionary -->
     <el-table-column
       v-else-if="typ === 'dict'"
@@ -72,12 +76,14 @@
         <fd-table-sort-header :column="scope.column" @sort-changed="onSortChanged"></fd-table-sort-header>
       </template>
     </el-table-column>
+
     <!-- icon -->
     <el-table-column v-else-if="typ === 'icon'" v-bind="$attrs" :align="align" :header-align="headerAlign" :width="widthCo">
       <template #default="scope">
-        <fd-icon :icon="scope.row[attrs.prop]" class="fd-tb-icon"></fd-icon>
+        <fd-icon :icon="scope.row[attrs.prop]" class="tb-icon"></fd-icon>
       </template>
     </el-table-column>
+
     <!-- action -->
     <el-table-column
       v-else-if="typ === 'act'"
@@ -92,10 +98,9 @@
         <slot name="prefix" :row="scope.row" :idx="scope.$index"></slot>
         <el-tooltip :show-after="500" content="详细" placement="top">
           <el-button
-            v-show="detailVisible"
-            class="fd-tb-act fd-tb-act-detail"
+            v-if="detailVisible"
+            class="tb-act-btn"
             plain
-            size="mini"
             type="primary"
             @click="actionEmit('detail', scope.row, scope.$index)"
           >
@@ -103,27 +108,13 @@
           </el-button>
         </el-tooltip>
         <el-tooltip :show-after="500" content="编辑" placement="top">
-          <el-button
-            v-show="editVisible"
-            class="fd-tb-act"
-            plain
-            size="mini"
-            type="success"
-            @click="actionEmit('edit', scope.row, scope.$index)"
-          >
+          <el-button v-if="editVisible" class="tb-act-btn" plain type="success" @click="actionEmit('edit', scope.row, scope.$index)">
             <fd-icon icon="write"></fd-icon>
           </el-button>
         </el-tooltip>
         <el-tooltip :show-after="500" content="删除" placement="top">
-          <el-button
-            v-show="delVisible"
-            class="fd-tb-act"
-            plain
-            size="mini"
-            type="danger"
-            @click="actionEmit('del', scope.row, scope.$index)"
-          >
-            <fd-icon icon="close"></fd-icon>
+          <el-button v-if="delVisible" class="tb-act-btn" plain type="danger" @click="actionEmit('del', scope.row, scope.$index)">
+            <fd-icon icon="delete"></fd-icon>
           </el-button>
         </el-tooltip>
         <slot name="append" :row="scope.row" :idx="scope.$index"></slot>
@@ -217,11 +208,11 @@ const widthCo = computed(() => {
   if (props.typ === 'dict') {
     return '150'
   }
-  if (props.typ === 'act') {
-    return '130'
-  }
   if (props.typ === 'icon') {
     return '80'
+  }
+  if (props.typ === 'act') {
+    return '130'
   }
   return ''
 })

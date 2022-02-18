@@ -3,7 +3,7 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page__action">
-        <el-button size="medium" @click="close()">
+        <el-button @click="close()">
           <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
         </el-button>
@@ -12,7 +12,7 @@
             v-show="hasAuth('generator:genTable:edit')"
             v-waves
             plain
-            size="medium"
+
             type="primary"
             @click="handleGenerate"
           >
@@ -104,7 +104,7 @@ const state = reactive({
 const { showPageHeader, docHeight, getDocHeight } = usePage()
 
 const previewHeight = computed(() => {
-  return { height: getDocHeight(105, 'px') }
+  return { height: getDocHeight(145, 'px') }
 })
 
 const route = useRoute()
@@ -220,7 +220,7 @@ const handleGenerate = async () => {
     .fd-page__sub-title {
       font-size: var(--el-font-size-base);
       font-weight: normal;
-      margin: 15px 15px 10px 15px;
+      margin: 16px 16px 8px 16px;
     }
 
     .tree-node-icon {
@@ -237,14 +237,14 @@ const handleGenerate = async () => {
     }
 
     .el-tree {
-      padding: 5px 15px;
+      padding: 8px 16px;
       font-size: var(--el-font-size-small);
       font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
       .el-tree-node > .el-tree-node__children {
         overflow: visible;
       }
       .el-tree-node__content {
-        height: 19px;
+        height: 20px;
       }
     }
   }
@@ -256,7 +256,7 @@ const handleGenerate = async () => {
     .fd-page__sub-title {
       font-size: var(--el-font-size-base);
       font-weight: normal;
-      margin: 15px 15px 10px 15px;
+      margin: 16px 16px 8px 16px;
     }
   }
 }

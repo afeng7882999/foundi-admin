@@ -84,7 +84,7 @@
       </li>
     </ul>
     <div class="dialog-web-uri-detail__sub-title">Profiles:</div>
-    <el-table :data="state.webUriData.Profiles" size="mini" border style="width: 100%" stripe :default-sort="{ prop: 'Name', order: 'ascending' }">
+    <el-table :data="state.webUriData.Profiles" size="small" border style="width: 100%" stripe :default-sort="{ prop: 'Name', order: 'ascending' }">
       <el-table-column label="Name" prop="Name" min-width="350" sortable></el-table-column>
       <el-table-column label="ParentName" prop="Parent" min-width="350" sortable></el-table-column>
       <el-table-column label="Type" prop="Type" width="80" sortable></el-table-column>

@@ -151,7 +151,7 @@ defineExpose({
     cursor: pointer;
 
     &.is-hover {
-      background-color: var(--el-background-color-base);
+      background-color: var(--el-bg-color);
     }
 
     &.is-disabled {

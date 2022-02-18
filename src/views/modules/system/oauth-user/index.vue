@@ -3,7 +3,7 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page__action">
-        <el-button size="medium" @click="close()">
+        <el-button @click="close()">
           <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
         </el-button>
@@ -12,7 +12,7 @@
           v-waves
           :disabled="selectedNodes.length <= 0"
           plain
-          size="medium"
+
           type="danger"
           @click="del()"
         >
@@ -20,7 +20,7 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:oauthUser:export')" v-waves size="medium" @click="exportData()">
+          <el-button v-show="hasAuth('system:oauthUser:export')" v-waves @click="exportData()">
             导出数据
           </el-button>
         </div>
@@ -31,7 +31,7 @@
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
         <el-table-column align="center" header-align="center" label="头像" prop="avatar" width="50">
           <template #default="scope">
-            <div class="fd-tb-avatar">
+            <div class="tb-avatar">
               <el-avatar :src="scope.row.avatar" icon="el-icon-user-solid" size="small"></el-avatar>
             </div>
           </template>
@@ -104,9 +104,9 @@
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
                 v-show="hasAuth('system:oauthUser:delete')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="danger"
                 @click="del(scope.row, scope.row.k)"
               >
@@ -120,7 +120,7 @@
         :background="true"
         :current-page="current"
         :page-count="total"
-        :page-size="size"
+        :page-size="siz"
         :page-sizes="[10, 20, 50, 100, 200]"
         :total="count"
         layout="total, sizes, prev, pager, next, jumper"

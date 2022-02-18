@@ -2,7 +2,7 @@
   <div ref="pageRoot" :style="docMinHeight" class="page-operLog fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <el-form ref="queryForm" :inline="true" :model="state.query" size="medium" @keyup.enter="queryList()">
+      <el-form ref="queryForm" :inline="true" :model="state.query" @keyup.enter="queryList()">
         <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
           <div v-show="state.queryFormShow" class="fd-page__query">
             <el-form-item label="模块" prop="title">
@@ -46,7 +46,7 @@
           v-waves
           :disabled="state.selectedNodes.length <= 0"
           plain
-          size="medium"
+
           type="danger"
           @click="del()"
         >
@@ -54,14 +54,14 @@
           删除
         </el-button>
         <el-divider class="action-divider" direction="vertical"></el-divider>
-        <el-button v-show="hasAuth('system:operLog:export')" v-waves size="medium" @click="exportData()">导出数据</el-button>
+        <el-button v-show="hasAuth('system:operLog:export')" v-waves @click="exportData()">导出数据</el-button>
         <div class="action-right">
           <el-form
             v-show="!state.queryFormShow"
             ref="queryFormQuick"
             :inline="true"
             :model="state.query"
-            size="medium"
+
             @keyup.enter="queryList()"
           >
             <el-form-item label="时间" prop="operTime" style="height: 36px">
@@ -196,9 +196,9 @@
             <el-tooltip :show-after="500" content="详细" placement="top">
               <el-button
                 v-show="hasAuth('system:operLog:list')"
-                class="fd-tb-act fd-tb-act-detail"
+                class="tb-act-btn tb-act-btn-detail"
                 plain
-                size="mini"
+                size="small"
                 type="primary"
                 @click="showDetail(scope.$index)"
               >
@@ -208,9 +208,9 @@
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
                 v-show="hasAuth('system:operLog:delete')"
-                class="fd-tb-act"
+                class="tb-act-btn"
                 plain
-                size="mini"
+                size="small"
                 type="danger"
                 @click="del(scope.row)"
               >

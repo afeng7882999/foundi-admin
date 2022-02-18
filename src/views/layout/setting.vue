@@ -56,8 +56,8 @@ export default {
 
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from 'vue'
-import FdThemeSelect from '@/components/theme-select/index.vue'
-import { DEFAULT_THEMES, themeProcess } from 'element-plus-dynamic-theme/theme'
+import FdThemeSelect from '@/components/theme/theme-select.vue'
+import { DEFAULT_THEMES, themeProcess } from '@/components/theme/theme'
 import useLayoutResize from './use-resize'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
@@ -160,16 +160,16 @@ defineExpose({
   &__item {
     display: flex;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
 
     .title {
-      margin-left: 10px;
+      margin-left: 8px;
       font-size: $font-size-base;
     }
 
     .help {
       flex: 1;
-      margin-left: 5px;
+      margin-left: 4px;
       font-size: $icon-size-middle;
       color: var(--el-text-color-placeholder);
     }
@@ -180,7 +180,7 @@ defineExpose({
   }
 
   &__scrollbar {
-    height: calc(100% - 50px);
+    height: calc(100% - 48px);
 
     .el-scrollbar__wrap {
       overflow-x: hidden !important;

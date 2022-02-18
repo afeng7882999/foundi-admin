@@ -1,11 +1,11 @@
 <template>
   <div :style="docMinHeight" class="page-user-profile fd-page">
     <fd-page-header v-show="showPageHeader" :title="state.currentUser.username + '的资料'"></fd-page-header>
-    <el-row :gutter="20">
+    <el-row :gutter="8">
       <el-col :span="6">
         <el-card shadow="hover">
           <div class="main-card">
-            <el-tooltip :open-delay="500" content="点击更换头像" effect="dark" placement="right">
+            <el-tooltip :show-after="500" content="点击更换头像" effect="dark" placement="right">
               <fd-image-cropper
                 ref="avatarCropper"
                 :default-img="DEFAULT_AVATAR"
@@ -59,8 +59,8 @@
           <div class="desc-card">
             <div class="desc-title" @click="onEditClick">
               <span>我的基本信息</span>
-              <el-tooltip :open-delay="500" content="修改基本信息" effect="dark" placement="right">
-                <el-button size="mini" type="primary">修改基本信息</el-button>
+              <el-tooltip :show-after="500" content="修改基本信息" effect="dark" placement="right">
+                <el-button size="small" type="primary">修改基本信息</el-button>
               </el-tooltip>
             </div>
             <div class="desc-list with-icon">
@@ -107,11 +107,7 @@
               <span class="list-item">{{ state.currentUser.noPassword ? '未设定' : '已设定' }}</span>
               <span class="list-desc">使用账号密码登录</span>
               <span class="list-act">
-                <el-button
-                  :type="state.currentUser.noPassword ? 'danger' : 'primary'"
-                  size="mini"
-                  @click="onChangePasswordClick"
-                >
+                <el-button :type="state.currentUser.noPassword ? 'danger' : 'primary'" size="small" @click="onChangePasswordClick">
                   {{ state.currentUser.noPassword ? '设定' : '修改' }}
                 </el-button>
               </span>
@@ -122,14 +118,8 @@
               <span class="list-item">{{ state.currentUser.mobile ? state.currentUser.mobile : '未绑定' }}</span>
               <span class="list-desc">使用手机登录; 通过手机找回密码</span>
               <span class="list-act">
-                <el-button v-if="state.currentUser.mobile" plain size="mini" type="warning" @click="onClearMobileClick">
-                  清除
-                </el-button>
-                <el-button
-                  :type="state.currentUser.mobile ? 'primary' : 'danger'"
-                  size="mini"
-                  @click="onChangeMobileClick"
-                >
+                <el-button v-if="state.currentUser.mobile" plain size="small" type="warning" @click="onClearMobileClick">清除</el-button>
+                <el-button :type="state.currentUser.mobile ? 'primary' : 'danger'" size="small" @click="onChangeMobileClick">
                   {{ state.currentUser.mobile ? '修改' : '绑定' }}
                 </el-button>
               </span>
@@ -140,14 +130,8 @@
               <span class="list-item">{{ state.currentUser.email ? state.currentUser.email : '未绑定' }}</span>
               <span class="list-desc">通过邮箱找回密码</span>
               <span class="list-act">
-                <el-button v-if="state.currentUser.email" plain size="mini" type="warning" @click="onClearEmailClick">
-                  清除
-                </el-button>
-                <el-button
-                  :type="state.currentUser.email ? 'primary' : 'danger'"
-                  size="mini"
-                  @click="onChangeEmailClick"
-                >
+                <el-button v-if="state.currentUser.email" plain size="small" type="warning" @click="onClearEmailClick">清除</el-button>
+                <el-button :type="state.currentUser.email ? 'primary' : 'danger'" size="small" @click="onChangeEmailClick">
                   {{ state.currentUser.email ? '修改' : '绑定' }}
                 </el-button>
               </span>
@@ -158,20 +142,8 @@
               <span class="list-item">{{ state.currentUser.noWeixin ? '未绑定' : '已绑定' }}</span>
               <span class="list-desc">使用微信扫码登录</span>
               <span class="list-act">
-                <el-button
-                  v-if="!state.currentUser.noWeixin"
-                  plain
-                  size="mini"
-                  type="warning"
-                  @click="onClearWeixinClick"
-                >
-                  清除
-                </el-button>
-                <el-button
-                  :type="state.currentUser.noWeixin ? 'danger' : 'primary'"
-                  size="mini"
-                  @click="onBindWeixinClick"
-                >
+                <el-button v-if="!state.currentUser.noWeixin" plain size="small" type="warning" @click="onClearWeixinClick">清除</el-button>
+                <el-button :type="state.currentUser.noWeixin ? 'danger' : 'primary'" size="small" @click="onBindWeixinClick">
                   {{ state.currentUser.noWeixin ? '绑定' : '修改' }}
                 </el-button>
               </span>
@@ -182,10 +154,8 @@
               <span class="list-item">{{ state.currentUser.noQQ ? '未绑定' : '已绑定' }}</span>
               <span class="list-desc">使用QQ第三方登录</span>
               <span class="list-act">
-                <el-button v-if="!state.currentUser.noQQ" plain size="mini" type="warning" @click="onClearQQClick">
-                  清除
-                </el-button>
-                <el-button :type="state.currentUser.noQQ ? 'danger' : 'primary'" size="mini" @click="onBindQQClick">
+                <el-button v-if="!state.currentUser.noQQ" plain size="small" type="warning" @click="onClearQQClick">清除</el-button>
+                <el-button :type="state.currentUser.noQQ ? 'danger' : 'primary'" size="small" @click="onBindQQClick">
                   {{ state.currentUser.noQQ ? '绑定' : '修改' }}
                 </el-button>
               </span>
@@ -196,20 +166,8 @@
               <span class="list-item">{{ state.currentUser.noWeibo ? '未绑定' : '已绑定' }}</span>
               <span class="list-desc">使用微博第三方登录</span>
               <span class="list-act">
-                <el-button
-                  v-if="!state.currentUser.noWeibo"
-                  plain
-                  size="mini"
-                  type="warning"
-                  @click="onClearWeiboClick"
-                >
-                  清除
-                </el-button>
-                <el-button
-                  :type="state.currentUser.noWeibo ? 'danger' : 'primary'"
-                  size="mini"
-                  @click="onBindWeiboClick"
-                >
+                <el-button v-if="!state.currentUser.noWeibo" plain size="small" type="warning" @click="onClearWeiboClick">清除</el-button>
+                <el-button :type="state.currentUser.noWeibo ? 'danger' : 'primary'" size="small" @click="onBindWeiboClick">
                   {{ state.currentUser.noWeibo ? '绑定' : '修改' }}
                 </el-button>
               </span>
@@ -478,7 +436,7 @@ const { docMinHeight, showPageHeader } = usePage()
 
 .page-user-profile {
   ::v-deep(.el-card) {
-    margin-bottom: 20px;
+    margin-bottom: 8px;
     border: none;
 
     .el-card__body {
@@ -489,8 +447,8 @@ const { docMinHeight, showPageHeader } = usePage()
   .profile-divider {
     position: relative;
     display: block;
-    margin: 10px 0;
-    width: calc(100% - 20px);
+    margin: 8px 0;
+    width: calc(100% - 8px);
     height: 0;
     border-top: 1px solid var(--el-border-color-base);
     align-self: center;
@@ -504,39 +462,41 @@ const { docMinHeight, showPageHeader } = usePage()
     .main-avatar {
       width: 101px;
       height: 101px;
-      margin-top: 30px;
+      margin-top: 32px;
       border-radius: 50%;
     }
 
     .main-name {
-      padding: 15px 0 5px 0;
+      padding: 16px 0 8px 0;
       font-size: var(--el-font-size-large);
       font-weight: $font-weight-bold;
     }
 
     .main-roles {
       display: flex;
-      padding: 10px 20px;
+      padding: 8px 16px;
       flex-wrap: wrap;
       justify-content: center;
       font-size: var(--el-font-size-extra-small);
       color: var(--el-text-color-regular);
 
       .role-tag {
-        margin: 0 5px;
+        margin: 0 4px;
       }
     }
 
     .main-btn {
-      margin: 30px 0 20px 0;
+      margin: 32px 0 16px 0;
     }
 
     .main-action {
       display: flex;
+      height: 40px;
       width: 100%;
-      padding: 12px 10px;
+      padding: 0 8px;
       align-items: center;
       font-size: var(--el-font-size-base);
+      border-left: 2px solid var(--el-color-white);
       cursor: pointer;
       user-select: none;
 
@@ -548,7 +508,7 @@ const { docMinHeight, showPageHeader } = usePage()
       }
 
       .action-icon {
-        margin: 0 10px 0 8px;
+        margin: 0 8px 0 8px;
         font-size: $icon-size-middle;
       }
 
@@ -560,7 +520,7 @@ const { docMinHeight, showPageHeader } = usePage()
 
   .desc-card {
     display: flex;
-    padding-bottom: 20px;
+    padding-bottom: 16px;
     font-size: var(--el-font-size-base);
     flex-direction: column;
     align-items: flex-start;
@@ -568,21 +528,23 @@ const { docMinHeight, showPageHeader } = usePage()
     .desc-title {
       display: flex;
       width: 100%;
-      height: 50px;
-      padding: 20px;
-      margin-bottom: 20px;
+      height: 48px;
+      padding: 16px;
+      margin-bottom: 16px;
       align-items: center;
       justify-content: space-between;
       color: var(--el-color-primary);
-      background-color: var(--el-background-color-base);
+      background-color: var(--el-bg-color);
     }
 
     .desc-list {
       display: flex;
+      height: 40px;
       width: 100%;
-      padding: 12px 10px 12px 48px;
+      padding: 0 8px 0 48px;
       align-items: center;
       color: var(--el-color-text-regular);
+      border-left: 2px solid var(--el-color-white);
 
       &.with-icon {
         padding-left: 12px;
@@ -591,6 +553,7 @@ const { docMinHeight, showPageHeader } = usePage()
       &:hover {
         color: var(--el-color-primary);
         background: var(--el-color-primary-light-9);
+        border-left: 2px solid var(--el-color-primary);
 
         .list-desc {
           color: var(--el-color-primary);

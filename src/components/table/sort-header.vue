@@ -117,7 +117,7 @@ const onDescOver = () => {
   cursor: pointer;
 
   &:hover {
-    background-color: var(--el-background-color-base);
+    background-color: var(--el-bg-color);
   }
 }
 </style>
