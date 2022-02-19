@@ -131,13 +131,13 @@ defineExpose({
 .fd-contextmenu {
   position: fixed;
   margin: 0;
-  padding: 8px 0;
+  padding: 6px 0;
   font-size: var(--el-font-size-base);
   color: var(--el-text-color-primary);
   white-space: nowrap;
   list-style: none;
   border: 1px solid var(--el-border-color-base);
-  border-radius: var(--el-border-radius-base);
+  border-radius: $border-radius-base;
   background-color: var(--el-fill-base);
   box-shadow: var(--el-box-shadow-base);
   z-index: 100;
@@ -201,8 +201,8 @@ defineExpose({
     }
   }
 
-  @include theme($round-mode) {
-    border-radius: 10px;
+  @include theme-s() {
+    border-radius: 0;
   }
 }
 </style>

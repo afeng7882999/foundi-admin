@@ -26,3 +26,10 @@
     @import "highlight.js/scss/solarized-dark.scss";
   }
 }
+
+.theme-sharp {
+  // el-popover
+  .el-popover {
+    border-radius: 0;
+  }
+}
