@@ -64,7 +64,7 @@
                 <span>
                   生成包路径
                   <el-tooltip content="生成在哪个java包下，例如 net.foundi.admin" placement="top">
-                    <fd-icon icon="help" class="is-tip"></fd-icon>
+                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
                   </el-tooltip>
                 </span>
               </template>
@@ -77,7 +77,7 @@
                 <span>
                   生成模块名
                   <el-tooltip content="可理解为子系统名，例如system" placement="top">
-                    <fd-icon icon="help" class="is-tip"></fd-icon>
+                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
                   </el-tooltip>
                 </span>
               </template>
@@ -92,7 +92,7 @@
                 <span>
                   菜单名
                   <el-tooltip content="前端菜单名称" placement="top">
-                    <fd-icon icon="help" class="is-tip"></fd-icon>
+                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
                   </el-tooltip>
                 </span>
               </template>
@@ -105,7 +105,7 @@
                 <span>
                   上级菜单
                   <el-tooltip content="分配到指定菜单下，例如系统管理" placement="top">
-                    <fd-icon icon="help" class="is-tip"></fd-icon>
+                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
                   </el-tooltip>
                 </span>
               </template>
@@ -125,7 +125,7 @@
                 <span>
                   树编码字段
                   <el-tooltip content="树显示的编码字段名，如：dept_id" placement="top">
-                    <fd-icon icon="help" class="is-tip"></fd-icon>
+                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
                   </el-tooltip>
                 </span>
               </template>
@@ -143,7 +143,7 @@
                 <span>
                   树父编码字段
                   <el-tooltip content="树显示的父编码字段名，如：parent_Id" placement="top">
-                    <fd-icon icon="help" class="is-tip"></fd-icon>
+                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
                   </el-tooltip>
                 </span>
               </template>
@@ -161,7 +161,7 @@
                 <span>
                   树名称字段
                   <el-tooltip content="树节点的显示名称字段名，如：dept_name" placement="top">
-                    <fd-icon icon="help" class="is-tip"></fd-icon>
+                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
                   </el-tooltip>
                 </span>
               </template>
