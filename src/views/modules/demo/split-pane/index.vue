@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasAuth('test:splitPane:list')" :style="docMinHeight" class="page-test-split-pane fd-page">
+  <div v-if="hasAuth('demo:splitPane:list')" :style="docMinHeight" class="page-demo-split-pane fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page__action">
@@ -33,7 +33,7 @@
 
 <script lang="ts">
 export default {
-  name: 'TestSplitPane'
+  name: 'DemoSplitPane'
 }
 </script>
 
@@ -55,7 +55,7 @@ const { docMinHeight, showPageHeader, hasAuth } = usePage()
 </script>
 
 <style lang="scss">
-.page-test-split-pane {
+.page-demo-split-pane {
   display: flex;
   flex-direction: column;
 

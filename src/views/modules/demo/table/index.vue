@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasAuth('test:table:list')" :style="docMinHeight" class="page-test-table fd-page">
+  <div v-if="hasAuth('demo:table:list')" :style="docMinHeight" class="page-demo-table fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <el-tabs>
       <el-tab-pane label="基础表格">
@@ -71,13 +71,13 @@
 
 <script lang="ts">
 export default {
-  name: 'TestTable'
+  name: 'DemoTable'
 }
 </script>
 
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref } from 'vue'
-import { menuData, operLogData, sysMenuType, sysOperLogStatus } from '@/views/modules/test/table/data'
+import { nextTick, reactive, ref } from 'vue'
+import { menuData, operLogData, sysMenuType, sysOperLogStatus } from './data'
 import useTable from '@/components/table/use-table'
 import { AnyObject } from '@/utils'
 import FdTableSetting from '@/components/table/table-setting.vue'

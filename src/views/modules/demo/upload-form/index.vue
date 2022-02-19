@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasAuth('test:uploadForm:list')" :style="docMinHeight" class="page-test-upload-form fd-page">
+  <div v-if="hasAuth('demo:uploadForm:list')" :style="docMinHeight" class="page-demo-upload-form fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page__sub-title"><span class="title-text">UploadInput</span></div>
@@ -14,7 +14,7 @@
 
 <script lang="ts">
 export default {
-  name: 'TestUploadForm'
+  name: 'DemoUploadForm'
 }
 </script>
 

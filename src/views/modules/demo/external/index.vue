@@ -3,7 +3,7 @@
 </template>
 <script lang="ts">
 export default {
-  name: 'TestExternal'
+  name: 'DemoExternal'
 }
 </script>
 <script setup lang="ts">
