@@ -11,6 +11,7 @@ const TAB_HEIGHT = 48
 const TITLE_PADDING = 8
 const SIDEBAR_MINI_WIDTH = 56
 const SIDEBAR_NORMAL_WIDTH = 240
+const FOOTER_HEIGHT = 48
 
 export default function useLayoutResize() {
   let bodyRect = {
@@ -49,7 +50,9 @@ export default function useLayoutResize() {
   }
 
   const getDocHeight = () => {
-    const height = storeState.app.enableTags ? TAB_HEIGHT + TITLE_HEIGHT + TITLE_PADDING : TITLE_HEIGHT + TITLE_PADDING
+    const height = storeState.app.enableTags
+      ? TAB_HEIGHT + TITLE_HEIGHT + TITLE_PADDING + FOOTER_HEIGHT
+      : TITLE_HEIGHT + TITLE_PADDING + FOOTER_HEIGHT
     return bodyRect.height - height
   }
 
