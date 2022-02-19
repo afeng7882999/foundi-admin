@@ -350,7 +350,7 @@ const onPopoverShow = () => {
 const updatePopoverTop = () => {
   if (selectEl && popoverEl) {
     if (popoverEl.style.transform) {
-      const top = selectEl.getBoundingClientRect().top + 8 + selectEl.offsetHeight
+      const top = selectEl.getBoundingClientRect().top + 12 + selectEl.offsetHeight
       popoverEl.style.transform = popoverEl.style.transform.replace(/(?<=translate3d\([\d|.]*px,\s)[\d|.]*/, top + '')
     }
   }
@@ -369,6 +369,9 @@ const clickOutSideOfPopover = (e: Event) => {
 </script>
 
 <style lang="scss">
+@use '/src/assets/style/variable' as *;
+@use 'src/assets/style/mixin' as *;
+
 .fd-tree-select {
   &__select {
     width: 100%;
@@ -378,9 +381,10 @@ const clickOutSideOfPopover = (e: Event) => {
     display: none !important;
   }
 
-  &__popper {
+  &__popper.el-popover.el-popper {
     max-height: 280px;
-    padding: 8px 0 8px 0 !important;
+    padding: 6px 0 6px 0;
+    border-radius: $border-radius-base;
   }
 
   &__tree {
@@ -409,6 +413,10 @@ const clickOutSideOfPopover = (e: Event) => {
     font-size: 14px;
     color: var(--el-text-color-secondary);
     text-align: center;
+  }
+
+  @include theme-s() {
+    border-radius: 0;
   }
 }
 </style>
