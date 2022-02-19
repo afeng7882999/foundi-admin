@@ -117,6 +117,7 @@
       </el-table>
       <el-pagination
         :current-page="state.current"
+        background
         :page-count="state.total"
         :page-size="state.size"
         :page-sizes="[10, 20, 50, 100, 200]"

@@ -100,9 +100,9 @@
   --el-index-top: #{$index-top};
   --el-index-popper: #{$index-popper};
   
-  --el-disabled-fill-base: var(--el-bg-color);
-  --el-disabled-color-base: var(--el-text-color-placeholder);
-  --el-disabled-border-base: var(--el-border-color-light);
+  --el-disabled-bg-color: var(--el-bg-color);
+  --el-disabled-text-color: var(--el-text-color-placeholder);
+  --el-disabled-border-color: var(--el-border-color-light);
   
   --el-scrollbar-bg-color: #{$scrollbar-bg-color};
   --el-scrollbar-hover-bg-color: #{$scrollbar-hover-bg-color};
