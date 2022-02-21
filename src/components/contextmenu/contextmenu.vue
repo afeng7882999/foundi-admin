@@ -13,7 +13,7 @@ export default {
 <script setup lang="ts">
 import { generateId } from '@/utils/lang'
 import { ref, nextTick, onBeforeUnmount, onMounted, provide, reactive, watch } from 'vue'
-import bus, { ContextmenuShowEvent } from './bus'
+import bus from './bus'
 
 const props = defineProps({
   disabled: {
@@ -52,7 +52,7 @@ watch(
 )
 
 onMounted(() => {
-  bus.on(ContextmenuShowEvent, ({ event, id }) => {
+  bus.on(({ event, id }) => {
     if (state.elId === id) {
       _show(event.pageY, event.pageX)
     } else {
@@ -67,7 +67,7 @@ onBeforeUnmount(() => {
 
 const show = (e: MouseEvent) => {
   if (!props.disabled) {
-    bus.emit(ContextmenuShowEvent, { event: e, id: state.elId })
+    bus.emit({ event: e, id: state.elId })
   }
 }
 

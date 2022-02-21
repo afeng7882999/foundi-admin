@@ -16,7 +16,7 @@
             type="primary"
             @click="handleGenerate"
           >
-            <fd-icon class="is-in-btn" icon="download" :loading="state.loading"></fd-icon>
+            <fd-icon class="is-in-btn" icon="download" :loading="state.genLoading"></fd-icon>
             生成
           </el-button>
         </div>
@@ -24,7 +24,7 @@
     </div>
     <fd-split-pane :default-pos="300" shrink="right" :style="previewHeight">
       <template #left>
-        <div class="fd-page__form page-generator-preview__tree" style="height: 100%">
+        <div v-loading="state.loading" class="fd-page__form page-generator-preview__tree" style="height: 100%">
           <div class="fd-page__sub-title"><span class="title-text">文件列表</span></div>
           <el-scrollbar always>
             <el-tree
@@ -49,7 +49,7 @@
         </div>
       </template>
       <template #right>
-        <div class="fd-page__form page-generator-preview__code" style="height: 100%">
+        <div v-loading="state.loading" class="fd-page__form page-generator-preview__code" style="height: 100%">
           <div class="fd-page__sub-title">
             <span class="title-text">{{ state.activeNode.path }}</span>
           </div>
@@ -98,7 +98,8 @@ const state = reactive({
     lang: 'application/xml',
     code: { name: '', path: '', content: '' }
   } as ICodePreviewNode,
-  loading: false
+  loading: false,
+  genLoading: false
 })
 
 const { showPageHeader, docHeight, getDocHeight } = usePage()
@@ -162,6 +163,7 @@ const compactCodeTree = (parent: ICodePreviewNode | null, children: ICodePreview
 onBeforeMount(async () => {
   const { ids } = route.params
   if (ids) {
+    state.loading = true
     try {
       state.data = await preview(ids as string)
       getCodeTree(0)
@@ -169,8 +171,10 @@ onBeforeMount(async () => {
       nextTick(() => {
         ;(codeTree.value as any).setCurrentKey(state.activeNode.id)
         ;(codeEditor.value as any).refresh('100%', getDocHeight(152, 'px'))
+        state.loading = false
       })
     } catch (e) {
+      state.loading = false
       console.log(e)
     }
   }
@@ -195,7 +199,7 @@ const close = () => {
 const { hasAuth } = usePage()
 
 const handleGenerate = async () => {
-  state.loading = true
+  state.genLoading = true
   const files = {} as AnyObject
   try {
     state.data.forEach((item) => {
@@ -203,10 +207,10 @@ const handleGenerate = async () => {
     })
     const zipped = fflate.zipSync(files)
     downloadFile(zipped, 'code_generated', 'zip')
-    state.loading = false
+    state.genLoading = false
   } catch (e) {
     console.log(e)
-    state.loading = false
+    state.genLoading = false
   }
 }
 </script>

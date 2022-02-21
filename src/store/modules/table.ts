@@ -50,7 +50,7 @@ const setSettings = (state: TableState, id: string, setting: TableSetting) => {
   }
 }
 
-const deleteSettings = (state: TableState, id: string, key: 'rowDensity' | 'columns' | 'expandAll' | 'stripe' | 'border') => {
+const deleteSettings = (state: TableState, id: string, key: keyof TableSetting) => {
   if (id) {
     const item = state.settings.find((s) => s.id === id)
     if (item) {

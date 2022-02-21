@@ -121,6 +121,7 @@ import { computed, defineComponent, PropType, reactive, ref, toRefs, watch } fro
 import { AnyObject } from '@/utils'
 import { ElMessage } from 'element-plus'
 import { upload } from '@/api/system/file'
+import { isObject } from '@vueuse/core'
 
 export default defineComponent({
   name: 'FdImageCropper',
@@ -263,7 +264,7 @@ export default defineComponent({
       reader.onload = (e: Event) => {
         let data = ''
         const target = e.target as any
-        if (typeof target.result === 'object') {
+        if (isObject(target.result)) {
           data = window.URL.createObjectURL(new Blob([target.result]))
         } else {
           data = target.result

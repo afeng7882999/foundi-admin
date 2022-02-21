@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
+import { isString } from '@vueuse/core'
 
 dayjs.locale('zh-cn')
 
@@ -10,11 +11,8 @@ export const DEFAULT_TIME_FORMAT = 'HH:mm:ss'
 /**
  * 时间戳转日期时间字符串
  */
-export function formatTimestamp(
-  timestamp: number | string,
-  shape = 'datetime' as 'time' | 'date' | 'datetime'
-): string {
-  let ts = typeof timestamp === 'string' ? Number(timestamp) : timestamp
+export function formatTimestamp(timestamp: number | string, shape = 'datetime' as 'time' | 'date' | 'datetime'): string {
+  let ts = isString(timestamp) ? Number(timestamp) : timestamp
   if (('' + ts).length === 10) {
     ts = ts * 1000
   } else {

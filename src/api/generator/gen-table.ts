@@ -3,6 +3,7 @@ import { AnyObject } from '@/utils'
 import request from '@/app/request'
 import { downloadFile } from '@/utils/file'
 import { IDictItem } from '@/api/system/dict-item'
+import { isString } from '@vueuse/core'
 
 export interface IGenTable extends IResData {
   // 主键
@@ -156,7 +157,7 @@ export const genTableSyncDb = async (id: string) => {
 
 // 生成代码并预览
 export const preview = async (ids: string[] | string) => {
-  const param = typeof ids === 'string' ? ids : ids.join(',')
+  const param = isString(ids) ? ids : ids.join(',')
   const { data } = await request({
     url: `${url}/preview/${param}`,
     method: 'get'

@@ -1,4 +1,5 @@
 import { rAF } from '@/utils/next-frame'
+import { isNumber } from '@vueuse/core'
 
 /**
  * 曲线函数
@@ -35,7 +36,7 @@ export function scrollTo(start: number, end: number, move: (val: number) => void
  * 横向滚动
  */
 export function scrollElementH(target: HTMLElement, end: HTMLElement | number, duration = 300) {
-  const endNum = typeof end === 'number' ? end : end.scrollLeft
+  const endNum = isNumber(end) ? end : end.scrollLeft
   scrollTo(
     target.scrollLeft,
     endNum,
@@ -50,7 +51,7 @@ export function scrollElementH(target: HTMLElement, end: HTMLElement | number, d
  * 纵向滚动
  */
 export function scrollElementV(target: HTMLElement, end: HTMLElement | number, duration = 300) {
-  const endNum = typeof end === 'number' ? end : end.scrollTop
+  const endNum = isNumber(end) ? end : end.scrollTop
   scrollTo(
     target.scrollTop,
     endNum,
@@ -65,9 +66,7 @@ export function scrollElementV(target: HTMLElement, end: HTMLElement | number, d
  * 获取页面的scrollTop
  */
 export function getDocumentTop(): number {
-  return (
-    document.documentElement.scrollTop || (document.body.parentNode as Element).scrollTop || document.body.scrollTop
-  )
+  return document.documentElement.scrollTop || (document.body.parentNode as Element).scrollTop || document.body.scrollTop
 }
 
 /**
@@ -83,7 +82,7 @@ function setDocumentTop(val: number) {
  * 页面纵向滚动
  */
 export function scrollDocH(end: HTMLElement | number, duration = 300) {
-  const endNum = typeof end === 'number' ? end : end.scrollTop
+  const endNum = isNumber(end) ? end : end.scrollTop
   scrollTo(getDocumentTop(), endNum, (val) => setDocumentTop(val), duration)
 }
 

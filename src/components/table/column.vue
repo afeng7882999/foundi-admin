@@ -97,13 +97,7 @@
       <template #default="scope">
         <slot name="prefix" :row="scope.row" :idx="scope.$index"></slot>
         <el-tooltip :show-after="500" content="详细" placement="top">
-          <el-button
-            v-if="detailVisible"
-            class="tb-act-btn"
-            plain
-            type="primary"
-            @click="actionEmit('detail', scope.row, scope.$index)"
-          >
+          <el-button v-if="detailVisible" class="tb-act-btn" plain type="primary" @click="actionEmit('detail', scope.row, scope.$index)">
             <fd-icon icon="view-grid-detail"></fd-icon>
           </el-button>
         </el-tooltip>
@@ -138,6 +132,7 @@ import { IDictItem } from '@/api/system/dict-item'
 import useDict from '@/components/crud/use-dict'
 import usePage from '@/components/crud/use-page'
 import { AnyObject } from '@/utils'
+import { isBoolean } from '@vueuse/core'
 
 const props = defineProps({
   typ: {
@@ -218,7 +213,7 @@ const widthCo = computed(() => {
 })
 
 const detailVisible = computed(() => {
-  if (typeof props.detail === 'boolean') {
+  if (isBoolean(props.detail)) {
     return props.detail
   }
   if (props.detail) {
@@ -228,7 +223,7 @@ const detailVisible = computed(() => {
 })
 
 const editVisible = computed(() => {
-  if (typeof props.edit === 'boolean') {
+  if (isBoolean(props.edit)) {
     return props.edit
   }
   if (props.edit) {
@@ -238,7 +233,7 @@ const editVisible = computed(() => {
 })
 
 const delVisible = computed(() => {
-  if (typeof props.del === 'boolean') {
+  if (isBoolean(props.del)) {
     return props.del
   }
   if (props.del) {

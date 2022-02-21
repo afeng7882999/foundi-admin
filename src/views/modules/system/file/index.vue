@@ -145,9 +145,10 @@ import useExpandTransition from '@/components/transition/use-expand-transition'
 import { configListOss, IConfig } from '@/api/system/config'
 import Upload from './upload.vue'
 import { localOrRemoteUrl } from '@/utils/query'
-import handleClipboard from '@/utils/clipboard'
 import { formatTimestamp } from '@/utils/time'
 import usePage from '@/components/crud/use-page'
+import { useClipboard } from '@vueuse/core'
+import { ElMessage } from 'element-plus'
 
 const stateOption = {
   idField: fileFields.idField,
@@ -183,7 +184,14 @@ onBeforeGetList(async () => {
   return true
 })
 
-const copyUrl = (url: string, event: Event) => {
-  handleClipboard(localOrRemoteUrl(url, 'upload'), event)
+const { copy } = useClipboard()
+
+const copyUrl = async (url: string, event: Event) => {
+  await copy(localOrRemoteUrl(url, 'upload'))
+  ElMessage({
+    message: '成功复制',
+    type: 'success',
+    duration: 1500
+  })
 }
 </script>

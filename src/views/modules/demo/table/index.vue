@@ -19,12 +19,12 @@
             <fd-column typ="selection"></fd-column>
             <fd-column typ="datetime" label="操作时间" prop="operTime" sortable></fd-column>
             <fd-column label="请求URL" prop="operUrl" sortable width="500"></fd-column>
-            <fd-column label="请求方式" prop="requestMethod" width="80"></fd-column>
+            <fd-column label="请求方式" prop="requestMethod" width="90"></fd-column>
             <fd-column typ="dict" label="操作状态" prop="statusDict" :dict="state.sysOperLogStatus" width="80"></fd-column>
             <fd-column label="账号" prop="operUserName" width="150"></fd-column>
             <fd-column label="IP" prop="operIp" width="150"></fd-column>
             <fd-column label="地点" prop="operLocation"></fd-column>
-            <fd-column typ="act" :detail="true" :del="true" :edit="true" header-align="center" align="center" width="290">
+            <fd-column typ="act" :detail="true" :del="true" :edit="true" header-align="center" align="center" width="200">
               <template #prefix>
                 <el-tooltip :show-after="500" content="生成并预览代码" placement="top">
                   <el-button class="tb-act-btn" plain size="small" type="warning">

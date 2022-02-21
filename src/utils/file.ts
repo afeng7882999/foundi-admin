@@ -1,11 +1,12 @@
 import { generateId } from './lang'
+import { isString } from '@vueuse/core'
 
 /**
  * 下载文件
  */
 export function downloadFile(obj: Blob | Uint8Array | string, name: string, suffix: string): void {
   let blob
-  if (typeof obj === 'string') {
+  if (isString(obj)) {
     blob = new Blob([obj], { type: 'text/plain' })
   } else {
     blob = new Blob([obj])

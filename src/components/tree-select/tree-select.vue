@@ -72,6 +72,7 @@ import { generateId } from '@/utils/lang'
 import { merge } from 'lodash-es'
 import { computed, nextTick, onBeforeMount, onBeforeUnmount, onMounted, PropType, reactive, ref, watch } from 'vue'
 import { DEFAULT_SELECT_PARAMS, DEFAULT_TREE_FIELDS, DEFAULT_TREE_PARAMS } from '@/components/tree-select/types'
+import { isString } from '@vueuse/core'
 
 const props = defineProps({
   dataList: {
@@ -176,7 +177,7 @@ watch(
     const { multiple } = selectParamsCo.value
     if (val) {
       if (multiple) {
-        state.ids = typeof val === 'string' ? [val] : val
+        state.ids = isString(val) ? [val] : val
       } else {
         state.ids = val === '' ? [] : [val as string]
       }

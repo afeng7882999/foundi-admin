@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <el-form ref="form" :model="state.data.table" :rules="state.rules" label-width="150px">
+    <el-form ref="form" v-loading="state.loading" :model="state.data.table" :rules="state.rules" label-width="150px">
       <div class="fd-page__form">
         <div class="fd-page__sub-title"><span class="title-text">基本信息</span></div>
         <el-row>
@@ -185,7 +185,7 @@
       </div>
     </el-form>
 
-    <div ref="tableWrapper" class="fd-page__table is-bordered">
+    <div ref="tableWrapper" v-loading="state.loading" class="fd-page__table is-bordered">
       <div class="fd-page__sub-title"><span class="title-text">字段信息</span></div>
       <el-table ref="table" :data="state.data.columns" row-key="id">
         <el-table-column class-name="sortable-drag" label="" width="38">
@@ -322,7 +322,8 @@ const state = reactive({
     author: [{ required: true, message: '请输入作者', trigger: 'blur' }],
     pack: [{ required: true, message: '请输入生成包路径', trigger: 'blur' }],
     module: [{ required: true, message: '请输入生成模块名', trigger: 'blur' }]
-  }
+  },
+  loading: false
 })
 
 const route = useRoute()
@@ -346,11 +347,14 @@ onBeforeMount(async () => {
   const { id } = route.params
   if (id) {
     try {
+      state.loading = true
       const { data: dicts } = await dictList()
       state.dictOptions = dicts
       state.data = await genTableGetOne(id as string)
       state.data.columns = state.data.columns.sort((a, b) => a.sort - b.sort)
+      state.loading = false
     } catch (e) {
+      state.loading = false
       console.log(e)
     }
   }
@@ -387,15 +391,18 @@ const handleSyncFromDb = async () => {
       cancelButtonText: '取消',
       type: 'warning'
     })
+    state.loading = true
     const id = state.data.table.id
     await genTableSyncDb(id)
     state.data = await genTableGetOne(id)
+    state.loading = false
     ElMessage({
       message: '同步成功',
       type: 'success',
       duration: 2500
     })
   } catch (e) {
+    state.loading = false
     console.log(e)
   }
 }

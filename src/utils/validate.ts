@@ -106,20 +106,3 @@ export function isAlphabets(str: string): boolean {
   const reg = /^[A-Za-z]+$/
   return reg.test(str)
 }
-
-/**
- * 是否是string对象
- */
-export function isString(str: unknown): boolean {
-  return typeof str === 'string' || str instanceof String
-}
-
-/**
- * 是否是数组
- */
-export function isArray(arg: unknown): boolean {
-  if (typeof Array.isArray === 'undefined') {
-    return Object.prototype.toString.call(arg) === '[object Array]'
-  }
-  return Array.isArray(arg)
-}
