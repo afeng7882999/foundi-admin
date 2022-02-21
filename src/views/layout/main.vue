@@ -6,6 +6,7 @@
       </keep-alive>
     </router-view>
     <div class="fd-footer">
+      <fd-svg-image class="fd-footer__icon" img="foundi"></fd-svg-image>
       <span class="fd-footer__text">{{ settings.footer }}</span>
     </div>
   </div>
@@ -22,6 +23,7 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import settings from '@/app/settings'
+import FdSvgImage from '@/components/svg-image/svg-image.vue'
 
 const store = useStore<AllState>()
 const storeState = store.state as AllState
@@ -40,10 +42,22 @@ const cachedViews = computed(() => {
 }
 
 .fd-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: $app-footer-height;
   padding: 16px 0 16px;
+  color: var(--el-text-color-placeholder);
+  user-select: none;
+
+  &__icon {
+    height: 16px;
+    width: 16px;
+    color: var(--el-text-color-placeholder);
+    margin-right: 4px;
+  }
+
   &__text {
-    width: 100%;
     display: flex;
     justify-content: center;
     color: var(--el-text-color-placeholder);

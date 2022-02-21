@@ -14,7 +14,7 @@ export default {
   // 是否显示设置的底部信息
   showFooter: true,
   // 底部信息
-  footer: '方得提供技术支持 Powered by FOUNDi',
+  footer: '方得 FOUNDi 提供技术支持',
   // 备案号
   caseNumber: '豫ICP备170xxxxx号'
 }

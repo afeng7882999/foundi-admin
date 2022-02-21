@@ -1,12 +1,7 @@
 <template>
   <div class="fd-title">
     <div class="fd-title__left">
-      <el-tooltip
-        :content="toggleBtnActive ? '展开菜单' : '收缩菜单'"
-        :show-after="500"
-        effect="dark"
-        placement="bottom"
-      >
+      <el-tooltip :content="toggleBtnActive ? '展开菜单' : '收缩菜单'" :show-after="500" effect="dark" placement="bottom">
         <fd-icon-button class="fd-title__toggle-button" @click="toggleSideBar">
           <fd-icon :class="{ active: toggleBtnActive }" class="icon" icon="hamburger-button"></fd-icon>
         </fd-icon-button>

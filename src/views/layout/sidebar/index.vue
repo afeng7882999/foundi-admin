@@ -185,7 +185,7 @@ const setExpand = (ifExpand: boolean) => {
   &.show-logo {
     .fd-sidebar__inner {
       .fd-sidebar__scrollbar {
-        height: calc(100% - 48px);
+        height: calc(100% - 64px);
       }
     }
   }
