@@ -2,7 +2,7 @@
   <div class="page-error-404">
     <span class="page-error-404__title">OOPS! PAGE NOT FOUND</span>
     <div class="page-error-404__icon vivify flipInX">
-      <fd-svg-image img="graphics-404"></fd-svg-image>
+      <fd-svg-image img="404"></fd-svg-image>
     </div>
     <span class="page-error-404__desc">对不起, 您访问的页面不存在, 您可以返回上一页, 或回到首页</span>
     <div class="page-error-404__act">

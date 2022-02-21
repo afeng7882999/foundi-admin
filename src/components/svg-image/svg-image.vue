@@ -11,31 +11,30 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed } from 'vue'
 
-  const props = defineProps({
-    img: {
-      type: String,
-      required: true
-    },
-    imgClass: {
-      type: String,
-      default: ''
-    }
-  })
+const props = defineProps({
+  img: {
+    type: String,
+    required: true
+  },
+  imgClass: {
+    type: String,
+    default: ''
+  }
+})
 
-    const imgName = computed(() => {
-      return `#svg-${props.img}`
-    })
+const imgName = computed(() => {
+  return `#svg-graphics-${props.img}`
+})
 
-    const svgClass = computed(() => {
-      if (props.imgClass) {
-        return 'fd-svg-image ' + props.imgClass
-      } else {
-        return 'fd-svg-image'
-      }
-    })
-
+const svgClass = computed(() => {
+  if (props.imgClass) {
+    return 'fd-svg-image ' + props.imgClass
+  } else {
+    return 'fd-svg-image'
+  }
+})
 </script>
 
 <style lang="scss" scoped>
