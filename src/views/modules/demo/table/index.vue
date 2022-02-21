@@ -57,7 +57,7 @@
             <fd-column label="菜单缩写" prop="abbr" width="80"></fd-column>
             <fd-column typ="custom" label="是否显示" prop="visible" width="80">
               <template #default="scope">
-                <fd-icon v-show="scope.row.visible" class="tb-icon is-success" icon="check"></fd-icon>
+                <fd-icon v-show="scope.row.visible" class="fd-tb-icon fd-tb-icon-success" icon="check"></fd-icon>
               </template>
             </fd-column>
             <fd-column label="菜单URL" prop="url"></fd-column>

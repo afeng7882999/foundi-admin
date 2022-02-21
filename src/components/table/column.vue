@@ -96,18 +96,18 @@
     >
       <template #default="scope">
         <slot name="prefix" :row="scope.row" :idx="scope.$index"></slot>
-        <el-tooltip :show-after="500" content="详细" placement="top">
-          <el-button v-if="detailVisible" class="tb-act-btn" plain type="primary" @click="actionEmit('detail', scope.row, scope.$index)">
+        <el-tooltip v-if="detailVisible" :show-after="500" content="详细" placement="top">
+          <el-button class="tb-act-btn" plain type="primary" @click="actionEmit('detail', scope.row, scope.$index)">
             <fd-icon icon="view-grid-detail"></fd-icon>
           </el-button>
         </el-tooltip>
-        <el-tooltip :show-after="500" content="编辑" placement="top">
-          <el-button v-if="editVisible" class="tb-act-btn" plain type="success" @click="actionEmit('edit', scope.row, scope.$index)">
+        <el-tooltip v-if="editVisible" :show-after="500" content="编辑" placement="top">
+          <el-button class="tb-act-btn" plain type="success" @click="actionEmit('edit', scope.row, scope.$index)">
             <fd-icon icon="write"></fd-icon>
           </el-button>
         </el-tooltip>
-        <el-tooltip :show-after="500" content="删除" placement="top">
-          <el-button v-if="delVisible" class="tb-act-btn" plain type="danger" @click="actionEmit('del', scope.row, scope.$index)">
+        <el-tooltip v-if="delVisible" :show-after="500" content="删除" placement="top">
+          <el-button class="tb-act-btn" plain type="danger" @click="actionEmit('del', scope.row, scope.$index)">
             <fd-icon icon="delete"></fd-icon>
           </el-button>
         </el-tooltip>

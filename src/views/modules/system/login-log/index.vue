@@ -63,7 +63,6 @@
           v-waves
           :disabled="state.selectedNodes.length <= 0"
           plain
-
           type="danger"
           @click="del()"
         >
@@ -78,8 +77,6 @@
               <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
             </el-badge>
           </el-tooltip>
-
-          <fd-table-setting :option="tableSettingOpt"></fd-table-setting>
         </div>
       </div>
     </div>
@@ -126,7 +123,6 @@ import Detail from './detail.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import usePage from '@/components/crud/use-page'
 import { TableColumn } from '@/components/table/types'
-import FdTableSetting from '@/components/table/table-setting.vue'
 
 const stateOption = {
   idField: loginLogFields.idField,
@@ -139,17 +135,14 @@ const stateOption = {
   tableColumns: [] as TableColumn[]
 }
 
-const { mixRefs, mixState: state, mixComputed, mixMethods, mixAttrs } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList(stateOption)
 const { queryForm, tableWrapper, table, detailDialog } = mixRefs
-const { rowDensity, columns, expandAll } = mixComputed
 const { queryList, resetQuery, toggleQueryForm, showDetail: _showDetail, sortChanged, del, exportData } = mixMethods
 const { tableAttrs, pageAttrs, detailAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
-
-const tableSettingOpt = { expandAll: () => expandAll, rowDensity: () => rowDensity, columns: () => columns }
 
 const showDetail = (row: ILoginLog, idx: number) => {
   _showDetail(idx)
