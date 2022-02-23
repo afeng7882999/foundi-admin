@@ -1,8 +1,7 @@
-import Api, { IResData } from '@/api'
-import { AnyObject } from '@/utils'
-import { IDictItem } from '@/api/system/dict-item'
+import Api, { ApiObj, ApiQuery } from '@/api'
+import { DictItem } from '@/api/system/dict-item'
 
-export interface IRole extends IResData {
+export interface Role extends ApiObj {
   // 主键
   id: string
   // 角色名称
@@ -34,33 +33,32 @@ export const roleFields = {
 }
 
 export const roleDicts = {
-  sysRoleDataScope: [] as IDictItem[]
+  sysRoleDataScope: [] as DictItem[]
 }
 
 export const roleQuery = {
   name: undefined,
   label: undefined,
   dataScopeDict: undefined
-}
+} as ApiQuery
 
 // api url
 export const url = '/api/system/role'
 
 // 获取单个系统角色
-export const roleGetOne = async (id: string) => Api.getOne<IRole>(url, id)
+export const roleGetOne = async (id: string) => Api.getOne<Role>(url, id)
 
 // 获取系统角色列表
-export const roleList = async (query?: AnyObject) => Api.getList<IRole>(url, query)
+export const roleList = async (query?: ApiQuery) => Api.getList<Role>(url, query)
 
 // 添加系统角色
-export const rolePostOne = async (data: AnyObject) => Api.postOne(url, data)
+export const rolePostOne = async (data: Partial<Role>) => Api.postOne(url, data)
 
 // 编辑系统角色
-export const rolePutOne = async (data: AnyObject) => Api.putOne(url, data)
+export const rolePutOne = async (data: Partial<Role>) => Api.putOne(url, data)
 
 // 删除系统角色
 export const roleDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统角色列表
-export const roleExport = async (filename?: string, params?: AnyObject) =>
-  Api.exportData(url + '/export', filename, params)
+export const roleExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)

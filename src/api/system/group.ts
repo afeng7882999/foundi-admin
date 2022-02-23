@@ -1,7 +1,6 @@
-import Api, { IResData } from '@/api'
-import { AnyObject } from '@/utils'
+import Api, {ApiObj, ApiQuery} from '@/api'
 
-export interface IGroup extends IResData {
+export interface Group extends ApiObj {
   // 主键
   id: string
   // 上级用户组ID，一级用户组为0
@@ -32,27 +31,26 @@ export const GROUP_DEFAULT_ROOT = {
   sort: 0,
   name: '全部',
   delFlag: false,
-  children: [] as IGroup[]
+  children: [] as Group[]
 }
 
 // api url
 export const url = '/api/system/group'
 
 // 获取单个系统用户组
-export const groupGetOne = async (id: string) => Api.getOne<IGroup>(url, id)
+export const groupGetOne = async (id: string) => Api.getOne<Group>(url, id)
 
 // 获取系统用户组列表
-export const groupList = async (query?: AnyObject) => Api.getList<IGroup>(url, query)
+export const groupList = async (query?: ApiQuery) => Api.getList<Group>(url, query)
 
 // 添加系统用户组
-export const groupPostOne = async (data: AnyObject) => Api.postOne(url, data)
+export const groupPostOne = async (data: Partial<Group>) => Api.postOne(url, data)
 
 // 编辑系统用户组
-export const groupPutOne = async (data: AnyObject) => Api.putOne(url, data)
+export const groupPutOne = async (data: Partial<Group>) => Api.putOne(url, data)
 
 // 删除系统用户组
 export const groupDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统用户组列表
-export const groupExport = async (filename?: string, params?: AnyObject) =>
-  Api.exportData(url + '/export', filename, params)
+export const groupExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)

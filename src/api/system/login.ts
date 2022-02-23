@@ -1,20 +1,20 @@
 import request, { httpEncrypt as requestEncrypt } from '@/app/request'
-import { AnyObject } from '@/utils'
+import { Response } from '@/api'
 
-export interface ILoginParam {
+export interface LoginParam {
   username: string
   password: string
   appName: string
   uuid: string
 }
 
-export interface IRegisterParam {
+export interface RegisterParam {
   username: string
   email: string
   password: string
 }
 
-export interface IResetPasswordParam {
+export interface ResetPasswordParam {
   username: string
   code: string
   type: 'email' | 'mobile'
@@ -27,7 +27,7 @@ export const url = '/api/login'
 export const logoutUrl = '/api/logout'
 
 // 账密登录
-export const login = async (param: ILoginParam) => {
+export const login = async (param: LoginParam) => {
   await requestEncrypt({
     url: url,
     method: 'post',
@@ -48,7 +48,7 @@ export const getCaptcha = async () => {
   const { data } = (await request({
     url: url + '/captcha',
     method: 'get'
-  })) as AnyObject
+  })) as Response
   const img = 'data:image/gif;base64,' + data.content.img
   const uuid = data.content.uuid
   const extra = data.content.extra
@@ -65,7 +65,7 @@ export const verifyCaptcha = async (uuid: string, code: string) => {
       uuid,
       code
     }
-  })) as AnyObject
+  })) as Response
 
   return data.content as boolean
 }
@@ -102,23 +102,23 @@ export const getWeixinUrl = async (appName: string) => {
     params: {
       appName
     }
-  })) as AnyObject
+  })) as Response
   return {
-    authzUrl: data.authzUrl as string,
-    state: data.state as string
+    authzUrl: data.content.authzUrl as string,
+    state: data.content.state as string
   }
 }
 
 // 通过微信登录
-export const loginByWeixin = async (state: string) => {
+export const loginByWeixin = async (state: string): Promise<boolean> => {
   const { data } = (await request({
     url: url + '/weixin-login',
     method: 'get',
     params: {
       state
     }
-  })) as any
-  return data.content as boolean
+  })) as Response
+  return data.content
 }
 
 // 获取QQ认证url
@@ -129,23 +129,23 @@ export const getQQUrl = async (appName: string) => {
     params: {
       appName
     }
-  })) as AnyObject
+  })) as Response
   return {
-    authzUrl: data.authzUrl as string,
-    state: data.state as string
+    authzUrl: data.content.authzUrl as string,
+    state: data.content.state as string
   }
 }
 
 // 通过QQ登录
-export const loginByQQ = async (state: string) => {
+export const loginByQQ = async (state: string): Promise<boolean> => {
   const { data } = (await request({
     url: url + '/qq-login',
     method: 'get',
     params: {
       state
     }
-  })) as any
-  return data.content as boolean
+  })) as Response
+  return data.content
 }
 
 // 获取微博认证url
@@ -156,27 +156,27 @@ export const getWeiboUrl = async (appName: string) => {
     params: {
       appName
     }
-  })) as AnyObject
+  })) as Response
   return {
-    authzUrl: data.authzUrl as string,
-    state: data.state as string
+    authzUrl: data.content.authzUrl as string,
+    state: data.content.state as string
   }
 }
 
 // 通过微博登录
-export const loginByWeibo = async (state: string) => {
+export const loginByWeibo = async (state: string): Promise<boolean> => {
   const { data } = (await request({
     url: url + '/weibo-login',
     method: 'get',
     params: {
       state
     }
-  })) as any
-  return data.content as boolean
+  })) as Response
+  return data.content
 }
 
 // 注册
-export const register = async (param: IRegisterParam) => {
+export const register = async (param: RegisterParam) => {
   await requestEncrypt({
     url: url + '/register',
     method: 'post',
@@ -185,27 +185,27 @@ export const register = async (param: IRegisterParam) => {
 }
 
 // 检测用户名是否可用
-export const checkUsername = async (username: string) => {
+export const checkUsername = async (username: string): Promise<boolean> => {
   const { data } = (await request({
     url: url + '/check-username',
     method: 'get',
     params: {
       username
     }
-  })) as any
-  return data.content as boolean
+  })) as Response
+  return data.content
 }
 
 // 检测Email是否可用
-export const checkEmail = async (email: string) => {
+export const checkEmail = async (email: string): Promise<boolean> => {
   const { data } = (await request({
     url: url + '/check-email',
     method: 'get',
     params: {
       email
     }
-  })) as any
-  return data.content as boolean
+  })) as Response
+  return data.content
 }
 
 // 检测是否是注册用户
@@ -216,11 +216,11 @@ export const checkUserExist = async (username: string) => {
     params: {
       username
     }
-  })) as AnyObject
+  })) as Response
   return {
-    exist: data.exist as boolean,
-    mobile: data.mobile as string,
-    email: data.email as string
+    exist: data.content.exist as boolean,
+    mobile: data.content.mobile as string,
+    email: data.content.email as string
   }
 }
 
@@ -237,7 +237,7 @@ export const sendResetPasswordCode = async (username: string, type: 'email' | 'm
 }
 
 // 重置密码
-export const resetPassword = async (param: IResetPasswordParam) => {
+export const resetPassword = async (param: ResetPasswordParam) => {
   await requestEncrypt({
     url: url + '/reset-password',
     method: 'put',
@@ -250,9 +250,9 @@ export const getAgreement = async () => {
   const { data } = (await request({
     url: url + '/agreement',
     method: 'get'
-  })) as AnyObject
+  })) as Response
   return {
-    agreement: data.userAgreement as string,
-    privacy: data.userPrivacy as string
+    agreement: data.content.userAgreement as string,
+    privacy: data.content.userPrivacy as string
   }
 }

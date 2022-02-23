@@ -1,9 +1,8 @@
-import Api, { IResData } from '@/api'
-import { AnyObject } from '@/utils'
+import Api, { ApiObj, ApiQuery } from '@/api'
 import request from '@/app/request'
-import { IDictItem } from '@/api/system/dict-item'
+import { DictItem } from '@/api/system/dict-item'
 
-export interface ITask extends IResData {
+export interface Task extends ApiObj {
   // 主键
   id: string
   // 任务名
@@ -41,34 +40,33 @@ export const taskFields = {
 export const taskQuery = {
   jobName: undefined,
   jobStatus: undefined
-}
+} as ApiQuery
 
 export const TASK_STATUS_DICT = [
   { itemKey: '1', itemValue: '运行中' },
   { itemKey: '0', itemValue: '停止中' }
-] as IDictItem[]
+] as DictItem[]
 
 // api url
 export const url = '/api/system/task'
 
 // 获取单个系统任务
-export const taskGetOne = async (id: string) => Api.getOne<ITask>(url, id)
+export const taskGetOne = async (id: string) => Api.getOne<Task>(url, id)
 
 // 获取系统任务列表
-export const taskList = async (query?: AnyObject) => Api.getList<ITask>(url, query)
+export const taskList = async (query?: ApiQuery) => Api.getList<Task>(url, query)
 
 // 添加系统任务
-export const taskPostOne = async (data: AnyObject) => Api.postOne(url, data)
+export const taskPostOne = async (data: Partial<Task>) => Api.postOne(url, data)
 
 // 编辑系统任务
-export const taskPutOne = async (data: AnyObject) => Api.putOne(url, data)
+export const taskPutOne = async (data: Partial<Task>) => Api.putOne(url, data)
 
 // 删除系统任务
 export const taskDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统任务列表
-export const taskExport = async (filename?: string, params?: AnyObject) =>
-  Api.exportData(url + '/export', filename, params)
+export const taskExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)
 
 // 启动/停止任务
 const changeTaskStatus = async (id: string, cmd: string) => {

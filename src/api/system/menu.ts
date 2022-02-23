@@ -1,8 +1,7 @@
-import Api, { IResData } from '@/api'
-import { AnyObject } from '@/utils'
-import { IDictItem } from '@/api/system/dict-item'
+import Api, { ApiObj, ApiQuery } from '@/api'
+import { DictItem } from '@/api/system/dict-item'
 
-export interface IMenu extends IResData {
+export interface Menu extends ApiObj {
   // 主键
   id: string
   // 父菜单ID，一级菜单为0
@@ -48,31 +47,30 @@ export const menuTreeFields = {
 }
 
 export const menuDicts = {
-  sysMenuType: [] as IDictItem[]
+  sysMenuType: [] as DictItem[]
 }
 
 export const menuQuery = {
   parentId: undefined
-}
+} as ApiQuery
 
 // api url
 export const url = '/api/system/menu'
 
 // 获取单个系统菜单
-export const menuGetOne = async (id: string) => Api.getOne<IMenu>(url, id)
+export const menuGetOne = async (id: string) => Api.getOne<Menu>(url, id)
 
 // 获取系统菜单列表
-export const menuList = async (query?: AnyObject) => Api.getList<IMenu>(url, query)
+export const menuList = async (query?: ApiQuery) => Api.getList<Menu>(url, query)
 
 // 添加系统菜单
-export const menuPostOne = async (data: AnyObject) => Api.postOne(url, data)
+export const menuPostOne = async (data: Partial<Menu>) => Api.postOne(url, data)
 
 // 编辑系统菜单
-export const menuPutOne = async (data: AnyObject) => Api.putOne(url, data)
+export const menuPutOne = async (data: Partial<Menu>) => Api.putOne(url, data)
 
 // 删除系统菜单
 export const menuDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统菜单列表
-export const menuExport = async (filename?: string, params?: AnyObject) =>
-  Api.exportData(url + '/export', filename, params)
+export const menuExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)

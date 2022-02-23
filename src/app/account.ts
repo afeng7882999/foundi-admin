@@ -1,4 +1,3 @@
-import { AnyObject } from '@/utils'
 import store from '@/store'
 import { login, logout } from '@/api/system/login'
 import settings from '@/app/settings'
@@ -23,7 +22,7 @@ export async function setToken(token: string): Promise<void> {
 /**
  * 用户登录
  */
-export async function userLogin(accountInfo: AnyObject): Promise<void> {
+export async function userLogin(accountInfo: { username: string; password: string; uuid: string }): Promise<void> {
   const username = accountInfo.username.trim()
   await login({
     username: username,

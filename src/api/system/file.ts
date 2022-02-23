@@ -1,9 +1,8 @@
-import Api, { IResData } from '@/api'
-import { AnyObject } from '@/utils'
-import { IDictItem } from '@/api/system/dict-item'
+import Api, { ApiObj, ApiQuery } from '@/api'
+import { DictItem } from '@/api/system/dict-item'
 import request from '@/app/request'
 
-export interface IFile extends IResData {
+export interface FileObj extends ApiObj {
   // 主键
   id: string
   // 文件名
@@ -25,14 +24,14 @@ export const fileFields = {
 }
 
 export const fileDicts = {
-  sysFileType: [] as IDictItem[]
+  sysFileType: [] as DictItem[]
 }
 
 export const fileQuery = {
   name: undefined,
   oss: undefined,
   typeDict: undefined
-}
+} as ApiQuery
 
 export const DEFAULT_OSS = 'local_oss_default'
 
@@ -40,36 +39,32 @@ export const DEFAULT_OSS = 'local_oss_default'
 export const url = '/api/system/file'
 
 // 获取单个文件
-export const fileGetOne = async (id: string) => Api.getOne<IFile>(url, id)
+export const fileGetOne = async (id: string) => Api.getOne<FileObj>(url, id)
 
 // 获取文件列表
-export const fileList = async (query?: AnyObject) => Api.getList<IFile>(url, query)
+export const fileList = async (query?: ApiQuery) => Api.getList<FileObj>(url, query)
 
 // 编辑文件
-export const filePutOne = async (data: AnyObject) => Api.putOne(url, data)
+export const filePutOne = async (data: Partial<FileObj>) => Api.putOne(url, data)
 
 // 删除文件
 export const fileDel = async (ids: string[]) => Api.del(url, ids)
 
 // 上传文件
-export const upload = async (files: File[], oss = DEFAULT_OSS) => {
+export const upload = async (files: File[], oss = DEFAULT_OSS): Promise<string[]> => {
   const formData = new FormData()
   files.forEach((file) => {
     formData.append('files', file)
   })
   formData.append('oss', oss)
-  try {
-    const { data } = await request({
-      url: url + '/upload',
-      method: 'post',
-      headers: { 'Content-type': 'multipart/form-data' },
-      data: formData
-    })
-    return data.content as string[]
-  } catch (e) {
-    console.log(e)
-  }
+  const { data } = await request({
+    url: url + '/upload',
+    method: 'post',
+    headers: { 'Content-type': 'multipart/form-data' },
+    data: formData
+  })
+  return data.content
 }
 
 // 查询当前用户文件
-export const listFileOfCurrent = async (query?: AnyObject) => Api.getList<IFile>(url + '/current', query)
+export const listFileOfCurrent = async (query?: ApiQuery) => Api.getList<FileObj>(url + '/current', query)

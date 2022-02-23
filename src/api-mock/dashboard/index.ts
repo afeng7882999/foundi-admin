@@ -1,10 +1,10 @@
 import { getDateListByRange, getLastDateList } from '@/utils/time'
-import { IContentStat } from '@/api/dashboard'
+import { ContentStat } from '@/api/dashboard'
 import { isNumber } from '@vueuse/core'
 
 export type ContentStatRange = number | Date[]
 
-export const getContentStat = async (range = 7 as ContentStatRange): Promise<IContentStat[]> => {
+export const getContentStat = async (range = 7 as ContentStatRange): Promise<ContentStat[]> => {
   let dateList
   if (isNumber(range)) {
     dateList = getLastDateList(range)
@@ -22,7 +22,7 @@ export const getContentStat = async (range = 7 as ContentStatRange): Promise<ICo
   ]
   const shares = [33, 41, 39, 25, 84, 110, 85, 101, 30, 61, 95, 57, 127, 65, 39, 30, 37, 48, 95, 42, 23, 17, 57, 61, 43, 27, 75, 85, 42, 40]
   const comments = [14, 4, 23, 10, 56, 95, 15, 84, 8, 18, 74, 3, 105, 29, 21, 5, 16, 13, 58, 20, 1, 4, 33, 39, 17, 7, 55, 59, 22, 12]
-  const result = [] as IContentStat[]
+  const result = [] as ContentStat[]
   for (let i = 0; i < dateList.length; i++) {
     const n = i % 30
     result.push({ date: dateList[i], read: reads[n], like: likes[n], comment: comments[n], share: shares[n] })

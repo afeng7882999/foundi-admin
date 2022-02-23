@@ -1,8 +1,7 @@
-import Api, { IResData } from '@/api'
-import { AnyObject } from '@/utils'
-import { IDictItem } from '@/api/system/dict-item'
+import Api, { ApiObj, ApiQuery } from '@/api'
+import { DictItem } from '@/api/system/dict-item'
 
-export interface IOAuthUser extends IResData {
+export interface OAuthUser extends ApiObj {
   // 主键
   id: string
   // 账号
@@ -30,8 +29,8 @@ export const oauthUserFields = {
 }
 
 export const oauthUserDicts = {
-  gender: [] as IDictItem[],
-  sysOAuthType: [] as IDictItem[]
+  gender: [] as DictItem[],
+  sysOAuthType: [] as DictItem[]
 }
 
 export const oauthUserQuery = {
@@ -39,26 +38,25 @@ export const oauthUserQuery = {
   nickName: '',
   oAuthTypeDict: '',
   userId: ''
-}
+} as ApiQuery
 
 // api url
 export const url = '/api/system/oauthUser'
 
 // 获取单个OAuth用户
-export const oauthUserGetOne = async (id: string) => Api.getOne<IOAuthUser>(url, id)
+export const oauthUserGetOne = async (id: string) => Api.getOne<OAuthUser>(url, id)
 
 // 获取OAuth用户列表
-export const oauthUserList = async (query?: AnyObject) => Api.getList<IOAuthUser>(url, query)
+export const oauthUserList = async (query?: ApiQuery) => Api.getList<OAuthUser>(url, query)
 
 // 添加OAuth用户
-export const oauthUserPostOne = async (data: AnyObject) => Api.postOne(url, data)
+export const oauthUserPostOne = async (data: Partial<OAuthUser>) => Api.postOne(url, data)
 
 // 编辑OAuth用户
-export const oauthUserPutOne = async (data: AnyObject) => Api.putOne(url, data)
+export const oauthUserPutOne = async (data: Partial<OAuthUser>) => Api.putOne(url, data)
 
 // 删除OAuth用户
 export const oauthUserDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出OAuth用户列表
-export const oauthUserExport = async (filename?: string, params?: AnyObject) =>
-  Api.exportData(url + '/export', filename, params)
+export const oauthUserExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)

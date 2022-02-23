@@ -1,9 +1,10 @@
-import Api, { IResData } from '@/api'
-import { AnyObject } from '@/utils'
+import Api, { ApiObj, ApiQuery } from '@/api'
 import request from '@/app/request'
-import { IDictList } from '@/components/crud/use-dict'
+import { Indexable } from '@/utils'
 
-export interface IDictItem extends IResData {
+export type DictList = Indexable<DictItem[]>
+
+export interface DictItem extends ApiObj {
   // 主键
   id?: string
   // 排序（升序）
@@ -39,35 +40,34 @@ export const dictItemParams = {
 export const dictItemQuery = {
   itemKey: undefined,
   itemValue: undefined
-}
+} as ApiQuery
 
 // api url
 export const url = '/api/system/dictItem'
 
 // 获取单个字典条目
-export const dictItemGetOne = async (id: string) => Api.getOne<IDictItem>(url, id)
+export const dictItemGetOne = async (id: string) => Api.getOne<DictItem>(url, id)
 
 // 获取字典条目列表
-export const dictItemList = async (query?: AnyObject) => Api.getList<IDictItem>(url, query)
+export const dictItemList = async (query?: ApiQuery) => Api.getList<DictItem>(url, query)
 
 // 添加字典条目
-export const dictItemPostOne = async (data: AnyObject) => Api.postOne(url, data)
+export const dictItemPostOne = async (data: Partial<DictItem>) => Api.postOne(url, data)
 
 // 编辑字典条目
-export const dictItemPutOne = async (data: AnyObject) => Api.putOne(url, data)
+export const dictItemPutOne = async (data: Partial<DictItem>) => Api.putOne(url, data)
 
 // 删除字典条目
 export const dictItemDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出字典条目列表
-export const dictItemExport = async (filename?: string, params?: AnyObject) =>
-  Api.exportData(url + '/export', filename, params)
+export const dictItemExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)
 
 // 由字典名获取字典条目列表
-export const getDictListByName = async (names: string[]) => {
+export const getDictListByName = async (names: string[]): Promise<DictList> => {
   const { data } = await request({
     url: `${url}/listByName/${names.join(',')}`,
     method: 'get'
   })
-  return data.content as IDictList
+  return data.content
 }

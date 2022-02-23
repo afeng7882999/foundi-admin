@@ -1,25 +1,58 @@
-import { AnyObject } from '@/utils'
 import request from '@/app/request'
 import qs from 'qs'
 import { downloadFile } from '@/utils/file'
 import { getToken } from '@/app/account'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { addOrRemoveSlash } from '@/utils/query'
+import { Indexable } from '@/types/global'
 
-export type IResData = AnyObject
+// axios response
+export type Response<T = ResData> = AxiosResponse<T>
+
+// http返回数据页
+export type ResPage = Partial<{
+  count: number
+  limit: number
+  total: number
+  current: number
+}>
+
+// http返回数据，response.data
+export type ResData<T = any> = Partial<{
+  msg: string | string[]
+  ex: string
+  content: T | T[] | Indexable<T>
+  page: ResPage
+  token: string
+}>
+
+// 提交或返回的单一数据
+export type ApiObj = Indexable
+
+// 返回的数据列表
+export type ApiList<T extends ApiObj> = {
+  data: T[]
+  resData: ResData<T>
+} & Partial<{
+  total: number
+  count: number
+}>
+
+// 查询条件
+export type ApiQuery = Indexable
 
 // 获取单个项目
-const getOne = async <T extends IResData>(getUrl: string, id: string) => {
+const getOne = async <T extends ApiObj>(getUrl: string, id: string): Promise<T> => {
   getUrl = addOrRemoveSlash(getUrl, true)
   const { data } = await request({
     url: `${getUrl}${id}`,
     method: 'get'
   })
-  return data.content as T
+  return data.content
 }
 
 // 获取列表
-const getList = async <T extends IResData>(listUrl: string, query?: AnyObject) => {
+const getList = async <T extends ApiObj>(listUrl: string, query?: ApiQuery): Promise<ApiList<T>> => {
   listUrl = addOrRemoveSlash(listUrl, false)
   if (query !== undefined) {
     listUrl =
@@ -31,28 +64,28 @@ const getList = async <T extends IResData>(listUrl: string, query?: AnyObject) =
         serializeDate: dateSerialize
       })
   }
-  const { data } = (await request({
+  const { data } = await request({
     url: listUrl,
     method: 'get'
-  })) as AnyObject
+  })
 
   if (data.page) {
     return {
-      data: data.content as T[],
-      total: data.page.total as number,
-      count: data.page.count as number,
-      resData: data as AnyObject
+      data: data.content,
+      total: data.page.total,
+      count: data.page.count,
+      resData: data
     }
   } else {
     return {
-      data: data.content as T[],
-      resData: data as AnyObject
+      data: data.content,
+      resData: data
     }
   }
 }
 
 // 添加项目
-const postOne = async (postUrl: string, data: AnyObject) => {
+const postOne = async (postUrl: string, data: ApiObj) => {
   await request({
     url: postUrl,
     method: 'post',
@@ -61,7 +94,7 @@ const postOne = async (postUrl: string, data: AnyObject) => {
 }
 
 // 编辑项目
-const putOne = async (putUrl: string, data: AnyObject) => {
+const putOne = async (putUrl: string, data: ApiObj) => {
   await request({
     url: putUrl,
     method: 'put',
@@ -79,13 +112,13 @@ const del = async (delUrl: string, ids: string[]) => {
 }
 
 // 导出
-const exportData = async (exportUrl: string, filename?: string, params?: AnyObject) => {
+const exportData = async (exportUrl: string, filename?: string, params?: ApiQuery) => {
   const { data } = await download(exportUrl, params)
   downloadFile(data, filename ? filename : '数据', 'xlsx')
 }
 
 // 下载文件
-const download = async (downloadUrl: string, params?: AnyObject): Promise<any> => {
+const download = async (downloadUrl: string, params?: ApiQuery): Promise<any> => {
   downloadUrl = addOrRemoveSlash(downloadUrl, false)
   if (params !== undefined) {
     downloadUrl = downloadUrl + '?' + qs.stringify(params, { indices: false })
@@ -109,7 +142,6 @@ async function upload(uploadUrl: string, file: Blob): Promise<any> {
 
 // Date类型序列化
 const dateSerialize = (date: Date) => {
-  // console.log(date.toString())
   return date.toString()
 }
 

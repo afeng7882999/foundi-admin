@@ -1,11 +1,10 @@
-import Api, { IResData } from '@/api'
-import { AnyObject } from '@/utils'
+import Api, { ApiObj, ApiQuery } from '@/api'
 import request from '@/app/request'
 import { downloadFile } from '@/utils/file'
-import { IDictItem } from '@/api/system/dict-item'
+import { DictItem } from '@/api/system/dict-item'
 import { isString } from '@vueuse/core'
 
-export interface IGenTable extends IResData {
+export interface GenTable extends ApiObj {
   // 主键
   id: string
   // 表名
@@ -50,7 +49,7 @@ export interface IGenTable extends IResData {
   author: string
 }
 
-export interface IGenTableColumn extends IResData {
+export interface GenTableColumn extends ApiObj {
   // 主键
   id: string
   // 表名称
@@ -91,7 +90,7 @@ export interface IGenTableColumn extends IResData {
   sort: number
 }
 
-export interface ICodePreview {
+export interface CodePreview {
   // 文件路径
   path: string
   // 文件名
@@ -100,9 +99,9 @@ export interface ICodePreview {
   content: string
 }
 
-export interface IGen extends IResData {
-  table: IGenTable
-  columns: IGenTableColumn[]
+export interface GenData extends ApiObj {
+  table: Partial<GenTable>
+  columns: Partial<GenTableColumn>[]
 }
 
 export const genTableFields = {
@@ -110,27 +109,27 @@ export const genTableFields = {
 }
 
 export const genTableDicts = {
-  gender: [] as IDictItem[],
-  sysUserStatus: [] as IDictItem[]
+  gender: [] as DictItem[],
+  sysUserStatus: [] as DictItem[]
 }
 
 export const genTableQuery = {
   tableName: undefined,
   tableComment: undefined,
   tableCreateTime: [] as Date[]
-}
+} as ApiQuery
 
 // api url
 export const url = '/api/generator/genTable'
 
 // 获取单个业务表
-export const genTableGetOne = async (id: string) => Api.getOne<IGen>(url, id)
+export const genTableGetOne = async (id: string) => Api.getOne<GenData>(url, id)
 
 // 获取业务表列表
-export const genTableList = async (query?: AnyObject) => Api.getList<IGenTable>(url, query)
+export const genTableList = async (query?: ApiQuery) => Api.getList<GenTable>(url, query)
 
 // 由数据库查询业务表
-export const genTableListDb = async (query?: AnyObject) => Api.getList<IGenTable>(url + '/listDb', query)
+export const genTableListDb = async (query?: ApiQuery) => Api.getList<GenTable>(url + '/listDb', query)
 
 // 由数据库导入业务表
 export const genTableImportDb = async (tableNames: string[]) => {
@@ -142,7 +141,7 @@ export const genTableImportDb = async (tableNames: string[]) => {
 }
 
 // 编辑业务表
-export const genTablePutOne = async (data: AnyObject) => Api.putOne(url, data)
+export const genTablePutOne = async (data: GenData) => Api.putOne(url, data)
 
 // 删除业务表
 export const genTableDel = async (ids: string[]) => Api.del(url, ids)
@@ -156,13 +155,13 @@ export const genTableSyncDb = async (id: string) => {
 }
 
 // 生成代码并预览
-export const preview = async (ids: string[] | string) => {
+export const preview = async (ids: string[] | string): Promise<CodePreview[]> => {
   const param = isString(ids) ? ids : ids.join(',')
   const { data } = await request({
     url: `${url}/preview/${param}`,
     method: 'get'
   })
-  return data.content as ICodePreview[]
+  return data.content
 }
 
 // 生成代码并下载

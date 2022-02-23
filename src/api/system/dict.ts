@@ -1,7 +1,6 @@
-import Api, { IResData } from '@/api'
-import { AnyObject } from '@/utils'
+import Api, { ApiObj, ApiQuery } from '@/api'
 
-export interface IDict extends IResData {
+export interface Dict extends ApiObj {
   // 主键
   id: string
   // 字典名
@@ -29,26 +28,25 @@ export const dictFields = {
 export const dictQuery = {
   name: undefined,
   nameCn: undefined
-}
+} as ApiQuery
 
 // api url
 export const url = '/api/system/dict'
 
 // 获取单个字典
-export const dictGetOne = async (id: string) => Api.getOne<IDict>(url, id)
+export const dictGetOne = async (id: string) => Api.getOne<Dict>(url, id)
 
 // 获取字典列表
-export const dictList = async (query?: AnyObject) => Api.getList<IDict>(url, query)
+export const dictList = async (query?: ApiQuery) => Api.getList<Dict>(url, query)
 
 // 添加字典
-export const dictPostOne = async (data: AnyObject) => Api.postOne(url, data)
+export const dictPostOne = async (data: Partial<Dict>) => Api.postOne(url, data)
 
 // 编辑字典
-export const dictPutOne = async (data: AnyObject) => Api.putOne(url, data)
+export const dictPutOne = async (data: Partial<Dict>) => Api.putOne(url, data)
 
 // 删除字典
 export const dictDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出字典列表
-export const dictExport = async (filename?: string, params?: AnyObject) =>
-  Api.exportData(url + '/export', filename, params)
+export const dictExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)

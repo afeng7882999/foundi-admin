@@ -1,9 +1,9 @@
 import dayjs from 'dayjs'
 import request from '@/app/request'
-import { IResData } from '@/api'
+import { ApiObj } from '@/api'
 import { isNumber } from '@vueuse/core'
 
-export interface IContentStat extends IResData {
+export interface ContentStat extends ApiObj {
   // 日期
   date: string
   // 阅读
@@ -20,7 +20,7 @@ export type ContentStatRange = number | Date[]
 
 const dashboardUrl = '/dashboard'
 
-export const getContentStat = async (range = 7 as ContentStatRange) => {
+export const getContentStat = async (range = 7 as ContentStatRange): Promise<ContentStat[]> => {
   let start, end
   if (isNumber(range)) {
     start = dayjs().subtract(range, 'day').startOf('day').valueOf()
@@ -38,5 +38,5 @@ export const getContentStat = async (range = 7 as ContentStatRange) => {
       end: end
     }
   })
-  return data as IContentStat[]
+  return data.content
 }

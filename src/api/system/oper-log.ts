@@ -1,8 +1,7 @@
-import Api, { IResData } from '@/api'
-import { AnyObject } from '@/utils'
-import { IDictItem } from '@/api/system/dict-item'
+import Api, { ApiObj, ApiQuery } from '@/api'
+import { DictItem } from '@/api/system/dict-item'
 
-export interface IOperLog extends IResData {
+export interface OperLog extends ApiObj {
   // 主键
   id: string
   // 模块标题
@@ -42,7 +41,7 @@ export const operLogFields = {
 }
 
 export const operLogDicts = {
-  sysOperLogStatus: [] as IDictItem[]
+  sysOperLogStatus: [] as DictItem[]
 }
 
 export const operLogQuery = {
@@ -52,26 +51,25 @@ export const operLogQuery = {
   operIp: undefined,
   operTime: [] as Date[],
   orderByList: [] as string[]
-}
+} as ApiQuery
 
 // api url
 export const url = '/api/system/operLog'
 
 // 获取单个系统操作日志
-export const operLogGetOne = async (id: string) => Api.getOne<IOperLog>(url, id)
+export const operLogGetOne = async (id: string) => Api.getOne<OperLog>(url, id)
 
 // 获取系统操作日志列表
-export const operLogList = async (query?: AnyObject) => Api.getList<IOperLog>(url, query)
+export const operLogList = async (query?: ApiQuery) => Api.getList<OperLog>(url, query)
 
 // 添加系统操作日志
-export const operLogPostOne = async (data: AnyObject) => Api.postOne(url, data)
+export const operLogPostOne = async (data: Partial<OperLog>) => Api.postOne(url, data)
 
 // 编辑系统操作日志
-export const operLogPutOne = async (data: AnyObject) => Api.putOne(url, data)
+export const operLogPutOne = async (data: Partial<OperLog>) => Api.putOne(url, data)
 
 // 删除系统操作日志
 export const operLogDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统操作日志列表
-export const operLogExport = async (filename?: string, params?: AnyObject) =>
-  Api.exportData(url + '/export', filename, params)
+export const operLogExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)

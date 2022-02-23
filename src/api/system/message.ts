@@ -1,9 +1,8 @@
-import Api, { IResData } from '@/api'
-import { AnyObject } from '@/utils'
+import Api, { ApiObj, ApiQuery } from '@/api'
 import request from '@/app/request'
-import { IDictItem } from '@/api/system/dict-item'
+import { DictItem } from '@/api/system/dict-item'
 
-export interface IMessage extends IResData {
+export interface Message extends ApiObj {
   // 主键
   id: string
   // 标题
@@ -22,7 +21,7 @@ export interface IMessage extends IResData {
   createAt: string
 }
 
-export interface IUserMessage extends IResData {
+export interface UserMessage extends ApiObj {
   // 主键
   id: string
   // 标题
@@ -50,22 +49,22 @@ export const messageFields = {
 }
 
 export const messageDicts = {
-  sysMessageType: [] as IDictItem[]
+  sysMessageType: [] as DictItem[]
 }
 
 export const messageQuery = {
   title: undefined,
   typeDict: undefined,
   createAt: [] as Date[]
-}
+} as ApiQuery
 
 export const useMessageFields = {
   idField: 'id'
 }
 
 export const userMessageDicts = {
-  sysMessageType: [] as IDictItem[],
-  sysMessageStatus: [] as IDictItem[]
+  sysMessageType: [] as DictItem[],
+  sysMessageStatus: [] as DictItem[]
 }
 
 export const userMessageQuery = {
@@ -73,7 +72,7 @@ export const userMessageQuery = {
   typeDict: undefined,
   statusDict: undefined,
   createAt: [] as Date[]
-}
+} as ApiQuery
 
 // api url
 export const url = '/api/system/message'
@@ -82,26 +81,25 @@ export const url = '/api/system/message'
 export const userMessageUrl = '/api/system/message/current'
 
 // 获取单个系统消息
-export const messageGetOne = async (id: string) => Api.getOne<IMessage>(url, id)
+export const messageGetOne = async (id: string) => Api.getOne<Message>(url, id)
 
 // 获取系统消息列表
-export const messageList = async (query?: AnyObject) => Api.getList<IMessage>(url, query)
+export const messageList = async (query?: ApiQuery) => Api.getList<Message>(url, query)
 
 // 添加系统消息
-export const messagePostOne = async (data: AnyObject) => Api.postOne(url, data)
+export const messagePostOne = async (data: Partial<Message>) => Api.postOne(url, data)
 
 // 编辑系统消息
-export const messagePutOne = async (data: AnyObject) => Api.putOne(url, data)
+export const messagePutOne = async (data: Partial<Message>) => Api.putOne(url, data)
 
 // 删除系统消息
 export const messageDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统消息列表
-export const messageExport = async (filename?: string, params?: AnyObject) =>
-  Api.exportData(url + '/export', filename, params)
+export const messageExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)
 
 // 获取当前用户系统消息列表
-export const listMessageOfCurrent = async (query?: AnyObject) => Api.getList<IUserMessage>(userMessageUrl, query)
+export const listMessageOfCurrent = async (query?: ApiQuery) => Api.getList<UserMessage>(userMessageUrl, query)
 
 // 当前用户系统消息设置已读
 export const SetMessageReadOfCurrent = async (ids: string[]) => {
