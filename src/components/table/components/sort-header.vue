@@ -17,11 +17,10 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, PropType, ref } from 'vue'
-import { AnyObject } from '@/utils'
+import { computed, ref } from 'vue'
 
 const props = defineProps({
-  column: Object as PropType<AnyObject>,
+  column: Object,
   default: null,
   tipShowAfter: {
     type: Number,

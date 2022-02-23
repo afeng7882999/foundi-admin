@@ -1,4 +1,4 @@
-import { WritableComputedRef } from '@vue/reactivity'
+import { Ref } from '@vue/reactivity'
 
 export type ColType = 'default' | 'custom' | 'datetime' | 'dict' | 'list' | 'act' | 'selection' | 'icon'
 export type RowDensity = 'high' | 'default' | 'low'
@@ -11,11 +11,11 @@ export interface TableColumn {
   type?: string
   fixed?: boolean | string
 }
-export interface TableSettingOption {
+export interface TableSettingProp {
   treeTable?: boolean
-  expandAll: () => WritableComputedRef<boolean | null>
-  rowDensity: () => WritableComputedRef<RowDensity | null>
-  columns: () => WritableComputedRef<TableColumn[] | null>
-  stripe: () => WritableComputedRef<boolean | null>
-  border: () => WritableComputedRef<boolean | null>
+  expandAll: () => Ref<boolean | null>
+  rowDensity: () => Ref<RowDensity | null>
+  columns: () => Ref<TableColumn[] | null>
+  stripe: () => Ref<boolean | null>
+  border: () => Ref<boolean | null>
 }

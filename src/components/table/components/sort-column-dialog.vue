@@ -58,7 +58,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
-import useTable from '@/components/table/use-table'
+import useSortableRow from '@/components/table/hooks/use-sortable-row'
 import { TableColumn } from '@/components/table/types'
 
 const tableWrapper = ref()
@@ -98,10 +98,8 @@ const changeFixed = (row: TableColumn, fixed: 'left' | 'right') => {
   row.fixed = fixed
 }
 
-const { tableAttrs } = useTable(table, tableWrapper, {
-  alias: '_d0',
+useSortableRow(table, {
   data: () => state.tableColumns,
-  configurable: false,
   rowDraggable: true
 })
 

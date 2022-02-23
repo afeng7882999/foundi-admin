@@ -38,12 +38,12 @@ export default {
 
 <script setup lang="ts">
 import { PropType, ref } from 'vue'
-import { TableColumn, TableSettingOption } from '@/components/table/types'
+import { TableColumn, TableSettingProp } from '@/components/table/types'
 import FdSortColumnDialog from './sort-column-dialog.vue'
 
 const props = defineProps({
   option: {
-    type: Object as PropType<TableSettingOption>,
+    type: Object as PropType<TableSettingProp>,
     required: true
   },
   tip: {
