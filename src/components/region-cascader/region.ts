@@ -1,18 +1,18 @@
 // from https://github.com/Plortinus/element-china-area-data
 
 import REGION_DATA from 'china-area-data'
-import { AnyObject } from '@/utils'
 import { cloneDeep } from 'lodash-es'
+import { Indexable } from '@/types/global'
 
-const regionData = REGION_DATA as AnyObject
+const regionData = REGION_DATA as Indexable
 const provinceObject = regionData['86']
 
 // code转汉字大对象
-const codeToName = {} as AnyObject
+const codeToName = {} as Indexable
 // 汉字转code大对象
-const nameToCode = {} as AnyObject
+const nameToCode = {} as Indexable
 // 三级树状列表
-const region3Array = [] as AnyObject[]
+const region3Array = [] as Indexable[]
 
 codeToName[''] = '全部'
 

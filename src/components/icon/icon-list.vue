@@ -2,25 +2,18 @@
   <div class="fd-icon-list" :class="listClass">
     <el-input
       v-if="showFilter"
-      class="fd-icon-list__search"
       v-model="filterText"
+      class="fd-icon-list__search"
       placeholder="查找"
       prefix-icon="el-icon-search"
-
       clearable
       @input="onSearchInput"
     />
-    <div
-      class="fd-icon-list__cell"
-      v-for="item in filteredList"
-      :key="item"
-      :class="cellClass(item)"
-      @click="onCellClick(item)"
-    >
+    <div v-for="item in filteredList" :key="item" class="fd-icon-list__cell" :class="cellClass(item)" @click="onCellClick(item)">
       <fd-icon class="fd-icon-list__icon" :icon="item"></fd-icon>
       <div class="fd-icon-list__label">{{ item }}</div>
     </div>
-    <div class="fd-icon-list__append" v-for="i in 30" :key="i" aria-hidden="true"></div>
+    <div v-for="i in 30" :key="i" class="fd-icon-list__append" aria-hidden="true"></div>
   </div>
 </template>
 
@@ -51,9 +44,7 @@ export default defineComponent({
 
     const filteredList = computed(() => {
       if (state.filterText) {
-        return getNameList().filter(
-          (item) => item.toLowerCase().indexOf(state.filterText.toLowerCase()) !== -1
-        )
+        return getNameList().filter((item: string) => item.toLowerCase().indexOf(state.filterText.toLowerCase()) !== -1)
       } else {
         return getNameList()
       }

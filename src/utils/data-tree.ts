@@ -1,36 +1,32 @@
-import { AnyObject } from '@/utils/index'
 import { cloneDeep } from 'lodash-es'
+import { Indexable } from '@/types/global'
 
-export interface ITreeNode {
-  [key: string]: any
-}
+export type TreeNode = Indexable
 
 // 默认树状节点
-export interface ITreeNodeDefault extends ITreeNode {
+export type TreeNodeDefault = TreeNode & {
   id: string
   parentId: string
   parentPath: string
   sort: number
   level: number
-  children: ITreeNodeDefault[]
-
-  [key: string]: any
+  children: TreeNodeDefault[]
 }
 
 // 树状节点属性名称
-export interface ITreeFields {
-  idField?: string
-  parentIdField?: string
+export interface TreeFields {
+  idField: string
+  parentIdField: string
   parentPathField?: string
-  sortField?: string
+  sortField: string
   levelField?: string
-  childrenField?: string
+  childrenField: string
 
   [key: string]: any
 }
 
 // 树状节点默认属性名称
-export const DEFAULT_TREE_FIELDS: ITreeFields = {
+export const DEFAULT_TREE_FIELDS: Partial<TreeFields> = {
   idField: 'id',
   parentIdField: 'parentId',
   parentPathField: 'parentPath',
@@ -42,7 +38,7 @@ export const DEFAULT_TREE_FIELDS: ITreeFields = {
 /**
  * 树排序
  */
-function sortTree<T extends ITreeNode>(treeNodes: T[], opt = DEFAULT_TREE_FIELDS) {
+function sortTree<T extends TreeNode>(treeNodes: T[], opt = DEFAULT_TREE_FIELDS) {
   const { sortField, childrenField } = opt
   treeNodes.sort((a, b) => a[sortField as string] - b[sortField as string])
   treeNodes.map((item) => {
@@ -55,7 +51,7 @@ function sortTree<T extends ITreeNode>(treeNodes: T[], opt = DEFAULT_TREE_FIELDS
 /**
  * 是否是树状数据
  */
-export function isTreeData(nodes: AnyObject[], opt = DEFAULT_TREE_FIELDS) {
+export function isTreeData(nodes: Indexable[], opt = DEFAULT_TREE_FIELDS) {
   const { childrenField } = opt
   return nodes && nodes[0].hasOwnProperty(childrenField as string)
 }
@@ -63,14 +59,14 @@ export function isTreeData(nodes: AnyObject[], opt = DEFAULT_TREE_FIELDS) {
 /**
  * 列表结构转树结构
  */
-export function arrayToTree<T extends ITreeNode>(treeNodes: T[], opt = DEFAULT_TREE_FIELDS): T[] {
+export function arrayToTree<T extends TreeNode>(treeNodes: T[], opt = DEFAULT_TREE_FIELDS): T[] {
   const { idField, childrenField, parentIdField } = opt
-  const map = {} as AnyObject
+  const map = {} as Indexable
   const arrayOfTree = [] as T[]
   for (let i = 0; i < treeNodes.length; i += 1) {
     const k = treeNodes[i][idField as string] as string
     map[k] = i
-    ;(treeNodes[i] as AnyObject)[childrenField as string] = []
+    ;(treeNodes[i] as Indexable)[childrenField as string] = []
   }
   for (let i = 0; i < treeNodes.length; i += 1) {
     const node = treeNodes[i]
@@ -90,7 +86,7 @@ export function arrayToTree<T extends ITreeNode>(treeNodes: T[], opt = DEFAULT_T
 /**
  * 遍历树
  */
-export function traverseTree<T extends ITreeNode>(treeNodes: T[], arranger: (node: T) => void, opt = DEFAULT_TREE_FIELDS): T[] {
+export function traverseTree<T extends TreeNode>(treeNodes: T[], arranger: (node: T) => void, opt = DEFAULT_TREE_FIELDS): T[] {
   const { childrenField } = opt
   let stack: T[] = []
   stack = stack.concat(treeNodes)
@@ -109,7 +105,7 @@ export function traverseTree<T extends ITreeNode>(treeNodes: T[], arranger: (nod
 /**
  * 设置兄弟节点
  */
-export function setSiblings<T extends ITreeNode>(treeNodes: T[], parent: T, props: AnyObject, opt = DEFAULT_TREE_FIELDS): void {
+export function setSiblings<T extends TreeNode>(treeNodes: T[], parent: T, props: Indexable, opt = DEFAULT_TREE_FIELDS): void {
   const { parentIdField } = opt
   traverseTree<T>(
     treeNodes,
@@ -126,7 +122,7 @@ export function setSiblings<T extends ITreeNode>(treeNodes: T[], parent: T, prop
  * 树筛选
  * 父节点不满足条件即不遍历子节点
  */
-export function filterTree<T extends ITreeNode>(treeNodes: T[], matcher: (node: T) => boolean, opt = DEFAULT_TREE_FIELDS): T[] {
+export function filterTree<T extends TreeNode>(treeNodes: T[], matcher: (node: T) => boolean, opt = DEFAULT_TREE_FIELDS): T[] {
   const { childrenField } = opt
   const result = [] as T[]
   for (const root of treeNodes) {
@@ -151,7 +147,7 @@ export function filterTree<T extends ITreeNode>(treeNodes: T[], matcher: (node: 
 /**
  * 获取多个树节点
  */
-export function getTreeNodes<T extends ITreeNode>(treeNodes: T[], matcher: (node: T) => boolean, opt = DEFAULT_TREE_FIELDS): T[] {
+export function getTreeNodes<T extends TreeNode>(treeNodes: T[], matcher: (node: T) => boolean, opt = DEFAULT_TREE_FIELDS): T[] {
   const { childrenField } = opt
   let stack: T[] = []
   const result = []
@@ -171,7 +167,7 @@ export function getTreeNodes<T extends ITreeNode>(treeNodes: T[], matcher: (node
 /**
  * 获取一个树节点
  */
-export function getTreeNode<T extends ITreeNode>(treeNodes: T[], matcher: (node: T) => boolean, opt = DEFAULT_TREE_FIELDS): T | null {
+export function getTreeNode<T extends TreeNode>(treeNodes: T[], matcher: (node: T) => boolean, opt = DEFAULT_TREE_FIELDS): T | null {
   const { childrenField } = opt
   let stack: T[] = []
   stack = stack.concat(treeNodes)
@@ -190,7 +186,7 @@ export function getTreeNode<T extends ITreeNode>(treeNodes: T[], matcher: (node:
 /**
  * 获取父节点
  */
-export function getParent<T extends ITreeNode>(treeNodes: T[], ITreeNode: T, opt = DEFAULT_TREE_FIELDS): T | null {
+export function getParent<T extends TreeNode>(treeNodes: T[], ITreeNode: T, opt = DEFAULT_TREE_FIELDS): T | null {
   const { idField, parentIdField } = opt
   return getTreeNode<T>(treeNodes, (item) => item[idField as string] === ITreeNode[parentIdField as string], opt)
 }
@@ -198,7 +194,7 @@ export function getParent<T extends ITreeNode>(treeNodes: T[], ITreeNode: T, opt
 /**
  * 获取本级与下级节点列表
  */
-export function getCurrentAndDesc<T extends ITreeNode>(
+export function getCurrentAndDesc<T extends TreeNode>(
   treeNodes: T[],
   parentMatcher: (node: T) => boolean,
   opt = DEFAULT_TREE_FIELDS

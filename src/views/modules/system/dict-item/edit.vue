@@ -1,18 +1,6 @@
 <template>
-  <el-dialog
-    v-model="state.visible"
-    :close-on-click-modal="false"
-    :title="state.isCreate ? '新增' : '修改'"
-    @closed="resetForm"
-  >
-    <el-form
-      ref="form"
-      :model="state.formData"
-      :rules="state.formRule"
-      label-width="100px"
-
-      @keyup.enter="submit()"
-    >
+  <el-dialog v-model="state.visible" :close-on-click-modal="false" :title="state.isCreate ? '新增' : '修改'" @closed="resetForm">
+    <el-form ref="form" :model="state.formData" :rules="state.formRule" label-width="100px" @keyup.enter="submit()">
       <el-form-item label="字典ID" prop="dictId">
         <el-input v-model="state.formData.dictId" disabled placeholder="请输入字典ID"></el-input>
       </el-form-item>

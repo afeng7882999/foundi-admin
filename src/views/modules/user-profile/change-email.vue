@@ -19,7 +19,7 @@ import { defineComponent, toRefs } from 'vue'
 import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
 import { validEmail } from '@/utils/validate'
 import { currentChangeEmail, currentCheckEmail } from '@/api/system/user'
-import { AnyObject } from '@/utils'
+import { Indexable } from '@/types/global'
 
 export default defineComponent({
   name: 'UserProfileChangeEmail',
@@ -37,13 +37,13 @@ export default defineComponent({
             callback()
           }
         } catch (e) {
-          callback(new Error(e.msg))
+          callback(new Error('验证邮箱地址出错'))
         }
       }
     }
 
     const stateOption = {
-      postApi: async (form: AnyObject) => {
+      postApi: async (form: Indexable) => {
         await currentChangeEmail(form.email)
       },
       resetFormData: {

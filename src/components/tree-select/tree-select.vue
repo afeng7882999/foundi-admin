@@ -65,7 +65,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { ITreeFields, ITreeNode, traverseTree } from '@/utils/data-tree'
+import { TreeFields, TreeNode, traverseTree } from '@/utils/data-tree'
 import { nextFrame } from '@/utils/next-frame'
 import { off, on } from '@/utils/dom'
 import { generateId } from '@/utils/lang'
@@ -76,7 +76,7 @@ import { isString } from '@vueuse/core'
 
 const props = defineProps({
   dataList: {
-    type: Array as PropType<ITreeNode[]>,
+    type: Array as PropType<TreeNode[]>,
     default: () => []
   },
   modelValue: {
@@ -101,7 +101,7 @@ const props = defineProps({
     type: Object
   },
   treeFields: {
-    type: Object as PropType<ITreeFields>,
+    type: Object as PropType<TreeFields>,
     default: () => DEFAULT_TREE_FIELDS
   }
 })
@@ -115,7 +115,7 @@ const selectCom = ref()
 const state = reactive({
   treeSelectId: 'fd-tree-select-',
   popoverElId: '',
-  data: props.dataList as ITreeNode[],
+  data: props.dataList as TreeNode[],
   keywords: '',
   labels: '' as string | string[],
   ids: [] as string[],
@@ -131,7 +131,7 @@ const selectParamsCo = computed(() => {
   }
 })
 
-const treeFieldsCo = computed<ITreeFields>(() => {
+const treeFieldsCo = computed<TreeFields>(() => {
   if (props.treeFields) {
     return merge({}, DEFAULT_TREE_FIELDS, props.treeFields)
   } else {
@@ -226,7 +226,7 @@ const setSelectNode = (ids: string[]) => {
   }
   if (multiple) {
     ;(treeCom.value as any).setCheckedKeys(ids)
-    state.labels = (treeCom.value as any).getCheckedNodes().map((item: ITreeNode) => item[treeFieldsCo.value.labelField]) || []
+    state.labels = (treeCom.value as any).getCheckedNodes().map((item: TreeNode) => item[treeFieldsCo.value.labelField]) || []
   } else {
     ;(treeCom.value as any).setCurrentKey(ids[0])
     if ((treeCom.value as any).getCurrentNode()) {
@@ -237,12 +237,12 @@ const setSelectNode = (ids: string[]) => {
   }
 }
 
-const filter = (value: string, data: ITreeNode) => {
+const filter = (value: string, data: TreeNode) => {
   if (!value) return true
   return data[treeFieldsCo.value.labelField].indexOf(value) !== -1
 }
 
-const onTreeNodeClick = (data: ITreeNode, node: any, com: any) => {
+const onTreeNodeClick = (data: TreeNode, node: any, com: any) => {
   const { multiple } = selectParamsCo.value
   const { clickParent } = treeParamsCo.value
   const { idField, childrenField, disabledField } = treeFieldsCo.value
@@ -277,10 +277,10 @@ const onTreeNodeClick = (data: ITreeNode, node: any, com: any) => {
   })
 }
 
-const onTreeCheck = (data: ITreeNode, node: any, com: any) => {
+const onTreeCheck = (data: TreeNode, node: any, com: any) => {
   state.ids = []
   const { idField } = treeFieldsCo.value
-  node.checkedNodes.forEach((item: ITreeNode) => {
+  node.checkedNodes.forEach((item: TreeNode) => {
     state.ids.push(item[idField as string])
   })
   emit('node-check', data, node, com)
@@ -330,7 +330,7 @@ const toggleVisible = () => {
   state.visible = true
 }
 
-const treeDataUpdate = (data: ITreeNode[]) => {
+const treeDataUpdate = (data: TreeNode[]) => {
   state.data = data
   nextFrame(() => {
     setSelectNode(state.ids)

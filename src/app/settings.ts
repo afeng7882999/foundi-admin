@@ -16,5 +16,5 @@ export default {
   // 底部信息
   footer: '方得 FOUNDi 提供技术支持',
   // 备案号
-  caseNumber: '豫ICP备170xxxxx号'
+  caseNumber: '冀ICP备170xxxxx号'
 }

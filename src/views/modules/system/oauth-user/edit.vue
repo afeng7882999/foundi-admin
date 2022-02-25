@@ -9,12 +9,7 @@
       </el-form-item>
       <el-form-item label="性别" prop="genderDict">
         <el-select v-model="formData.genderDict" style="width: 100%">
-          <el-option
-            v-for="item in dicts.gender"
-            :key="item.itemKey"
-            :label="item.itemValue"
-            :value="item.itemKey"
-          ></el-option>
+          <el-option v-for="item in dicts.gender" :key="item.itemKey" :label="item.itemValue" :value="item.itemKey"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="OpenId" prop="openId">
@@ -22,12 +17,7 @@
       </el-form-item>
       <el-form-item label="认证类型" prop="authcTypeDict">
         <el-select v-model="formData.authcTypeDict" style="width: 100%">
-          <el-option
-            v-for="item in dicts.sysAuthcType"
-            :key="item.itemKey"
-            :label="item.itemValue"
-            :value="item.itemKey"
-          ></el-option>
+          <el-option v-for="item in dicts.sysAuthcType" :key="item.itemKey" :label="item.itemValue" :value="item.itemKey"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="关联user" prop="userId">
@@ -46,13 +36,7 @@
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
 import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
-import {
-  oauthUserDicts,
-  oauthUserFields,
-  oauthUserGetOne,
-  oauthUserPostOne,
-  oauthUserPutOne
-} from '@/api/system/oauth-user'
+import { OAuthUser, oauthUserDicts, oauthUserFields, oauthUserGetOne, oauthUserPostOne, oauthUserPutOne } from '@/api/system/oauth-user'
 
 export default defineComponent({
   name: 'SystemOauthUserEdit',
@@ -72,14 +56,14 @@ export default defineComponent({
         genderDict: '',
         openId: '',
         authcTypeDict: '',
-        userId: 0
+        userId: '0'
       },
       formRule: {
         account: [{ required: true, message: '账号不能为空', trigger: 'blur' }]
       }
     }
 
-    const { mixRefs, mixState, mixMethods } = useEdit(stateOption, emit)
+    const { mixRefs, mixState, mixMethods } = useEdit<OAuthUser>(stateOption, emit)
 
     return {
       ...mixRefs,

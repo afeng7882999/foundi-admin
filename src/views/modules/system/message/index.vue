@@ -3,12 +3,7 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="query" @keyup.enter="queryList()">
-        <transition
-          name="expand"
-          @enter="expandEnter"
-          @after-enter="expandAfterEnter"
-          @before-leave="expandBeforeLeave"
-        >
+        <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
           <div v-show="queryFormShow" class="fd-page__query">
             <el-form-item label="标题" prop="title">
               <el-input v-model="query.title" clearable placeholder="请输入标题" />
@@ -43,13 +38,7 @@
         </transition>
       </el-form>
       <div class="fd-page__action">
-        <el-button
-          v-show="hasAuth('system:message:delete')"
-          :disabled="selectedNodes.length <= 0"
-          plain
-          type="danger"
-          @click="del()"
-        >
+        <el-button v-show="hasAuth('system:message:delete')" :disabled="selectedNodes.length <= 0" plain type="danger" @click="del()">
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
@@ -57,12 +46,7 @@
           <el-button v-show="hasAuth('system:message:add')" v-waves type="primary" @click="showEdit()">新增</el-button>
           <el-button v-show="hasAuth('system:message:export')" v-waves @click="exportData()">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
-          <el-tooltip
-            :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'"
-            :show-after="500"
-            effect="dark"
-            placement="top"
-          >
+          <el-tooltip :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <fd-icon-button
               :class="queryFormShow ? 'expanded' : ''"
               class="action-query-toggle"
@@ -76,13 +60,7 @@
     <div class="fd-page__table is-bordered">
       <el-table v-loading="loading" :data="data" row-key="id" @selection-change="onSelectionChange">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="center"
-          header-align="center"
-          label="标题"
-          prop="title"
-        ></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="标题" prop="title"></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
           align="center"
@@ -90,13 +68,7 @@
           label="信息内容"
           prop="content"
         ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="center"
-          header-align="center"
-          label="信息类型"
-          prop="typeDict"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="信息类型" prop="typeDict">
           <template #default="scope">
             <span>{{ dictVal(dicts.sysMessageType, scope.row.typeDict) }}</span>
           </template>
@@ -115,13 +87,7 @@
           label="是否群发"
           prop="isGroup"
         ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="center"
-          header-align="center"
-          label="接收组"
-          prop="groupId"
-        ></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="接收组" prop="groupId"></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
           align="center"
@@ -178,7 +144,7 @@
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
 import useList from '@/components/crud/use-list'
-import { messageDel, messageDicts, messageExport, messageFields, messageList, messageQuery } from '@/api/system/message'
+import { Message, messageDel, messageDicts, messageExport, messageFields, messageList, messageQuery } from '@/api/system/message'
 import Edit from './edit.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import usePage from '@/components/crud/use-page'
@@ -196,7 +162,7 @@ export default defineComponent({
       query: messageQuery
     }
 
-    const { mixRefs, mixState, mixMethods } = useList(stateOption)
+    const { mixRefs, mixState, mixMethods } = useList<Message>(stateOption)
 
     const { docMinHeight, showPageHeader, hasAuth } = usePage()
 

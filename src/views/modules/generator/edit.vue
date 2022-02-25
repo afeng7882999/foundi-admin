@@ -291,16 +291,15 @@ export default {
 <script setup lang="ts">
 import { computed, onBeforeMount, reactive, ref } from 'vue'
 import usePage from '@/components/crud/use-page'
-import { filterTree, ITreeNodeDefault } from '@/utils/data-tree'
+import { filterTree, TreeNodeDefault } from '@/utils/data-tree'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { ElForm, ElMessage, ElMessageBox, ElTable } from 'element-plus'
-import { AnyObject } from '@/utils'
-import { genTableGetOne, genTablePutOne, genTableSyncDb, IGenTable, IGenTableColumn } from '@/api/generator/gen-table'
-import { dictList, IDict } from '@/api/system/dict'
+import { genTableGetOne, genTablePutOne, genTableSyncDb, GenTableColumn, GenTable } from '@/api/generator/gen-table'
+import { dictList, Dict } from '@/api/system/dict'
 import { DEFAULT_HTML_TYPES, DEFAULT_QUERY_TYPES } from '@/views/modules/generator/types'
-import useTable from '@/components/table/use-table'
+import useSortableRow from '@/components/table/hooks/use-sortable-row'
 
 const form = ref<InstanceType<typeof ElForm>>()
 const tableWrapper = ref<HTMLElement>()
@@ -309,11 +308,11 @@ const table = ref<InstanceType<typeof ElTable>>()
 const state = reactive({
   // 表信息
   data: {
-    table: {} as IGenTable,
-    columns: [] as IGenTableColumn[]
+    table: {} as GenTable,
+    columns: [] as GenTableColumn[]
   },
   // 字典信息
-  dictOptions: [] as IDict[],
+  dictOptions: [] as Dict[],
   // 表信息验证规则
   rules: {
     tableName: [{ required: true, message: '请输入表名称', trigger: 'blur' }],
@@ -334,11 +333,11 @@ const storeState = store.state as AllState
 const { docMinHeight, showPageHeader } = usePage()
 
 const parentMenuList = computed(() => {
-  return filterTree(storeState.user.menu as ITreeNodeDefault[], (item) => item.typeDict === '0')
+  return filterTree(storeState.user.menu as TreeNodeDefault[], (item) => item.typeDict === '0')
 })
 
 const fieldNames = computed(() => {
-  return state.data.columns.map((item: AnyObject) => {
+  return state.data.columns.map((item: Partial<GenTableColumn>) => {
     return { id: item.fieldName, name: item.fieldName + ': ' + item.columnComment }
   })
 })
@@ -351,7 +350,7 @@ onBeforeMount(async () => {
       const { data: dicts } = await dictList()
       state.dictOptions = dicts
       state.data = await genTableGetOne(id as string)
-      state.data.columns = state.data.columns.sort((a, b) => a.sort - b.sort)
+      state.data.columns = state.data.columns.sort((a, b) => (a.sort as number) - (b.sort as number))
       state.loading = false
     } catch (e) {
       state.loading = false
@@ -408,5 +407,5 @@ const handleSyncFromDb = async () => {
 }
 
 // table drag to sort
-useTable(table, tableWrapper, { data: () => state.data.columns, configurable: false, rowDraggable: true })
+useSortableRow(table, { data: () => state.data.columns })
 </script>

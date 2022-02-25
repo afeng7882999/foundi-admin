@@ -1,13 +1,4 @@
-import {
-  CropInfo,
-  CropperContainer,
-  CropperImg,
-  CropperProps,
-  FlipType,
-  ImgTransform,
-  RotateType,
-  ZoomType
-} from './types'
+import { CropInfo, CropperContainer, CropperImg, CropperProps, FlipType, ImgTransform, RotateType, ZoomType } from './types'
 import useAxis, { getImgProjection } from './use-axis'
 
 // use image transform
@@ -229,10 +220,7 @@ const useTransform = (
 
     let translateX = transform.translateX + dx
     let translateY = transform.translateY + dy
-    const boundary = checkContainerBoundary(
-      getImgAxis(transform.translateX, transform.translateY, transform.scale, angle),
-      container
-    )
+    const boundary = checkContainerBoundary(getImgAxis(transform.translateX, transform.translateY, transform.scale, angle), container)
 
     if (theImg.outW * transform.scale <= container.w && theImg.outH * transform.scale <= container.h) {
       const { outW, outH } = getImgProjection(theImg.trueW, theImg.trueH, angle)

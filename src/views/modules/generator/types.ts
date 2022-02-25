@@ -1,12 +1,12 @@
-import { ICodePreview } from '@/api/generator/gen-table'
+import { CodePreview } from '@/api/generator/gen-table'
 
-interface ICodePreviewNode {
+interface CodePreviewNode {
   id: number
   name: string
   path?: string
   lang?: string
-  code?: ICodePreview
-  children?: ICodePreviewNode[]
+  code?: CodePreview
+  children?: CodePreviewNode[]
 }
 
 const LANG_OF_FILENAME = {
@@ -44,4 +44,4 @@ const DEFAULT_HTML_TYPES = [
   { label: '富文本', value: 'editor' }
 ]
 
-export { ICodePreviewNode, LANG_OF_FILENAME, DEFAULT_HTML_TYPES, DEFAULT_QUERY_TYPES }
+export { CodePreviewNode, LANG_OF_FILENAME, DEFAULT_HTML_TYPES, DEFAULT_QUERY_TYPES }

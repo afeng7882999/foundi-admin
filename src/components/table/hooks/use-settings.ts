@@ -9,7 +9,7 @@ import { AllState } from '@/store'
 import { useRoute } from 'vue-router'
 import { getPageIdFromRoute } from '@/utils/query'
 import { addClass, removeClass } from '@/utils/dom'
-import { ITreeNode, traverseTree } from '@/utils/data-tree'
+import { TreeNode, traverseTree } from '@/utils/data-tree'
 import { unrefElement, VueInstance } from '@vueuse/core'
 import { ApiObj } from '@/api'
 import { Indexable } from '@/types/global'
@@ -23,9 +23,11 @@ export type TableSettingsOption = {
   configurable: boolean
   // 表的别名（可配置时）
   alias: string
+  // 是否默认展开（树表）
+  defaultExpandAll: boolean
 }
 
-const useSettings = (table: Ref<InstanceType<typeof ElTable>>, tableSettingsOpt?: Partial<TableSettingsOption>) => {
+const useSettings = (table: Ref<InstanceType<typeof ElTable> | undefined>, tableSettingsOpt?: Partial<TableSettingsOption>) => {
   //===============================================================================
   // option
   //===============================================================================
@@ -34,7 +36,9 @@ const useSettings = (table: Ref<InstanceType<typeof ElTable>>, tableSettingsOpt?
     // 是否可配置
     configurable: true,
     // 表的别名（可配置时）
-    alias: '_0'
+    alias: '_0',
+    // 是否默认展开（树表）
+    defaultExpandAll: true
   }
 
   const option = merge({}, defaultOpt, tableSettingsOpt)
@@ -104,12 +108,12 @@ const useSettings = (table: Ref<InstanceType<typeof ElTable>>, tableSettingsOpt?
       if (item && item.setting && item.setting.expandAll !== null) {
         return item.setting.expandAll as boolean
       }
-      return null
+      return option.defaultExpandAll
     },
     set: async (expandAll) => {
       if (expandAll !== null) {
         if (option.data) {
-          const data = option.data() as ITreeNode[]
+          const data = option.data() as TreeNode[]
           traverseTree(data, (d) => {
             ;(table.value as InstanceType<typeof ElTable>).toggleRowExpansion(d, expandAll)
           })
@@ -258,9 +262,6 @@ const useSettings = (table: Ref<InstanceType<typeof ElTable>>, tableSettingsOpt?
     const result = {
       border: border.value
     } as Indexable
-    if (option.data) {
-      result.data = option.data()
-    }
     if (option.treeTable) {
       result.defaultExpandAll = expandAll.value
     } else {

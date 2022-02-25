@@ -22,24 +22,13 @@
         <el-input v-model="state.formData.configKey" placeholder="请输入键"></el-input>
       </el-form-item>
       <el-form-item class="json-editor-form-item" label="值" prop="configValue">
-        <fd-code-editor
-          ref="jsonEditor"
-          v-model="state.formData.configValue"
-          border
-          language="application/json"
-          line-numbers
-        />
+        <fd-code-editor ref="jsonEditor" v-model="state.formData.configValue" border language="application/json" line-numbers />
       </el-form-item>
       <el-form-item label="是否启用" prop="enabled">
         <el-switch v-model="state.formData.enabled" active-text="是" inactive-text="否"></el-switch>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
-        <el-input
-          v-model="state.formData.remark"
-          :autosize="{ minRows: 3 }"
-          placeholder="请输入备注"
-          type="textarea"
-        ></el-input>
+        <el-input v-model="state.formData.remark" :autosize="{ minRows: 3 }" placeholder="请输入备注" type="textarea"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -60,7 +49,7 @@ export default {
 <script setup lang="ts">
 import { ref } from 'vue'
 import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
-import { configDicts, configFields, configGetOne, configPostOne, configPutOne } from '@/api/system/config'
+import { Config, configDicts, configFields, configGetOne, configPostOne, configPutOne } from '@/api/system/config'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { nextFrame } from '@/utils/next-frame'
 import { cleanStr, formatJson } from '@/utils/lang'
@@ -78,9 +67,9 @@ const stateOption = {
     configTypeDict: '',
     configKey: '',
     configValue: '',
-    enabled: false,
+    enabled: undefined,
     remark: ''
-  },
+  } as Partial<Config>,
   formRule: {
     configKey: [{ required: true, message: '键不能为空', trigger: 'blur' }],
     configValue: [{ required: true, message: '值不能为空', trigger: 'blur' }]
@@ -90,7 +79,7 @@ const stateOption = {
 
 const emit = defineEmits([REFRESH_DATA_EVENT])
 
-const { mixRefs, mixState: state, mixMethods } = useEdit(stateOption, emit)
+const { mixRefs, mixState: state, mixMethods } = useEdit<Config>(stateOption, emit)
 const { form } = mixRefs
 const { open, submit, hideDialog, onBeforeOpen, onBeforeSubmitData } = mixMethods
 
@@ -99,7 +88,7 @@ onBeforeOpen(async () => {
     state.formData.configValue = formatJson(state.formData.configValue)
   }
   nextFrame(() => {
-    ;(jsonEditor.value as any).refresh()
+    jsonEditor.value.refresh()
   })
 })
 

@@ -8,14 +8,7 @@
           返回列表
         </el-button>
         <div class="action-right">
-          <el-button
-            v-show="hasAuth('generator:genTable:edit')"
-            v-waves
-            plain
-
-            type="primary"
-            @click="handleGenerate"
-          >
+          <el-button v-show="hasAuth('generator:genTable:edit')" v-waves plain type="primary" @click="handleGenerate">
             <fd-icon class="is-in-btn" icon="download" :loading="state.genLoading"></fd-icon>
             生成
           </el-button>
@@ -76,28 +69,28 @@ import usePage from '@/components/crud/use-page'
 import { downloadFile, getFileExt } from '@/utils/file'
 import { computed, nextTick, onBeforeMount, reactive, ref } from 'vue'
 import FdCodeEditor from '@/components/code-editor/index.vue'
-import { ICodePreview, preview } from '@/api/generator/gen-table'
+import { CodePreview, preview } from '@/api/generator/gen-table'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import FdSplitPane from '@/components/split-pane/index.vue'
-import { ICodePreviewNode, LANG_OF_FILENAME } from '@/views/modules/generator/types'
+import { CodePreviewNode, LANG_OF_FILENAME } from '@/views/modules/generator/types'
 import * as fflate from 'fflate'
 import { strToU8 } from 'fflate'
-import { AnyObject } from '@/utils'
+import { Indexable } from '@/types/global'
 
 const codeEditor = ref()
 const codeTree = ref()
 
 const state = reactive({
-  data: [] as ICodePreview[],
-  nodeData: [] as ICodePreviewNode[],
+  data: [] as CodePreview[],
+  nodeData: [] as CodePreviewNode[],
   activeNode: {
     id: 0,
     name: '',
     lang: 'application/xml',
     code: { name: '', path: '', content: '' }
-  } as ICodePreviewNode,
+  } as CodePreviewNode,
   loading: false,
   genLoading: false
 })
@@ -121,12 +114,12 @@ const getCodeTree = (idx: number) => {
     for (let i = 0; i < len - 1; i++) {
       let parent = parents.find((d) => d.name === paths[i])
       if (parent) {
-        parents = parent.children as ICodePreviewNode[]
+        parents = parent.children as CodePreviewNode[]
         continue
       }
       parent = { id: id++, name: paths[i], children: [] }
       parents.push(parent)
-      parents = parent.children as ICodePreviewNode[]
+      parents = parent.children as CodePreviewNode[]
     }
 
     const ext = getFileExt(item.name)
@@ -144,7 +137,7 @@ const getCodeTree = (idx: number) => {
   }
 }
 
-const compactCodeTree = (parent: ICodePreviewNode | null, children: ICodePreviewNode[]) => {
+const compactCodeTree = (parent: CodePreviewNode | null, children: CodePreviewNode[]) => {
   if (parent && parent.children?.length === 1 && !children[0].lang) {
     parent.name = parent.name + '/' + children[0].name
     parent.children = children[0].children
@@ -180,7 +173,7 @@ onBeforeMount(async () => {
   }
 })
 
-const onTreeNodeClick = (node: ICodePreviewNode) => {
+const onTreeNodeClick = (node: CodePreviewNode) => {
   if (node.code) {
     state.activeNode = node
     nextTick(() => {
@@ -200,7 +193,7 @@ const { hasAuth } = usePage()
 
 const handleGenerate = async () => {
   state.genLoading = true
-  const files = {} as AnyObject
+  const files = {} as Indexable
   try {
     state.data.forEach((item) => {
       files[item.path] = strToU8(item.content)

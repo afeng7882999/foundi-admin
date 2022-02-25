@@ -6,23 +6,6 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { decryptByAES, encryptByAES, encryptByRsa, generateKey } from '@/utils/encrypt'
 import { merge } from 'lodash-es'
 
-// 返回数据页
-export interface ResPage {
-  count?: number
-  limit?: number
-  total?: number
-  current?: number
-}
-
-// 返回数据
-export interface ResData<T = any> {
-  msg?: string | string[]
-  ex?: string
-  data?: T
-  page?: ResPage
-  token?: string
-}
-
 // 加密config
 interface AxiosRequestConfigWithEnc extends AxiosRequestConfig {
   encrypt: { key: string; iv: string }

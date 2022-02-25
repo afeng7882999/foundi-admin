@@ -1,13 +1,5 @@
 <template>
-  <el-dialog
-    v-model="state.visible"
-    :close-on-click-modal="false"
-    append-to-body
-    title="导入表"
-    top="5vh"
-    width="80%"
-    @close="hideDialog"
-  >
+  <el-dialog v-model="state.visible" :close-on-click-modal="false" append-to-body title="导入表" top="5vh" width="80%" @close="hideDialog">
     <el-form ref="queryForm" :inline="true" :model="state.query">
       <el-form-item label="表名称" prop="tableName">
         <el-input v-model="state.query.tableName" clearable placeholder="请输入表名称" @keyup.enter="queryList" />
@@ -31,7 +23,6 @@
       v-loading="state.loading"
       :data="state.data"
       height="300px"
-
       @row-click="clickRow"
       @selection-change="onSelectionChange"
     >
@@ -72,9 +63,8 @@ export default {
 
 <script setup lang="ts">
 import useList from '@/components/crud/use-list'
-import { genTableImportDb, genTableListDb } from '@/api/generator/gen-table'
+import { GenTable, genTableImportDb, genTableListDb } from '@/api/generator/gen-table'
 import { ElMessage } from 'element-plus'
-import { AnyObject } from '@/utils'
 import { formatTimestamp } from '@/utils/time'
 
 const emit = defineEmits(['generator-imported'])
@@ -89,7 +79,7 @@ const stateOption = {
   visible: false
 }
 
-const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods } = useList<GenTable>(stateOption)
 const { queryForm, table } = mixRefs
 const { getList, pageChange, sizeChange, queryList, resetQuery, onSelectionChange } = mixMethods
 
@@ -122,7 +112,7 @@ const hideDialog = () => {
 }
 
 // 单击行选中
-const clickRow = (row: AnyObject) => {
+const clickRow = (row: GenTable) => {
   ;(table.value as any).toggleRowSelection(row)
 }
 

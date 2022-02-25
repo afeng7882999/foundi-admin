@@ -14,7 +14,14 @@
             <el-step description="完成设置" title="完成"></el-step>
           </el-steps>
           <div v-if="state.step === 0" class="step-content">
-            <el-form ref="userForm" :model="state.userParam" class="step-content__form" label-width="80px" @keyup.enter="checkUsername" @submit.prevent>
+            <el-form
+              ref="userForm"
+              :model="state.userParam"
+              class="step-content__form"
+              label-width="80px"
+              @keyup.enter="checkUsername"
+              @submit.prevent
+            >
               <el-form-item :error="state.usernameError" label="用户名" prop="username">
                 <el-input v-model="state.userParam.username" placeholder="请输入需重置密码的用户名"></el-input>
               </el-form-item>
@@ -54,7 +61,12 @@
             <el-form ref="submitForm" :model="state.submitParam" :rules="state.submitRules" class="step-content__form" label-width="80px">
               <el-form-item class="step-content__btn-input" label="验证码" prop="code">
                 <el-input v-model="state.submitParam.code" :placeholder="validPrompt"></el-input>
-                <fd-count-down-button ref="countDownButton" :button-prop="{ type: 'primary' }" :disable-time="20" @click="getResetValid"></fd-count-down-button>
+                <fd-count-down-button
+                  ref="countDownButton"
+                  :button-prop="{ type: 'primary' }"
+                  :disable-time="20"
+                  @click="getResetValid"
+                ></fd-count-down-button>
               </el-form-item>
               <el-form-item label="新密码" prop="password">
                 <el-input v-model="state.submitParam.password" placeholder="长度6-20,可包含字母,数字,下划线" show-password></el-input>

@@ -1,12 +1,6 @@
 <template>
   <div :class="classObj" class="fd-layout">
-    <fd-sidebar
-      :app-config="appConfig"
-      :menu="menu"
-      :mode="mode"
-      :user-profile="userProfile"
-      @off-screen-click="closeOffScreenSidebar"
-    />
+    <fd-sidebar :app-config="appConfig" :menu="menu" :mode="mode" :user-profile="userProfile" @off-screen-click="closeOffScreenSidebar" />
     <div class="fd-layout__main">
       <div class="fd-layout__header">
         <fd-title @app-setting-show="showAppSetting"></fd-title>

@@ -12,7 +12,7 @@ export type FocusRowOption = {
   rowFocusable: boolean
 }
 
-const useFocusableRow = (table: Ref<InstanceType<typeof ElTable>>, focusRowOpt?: Partial<FocusRowOption>) => {
+const useFocusableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, focusRowOpt?: Partial<FocusRowOption>) => {
   //===============================================================================
   // option
   //===============================================================================

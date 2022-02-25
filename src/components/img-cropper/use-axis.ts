@@ -34,12 +34,7 @@ const useAxis = (props: CropperProps, theImg: CropperImg, cropInfo: CropInfo) =>
   const checkImgAxis = (translateX: number, translateY: number, scale: number, rotate: number) => {
     const axis = getImgAxis(translateX, translateY, scale, rotate)
     const cropAxis = getCropAxis()
-    return (
-      axis.left <= cropAxis.left &&
-      axis.right >= cropAxis.right &&
-      axis.top <= cropAxis.top &&
-      axis.bottom >= cropAxis.bottom
-    )
+    return axis.left <= cropAxis.left && axis.right >= cropAxis.right && axis.top <= cropAxis.top && axis.bottom >= cropAxis.bottom
   }
 
   return {

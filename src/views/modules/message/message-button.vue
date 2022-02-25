@@ -28,7 +28,8 @@
 import request from '@/app/request'
 import SystemMessageContentDialog from './message-content.vue'
 import { defineComponent, nextTick, onBeforeUnmount, onMounted, reactive, ref, toRefs } from 'vue'
-import { AnyObject } from '@/utils'
+import { Message } from '@/api/system/message'
+import { Indexable } from '@/types/global'
 
 export default defineComponent({
   name: 'SystemMessageButton',
@@ -52,7 +53,7 @@ export default defineComponent({
 
     const state = reactive({
       messageContentVisible: false,
-      dataList: [] as AnyObject[],
+      dataList: [] as Message[],
       unreadCount: '0'
     })
 
@@ -76,8 +77,8 @@ export default defineComponent({
             current: 1,
             limit: props.listCount
           }
-        })) as AnyObject
-        state.dataList = data.filter((m: AnyObject) => unread(m))
+        })) as Indexable
+        state.dataList = data.filter((m: Indexable) => unread(m))
         messageType = msgType
         state.unreadCount = state.dataList.length > props.listCount - 1 ? props.listCount - 1 + '+' : state.dataList.length.toString()
       } catch (e) {

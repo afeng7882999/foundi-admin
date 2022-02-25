@@ -1,13 +1,6 @@
 <template>
   <div class="fd-upload-input">
-    <el-input
-      :model-value="modelValue"
-      :placeholder="placeholder"
-      :size="size"
-      clearable
-      @input="changeValue"
-      @clear="clearValue"
-    >
+    <el-input :model-value="modelValue" :placeholder="placeholder" :size="size" clearable @input="changeValue" @clear="clearValue">
       <template #append>
         <el-upload
           ref="fileUpload"

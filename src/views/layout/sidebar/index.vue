@@ -33,7 +33,7 @@ import FdNavMenu from '@/components/nav-menu/index.vue'
 import { computed, PropType, reactive, ref, watch } from 'vue'
 import { AppState, SidebarMode } from '@/store/modules/app'
 import { UserState } from '@/store/modules/user'
-import { ITreeNodeDefault } from '@/utils/data-tree'
+import { TreeNodeDefault } from '@/utils/data-tree'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { setSidebarTheme } from '@/components/theme/theme'
@@ -42,7 +42,7 @@ const DEFAULT_LEVEL_PADDING = 10
 
 const props = defineProps({
   menu: {
-    type: Array as PropType<ITreeNodeDefault[]>,
+    type: Array as PropType<TreeNodeDefault[]>,
     default: () => []
   },
   mode: {

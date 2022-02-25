@@ -32,7 +32,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { groupFields, groupTreeFields, groupList, groupGetOne, groupPostOne, groupPutOne } from '@/api/system/group'
+import { groupFields, groupTreeFields, groupList, groupGetOne, groupPostOne, groupPutOne, Group } from '@/api/system/group'
 import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
 
 const emit = defineEmits([REFRESH_DATA_EVENT])
@@ -57,7 +57,7 @@ const stateOption = {
   }
 }
 
-const { mixRefs, mixState: state, mixMethods } = useEdit(stateOption, emit)
+const { mixRefs, mixState: state, mixMethods } = useEdit<Group>(stateOption, emit)
 const { form } = mixRefs
 const { open, submit, hideDialog } = mixMethods
 

@@ -1,12 +1,6 @@
 <template>
   <div class="fd-page__form">
-    <el-descriptions
-      :column="2"
-      :title="`系统字典 - ${state.data[state.idx].name}`"
-      border
-      direction="vertical"
-
-    >
+    <el-descriptions :column="2" :title="`系统字典 - ${state.data[state.idx].name}`" border direction="vertical">
       <el-descriptions-item label="名称">
         <span>{{ state.data[state.idx].name }}</span>
       </el-descriptions-item>
@@ -20,11 +14,7 @@
         <template #label>字典项（{{ state.dictItemCount }}项）</template>
         <div class="fd-detail-list">
           <ul class="fd-detail-list__inner">
-            <li
-              v-for="(item, index) in state.data[state.idx].items"
-              :key="item.id"
-              :class="{ 'fd-detail-list__odd': index % 2 !== 0 }"
-            >
+            <li v-for="(item, index) in state.data[state.idx].items" :key="item.id" :class="{ 'fd-detail-list__odd': index % 2 !== 0 }">
               <span class="fd-detail-list__idx">{{ item.itemKey }}</span>
               <span>{{ item.itemValue }}</span>
             </li>
@@ -44,10 +34,8 @@ export default {
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
 import useDetail, { OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
-import { dictFields, IDict } from '@/api/system/dict'
-import { getDictListByName, IDictItem } from '@/api/system/dict-item'
-import { AnyObject } from '@/utils'
-import { IDictList } from '@/components/crud/use-dict'
+import { dictFields, Dict } from '@/api/system/dict'
+import { getDictListByName, DictItem, DictList } from '@/api/system/dict-item'
 
 const stateOption = {
   idField: dictFields.idField,
@@ -56,24 +44,24 @@ const stateOption = {
     name: '',
     nameCn: '',
     remarks: '',
-    items: [] as IDictItem[]
+    items: [] as DictItem[]
   },
   dictItemCount: 0
 }
 
 const emit = defineEmits([OPEN_EDIT_EVENT])
 
-const { mixState: state, mixMethods } = useDetail(stateOption, emit)
+const { mixState: state, mixMethods } = useDetail<Dict>(stateOption, emit)
 const { onBeforeOpen, open, resetForm, close } = mixMethods
 
 onBeforeMount(async () => {
   resetForm()
 })
 
-onBeforeOpen(async (data: AnyObject[], idx: number) => {
-  const dict = data[idx] as IDict
+onBeforeOpen(async (data: Dict[], idx: number) => {
+  const dict = data[idx] as Dict
   if (!dict.items) {
-    const { [dict.name]: items } = (await getDictListByName([dict.name])) as IDictList
+    const { [dict.name]: items } = (await getDictListByName([dict.name])) as DictList
     dict.items = items
   }
   state.dictItemCount = dict.items.length

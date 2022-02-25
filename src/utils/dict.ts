@@ -1,9 +1,9 @@
-import { IDictItem } from '@/api/system/dict-item'
+import { DictItem } from '@/api/system/dict-item'
 
 /**
  * 由键值查找字典值
  */
-export function dictValue(dictItems: IDictItem[], key: string): string {
+export function dictValue(dictItems: DictItem[], key: string): string {
   const result = dictItems.find((d) => d.itemKey === key)
   if (result && result.itemValue) {
     return result.itemValue
@@ -15,7 +15,7 @@ export function dictValue(dictItems: IDictItem[], key: string): string {
 /**
  * 由字典值查找键值
  */
-export function dictKey(dictItems: IDictItem[], value: string): string {
+export function dictKey(dictItems: DictItem[], value: string): string {
   const result = dictItems.find((d) => d.itemValue === value)
   if (result && result.itemKey) {
     return result.itemKey

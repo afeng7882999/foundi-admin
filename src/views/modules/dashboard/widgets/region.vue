@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, reactive, ref, toRefs, watch} from 'vue'
+import { defineComponent, onMounted, reactive, ref, toRefs, watch } from 'vue'
 import FdWidgetPanel from './panel.vue'
 import * as echarts from 'echarts/core'
 import {
@@ -20,19 +20,30 @@ import {
   TooltipComponent,
   TooltipComponentOption
 } from 'echarts/components'
-import {LineChart, LineSeriesOption} from 'echarts/charts'
-import {UniversalTransition} from 'echarts/features'
-import {CanvasRenderer} from 'echarts/renderers'
-import {useStore} from 'vuex'
-import {AllState} from '@/store'
+import { LineChart, LineSeriesOption } from 'echarts/charts'
+import { UniversalTransition } from 'echarts/features'
+import { CanvasRenderer } from 'echarts/renderers'
+import { useStore } from 'vuex'
+import { AllState } from '@/store'
 
-type EChartsOption = echarts.ComposeOption<TitleComponentOption | ToolboxComponentOption | TooltipComponentOption | GridComponentOption | LegendComponentOption | LineSeriesOption>
+type EChartsOption = echarts.ComposeOption<
+  TitleComponentOption | ToolboxComponentOption | TooltipComponentOption | GridComponentOption | LegendComponentOption | LineSeriesOption
+>
 
-echarts.use([TitleComponent, ToolboxComponent, TooltipComponent, GridComponent, LegendComponent, LineChart, CanvasRenderer, UniversalTransition])
+echarts.use([
+  TitleComponent,
+  ToolboxComponent,
+  TooltipComponent,
+  GridComponent,
+  LegendComponent,
+  LineChart,
+  CanvasRenderer,
+  UniversalTransition
+])
 
 export default defineComponent({
   name: 'WidgetRegion',
-  components: {FdWidgetPanel},
+  components: { FdWidgetPanel },
   setup() {
     const option: EChartsOption = {
       tooltip: {
@@ -90,7 +101,7 @@ export default defineComponent({
       dateRangeCustom: [] as string[]
     })
 
-    let echartsCom = undefined as echarts.ECharts
+    let echartsCom = undefined as echarts.ECharts | undefined
     const initChart = () => {
       echartsCom = echarts.init(myEcharts.value as HTMLElement)
       echartsCom.setOption(option)
@@ -102,10 +113,10 @@ export default defineComponent({
     const store = useStore<AllState>()
     const storeState = store.state as AllState
     watch(
-        () => storeState.app.docWidth,
-        () => {
-          echartsCom?.resize()
-        }
+      () => storeState.app.docWidth,
+      () => {
+        echartsCom?.resize()
+      }
     )
 
     const onRadioGroupChange = () => {

@@ -3,12 +3,7 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="state.query" @keyup.enter="queryList">
-        <transition
-          name="expand"
-          @enter="expandEnter"
-          @after-enter="expandAfterEnter"
-          @before-leave="expandBeforeLeave"
-        >
+        <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
           <div v-show="state.queryFormShow" class="fd-page__query">
             <el-form-item label="表名称" prop="tableName">
               <el-input v-model="state.query.tableName" clearable placeholder="请输入表名称" />
@@ -43,7 +38,6 @@
             v-waves
             :disabled="state.selectedNodes.length <= 0"
             plain
-
             type="danger"
             @click="del()"
           >
@@ -51,46 +45,20 @@
             删除
           </el-button>
           <div class="action-right">
-            <el-button
-              v-show="hasAuth('generator:genTable:edit')"
-              v-waves
-              plain
-
-              type="primary"
-              @click="handleGenerate(null)"
-            >
+            <el-button v-show="hasAuth('generator:genTable:edit')" v-waves plain type="primary" @click="handleGenerate(null)">
               <fd-icon class="is-in-btn" icon="download" :loading="state.generating['batch']"></fd-icon>
               生成
             </el-button>
-            <el-button
-              v-show="hasAuth('generator:genTable:edit')"
-              v-waves
-              plain
-
-              type="warning"
-              @click="handlePreview"
-            >
+            <el-button v-show="hasAuth('generator:genTable:edit')" v-waves plain type="warning" @click="handlePreview">
               <fd-icon class="is-in-btn" icon="preview-open"></fd-icon>
               预览
             </el-button>
-            <el-button
-              v-show="hasAuth('generator:genTable:edit')"
-              v-waves
-              plain
-
-              type="info"
-              @click="openImport"
-            >
+            <el-button v-show="hasAuth('generator:genTable:edit')" v-waves plain type="info" @click="openImport">
               <fd-icon class="is-in-btn" icon="upload-one"></fd-icon>
               导入
             </el-button>
             <el-divider class="action-divider" direction="vertical"></el-divider>
-            <el-tooltip
-              :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'"
-              :show-after="500"
-              effect="dark"
-              placement="top"
-            >
+            <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
               <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
                 <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
               </el-badge>
@@ -142,14 +110,7 @@
           prop="module"
           width="100"
         ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="创建时间"
-          prop="tableCreateTime"
-          width="200"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="创建时间" prop="tableCreateTime" width="200">
           <template #default="scope">
             {{ formatTimestamp(scope.row.tableCreateTime) }}
           </template>
@@ -237,10 +198,9 @@ export default {
 import { onActivated, ref } from 'vue'
 import useList from '@/components/crud/use-list'
 import useExpandTransition from '@/components/transition/use-expand-transition'
-import { download, genTableDel, genTableList, genTableQuery } from '@/api/generator/gen-table'
+import { download, GenTable, genTableDel, genTableList, genTableQuery } from '@/api/generator/gen-table'
 import GeneratorImport from './import.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { AnyObject } from '@/utils'
 import { ElMessage } from 'element-plus'
 import { formatTimestamp } from '@/utils/time'
 import usePage from '@/components/crud/use-page'
@@ -276,7 +236,7 @@ onActivated(() => {
 })
 
 // 生成
-const handleGenerate = async (row: AnyObject) => {
+const handleGenerate = async (row: GenTable) => {
   const ids = row ? [row.id] : state.selectedNodes.map((n) => n.id)
   const load = row ? row.id : 'batch'
   if (ids.length === 0) {
@@ -303,7 +263,7 @@ const openImport = () => {
 }
 
 // 预览
-const handlePreview = async (row: AnyObject) => {
+const handlePreview = async (row: GenTable) => {
   const ids = row && row.id ? row.id : state.selectedNodes.map((n) => n.id).join(',')
   const tableName = row && row.id ? row.tableName + ' ' : ''
   if (ids.length === 0) {
@@ -319,7 +279,7 @@ const handlePreview = async (row: AnyObject) => {
 }
 
 // 修改
-const handleEdit = async (row: AnyObject) => {
+const handleEdit = async (row: GenTable) => {
   if (row) {
     const tableId = row.id
     const tableName = row.tableName

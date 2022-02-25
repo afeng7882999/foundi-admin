@@ -61,7 +61,7 @@
       </div>
     </div>
     <div class="fd-page__table is-bordered">
-      <el-table v-loading="state.loading" :data="state.data" row-key="id" @selection-change="onSelectionChange">
+      <el-table v-loading="state.loading" v-bind="tableAttrs">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="文件名" prop="name" width="450">
           <template #default="scope">
@@ -115,17 +115,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        :current-page="state.current"
-        background
-        :page-count="state.total"
-        :page-size="state.size"
-        :page-sizes="[10, 20, 50, 100, 200]"
-        :total="state.count"
-        layout="total, sizes, prev, pager, next, jumper"
-        @current-change="pageChange"
-        @size-change="sizeChange"
-      ></el-pagination>
+      <el-pagination v-bind="paginationAttrs"></el-pagination>
     </div>
     <el-backtop></el-backtop>
     <upload v-if="state.editShow" ref="editDialog" @refresh-data-list="getList"></upload>
@@ -140,9 +130,9 @@ export default {
 
 <script setup lang="ts">
 import useList from '@/components/crud/use-list'
-import { fileDel, fileDicts, fileFields, fileList, fileQuery } from '@/api/system/file'
+import { fileDel, fileDicts, fileFields, fileList, FileObj, fileQuery } from '@/api/system/file'
 import useExpandTransition from '@/components/transition/use-expand-transition'
-import { configListOss, IConfig } from '@/api/system/config'
+import { configListOss, Config } from '@/api/system/config'
 import Upload from './upload.vue'
 import { localOrRemoteUrl } from '@/utils/query'
 import { formatTimestamp } from '@/utils/time'
@@ -156,24 +146,13 @@ const stateOption = {
   delApi: fileDel,
   dicts: fileDicts,
   query: fileQuery,
-  configList: [] as IConfig[]
+  configList: [] as Config[]
 }
 
-const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<FileObj>(stateOption)
 const { queryForm, editDialog } = mixRefs
-const {
-  getList,
-  queryList,
-  resetQuery,
-  toggleQueryForm,
-  dictVal,
-  pageChange,
-  sizeChange,
-  del,
-  onSelectionChange,
-  showEdit,
-  onBeforeGetList
-} = mixMethods
+const { getList, queryList, resetQuery, toggleQueryForm, dictVal, del, showEdit, onBeforeGetList } = mixMethods
+const { tableAttrs, paginationAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 

@@ -27,14 +27,14 @@ export default {
 
 <script setup lang="ts">
 import { inject } from 'vue'
-import { ITreeNodeDefault } from '@/utils/data-tree'
+import { TreeNodeDefault } from '@/utils/data-tree'
 import FdNavMenuItem from './nav-menu-item.vue'
-import {IRootMenuProvided} from "@/components/nav-menu/types";
+import { RootMenuProvided } from '@/components/nav-menu/types'
 
-const rootMenu = inject('rootMenu') as IRootMenuProvided
+const rootMenu = inject('rootMenu') as RootMenuProvided
 const { handleActive, rootState } = rootMenu
 
-const getVisibleMenu = (items: ITreeNodeDefault[]) => {
+const getVisibleMenu = (items: TreeNodeDefault[]) => {
   return items.filter((item) => !!item.visible)
 }
 </script>

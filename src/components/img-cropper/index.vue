@@ -118,10 +118,10 @@ import VueCropper from './vue-cropper.vue'
 import { IVueCropper } from './types'
 import { localOrRemoteUrl } from '@/utils/query'
 import { computed, defineComponent, PropType, reactive, ref, toRefs, watch } from 'vue'
-import { AnyObject } from '@/utils'
 import { ElMessage } from 'element-plus'
 import { upload } from '@/api/system/file'
 import { isObject } from '@vueuse/core'
+import { Indexable } from '@/types/global'
 
 export default defineComponent({
   name: 'FdImageCropper',
@@ -232,7 +232,7 @@ export default defineComponent({
       ;(cropper.value as IVueCropper).reset()
     }
 
-    const onUpdatePreview = (data: AnyObject) => {
+    const onUpdatePreview = (data: Indexable) => {
       let zoom = 200
       const ratio = props.imgRatio[0] / props.imgRatio[1]
       if (ratio < 200 / 120) {

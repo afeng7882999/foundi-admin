@@ -19,20 +19,13 @@
               label-width="80px"
             >
               <el-form-item label="用户名" prop="username">
-                <el-input
-                  v-model="state.registerData.username"
-                  placeholder="长度5-20,字母开头,可包含字母,数字,下划线,点"
-                ></el-input>
+                <el-input v-model="state.registerData.username" placeholder="长度5-20,字母开头,可包含字母,数字,下划线,点"></el-input>
               </el-form-item>
               <el-form-item label="邮箱" prop="email">
                 <el-input v-model="state.registerData.email" placeholder="请输入邮箱地址"></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="password">
-                <el-input
-                  v-model="state.registerData.password"
-                  placeholder="长度6-20,可包含字母,数字,下划线"
-                  type="password"
-                ></el-input>
+                <el-input v-model="state.registerData.password" placeholder="长度6-20,可包含字母,数字,下划线" type="password"></el-input>
               </el-form-item>
               <el-form-item label="确认密码" prop="checkPass">
                 <el-input v-model="state.registerData.checkPass" placeholder="与密码一致" type="password"></el-input>
@@ -91,7 +84,7 @@ const validateUsername = async (rule: any, value: string, callback: any) => {
         callback()
       }
     } catch (e) {
-      callback(new Error((e as any).msg))
+      callback(new Error('检测用户名出错'))
     }
   }
 }
@@ -110,7 +103,7 @@ const validateEmail = async (rule: any, value: string, callback: any) => {
         callback()
       }
     } catch (e) {
-      callback(new Error((e as any).msg))
+      callback(new Error('检测邮箱地址出错'))
     }
   }
 }

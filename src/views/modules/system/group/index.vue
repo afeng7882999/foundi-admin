@@ -8,7 +8,6 @@
           v-waves
           :disabled="state.selectedNodes.length <= 0"
           plain
-
           type="danger"
           @click="del()"
         >
@@ -22,7 +21,7 @@
       </div>
     </div>
     <div ref="tableWrapper" class="fd-page__table is-bordered">
-      <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs" default-expand-all>
+      <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs">
         <el-table-column align="left" header-align="left" type="selection" width="40"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="用户组名称" prop="name"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="上级用户组" prop="parentId">
@@ -73,7 +72,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { groupFields, groupTreeFields, groupList, groupDel, groupExport } from '@/api/system/group'
+import { groupFields, groupTreeFields, groupList, groupDel, groupExport, Group } from '@/api/system/group'
 import Edit from './edit.vue'
 import usePage from '@/components/crud/use-page'
 import useList from '@/components/crud/use-list'
@@ -84,12 +83,13 @@ const stateOption = {
   treeFields: groupTreeFields,
   listApi: groupList,
   delApi: groupDel,
-  exportApi: groupExport
+  exportApi: groupExport,
+  defaultExpandAll: true
 }
 
-const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList(stateOption)
-const { tableWrapper, table, editDialog } = mixRefs
-const { showEdit, getList, del, onTreeSelect, onTreeSelectAll, getParentName, exportData } = mixMethods
+const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<Group>(stateOption)
+const { table, editDialog } = mixRefs
+const { showEdit, getList, del, getParentName, exportData } = mixMethods
 const { tableAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()

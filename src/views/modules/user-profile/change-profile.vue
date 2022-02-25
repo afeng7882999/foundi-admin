@@ -43,8 +43,8 @@
 import { defineComponent, toRefs } from 'vue'
 import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
 import FdRegionCascader from '@/components/region-cascader/index.vue'
-import {currentCheckUsername, currentEdit, userGetOne} from '@/api/system/user'
-import { IDictItem } from '@/api/system/dict-item'
+import { currentCheckUsername, currentEdit, User, userGetOne } from '@/api/system/user'
+import { DictItem } from '@/api/system/dict-item'
 import { omit } from 'lodash-es'
 import { validUsername } from '@/utils/validate'
 
@@ -67,7 +67,7 @@ export default defineComponent({
             callback()
           }
         } catch (e) {
-          callback(new Error(e.msg))
+          callback(new Error('检测用户名出错'))
         }
       }
     }
@@ -76,7 +76,7 @@ export default defineComponent({
       getApi: userGetOne,
       putApi: currentEdit,
       dicts: {
-        gender: [] as IDictItem[]
+        gender: [] as DictItem[]
       },
       resetFormData: {
         username: '',
@@ -96,7 +96,7 @@ export default defineComponent({
       }
     }
 
-    const { mixRefs, mixState, mixMethods } = useEdit(stateOption, emit)
+    const { mixRefs, mixState, mixMethods } = useEdit<User>(stateOption, emit)
 
     mixMethods.onAfterGetData(async (data) => {
       mixState.formData = data

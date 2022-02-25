@@ -1,46 +1,49 @@
 import { cloneDeep, merge } from 'lodash-es'
 import { computed, onBeforeUnmount, onMounted, reactive, watch } from 'vue'
-import useDict, { IDictList } from '@/components/crud/use-dict'
-import { AnyFunction, AnyObject } from '@/utils'
+import useDict from '@/components/crud/use-dict'
 import { off, on } from '@/utils/dom'
+import { AnyFunction, Indexable } from '@/types/global'
+import { DictList } from '@/api/system/dict-item'
+import { ApiObj } from '@/api'
+import { MaybeRef } from '@vueuse/core'
 
-export interface IDetailDialog {
-  open: (data: AnyObject[], idx: number, extra?: AnyObject) => void
+export type DetailDialog<T extends ApiObj> = {
+  open: (data: T[], idx: number, extra?: Indexable) => void
   close: () => void
 }
 
-export interface IDetailStateOption {
+export type DetailStateOption<T extends ApiObj> = Partial<{
   // 主键
-  idField?: string
+  idField: string
   // 字典
-  dicts?: IDictList
+  dicts: DictList
   // 重置表单
-  resetFormData?: AnyObject
+  resetFormData: Partial<T> | Indexable
   // 对话框标题
-  title?: string
+  title: string
   // 是否显示导航按钮
-  ifShowNavigation?: boolean
+  ifShowNavigation: boolean
   // 是否显示编辑按钮
-  ifEditable?: boolean
+  ifEditable: boolean
 
   [key: string]: any
-}
+}>
 
 export const OPEN_EDIT_EVENT = 'open-edit-dialog'
 export const NAVIGATE_EVENT = 'navigate'
 
-export default function <T extends IDetailStateOption>(stateOption: T, emit: AnyFunction) {
+export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, emit: AnyFunction) {
   const defaultState = {
     // 主键
     idField: 'id',
     // 当前数据索引
     idx: 0,
     // 数据列表
-    data: [] as AnyObject[],
+    data: [] as MaybeRef<T[]>,
     // 字典
-    dicts: {} as IDictList,
+    dicts: {} as DictList,
     // 重置表单
-    resetFormData: {} as AnyObject,
+    resetFormData: {} as Partial<T> | Indexable,
     // 对话框标题
     title: '',
     // 是否显示导航按钮
@@ -51,14 +54,16 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
     visible: false
   }
 
-  const mixState = reactive(merge({}, defaultState, stateOption) as typeof defaultState & T)
+  const mixState = reactive(merge({}, defaultState, stateOption) as typeof defaultState & DetailStateOption<T>)
 
   const mixHandlers = {
     // 显示之前
-    beforeOpen: async (data: AnyObject[], idx: number, extra?: AnyObject) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    beforeOpen: async (data: T[], idx: number, extra?: Indexable) => {
       return
     },
     // 改变当前项之后
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     currentChanged: async (idx: number) => {
       return
     }
@@ -83,7 +88,7 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
   )
 
   // 显示之前
-  const onBeforeOpen = (fn: (data: AnyObject[], idx: number, extra?: AnyObject) => Promise<void>) => {
+  const onBeforeOpen = (fn: (data: T[], idx: number, extra?: Indexable) => Promise<void>) => {
     mixHandlers.beforeOpen = fn
   }
 
@@ -93,7 +98,7 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
   }
 
   // 显示
-  const open = async (data: AnyObject[], idx: number, extra?: AnyObject) => {
+  const open = async (data: T[], idx: number, extra?: Indexable) => {
     await mixHandlers.beforeOpen(data, idx, extra)
     mixState.idx = idx
     mixState.data = data
@@ -112,7 +117,7 @@ export default function <T extends IDetailStateOption>(stateOption: T, emit: Any
 
   // 清除表单数据
   const resetForm = () => {
-    mixState.data = [cloneDeep(mixState.resetFormData)]
+    mixState.data = [cloneDeep(mixState.resetFormData as T)]
     mixState.idx = 0
   }
 

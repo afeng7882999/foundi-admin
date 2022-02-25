@@ -28,23 +28,13 @@
         <el-col :span="12">
           <el-form-item label="类型" prop="typeDict">
             <el-select v-model="formData.typeDict" style="width: 100%">
-              <el-option
-                v-for="item in dicts.sysMenuType"
-                :key="item.itemKey"
-                :label="item.itemValue"
-                :value="item.itemKey"
-              ></el-option>
+              <el-option v-for="item in dicts.sysMenuType" :key="item.itemKey" :label="item.itemValue" :value="item.itemKey"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="排序" prop="sort">
-            <el-input-number
-              v-model="formData.sort"
-              :min="0"
-              controls-position="right"
-              style="width: 100%"
-            ></el-input-number>
+            <el-input-number v-model="formData.sort" :min="0" controls-position="right" style="width: 100%"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
@@ -61,12 +51,7 @@
         </el-col>
       </el-row>
       <el-form-item label="注释" prop="remark">
-        <el-input
-          v-model="formData.remark"
-          :autosize="{ minRows: 2 }"
-          placeholder="请输入注释"
-          type="textarea"
-        ></el-input>
+        <el-input v-model="formData.remark" :autosize="{ minRows: 2 }" placeholder="请输入注释" type="textarea"></el-input>
       </el-form-item>
       <el-form-item label="是否显示" prop="visible">
         <el-switch v-model="formData.visible" active-text="是" inactive-text="否"></el-switch>
@@ -84,7 +69,7 @@
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
 import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
-import { menuDicts, menuFields, menuGetOne, menuList, menuPostOne, menuPutOne, menuTreeFields } from '@/api/system/menu'
+import { Menu, menuDicts, menuFields, menuGetOne, menuList, menuPostOne, menuPutOne, menuTreeFields } from '@/api/system/menu'
 import FdTagInput from '@/components/tag-input/index.vue'
 import FdIconSelector from '@/components/icon/icon-selector.vue'
 
@@ -125,7 +110,7 @@ export default defineComponent({
       perms: [] as string[]
     }
 
-    const { mixRefs, mixState, mixMethods } = useEdit(stateOption, emit)
+    const { mixRefs, mixState, mixMethods } = useEdit<Menu>(stateOption, emit)
 
     mixMethods.onBeforeOpen(async () => {
       mixState.perms = mixState.formData.perms ? mixState.formData.perms.split(',') : []

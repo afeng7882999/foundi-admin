@@ -1,7 +1,7 @@
 <template>
-  <el-dialog custom-class="dialog-full-sql" title="FULL SQL" v-model="state.visible" width="90%">
+  <el-dialog v-model="state.visible" custom-class="dialog-full-sql" title="FULL SQL" width="90%">
     <div class="dialog-full-sql__sub-title">Format View:</div>
-    <el-input class="dialog-full-sql__textarea" type="textarea" autosize v-model="state.fullSqlData.formattedSql"></el-input>
+    <el-input v-model="state.fullSqlData.formattedSql" class="dialog-full-sql__textarea" type="textarea" autosize></el-input>
     <div class="dialog-full-sql__sub-title">ParseView:</div>
     <ul class="db-stat-lst is-wide">
       <li class="db-stat-lst__item">
@@ -95,7 +95,7 @@
       </li>
     </ul>
     <template #footer>
-      <el-button @click="state.visible = false" type="primary">确定</el-button>
+      <el-button type="primary" @click="state.visible = false">确定</el-button>
     </template>
   </el-dialog>
 </template>
@@ -140,8 +140,7 @@ defineExpose({
 </script>
 
 <style lang="scss">
-
-.dialog-full-sql{
+.dialog-full-sql {
   &__submenu-title {
     padding: 20px 0 10px 0;
     font-size: var(--el-font-size-large);

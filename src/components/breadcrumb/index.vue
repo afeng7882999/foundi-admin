@@ -20,12 +20,12 @@ export default {
 <script setup lang="ts">
 import { reactive, onBeforeMount } from 'vue'
 import { onBeforeRouteUpdate, RouteLocationNormalized, useRoute, useRouter } from 'vue-router'
-import { getTreeNode, getTreeNodes, ITreeNodeDefault } from '@/utils/data-tree'
+import { getTreeNode, getTreeNodes, TreeNodeDefault } from '@/utils/data-tree'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 
 const state = reactive({
-  breadcrumbs: [] as ITreeNodeDefault[]
+  breadcrumbs: [] as TreeNodeDefault[]
 })
 
 const route = useRoute()
@@ -70,7 +70,7 @@ const getBreadcrumb = (r: RouteLocationNormalized) => {
 }
 
 // 导航到菜单项
-const handleLink = (item: ITreeNodeDefault) => {
+const handleLink = (item: TreeNodeDefault) => {
   const { redirect, url } = item
   if (redirect) {
     router.push(redirect)

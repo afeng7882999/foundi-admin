@@ -2,7 +2,7 @@
 import { ActionContext } from 'vuex'
 import Cookies from 'js-cookie'
 import config from '@/app/settings'
-import { ITreeNodeDefault } from '@/utils/data-tree'
+import { TreeNodeDefault } from '@/utils/data-tree'
 import { AnyObject } from '@/utils'
 
 const TokenKey = config.TokenKey
@@ -13,7 +13,7 @@ export interface UserState {
   token?: string
   user: AnyObject
   roles?: AnyObject[]
-  menu?: ITreeNodeDefault[]
+  menu?: TreeNodeDefault[]
   perms?: string[]
 }
 
@@ -49,7 +49,7 @@ const mutations = {
     state.perms = perms
     window.localStorage.setItem('user.perms', JSON.stringify(perms))
   },
-  SET_MENU: (state: UserState, menu: ITreeNodeDefault[]) => {
+  SET_MENU: (state: UserState, menu: TreeNodeDefault[]) => {
     state.menu = menu
     window.localStorage.setItem('user.menu', JSON.stringify(menu))
   },
@@ -84,12 +84,12 @@ const actions = {
   setPerms({ commit }: ActionContext<UserState, unknown>, perms: string[]) {
     commit('SET_PERMS', perms)
   },
-  setMenu({ commit }: ActionContext<UserState, unknown>, menu: ITreeNodeDefault[]) {
+  setMenu({ commit }: ActionContext<UserState, unknown>, menu: TreeNodeDefault[]) {
     commit('SET_MENU', menu)
   },
   setUserInfo(
     { commit }: ActionContext<UserState, unknown>,
-    info: { user: AnyObject; roles: string[]; perms: string[]; menu: ITreeNodeDefault[] }
+    info: { user: AnyObject; roles: string[]; perms: string[]; menu: TreeNodeDefault[] }
   ) {
     commit('SET_USER', info.user)
     commit('SET_ROLES', info.roles)

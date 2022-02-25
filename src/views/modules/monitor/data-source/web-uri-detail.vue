@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="dialog-web-uri-detail" title="Web URI" v-model="state.visible" width="90%">
+  <el-dialog v-model="state.visible" custom-class="dialog-web-uri-detail" title="Web URI" width="90%">
     <div class="dialog-web-uri-detail__sub-title">Web URI View:</div>
     <ul class="db-stat-lst is-wide">
       <li class="db-stat-lst__item">
@@ -84,7 +84,14 @@
       </li>
     </ul>
     <div class="dialog-web-uri-detail__sub-title">Profiles:</div>
-    <el-table :data="state.webUriData.Profiles" size="small" border style="width: 100%" stripe :default-sort="{ prop: 'Name', order: 'ascending' }">
+    <el-table
+      :data="state.webUriData.Profiles"
+      size="small"
+      border
+      style="width: 100%"
+      stripe
+      :default-sort="{ prop: 'Name', order: 'ascending' }"
+    >
       <el-table-column label="Name" prop="Name" min-width="350" sortable></el-table-column>
       <el-table-column label="ParentName" prop="Parent" min-width="350" sortable></el-table-column>
       <el-table-column label="Type" prop="Type" width="80" sortable></el-table-column>
@@ -92,7 +99,7 @@
       <el-table-column label="ExecuteTimeMillis" prop="ExecuteTimeMillis" width="80" sortable></el-table-column>
     </el-table>
     <template #footer>
-      <el-button @click="state.visible = false" type="primary">确定</el-button>
+      <el-button type="primary" @click="state.visible = false">确定</el-button>
     </template>
   </el-dialog>
 </template>

@@ -1,18 +1,6 @@
 <template>
-  <el-dialog
-    v-model="state.visible"
-    :close-on-click-modal="false"
-    :title="state.isCreate ? '新增' : '修改'"
-    :width="750"
-  >
-    <el-form
-      ref="form"
-      :model="state.formData"
-      :rules="state.formRule"
-      label-width="80px"
-
-      @keyup.enter="submit"
-    >
+  <el-dialog v-model="state.visible" :close-on-click-modal="false" :title="state.isCreate ? '新增' : '修改'" :width="750">
+    <el-form ref="form" :model="state.formData" :rules="state.formRule" label-width="80px" @keyup.enter="submit">
       <el-tabs v-model="state.tabName" stretch>
         <el-tab-pane label="角色基本信息" name="1">
           <el-form-item label="角色名称" prop="name">
@@ -22,12 +10,7 @@
             <el-input v-model="state.formData.label" placeholder="请输入角色标识"></el-input>
           </el-form-item>
           <el-form-item label="备注" prop="remark">
-            <el-input
-              v-model="state.formData.remark"
-              :autosize="{ minRows: 5 }"
-              placeholder="请输入备注"
-              type="textarea"
-            ></el-input>
+            <el-input v-model="state.formData.remark" :autosize="{ minRows: 5 }" placeholder="请输入备注" type="textarea"></el-input>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane :label="`业务权限（${state.menuSelectedCount}项）`" name="2">
@@ -149,27 +132,28 @@ export default {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
-import { roleDicts, roleFields, roleGetOne, rolePostOne, rolePutOne } from '@/api/system/role'
-import { groupList, IGroup } from '@/api/system/group'
-import { IMenu, menuList } from '@/api/system/menu'
+import useEdit, { ListEditStateOption, REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
+import { Role, roleDicts, roleFields, roleGetOne, rolePostOne, rolePutOne } from '@/api/system/role'
+import { groupList, Group } from '@/api/system/group'
+import { Menu, menuList } from '@/api/system/menu'
 import { arrayToTree } from '@/utils/data-tree'
 import { useElTree } from '@/components/tree/use-tree'
 import { ElTree } from 'element-plus'
+import { Ref } from '@vue/reactivity'
 
 const emit = defineEmits([REFRESH_DATA_EVENT])
 
-const menuTree = ref()
-const groupTree = ref()
+const menuTree = ref() as Ref<InstanceType<typeof ElTree>>
+const groupTree = ref() as Ref<InstanceType<typeof ElTree>>
 
-const stateOption = {
+const stateOption: ListEditStateOption<Role> = {
   idField: roleFields.idField,
   getApi: roleGetOne,
   postApi: rolePostOne,
   putApi: rolePutOne,
   dicts: roleDicts,
-  groupList: [] as IGroup[],
-  menuList: [] as IMenu[],
+  groupList: [] as Group[],
+  menuList: [] as Menu[],
   resetFormData: {
     id: '',
     name: '',
@@ -190,7 +174,7 @@ const stateOption = {
   tabName: '1'
 }
 
-const { mixRefs, mixState: state, mixMethods } = useEdit(stateOption, emit)
+const { mixRefs, mixState: state, mixMethods } = useEdit<Role>(stateOption, emit)
 const { form } = mixRefs
 const { open, submit, onAfterGetData, onBeforeOpen, onBeforeSubmitData, onAfterClose } = mixMethods
 
@@ -223,44 +207,44 @@ const groupTreeChecked = (data: any, checked: { checkedKeys: string[] }) => {
 const { expandAll, collapseAll, checkCurrentAndDesc, uncheckCurrentAndDesc } = useElTree()
 
 const menuTreeSelectAll = () => {
-  state.menuSelectedCount = checkCurrentAndDesc(menuTree.value as typeof ElTree, state.menuList)
+  state.menuSelectedCount = checkCurrentAndDesc(menuTree.value, state.menuList)
 }
 
 const menuTreeClearAll = () => {
-  state.menuSelectedCount = uncheckCurrentAndDesc(menuTree.value as typeof ElTree, state.menuList)
+  state.menuSelectedCount = uncheckCurrentAndDesc(menuTree.value, state.menuList)
 }
 
 const menuTreeExpand = () => {
-  expandAll(menuTree.value as typeof ElTree)
+  expandAll(menuTree.value)
   state.menuExpandAll = true
 }
 
 const menuTreeCollapse = () => {
-  collapseAll(menuTree.value as typeof ElTree)
+  collapseAll(menuTree.value)
   state.menuExpandAll = false
 }
 
 const groupTreeSelectAll = () => {
-  state.groupSelectedCount = checkCurrentAndDesc(groupTree.value as typeof ElTree, state.groupList)
+  state.groupSelectedCount = checkCurrentAndDesc(groupTree.value, state.groupList)
 }
 
 const groupTreeClearAll = () => {
-  state.groupSelectedCount = uncheckCurrentAndDesc(groupTree.value as typeof ElTree, state.groupList)
+  state.groupSelectedCount = uncheckCurrentAndDesc(groupTree.value, state.groupList)
 }
 
 const groupTreeExpand = () => {
-  expandAll(groupTree.value as typeof ElTree)
+  expandAll(groupTree.value)
   state.groundExpandAll = true
 }
 
 const groupTreeCollapse = () => {
-  collapseAll(groupTree.value as typeof ElTree)
+  collapseAll(groupTree.value)
   state.groundExpandAll = false
 }
 
 onAfterClose(async () => {
-  ;(menuTree.value as any).setCurrentKey(null)
-  ;(groupTree.value as any).setCurrentKey(null)
+  menuTree.value.setCurrentKey('')
+  groupTree.value.setCurrentKey('')
   state.menuSelectedCount = 0
   state.groupSelectedCount = 0
 })

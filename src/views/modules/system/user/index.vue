@@ -236,11 +236,11 @@ import useList from '@/components/crud/use-list'
 import Edit from './edit.vue'
 import Detail from './detail.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
-import { IUser, userDel, userDicts, userExport, userList, userQuery } from '@/api/system/user'
-import { groupList, IGroup } from '@/api/system/group'
+import { User, userDel, userDicts, userExport, userList, userQuery } from '@/api/system/user'
+import { groupList, Group } from '@/api/system/group'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { arrayToTree } from '@/utils/data-tree'
-import { IRole, roleList } from '@/api/system/role'
+import { Role, roleList } from '@/api/system/role'
 import { localOrRemoteUrl } from '@/utils/query'
 import { useRouter } from 'vue-router'
 import usePage from '@/components/crud/use-page'
@@ -256,10 +256,10 @@ export default defineComponent({
       dicts: userDicts,
       query: userQuery,
 
-      groupList: [] as IGroup[],
-      roleList: [] as IRole[],
-      groupTree: [] as IGroup[],
-      roleTree: [] as IRole[],
+      groupList: [] as Group[],
+      roleList: [] as Role[],
+      groupTree: [] as Group[],
+      roleTree: [] as Role[],
       groupTreeProps: {
         children: 'children',
         label: 'name'
@@ -269,7 +269,7 @@ export default defineComponent({
       treeField: { labelField: 'name' }
     }
 
-    const { mixRefs, mixState, mixMethods } = useList(stateOption)
+    const { mixRefs, mixState, mixMethods, mixAttrs } = useList<User>(stateOption)
 
     const { docMinHeight, showPageHeader, hasAuth, setViewTitle } = usePage()
 
@@ -282,22 +282,22 @@ export default defineComponent({
     })
 
     const getGroupName = (id: string) => {
-      const group = mixState.groupList.find((g) => g.id === id)
-      return group ? (group as IGroup).name : '无'
+      const group = mixState.groupList.find((g: Group) => g.id === id)
+      return group ? (group as Group).name : '无'
     }
 
-    const onTableRowClick = (row: IUser) => {
+    const onTableRowClick = (row: User) => {
       setCurrentData(row)
     }
 
     mixMethods.onAfterGetList(async () => {
       if (mixState.currentId) {
-        const current = mixState.data.find((d) => d.id === mixState.currentId) as IUser
+        const current = mixState.data.find((d) => d.id === mixState.currentId) as User
         await setCurrentData(current)
       }
     })
 
-    const setCurrentData = async (user: IUser) => {
+    const setCurrentData = async (user: User) => {
       if (!user) {
         mixState.currentId = ''
         ;(mixRefs.detailDialog.value as any).close()
@@ -317,17 +317,17 @@ export default defineComponent({
 
     const getRoleNameList = (ids: string[]) => {
       if (ids) {
-        const roles = mixState.roleList.filter((r) => ids.some((i) => i === r.id))
-        return roles.map((r) => r.name)
+        const roles = mixState.roleList.filter((r: Role) => ids.some((i) => i === r.id))
+        return roles.map((r: Role) => r.name)
       }
       return []
     }
 
-    const ifOAuthEmpty = (user: IUser) => {
+    const ifOAuthEmpty = (user: User) => {
       return !(user.hasWeixin || user.hasQQ || user.hasWeibo)
     }
 
-    const getDistricts = (user: IUser) => {
+    const getDistricts = (user: User) => {
       let result = ''
       if (user.province) {
         result += user.province
@@ -342,7 +342,7 @@ export default defineComponent({
     }
     const router = useRouter()
 
-    const onOpenOAuthList = async (row: IUser) => {
+    const onOpenOAuthList = async (row: User) => {
       if (row) {
         const id = row.id
         const name = row.username
@@ -354,6 +354,7 @@ export default defineComponent({
 
     return {
       ...mixRefs,
+      ...mixAttrs,
       ...toRefs(mixState),
       docMinHeight,
       showPageHeader,

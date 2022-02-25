@@ -7,7 +7,11 @@
       <el-form-item class="btn-input" label="验证码" prop="code">
         <el-input v-model="formData.code" placeholder="验证码">
           <template #append>
-            <fd-count-down-button :button-prop="{ type: 'primary' }" :disable-time="30" @count-down-button-click="getResetValidCode"></fd-count-down-button>
+            <fd-count-down-button
+              :button-prop="{ type: 'primary' }"
+              :disable-time="30"
+              @count-down-button-click="getResetValidCode"
+            ></fd-count-down-button>
           </template>
         </el-input>
       </el-form-item>
@@ -28,7 +32,7 @@ import { validMobile } from '@/utils/validate'
 import FdCountDownButton from '@/components/count-down-button/index.vue'
 import { currentChangeMobile, currentChangeMobileValid, currentCheckMobile } from '@/api/system/user'
 import { ElMessage } from 'element-plus'
-import { AnyObject } from '@/utils'
+import { Indexable } from '@/types/global'
 
 export default defineComponent({
   name: 'UserProfileChangeMobile',
@@ -49,13 +53,13 @@ export default defineComponent({
             callback()
           }
         } catch (e) {
-          callback(new Error(e.msg))
+          callback(new Error('检测手机号出错'))
         }
       }
     }
 
     const stateOption = {
-      postApi: async (form: AnyObject) => {
+      postApi: async (form: Indexable) => {
         await currentChangeMobile(form.code, form.mobile)
       },
       resetFormData: {

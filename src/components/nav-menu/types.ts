@@ -1,17 +1,17 @@
-import {ITreeNodeDefault} from "@/utils/data-tree";
-import {ComputedRef, UnwrapNestedRefs} from "@vue/reactivity";
+import { TreeNodeDefault } from '@/utils/data-tree'
+import { ComputedRef, UnwrapNestedRefs } from '@vue/reactivity'
 
-interface IRootMenuState {
-  menuItems: ITreeNodeDefault[]
+interface RootMenuState {
+  menuItems: TreeNodeDefault[]
   activeId: string
   descActiveIds: string[]
   expandedIds: string[]
 }
 
-export interface IRootMenuProvided {
+export interface RootMenuProvided {
   levelPadding: ComputedRef<number>
-  rootState: UnwrapNestedRefs<IRootMenuState>
-  handleActive: (t: ITreeNodeDefault) => void
-  handleExpand: (t: ITreeNodeDefault) => void
-  handleCollapse: (t: ITreeNodeDefault) => void
+  rootState: UnwrapNestedRefs<RootMenuState>
+  handleActive: (t: TreeNodeDefault) => void
+  handleExpand: (t: TreeNodeDefault) => void
+  handleCollapse: (t: TreeNodeDefault) => void
 }

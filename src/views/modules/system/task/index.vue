@@ -3,24 +3,14 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="query" @keyup.enter="queryList()">
-        <transition
-          name="expand"
-          @enter="expandEnter"
-          @after-enter="expandAfterEnter"
-          @before-leave="expandBeforeLeave"
-        >
+        <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
           <div v-show="queryFormShow" class="fd-page__query">
             <el-form-item label="任务名" prop="jobName">
               <el-input v-model="query.jobName" clearable placeholder="请输入任务名" />
             </el-form-item>
             <el-form-item label="任务状态" prop="jobStatus">
               <el-select v-model="query.jobStatus" clearable filterable placeholder="请选择">
-                <el-option
-                  v-for="item in taskStatusDict"
-                  :key="item.itemKey"
-                  :label="item.itemValue"
-                  :value="item.itemKey"
-                ></el-option>
+                <el-option v-for="item in taskStatusDict" :key="item.itemKey" :label="item.itemValue" :value="item.itemKey"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -34,32 +24,15 @@
         </transition>
       </el-form>
       <div class="fd-page__action">
-        <el-button
-          v-show="hasAuth('system:task:delete')"
-          v-waves
-          :disabled="selectedNodes.length <= 0"
-          plain
-
-          type="danger"
-          @click="del()"
-        >
+        <el-button v-show="hasAuth('system:task:delete')" v-waves :disabled="selectedNodes.length <= 0" plain type="danger" @click="del()">
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:task:add')" v-waves plain type="primary" @click="showEdit()">
-            新增
-          </el-button>
-          <el-button v-show="hasAuth('system:task:export')" v-waves @click="exportData()">
-            导出数据
-          </el-button>
+          <el-button v-show="hasAuth('system:task:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
+          <el-button v-show="hasAuth('system:task:export')" v-waves @click="exportData()">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
-          <el-tooltip
-            :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'"
-            :show-after="500"
-            effect="dark"
-            placement="top"
-          >
+          <el-tooltip :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <fd-icon-button
               :class="queryFormShow ? 'expanded' : ''"
               class="action-query-toggle"
@@ -71,7 +44,7 @@
       </div>
     </div>
     <div class="fd-page__table is-bordered">
-      <el-table v-loading="loading" :data="data" row-key="id" @selection-change="onSelectionChange">
+      <el-table v-loading="loading" v-bind="tableAttrs">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
@@ -81,13 +54,7 @@
           prop="jobName"
           width="150px"
         ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="center"
-          header-align="center"
-          label="分组"
-          prop="jobGroup"
-        ></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="分组" prop="jobGroup"></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
           align="center"
@@ -191,17 +158,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        :background="true"
-        :current-page="current"
-        :page-count="total"
-        :page-size="siz"
-        :page-sizes="[10, 20, 50, 100, 200]"
-        :total="count"
-        layout="total, sizes, prev, pager, next, jumper"
-        @current-change="pageChange"
-        @size-change="sizeChange"
-      ></el-pagination>
+      <el-pagination v-bind="paginationAttrs"></el-pagination>
     </div>
     <el-backtop></el-backtop>
     <edit v-if="editShow" ref="editDialog" @refresh-data-list="getList"></edit>
@@ -212,6 +169,7 @@
 import { defineComponent, toRefs } from 'vue'
 import useList from '@/components/crud/use-list'
 import {
+  Task,
   TASK_STATUS_DICT,
   taskDel,
   taskExport,
@@ -242,7 +200,7 @@ export default defineComponent({
       taskStatusDict: TASK_STATUS_DICT
     }
 
-    const { mixRefs, mixState, mixMethods } = useList(stateOption)
+    const { mixRefs, mixState, mixMethods, mixAttrs } = useList<Task>(stateOption)
 
     const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
@@ -297,6 +255,7 @@ export default defineComponent({
 
     return {
       ...mixRefs,
+      ...mixAttrs,
       ...toRefs(mixState),
       docMinHeight,
       showPageHeader,

@@ -7,13 +7,7 @@
       </el-form-item>
     </el-form>
     <!-- 表格 -->
-    <el-table
-      v-loading="loading"
-      :data="data"
-      :row-class-name="rowClass"
-      style="width: 100%"
-      @selection-change="onSelectionChange"
-    >
+    <el-table v-loading="loading" :data="data" :row-class-name="rowClass" style="width: 100%" @selection-change="onSelectionChange">
       <el-table-column align="center" header-align="center" width="30">
         <template #default="scope">
           <fd-icon :icon="unread(scope.row) ? 'email2' : 'email-open'"></fd-icon>
@@ -31,25 +25,12 @@
           <span>{{ dictVal(dicts.sysMessageType, scope.row.typeDict) }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        :show-overflow-tooltip="true"
-        align="left"
-        header-align="center"
-        label="标题"
-        prop="title"
-        width="300"
-      >
+      <el-table-column :show-overflow-tooltip="true" align="left" header-align="center" label="标题" prop="title" width="300">
         <template #default="scope">
           <span class="title-link" @click="showEdit(scope.row)">{{ scope.row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        :show-overflow-tooltip="true"
-        align="left"
-        header-align="center"
-        label="内容"
-        prop="content"
-      ></el-table-column>
+      <el-table-column :show-overflow-tooltip="true" align="left" header-align="center" label="内容" prop="content"></el-table-column>
       <el-table-column
         :show-overflow-tooltip="true"
         align="left"
@@ -81,11 +62,7 @@
       @size-change="sizeChange"
     ></el-pagination>
     <!-- 添加删除 -->
-    <system-message-content-dialog
-      v-if="editShow"
-      ref="editDialog"
-      @refresh-data-list="getList"
-    ></system-message-content-dialog>
+    <system-message-content-dialog v-if="editShow" ref="editDialog" @refresh-data-list="getList"></system-message-content-dialog>
   </div>
 </template>
 
@@ -94,15 +71,14 @@ import { defineComponent, toRefs } from 'vue'
 import useList from '@/components/crud/use-list'
 import SystemMessageContentDialog from './message-content.vue'
 import { ElMessage } from 'element-plus'
-import { AnyObject } from '@/utils'
 import {
   DelMessageOfCurrent,
-  listMessageOfCurrent,
+  listMessageOfCurrent, Message,
   SetMessageReadOfCurrent,
   userMessageDicts,
   userMessageQuery
 } from '@/api/system/message'
-import usePage from "@/components/crud/use-page";
+import usePage from '@/components/crud/use-page'
 
 export default defineComponent({
   name: 'SystemMessage',
@@ -118,7 +94,7 @@ export default defineComponent({
       query: userMessageQuery
     }
 
-    const { mixRefs, mixState, mixMethods } = useList(stateOption)
+    const { mixRefs, mixState, mixMethods } = useList<Message>(stateOption)
 
     const { docMinHeight } = usePage()
 
@@ -139,13 +115,13 @@ export default defineComponent({
       }
     }
 
-    const rowClass = ({ row }: AnyObject) => {
+    const rowClass = ({ row }: Message) => {
       if (!unread(row)) {
         return 'read-message'
       }
     }
 
-    const unread = (message: AnyObject) => {
+    const unread = (message: Message) => {
       return message.stat == null || message.stat === '0'
     }
 

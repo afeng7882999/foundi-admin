@@ -1,13 +1,8 @@
 import { dictValue } from '@/utils/dict'
-import { AnyObject } from '@/utils'
 import { upperFirst } from '@/utils/lang'
-import { getDictListByName, IDictItem } from '@/api/system/dict-item'
+import { getDictListByName, DictItem, DictList } from '@/api/system/dict-item'
 
-export interface IDictList {
-  [key: string]: IDictItem[]
-}
-
-export default function (dictOption?: IDictList) {
+export default function (dictOption?: DictList) {
   // 获取字典数据
   const getDictData = async () => {
     const names = [] as string[]
@@ -25,14 +20,14 @@ export default function (dictOption?: IDictList) {
   }
 
   // 设置字典
-  const setDicts = (resData: AnyObject) => {
+  const setDicts = (resData: DictList) => {
     for (const key in dictOption) {
       dictOption[key] = resData[upperFirst(key)]
     }
   }
 
   // 字典key->value
-  const dictVal = (dictItems: IDictItem[], key: string) => {
+  const dictVal = (dictItems: DictItem[], key: string) => {
     if (!dictItems || dictItems.length === 0) {
       return
     }

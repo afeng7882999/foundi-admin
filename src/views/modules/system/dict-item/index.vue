@@ -31,7 +31,6 @@
           v-waves
           :disabled="state.selectedNodes.length <= 0"
           plain
-
           type="danger"
           @click="del()"
         >
@@ -39,9 +38,7 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:dictItem:add')" v-waves plain type="primary" @click="showDictItemEdit()">
-            新增
-          </el-button>
+          <el-button v-show="hasAuth('system:dictItem:add')" v-waves plain type="primary" @click="showDictItemEdit()">新增</el-button>
           <el-button v-show="hasAuth('system:dictItem:export')" @click.prevent.stop="openMenu($event)">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
           <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
@@ -53,7 +50,7 @@
       </div>
     </div>
     <div class="fd-page__table is-bordered">
-      <el-table v-loading="state.loading" :data="state.data" row-key="id" @selection-change="onSelectionChange">
+      <el-table v-loading="state.loading" v-bind="tableAttrs">
         <el-table-column align="left" header-align="left" type="selection" width="40"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="字典项键值" prop="itemKey"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="字典项值" prop="itemValue"></el-table-column>
@@ -88,17 +85,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        :background="true"
-        :current-page="state.current"
-        :page-count="state.total"
-        :page-size="state.size"
-        :page-sizes="[10, 20, 50, 100, 200]"
-        :total="state.count"
-        layout="total, sizes, prev, pager, next, jumper"
-        @current-change="pageChange"
-        @size-change="sizeChange"
-      ></el-pagination>
+      <el-pagination v-bind="paginationAttrs"></el-pagination>
     </div>
     <el-backtop></el-backtop>
     <fd-contextmenu ref="contextMenu" event-type="click">
@@ -118,7 +105,7 @@ export default {
 <script setup lang="ts">
 import { nextTick, onBeforeMount, ref } from 'vue'
 import useList from '@/components/crud/use-list'
-import { dictItemDel, dictItemExport, dictItemFields, dictItemList, dictItemParams, dictItemQuery } from '@/api/system/dict-item'
+import { DictItem, dictItemDel, dictItemExport, dictItemFields, dictItemList, dictItemParams, dictItemQuery } from '@/api/system/dict-item'
 import Edit from './edit.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import { useRoute, useRouter } from 'vue-router'
@@ -143,9 +130,10 @@ const route = useRoute()
 const router = useRouter()
 const store = useStore()
 
-const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<DictItem>(stateOption)
 const { queryForm, editDialog } = mixRefs
-const { getList, pageChange, sizeChange, queryList, resetQuery, del, onSelectionChange, toggleQueryForm, onAfterGetList } = mixMethods
+const { getList, queryList, resetQuery, del, toggleQueryForm } = mixMethods
+const { tableAttrs, paginationAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
@@ -177,9 +165,9 @@ const exportDictItemData = async (type?: string) => {
   state.exportLoading = true
   try {
     if (type && type === 'all') {
-      await state.exportApi('字典条目数据', {})
+      state.exportApi && (await state.exportApi('字典条目数据', {}))
     } else {
-      await state.exportApi(`字典${state.dictName}数据`, { dictId: state.params.dictId })
+      state.exportApi && (await state.exportApi(`字典${state.dictName}数据`, { dictId: state.params.dictId }))
     }
     state.exportLoading = false
   } catch (e) {

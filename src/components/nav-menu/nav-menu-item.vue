@@ -26,15 +26,15 @@ export default {
 <script setup lang="ts">
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import { computed, inject, PropType, ref } from 'vue'
-import { ITreeNodeDefault } from '@/utils/data-tree'
-import { IRootMenuProvided } from '@/components/nav-menu/types'
+import { TreeNodeDefault } from '@/utils/data-tree'
+import { RootMenuProvided } from '@/components/nav-menu/types'
 
 const MENU_TYPE = '0'
 
 const props = defineProps({
   menuItem: {
-    type: Object as PropType<ITreeNodeDefault>,
-    default: {} as ITreeNodeDefault
+    type: Object as PropType<TreeNodeDefault>,
+    default: {} as TreeNodeDefault
   },
   level: {
     type: Number,
@@ -42,7 +42,7 @@ const props = defineProps({
   }
 })
 
-const rootMenu = inject('rootMenu') as IRootMenuProvided
+const rootMenu = inject('rootMenu') as RootMenuProvided
 
 const mouseHover = ref(false)
 

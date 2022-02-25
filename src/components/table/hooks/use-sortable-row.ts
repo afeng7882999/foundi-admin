@@ -19,7 +19,7 @@ export type SortableRowOption = {
   onRowDragEnd: (e: SortableEvent) => void
 }
 
-const useSortableRow = (table: Ref<InstanceType<typeof ElTable>>, sortableRowOpt?: Partial<SortableRowOption>) => {
+const useSortableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, sortableRowOpt?: Partial<SortableRowOption>) => {
   //===============================================================================
   // option
   //===============================================================================

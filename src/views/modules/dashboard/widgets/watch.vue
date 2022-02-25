@@ -26,12 +26,7 @@ import { useStore } from 'vuex'
 import { AllState } from '@/store'
 
 type ECOption = echarts.ComposeOption<
-  | BarSeriesOption
-  | LineSeriesOption
-  | TitleComponentOption
-  | TooltipComponentOption
-  | GridComponentOption
-  | DatasetComponentOption
+  BarSeriesOption | LineSeriesOption | TitleComponentOption | TooltipComponentOption | GridComponentOption | DatasetComponentOption
 >
 
 echarts.use([

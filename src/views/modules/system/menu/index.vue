@@ -3,15 +3,7 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page__action">
-        <el-button
-          v-show="hasAuth('system:menu:delete')"
-          v-waves
-          :disabled="selectedNodes.length <= 0"
-          plain
-
-          type="danger"
-          @click="del()"
-        >
+        <el-button v-show="hasAuth('system:menu:delete')" v-waves :disabled="selectedNodes.length <= 0" plain type="danger" @click="del()">
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
@@ -133,11 +125,10 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import { menuDel, menuDicts, menuExport, menuFields, menuList, menuQuery, menuTreeFields } from '@/api/system/menu'
+import { Menu, menuDel, menuDicts, menuExport, menuFields, menuList, menuQuery, menuTreeFields } from '@/api/system/menu'
 import Edit from './edit.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import { arrayToTree } from '@/utils/data-tree'
-import { AnyObject } from '@/utils'
 import usePage from '@/components/crud/use-page'
 import useList from '@/components/crud/use-list'
 
@@ -155,10 +146,10 @@ export default defineComponent({
       dicts: menuDicts,
       query: menuQuery,
 
-      parentList: [] as AnyObject[]
+      parentList: [] as Menu[]
     }
 
-    const { mixRefs, mixState, mixMethods, mixAttrs } = useList(stateOption)
+    const { mixRefs, mixState, mixMethods, mixAttrs } = useList<Menu>(stateOption)
 
     const { docMinHeight, showPageHeader, hasAuth } = usePage()
 

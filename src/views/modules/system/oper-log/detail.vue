@@ -57,7 +57,7 @@ export default {
 
 <script setup lang="ts">
 import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
-import { operLogFields } from '@/api/system/oper-log'
+import { OperLog, operLogFields } from '@/api/system/oper-log'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { formatJson } from '@/utils/lang'
 import { formatTimestamp } from '@/utils/time'
@@ -90,7 +90,7 @@ const stateOption = {
   jsonResult: ''
 }
 
-const { mixState: state, mixComputed, mixMethods } = useDetail(stateOption, emit)
+const { mixState: state, mixComputed, mixMethods } = useDetail<OperLog>(stateOption, emit)
 const { prevDisabled, nextDisabled } = mixComputed
 const { open, dictVal, onEdit, onPrev, onNext, close, onCurrentChanged } = mixMethods
 

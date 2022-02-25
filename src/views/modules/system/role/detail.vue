@@ -1,12 +1,6 @@
 <template>
   <div class="fd-page__form">
-    <el-descriptions
-      :column="2"
-      :title="`角色 - ${state.data[state.idx].name}`"
-      border
-      direction="vertical"
-
-    >
+    <el-descriptions :column="2" :title="`角色 - ${state.data[state.idx].name}`" border direction="vertical">
       <el-descriptions-item label="名称">
         <span>{{ state.data[state.idx].name }}</span>
       </el-descriptions-item>
@@ -53,14 +47,14 @@ export default {
 
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
-import useDetail, { OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
-import { roleFields } from '@/api/system/role'
-import { IMenu } from '@/api/system/menu'
-import { IGroup } from '@/api/system/group'
-import { AnyObject } from '@/utils'
+import useDetail, { DetailStateOption, OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
+import { Role, roleFields } from '@/api/system/role'
+import { Menu } from '@/api/system/menu'
+import { Group } from '@/api/system/group'
 import { arrayToTree } from '@/utils/data-tree'
+import { Indexable } from '@/types/global'
 
-const stateOption = {
+const stateOption: DetailStateOption<Role> = {
   idField: roleFields.idField,
   resetFormData: {
     id: '',
@@ -68,8 +62,8 @@ const stateOption = {
     label: '',
     remark: '',
     dataScopeDict: '',
-    menuList: [] as IMenu[],
-    groupList: [] as IGroup[]
+    menuList: [] as Menu[],
+    groupList: [] as Group[]
   },
   menuSelectedCount: 0,
   groupSelectedCount: 0
@@ -77,24 +71,24 @@ const stateOption = {
 
 const emit = defineEmits([OPEN_EDIT_EVENT])
 
-const { mixState: state, mixMethods } = useDetail(stateOption, emit)
+const { mixState: state, mixMethods } = useDetail<Role>(stateOption, emit)
 const { onBeforeOpen, resetForm, open, dictVal, close } = mixMethods
 
 onBeforeMount(async () => {
   resetForm()
 })
 
-onBeforeOpen(async (data: AnyObject[], idx: number, extra?: AnyObject) => {
+onBeforeOpen(async (data: Role[], idx: number, extra?: Indexable) => {
   if (!extra || !extra.menuList || !extra.groupList) {
     return
   }
-  const role = data[idx] as AnyObject
+  const role = data[idx] as Role
   if (!role.menuList) {
-    const allMenu = extra.menuList as IMenu[]
+    const allMenu = extra.menuList as Menu[]
     role.menuList = arrayToTree(allMenu.filter((m) => role.menuIdList.includes(m.id)))
   }
   if (!role.groupList) {
-    const allGroup = extra.groupList as IGroup[]
+    const allGroup = extra.groupList as Group[]
     role.groupList = arrayToTree(allGroup.filter((g) => role.groupIdList.includes(g.id)))
   }
   state.menuSelectedCount = role.menuIdList.length

@@ -49,19 +49,8 @@ export default defineComponent({
     }
 
     function initConfig(editor: any): void {
-      const {
-        height,
-        zIndex,
-        placeholder,
-        focus,
-        customAlert,
-        menus,
-        colors,
-        fontNames,
-        lineHeights,
-        showFullScreen,
-        onchangeTimeout
-      } = props.config
+      const { height, zIndex, placeholder, focus, customAlert, menus, colors, fontNames, lineHeights, showFullScreen, onchangeTimeout } =
+        props.config
 
       // 设置编辑区域高度为 500px
       editor.config.height = height

@@ -60,14 +60,7 @@ const useCrop = (props: CropperProps, container: CropperContainer, theImg: Cropp
   }
 
   // set crop state when scaling start
-  const scaleBegin = (
-    x: number,
-    y: number,
-    changeableX: boolean,
-    changeableY: boolean,
-    typeX: number,
-    typeY: number
-  ) => {
+  const scaleBegin = (x: number, y: number, changeableX: boolean, changeableY: boolean, typeX: number, typeY: number) => {
     cropInfo.cropX = x
     cropInfo.cropY = y
     canChangeX = changeableX
@@ -98,30 +91,21 @@ const useCrop = (props: CropperProps, container: CropperContainer, theImg: Cropp
       if (canChangeX) {
         if (changeCropTypeX === 1) {
           if (cropOldW - dx > 0) {
-            cropInfo.cropW =
-              wrapperW - cropStartOffsetX - dx <= wrapperW - minX ? cropOldW - dx : cropOldW + cropStartOffsetX - minX
+            cropInfo.cropW = wrapperW - cropStartOffsetX - dx <= wrapperW - minX ? cropOldW - dx : cropOldW + cropStartOffsetX - minX
             cropInfo.cropOffsetX = wrapperW - cropStartOffsetX - dx <= wrapperW - minX ? cropStartOffsetX + dx : minX
           } else {
-            cropInfo.cropW =
-              Math.abs(dx) + cropStartOffsetX <= wrapperW
-                ? Math.abs(dx) - cropOldW
-                : wrapperW - cropOldW - cropStartOffsetX
+            cropInfo.cropW = Math.abs(dx) + cropStartOffsetX <= wrapperW ? Math.abs(dx) - cropOldW : wrapperW - cropOldW - cropStartOffsetX
             cropInfo.cropOffsetX = cropStartOffsetX + cropOldW
           }
         } else if (changeCropTypeX === 2) {
           if (cropOldW + dx > 0) {
-            cropInfo.cropW =
-              cropOldW + dx + cropInfo.cropOffsetX <= wrapperW ? cropOldW + dx : wrapperW - cropInfo.cropOffsetX
+            cropInfo.cropW = cropOldW + dx + cropInfo.cropOffsetX <= wrapperW ? cropOldW + dx : wrapperW - cropInfo.cropOffsetX
             cropInfo.cropOffsetX = cropStartOffsetX
           } else {
             cropInfo.cropW =
-              wrapperW - cropStartOffsetX + Math.abs(dx + cropOldW) <= wrapperW - minX
-                ? Math.abs(dx + cropOldW)
-                : cropStartOffsetX - minX
+              wrapperW - cropStartOffsetX + Math.abs(dx + cropOldW) <= wrapperW - minX ? Math.abs(dx + cropOldW) : cropStartOffsetX - minX
             cropInfo.cropOffsetX =
-              wrapperW - cropStartOffsetX + Math.abs(dx + cropOldW) <= wrapperW - minX
-                ? cropStartOffsetX - Math.abs(dx + cropOldW)
-                : minX
+              wrapperW - cropStartOffsetX + Math.abs(dx + cropOldW) <= wrapperW - minX ? cropStartOffsetX - Math.abs(dx + cropOldW) : minX
           }
         }
       }
@@ -129,30 +113,21 @@ const useCrop = (props: CropperProps, container: CropperContainer, theImg: Cropp
       if (canChangeY) {
         if (changeCropTypeY === 1) {
           if (cropOldH - dy > 0) {
-            cropInfo.cropH =
-              wrapperH - cropStartOffsetY - dy <= wrapperH - minY ? cropOldH - dy : cropOldH + cropStartOffsetY - minY
+            cropInfo.cropH = wrapperH - cropStartOffsetY - dy <= wrapperH - minY ? cropOldH - dy : cropOldH + cropStartOffsetY - minY
             cropInfo.cropOffsetY = wrapperH - cropStartOffsetY - dy <= wrapperH - minY ? cropStartOffsetY + dy : minY
           } else {
-            cropInfo.cropH =
-              Math.abs(dy) + cropStartOffsetY <= wrapperH
-                ? Math.abs(dy) - cropOldH
-                : wrapperH - cropOldH - cropStartOffsetY
+            cropInfo.cropH = Math.abs(dy) + cropStartOffsetY <= wrapperH ? Math.abs(dy) - cropOldH : wrapperH - cropOldH - cropStartOffsetY
             cropInfo.cropOffsetY = cropStartOffsetY + cropOldH
           }
         } else if (changeCropTypeY === 2) {
           if (cropOldH + dy > 0) {
-            cropInfo.cropH =
-              cropOldH + dy + cropInfo.cropOffsetY <= wrapperH ? cropOldH + dy : wrapperH - cropInfo.cropOffsetY
+            cropInfo.cropH = cropOldH + dy + cropInfo.cropOffsetY <= wrapperH ? cropOldH + dy : wrapperH - cropInfo.cropOffsetY
             cropInfo.cropOffsetY = cropStartOffsetY
           } else {
             cropInfo.cropH =
-              wrapperH - cropStartOffsetY + Math.abs(dy + cropOldH) <= wrapperH - minY
-                ? Math.abs(dy + cropOldH)
-                : cropStartOffsetY - minY
+              wrapperH - cropStartOffsetY + Math.abs(dy + cropOldH) <= wrapperH - minY ? Math.abs(dy + cropOldH) : cropStartOffsetY - minY
             cropInfo.cropOffsetY =
-              wrapperH - cropStartOffsetY + Math.abs(dy + cropOldH) <= wrapperH - minY
-                ? cropStartOffsetY - Math.abs(dy + cropOldH)
-                : minY
+              wrapperH - cropStartOffsetY + Math.abs(dy + cropOldH) <= wrapperH - minY ? cropStartOffsetY - Math.abs(dy + cropOldH) : minY
           }
         }
       }

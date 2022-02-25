@@ -6,7 +6,7 @@ import config from './settings'
 import { clearUserInfo, getToken, getUserInfo, isAdmin } from '@/app/account'
 import { ElMessage } from 'element-plus'
 import { Router, RouteRecordRaw } from 'vue-router'
-import { ITreeNodeDefault, traverseTree } from '@/utils/data-tree'
+import { TreeNodeDefault, traverseTree } from '@/utils/data-tree'
 import { camelToDash, urlToCamel } from '@/utils/lang'
 
 export function createRouterGuards(router: Router) {
@@ -80,7 +80,7 @@ export function createRouterGuards(router: Router) {
 /**
  * initialize dynamic routes
  */
-export async function initDynamicRoutes(menus: ITreeNodeDefault[]): Promise<void> {
+export async function initDynamicRoutes(menus: TreeNodeDefault[]): Promise<void> {
   const routes = [] as RouteRecordRaw[]
 
   traverseTree(menus, (item) => {

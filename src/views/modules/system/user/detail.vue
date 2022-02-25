@@ -1,36 +1,20 @@
 <template>
   <div class="fd-page__form">
-    <el-descriptions
-      :column="2"
-      :title="`系统用户 - ${data[idx].username}`"
-      border
-      direction="horizontal"
-
-    >
+    <el-descriptions :column="2" :title="`系统用户 - ${data[idx].username}`" border direction="horizontal">
       <el-descriptions-item :span="2" label="用户ID">{{ data[idx].id }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="用户名">{{ data[idx].username }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="手机号">{{ data[idx].mobile }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="邮箱">{{ data[idx].email }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="用户组">{{ getGroupName(data[idx].groupId) }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="角色">
-        <el-tag
-          v-for="item in getRoleNameList(data[idx].roleIdList)"
-          :key="item"
-          :menu-item="item"
-          class="page-user-role-tag"
-          size="small"
-        >
+        <el-tag v-for="item in getRoleNameList(data[idx].roleIdList)" :key="item" :menu-item="item" class="page-user-role-tag" size="small">
           {{ item }}
         </el-tag>
       </el-descriptions-item>
       <el-descriptions-item label="注册时间">{{ data[idx].createAt }}</el-descriptions-item>
       <el-descriptions-item label="状态">
-        <el-tag v-if="dictVal(dicts?.sysUserStatus, data[idx].statusDict) === '正常'" size="small" type="success">
-          正常
-        </el-tag>
-        <el-tag v-if="dictVal(dicts?.sysUserStatus, data[idx].statusDict) === '禁用'" size="small" type="danger">
-          禁用
-        </el-tag>
+        <el-tag v-if="dictVal(dicts?.sysUserStatus, data[idx].statusDict) === '正常'" size="small" type="success">正常</el-tag>
+        <el-tag v-if="dictVal(dicts?.sysUserStatus, data[idx].statusDict) === '禁用'" size="small" type="danger">禁用</el-tag>
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="绑定信息">
         <div class="fd-detail-list">
@@ -60,12 +44,12 @@
 <script lang="ts">
 import { defineComponent, onBeforeMount, toRefs } from 'vue'
 import useDetail from '@/components/crud/use-detail'
-import { IUser } from '@/api/system/user'
-import { IGroup } from '@/api/system/group'
-import { IRole } from '@/api/system/role'
-import { IOAuthUser, oauthUserList } from '@/api/system/oauth-user'
-import { AnyObject } from '@/utils'
-import { IDictItem } from '@/api/system/dict-item'
+import { User } from '@/api/system/user'
+import { Group } from '@/api/system/group'
+import { Role } from '@/api/system/role'
+import { OAuthUser, oauthUserList } from '@/api/system/oauth-user'
+import { DictItem } from '@/api/system/dict-item'
+import { Indexable } from '@/types/global'
 
 export default defineComponent({
   name: 'SystemUserDetail',
@@ -74,10 +58,10 @@ export default defineComponent({
       ifShowNavigation: false,
       ifEditable: false,
       dicts: {
-        sysOAuthType: [] as IDictItem[]
+        sysOAuthType: [] as DictItem[]
       },
-      groupList: [] as IGroup[],
-      roleList: [] as IRole[],
+      groupList: [] as Group[],
+      roleList: [] as Role[],
       resetFormData: {
         id: '',
         username: '',
@@ -94,42 +78,42 @@ export default defineComponent({
         city: '',
         district: '',
         createAt: '',
-        oAuthUserList: [] as IOAuthUser[]
+        oAuthUserList: [] as OAuthUser[]
       }
     }
 
-    const { mixState, mixComputed, mixMethods } = useDetail(stateOption, emit)
+    const { mixState, mixComputed, mixMethods } = useDetail<User>(stateOption, emit)
 
     onBeforeMount(async () => {
       mixMethods.resetForm()
       await mixMethods.getDictData()
     })
 
-    mixMethods.onBeforeOpen(async (data: AnyObject[], idx: number, extra?: AnyObject) => {
+    mixMethods.onBeforeOpen(async (data: User[], idx: number, extra?: Indexable) => {
       mixState.groupList = extra?.groupList
       mixState.roleList = extra?.roleList
 
-      const user = data[idx] as IUser
-      const { data: oAuthUserList } = (await oauthUserList({ userId: user.id })) as AnyObject
-      ;(oAuthUserList as IOAuthUser[]).sort((a, b) => a.oAuthTypeDict.localeCompare(b.oAuthTypeDict))
+      const user = data[idx]
+      const { data: oAuthUserList } = await oauthUserList({ userId: user.id })
+      ;(oAuthUserList as OAuthUser[]).sort((a, b) => a.oAuthTypeDict.localeCompare(b.oAuthTypeDict))
       user.oAuthUserList = oAuthUserList
       mixState.data[idx] = { ...user }
     })
 
     const getGroupName = (id: string) => {
-      const group = mixState.groupList.find((g) => g.id === id)
-      return group ? (group as IGroup).name : '无'
+      const group = mixState.groupList.find((g: Group) => g.id === id)
+      return group ? (group as Group).name : '无'
     }
 
     const getRoleNameList = (ids: string[]) => {
       if (ids) {
-        const roles = mixState.roleList.filter((r) => ids.some((i) => i === r.id))
-        return roles.map((r) => r.name)
+        const roles = mixState.roleList.filter((r: Role) => ids.some((i) => i === r.id))
+        return roles.map((r: Role) => r.name)
       }
       return []
     }
 
-    const getDistricts = (user: IUser) => {
+    const getDistricts = (user: User) => {
       let result = ''
       if (user.province) {
         result += user.province

@@ -1,23 +1,9 @@
 import { crossOriginIos } from './utils'
 import { nextTick } from 'vue'
-import {
-  CropInfo,
-  CropperContainer,
-  CropperImg,
-  CropperProps,
-  ExifData,
-  ImgLoadedWithExif,
-  ImgTransform
-} from './types'
+import { CropInfo, CropperContainer, CropperImg, CropperProps, ExifData, ImgLoadedWithExif, ImgTransform } from './types'
 import { getCenterTranslate, getScaleByMode } from './use-transform'
 
-const useImg = (
-  props: CropperProps,
-  container: CropperContainer,
-  theImg: CropperImg,
-  cropInfo: CropInfo,
-  transform: ImgTransform
-) => {
+const useImg = (props: CropperProps, container: CropperContainer, theImg: CropperImg, cropInfo: CropInfo, transform: ImgTransform) => {
   // load image
   const load = (): Promise<void> => {
     return new Promise((resolve, reject) => {

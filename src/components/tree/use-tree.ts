@@ -7,7 +7,7 @@ const useElTree = () => {
    */
   const clear = (com: InstanceType<typeof ElTree>): void => {
     if (com) {
-      const store = com.store as any
+      const store = com.store
       store.root.childNodes.splice(0, store.root.childNodes.length)
     }
   }
@@ -17,7 +17,7 @@ const useElTree = () => {
    */
   const init = (com: InstanceType<typeof ElTree>, initData: any[]): void => {
     if (com) {
-      const store = com.store as any
+      const store = com.store
       store.root.doCreateChildren(initData)
     }
   }

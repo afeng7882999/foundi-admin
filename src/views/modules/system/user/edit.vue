@@ -1,11 +1,5 @@
 <template>
-  <el-dialog
-    v-model="visible"
-    :close-on-click-modal="false"
-    :title="isCreate ? '新增' : '修改'"
-    width="720px"
-    @closed="hideDialog"
-  >
+  <el-dialog v-model="visible" :close-on-click-modal="false" :title="isCreate ? '新增' : '修改'" width="720px" @closed="hideDialog">
     <el-form ref="form" :model="formData" :rules="formRule" label-width="80px" @keyup.enter="submit">
       <el-row>
         <el-col :span="16">
@@ -58,12 +52,7 @@
       </el-form-item>
       <el-form-item label="状态" prop="statusDict">
         <el-select v-model="formData.statusDict" style="width: 100%">
-          <el-option
-            v-for="item in dicts.sysUserStatus"
-            :key="item.itemKey"
-            :label="item.itemValue"
-            :value="item.itemKey"
-          ></el-option>
+          <el-option v-for="item in dicts.sysUserStatus" :key="item.itemKey" :label="item.itemValue" :value="item.itemKey"></el-option>
         </el-select>
       </el-form-item>
       <el-row>
@@ -75,12 +64,7 @@
         <el-col :span="12">
           <el-form-item label="性别" prop="genderDict">
             <el-select v-model="formData.genderDict" style="width: 100%">
-              <el-option
-                v-for="item in dicts.gender"
-                :key="item.itemKey"
-                :label="item.itemValue"
-                :value="item.itemKey"
-              ></el-option>
+              <el-option v-for="item in dicts.gender" :key="item.itemKey" :label="item.itemValue" :value="item.itemKey"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -118,6 +102,7 @@ import {
   checkEmail,
   checkMobile,
   checkUsername,
+  User,
   userDicts,
   userGetOne,
   userPostOne,
@@ -127,10 +112,10 @@ import FdImageCropper from '@/components/img-cropper/index.vue'
 import { validEmail, validMobile, validPassword, validUsername } from '@/utils/validate'
 import FdRegionCascader from '@/components/region-cascader/index.vue'
 import { omit } from 'lodash-es'
-import { groupList, IGroup } from '@/api/system/group'
+import { groupList, Group } from '@/api/system/group'
 import ChangePassword from './change-password.vue'
 import { arrayToTree } from '@/utils/data-tree'
-import { IRole, roleList } from '@/api/system/role'
+import { Role, roleList } from '@/api/system/role'
 import { DEFAULT_AVATAR } from '@/store/modules/user'
 import { RegionObj } from '@/components/region-cascader/types'
 
@@ -155,7 +140,7 @@ export default defineComponent({
             callback()
           }
         } catch (e) {
-          callback(new Error((e as any).msg))
+          callback(new Error('检测用户名出错'))
         }
       }
     }
@@ -191,7 +176,7 @@ export default defineComponent({
               callback()
             }
           } catch (e) {
-            callback(new Error((e as any).msg))
+            callback(new Error('检测邮箱地址出错'))
           }
         }
       }
@@ -210,7 +195,7 @@ export default defineComponent({
               callback()
             }
           } catch (e) {
-            callback(new Error((e as any).msg))
+            callback(new Error('检测手机号出错'))
           }
         }
       }
@@ -221,8 +206,8 @@ export default defineComponent({
       postApi: userPostOne,
       putApi: userPutOne,
       dicts: userDicts,
-      groupList: [] as IGroup[],
-      roleList: [] as IRole[],
+      groupList: [] as Group[],
+      roleList: [] as Role[],
       resetFormData: {
         id: '',
         username: '',
@@ -259,7 +244,7 @@ export default defineComponent({
 
     const defaultAvatar = computed(() => DEFAULT_AVATAR)
 
-    const { mixRefs, mixState, mixMethods } = useEdit(stateOption, emit)
+    const { mixRefs, mixState, mixMethods } = useEdit<User>(stateOption, emit)
 
     mixMethods.onBeforeOpen(async () => {
       const { data: groups } = await groupList()
@@ -288,7 +273,7 @@ export default defineComponent({
     })
 
     const showChangePassword = (id: string) => {
-      ;(changePasswordDialog.value as any).open(id)
+      changePasswordDialog.value.open(id)
     }
 
     return {

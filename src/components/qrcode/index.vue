@@ -81,7 +81,7 @@ const countDown = () => {
     if (timeout) {
       window.clearTimeout(timeout)
     }
-    timeout = setTimeout(() => {
+    timeout = window.setTimeout(() => {
       state.expired = true
     }, props.expire * 1000)
   }

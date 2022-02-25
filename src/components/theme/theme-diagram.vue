@@ -57,12 +57,8 @@ const titleStyle = computed(() => {
 const colorStyle = (colorName: string) => {
   return {
     backgroundColor: props.theme[colorName] ? props.theme[colorName] : CUSTOM_THEME[colorName],
-    borderColor: props.theme['--el-border-color-base']
-      ? props.theme['--el-border-color-base']
-      : CUSTOM_THEME['--el-border-color-base'],
-    borderRadius: props.theme['--el-border-radius-base']
-      ? props.theme['--el-border-radius-base']
-      : CUSTOM_THEME['--el-border-radius-base']
+    borderColor: props.theme['--el-border-color-base'] ? props.theme['--el-border-color-base'] : CUSTOM_THEME['--el-border-color-base'],
+    borderRadius: props.theme['--el-border-radius-base'] ? props.theme['--el-border-radius-base'] : CUSTOM_THEME['--el-border-radius-base']
   }
 }
 </script>

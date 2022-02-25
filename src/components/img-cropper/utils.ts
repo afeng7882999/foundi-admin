@@ -1,9 +1,11 @@
 export function wheelEvt() {
-  return 'onwheel' in document.createElement('div')
-    ? 'wheel'
-    : (document as any).onmousewheel !== undefined
-      ? 'mousewheel'
-      : 'DOMMouseScroll'
+  if ('onwheel' in document.createElement('div')) {
+    return 'wheel'
+  }
+  if ((document as any).onmousewheel !== undefined) {
+    return 'mousewheel'
+  }
+  return 'DOMMouseScroll'
 }
 
 export function toBlobPolyfill() {

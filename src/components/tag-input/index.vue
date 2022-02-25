@@ -1,17 +1,13 @@
 <template>
-  <div class="fd-tag-input" :class="wrapperClass" @paste="pasteText" ref="wrapper">
-    <div
-      class="fd-tag-input__tags"
-      v-for="(item, index) in modelValue"
-      :key="index"
-      :style="tagStyle"
-    >
+  <div ref="wrapper" class="fd-tag-input" :class="wrapperClass" @paste="pasteText">
+    <div v-for="(item, index) in modelValue" :key="index" class="fd-tag-input__tags" :style="tagStyle">
       <span class="fd-tag-input__content">{{ item }}</span>
       <div class="fd-tag-input__act" @click="delTag(index)">
         <fd-icon icon="close-small"></fd-icon>
       </div>
     </div>
     <input
+      ref="input"
       class="fd-tag-input__input"
       :style="inputStyle"
       type="text"
@@ -20,7 +16,6 @@
       @keydown.delete="delTag()"
       @focus="focus(true)"
       @blur="focus(false)"
-      ref="input"
     />
   </div>
 </template>
@@ -32,16 +27,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import {
-  computed,
-  defineComponent,
-  onBeforeUnmount,
-  onMounted,
-  PropType,
-  reactive,
-  ref,
-  toRefs
-} from 'vue'
+import { computed, onBeforeUnmount, onMounted, PropType, reactive, ref } from 'vue'
 import { addResizeListener, removeResizeListener } from '@/utils/resize-event'
 
 const props = defineProps({

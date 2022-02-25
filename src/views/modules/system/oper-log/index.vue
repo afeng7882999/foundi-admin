@@ -46,7 +46,6 @@
           v-waves
           :disabled="state.selectedNodes.length <= 0"
           plain
-
           type="danger"
           @click="del()"
         >
@@ -56,14 +55,7 @@
         <el-divider class="action-divider" direction="vertical"></el-divider>
         <el-button v-show="hasAuth('system:operLog:export')" v-waves @click="exportData()">导出数据</el-button>
         <div class="action-right">
-          <el-form
-            v-show="!state.queryFormShow"
-            ref="queryFormQuick"
-            :inline="true"
-            :model="state.query"
-
-            @keyup.enter="queryList()"
-          >
+          <el-form v-show="!state.queryFormShow" ref="queryFormQuick" :inline="true" :model="state.query" @keyup.enter="queryList()">
             <el-form-item label="时间" prop="operTime" style="height: 36px">
               <el-date-picker
                 v-model="state.query.operTime"
@@ -92,15 +84,7 @@
       </div>
     </div>
     <div ref="tableWrapper" class="fd-page__table is-bordered">
-      <el-table
-        ref="table"
-        v-loading="state.loading"
-        highlight-current-row
-        :data="state.data"
-        row-key="id"
-        @selection-change="onSelectionChange"
-        @row-click="onTableRowClick"
-      >
+      <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs">
         <el-table-column align="left" header-align="left" type="selection" width="40"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="时间" prop="operTime" width="200">
           <template #default="scope">
@@ -220,20 +204,10 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        :background="true"
-        :current-page="state.current"
-        :page-count="state.total"
-        :page-size="state.size"
-        :page-sizes="[10, 15, 20, 50, 100]"
-        :total="state.count"
-        layout="total, sizes, prev, pager, next, jumper"
-        @current-change="pageChange"
-        @size-change="sizeChange"
-      ></el-pagination>
+      <el-pagination v-bind="paginationAttrs"></el-pagination>
     </div>
     <el-backtop></el-backtop>
-    <detail v-if="state.detailShow" ref="detailDialog" @navigate="onDetailNavigate"></detail>
+    <detail v-if="state.detailShow" ref="detailDialog" v-bind="detailAttrs"></detail>
   </div>
 </template>
 
@@ -244,74 +218,30 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useList from '@/components/crud/use-list'
-import { IOperLog, operLogDel, operLogDicts, operLogExport, operLogFields, operLogList, operLogQuery } from '@/api/system/oper-log'
+import useList, { ListStateOption } from '@/components/crud/use-list'
+import { OperLog, operLogDel, operLogDicts, operLogExport, operLogFields, operLogList, operLogQuery } from '@/api/system/oper-log'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import Detail from './detail.vue'
-import { nextTick, ref } from 'vue'
-import useTable from '@/components/table/use-table'
 import { formatTimestamp } from '@/utils/time'
 import usePage from '@/components/crud/use-page'
 
-const pageTable = ref()
-
-const stateOption = {
+const stateOption: ListStateOption<OperLog> = {
   idField: operLogFields.idField,
   listApi: operLogList,
   delApi: operLogDel,
   exportApi: operLogExport,
   dicts: operLogDicts,
   query: operLogQuery,
-  currentId: ''
+  currentId: '',
+  tableRowSelectable: true
 }
 
-const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<OperLog>(stateOption)
 const { queryForm, table, detailDialog } = mixRefs
-const {
-  queryList,
-  resetQuery,
-  del,
-  exportData,
-  toggleQueryForm,
-  sortChanged,
-  dictVal,
-  showDetail,
-  pageChange,
-  sizeChange,
-  onSelectionChange,
-  onAfterGetList
-} = mixMethods
+const { queryList, resetQuery, del, exportData, toggleQueryForm, dictVal, showDetail } = mixMethods
+const { tableAttrs, paginationAttrs, detailAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
-
-const { highlightCurrentRow } = useTable(table, pageTable)
-
-const onTableRowClick = (row: IOperLog) => {
-  setCurrentData(row?.id)
-}
-
-onAfterGetList(async () => {
-  if (state.currentId) {
-    setCurrentData(state.currentId)
-  }
-})
-
-const onDetailNavigate = (id: string) => {
-  const current = state.data.find((d) => d.id === id) as IOperLog
-  ;(table.value as any).setCurrentRow(current)
-  setCurrentData(id)
-}
-
-const setCurrentData = (id: string) => {
-  if (!id) {
-    state.currentId = ''
-  } else {
-    state.currentId = id
-  }
-  nextTick(() => {
-    highlightCurrentRow()
-  })
-}
 </script>

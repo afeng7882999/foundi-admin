@@ -1,13 +1,6 @@
 <template>
   <el-dialog v-model="state.visible" :close-on-click-modal="false" :title="state.isCreate ? '新增' : '修改'">
-    <el-form
-      ref="form"
-      :model="state.formData"
-      :rules="state.formRule"
-      label-width="90px"
-
-      @keyup.enter="submit()"
-    >
+    <el-form ref="form" :model="state.formData" :rules="state.formRule" label-width="90px" @keyup.enter="submit()">
       <el-form-item label="字典名" prop="name">
         <el-input v-model="state.formData.name" placeholder="请输入字典名"></el-input>
       </el-form-item>
@@ -35,7 +28,7 @@ export default {
 
 <script setup lang="ts">
 import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
-import { dictFields, dictGetOne, dictPostOne, dictPutOne } from '@/api/system/dict'
+import { Dict, dictFields, dictGetOne, dictPostOne, dictPutOne } from '@/api/system/dict'
 
 const stateOption = {
   idField: dictFields.idField,
@@ -54,7 +47,7 @@ const stateOption = {
 }
 const emit = defineEmits([REFRESH_DATA_EVENT])
 
-const { mixRefs, mixState: state, mixMethods } = useEdit(stateOption, emit)
+const { mixRefs, mixState: state, mixMethods } = useEdit<Dict>(stateOption, emit)
 const { form } = mixRefs
 const { open, submit } = mixMethods
 

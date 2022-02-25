@@ -57,15 +57,7 @@
       </div>
     </div>
     <div ref="tableWrapper" class="fd-page__table is-bordered">
-      <el-table
-        ref="table"
-        v-loading="state.loading"
-        :data="state.data"
-        highlight-current-row
-        row-key="id"
-        @selection-change="onSelectionChange"
-        @row-click="onTableRowClick"
-      >
+      <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="启用" prop="enabled" width="70">
           <template #default="scope">
@@ -141,20 +133,10 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        :background="true"
-        :current-page="state.current"
-        :page-count="state.total"
-        :page-size="state.size"
-        :page-sizes="[10, 20, 50, 100, 200]"
-        :total="state.count"
-        layout="total, sizes, prev, pager, next, jumper"
-        @current-change="pageChange"
-        @size-change="sizeChange"
-      ></el-pagination>
+      <el-pagination v-bind="paginationAttrs"></el-pagination>
     </div>
     <el-backtop></el-backtop>
-    <detail v-if="state.detailShow" ref="detailDialog" @open-edit-dialog="showEdit(state.currentId)" @navigate="onDetailNavigate"></detail>
+    <detail v-if="state.detailShow" ref="detailDialog" v-bind="detailAttrs" @open-edit-dialog="showEdit(state.currentId)"></detail>
     <edit v-if="state.editShow" ref="editDialog" @refresh-data-list="getList"></edit>
   </div>
 </template>
@@ -167,11 +149,10 @@ export default {
 
 <script setup lang="ts">
 import useList from '@/components/crud/use-list'
-import { configDel, configDicts, configExport, configFields, configList, configQuery, IConfig } from '@/api/system/config'
+import { configDel, configDicts, configExport, configFields, configList, configQuery, Config } from '@/api/system/config'
 import Edit from './edit.vue'
 import Detail from './detail.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
-import { nextTick, ref } from 'vue'
 import { formatTimestamp } from '@/utils/time'
 import usePage from '@/components/crud/use-page'
 
@@ -186,55 +167,12 @@ const stateOption = {
   tableRowSelectable: true
 }
 
-const pageTable = ref()
-
-const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
-const { queryForm, table, tableWrapper, editDialog, detailDialog } = mixRefs
-const {
-  getList,
-  pageChange,
-  sizeChange,
-  queryList,
-  resetQuery,
-  del,
-  dictVal,
-  exportData,
-  showEdit,
-  showDetail,
-  onSelectionChange,
-  toggleQueryForm,
-  onAfterGetList,
-  highlightCurrentRow
-} = mixMethods
+const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<Config>(stateOption)
+const { queryForm, table, editDialog, detailDialog } = mixRefs
+const { getList, queryList, resetQuery, del, dictVal, exportData, showEdit, showDetail, toggleQueryForm } = mixMethods
+const { tableAttrs, paginationAttrs, detailAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
-
-const onTableRowClick = (row: IConfig) => {
-  setCurrentData(row?.id)
-}
-
-onAfterGetList(async () => {
-  if (state.currentId) {
-    setCurrentData(state.currentId)
-  }
-})
-
-const onDetailNavigate = (id: string) => {
-  const current = state.data.find((d) => d.id === id) as IConfig
-  ;(table.value as any).setCurrentRow(current)
-  setCurrentData(id)
-}
-
-const setCurrentData = (id: string) => {
-  if (!id) {
-    state.currentId = ''
-  } else {
-    state.currentId = id
-  }
-  nextTick(() => {
-    highlightCurrentRow()
-  })
-}
 </script>

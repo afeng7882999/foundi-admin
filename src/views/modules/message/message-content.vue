@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-drag-dialog v-model:visible="visible" :close-on-click-modal="false" title="消息内容" width="60%">
+  <el-dialog v-model:visible="visible" draggable :close-on-click-modal="false" title="消息内容" width="60%">
     <el-form ref="dataForm" label-position="left" label-width="80px">
       <el-form-item label="信息类型" prop="typeDict">
         <el-input :value="typeFormatter(message.typeDict)" placeholder="类型"></el-input>
@@ -23,8 +23,8 @@
 import { defineComponent, reactive, toRefs, watch } from 'vue'
 import { dictValue } from '@/utils/dict'
 import request from '@/app/request'
-import { AnyObject } from '@/utils'
-import { IDictItem } from '@/api/system/dict-item'
+import { DictItem } from '@/api/system/dict-item'
+import { Message } from '@/api/system/message'
 
 export default defineComponent({
   name: 'SystemMessageContentDialog',
@@ -32,8 +32,8 @@ export default defineComponent({
   setup(props, { emit }) {
     const state = reactive({
       statUrl: '/system/message/current/',
-      message: {} as AnyObject,
-      messageTypes: [] as IDictItem[],
+      message: {} as Message,
+      messageTypes: [] as DictItem[],
       visible: false
     })
 
@@ -47,7 +47,7 @@ export default defineComponent({
       }
     )
 
-    const open = (message: AnyObject, messageTypes: IDictItem[]) => {
+    const open = (message: Message, messageTypes: DictItem[]) => {
       state.message = message
       state.messageTypes = messageTypes
       state.visible = true
@@ -64,7 +64,7 @@ export default defineComponent({
       }
     }
 
-    const unread = (message: AnyObject) => {
+    const unread = (message: Message) => {
       return message.stat == null || message.stat === '0'
     }
 

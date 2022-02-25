@@ -14,17 +14,17 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { filterTree, getTreeNode, ITreeNodeDefault } from '@/utils/data-tree'
+import { filterTree, getTreeNode, TreeNodeDefault } from '@/utils/data-tree'
 import FdNavMenuItem from './nav-menu-item.vue'
 import { nextFrame } from '@/utils/next-frame'
 import { computed, PropType, provide, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import FdNavMenuGroup from './nav-menu-group.vue'
-import { IRootMenuProvided } from './types'
+import { RootMenuProvided } from './types'
 
 const props = defineProps({
   menu: {
-    type: Array as PropType<ITreeNodeDefault[]>,
+    type: Array as PropType<TreeNodeDefault[]>,
     default: () => []
   },
   defaultPath: {
@@ -46,7 +46,7 @@ const props = defineProps({
 })
 
 const state = reactive({
-  menuItems: [] as ITreeNodeDefault[],
+  menuItems: [] as TreeNodeDefault[],
   activeId: '-1',
   descActiveIds: [] as string[],
   expandedIds: [] as string[]
@@ -82,13 +82,13 @@ watch(
   { immediate: true }
 )
 
-const getVisibleMenu = (items: ITreeNodeDefault[]) => {
+const getVisibleMenu = (items: TreeNodeDefault[]) => {
   return items.filter((item) => !!item.visible)
 }
 
 const emit = defineEmits(['select'])
 
-const handleActive = (item: ITreeNodeDefault) => {
+const handleActive = (item: TreeNodeDefault) => {
   const oldActiveId = state.activeId
   const oldDescActiveIds = state.descActiveIds
   state.activeId = item.id
@@ -102,7 +102,7 @@ const handleActive = (item: ITreeNodeDefault) => {
   })
 }
 
-const handleExpand = (item: ITreeNodeDefault) => {
+const handleExpand = (item: TreeNodeDefault) => {
   if (state.expandedIds.indexOf(item.id) !== -1) return
   const expandedIds = state.expandedIds
   state.expandedIds = expandedIds.filter((id) => {
@@ -111,7 +111,7 @@ const handleExpand = (item: ITreeNodeDefault) => {
   state.expandedIds.push(item.id)
 }
 
-const handleCollapse = (item: ITreeNodeDefault) => {
+const handleCollapse = (item: TreeNodeDefault) => {
   if (state.expandedIds.indexOf(item.id) === -1) return
   const expandedIds = state.expandedIds
   state.expandedIds = expandedIds.filter((id) => {
@@ -128,7 +128,7 @@ const collapseAll = () => {
   state.expandedIds = []
 }
 
-provide<IRootMenuProvided>('rootMenu', {
+provide<RootMenuProvided>('rootMenu', {
   levelPadding: computed(() => {
     return props.levelPadding
   }),

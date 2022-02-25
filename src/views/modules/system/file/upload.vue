@@ -29,9 +29,7 @@
           <template #tip>
             <div v-if="!ifHideTip" class="el-upload__tip">{{ tipContent }}</div>
           </template>
-          <el-button style="margin-left: 10px" type="success" @click="onUploadSubmit">
-            上传到服务器
-          </el-button>
+          <el-button style="margin-left: 10px" type="success" @click="onUploadSubmit">上传到服务器</el-button>
         </el-upload>
       </el-form-item>
     </el-form>
@@ -52,7 +50,7 @@ export default {
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
-import { configListOss, IConfig } from '@/api/system/config'
+import { configListOss, Config } from '@/api/system/config'
 import useUpload from '@/components/upload-form/use-upload'
 import { DEFAULT_OSS } from '@/api/system/file'
 
@@ -61,7 +59,7 @@ const emit = defineEmits([REFRESH_DATA_EVENT])
 const fileUpload = ref()
 
 const state = reactive({
-  configList: [] as IConfig[],
+  configList: [] as Config[],
   fileList: [] as string[],
   oss: DEFAULT_OSS,
   visible: false

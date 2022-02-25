@@ -57,8 +57,8 @@ import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { AllState } from '@/store'
 import { useStore } from 'vuex'
 import { _RouteLocationBase, onBeforeRouteUpdate, RouteMeta, RouteRecordRaw, useRoute, useRouter } from 'vue-router'
-import { AnyObject } from '@/utils'
 import { DEFAULT_ROUTE } from './types'
+import { Indexable } from '@/types/global'
 
 const scrollPanel = ref()
 const contextMenu = ref()
@@ -66,7 +66,7 @@ const contextMenu = ref()
 const state = reactive({
   selectedTag: {} as _RouteLocationBase,
   closable: true,
-  affixTags: [] as AnyObject[]
+  affixTags: [] as Indexable[]
 })
 
 const store = useStore<AllState>()
@@ -104,7 +104,7 @@ const isAffix = (tag: _RouteLocationBase) => {
 }
 
 const filterAffixTags = (routes: RouteRecordRaw[], basePath = '/') => {
-  let tags = [] as AnyObject[]
+  let tags = [] as Indexable[]
   routes.forEach((route) => {
     if (route.meta && route.meta.affix) {
       const tagPath = basePath + route.path

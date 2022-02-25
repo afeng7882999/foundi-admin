@@ -193,7 +193,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
-import useDict, { IDictList } from '@/components/crud/use-dict'
+import useDict from '@/components/crud/use-dict'
 import FdImageCropper from '@/components/img-cropper/index.vue'
 import { userLogout } from '@/app/account'
 import ChangePassword from '../system/user/change-password.vue'
@@ -203,8 +203,7 @@ import { DEFAULT_AVATAR } from '@/store/modules/user'
 import AddPasswordDialog from './add-password.vue'
 import ChangeEmailDialog from './change-email.vue'
 import BindWeixinDialog from './bind-weixin.vue'
-import { IDictItem } from '@/api/system/dict-item'
-import { AnyFunction, AnyObject } from '@/utils'
+import { DictItem, DictList } from '@/api/system/dict-item'
 import {
   currentBindQQ,
   currentBindWeibo,
@@ -214,26 +213,28 @@ import {
   currentClearQQ,
   currentClearWeibo,
   currentClearWeixin,
-  getCurrentInfo
+  getCurrentInfo,
+  User
 } from '@/api/system/user'
-import { groupList, IGroup } from '@/api/system/group'
+import { groupList, Group } from '@/api/system/group'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 import usePage from '@/components/crud/use-page'
 import { getQQUrl, getWeiboUrl } from '@/api/system/login'
 import settings from '@/app/settings'
 import { localOrRemoteUrl } from '@/utils/query'
-import { IRole } from '@/api/system/role'
+import { Role } from '@/api/system/role'
+import { AnyFunction } from '@/types/global'
 
 const state = reactive({
-  currentUser: {} as AnyObject,
+  currentUser: {} as User,
   dicts: {
-    gender: [] as IDictItem[],
-    logTypes: [] as IDictItem[],
-    fileTypes: [] as IDictItem[]
-  } as IDictList,
+    gender: [] as DictItem[],
+    logTypes: [] as DictItem[],
+    fileTypes: [] as DictItem[]
+  } as DictList,
   roleNames: [] as string[],
-  groupList: [] as IGroup[],
+  groupList: [] as Group[],
   checkAuthcRate: 2000, // 2 seconds
   checkAuthcTimes: 60, // 2 minutes
   clockForBind: null as number | null
@@ -261,7 +262,7 @@ const getData = async () => {
     const all = await Promise.all([await getDictData(), await groupList(), await getCurrentInfo()])
     state.groupList = all[1].data
     state.currentUser = all[2].user
-    state.roleNames = all[2].roles.map((r: IRole) => r.name)
+    state.roleNames = all[2].roles.map((r: Role) => r.name)
   } catch (e) {
     console.log(e)
   }
@@ -269,12 +270,12 @@ const getData = async () => {
 
 const getGroupName = (id: string) => {
   const group = state.groupList.find((g) => g.id === id)
-  return group ? (group as IGroup).name : '无'
+  return group ? (group as Group).name : '无'
 }
 
 const avatarCropper = ref()
 const onChangeAvatarClick = () => {
-  ;(avatarCropper.value as any).uploadShow()
+  avatarCropper.value.uploadShow()
 }
 const avatarChanged = async (avatar: string) => {
   try {
@@ -296,9 +297,9 @@ const changPasswordDlg = ref()
 const addPasswordDlg = ref()
 const onChangePasswordClick = () => {
   if (state.currentUser.hasPassword) {
-    ;(changPasswordDlg.value as any).open()
+    changPasswordDlg.value.open()
   } else {
-    ;(addPasswordDlg.value as any).open()
+    addPasswordDlg.value.open()
   }
 }
 

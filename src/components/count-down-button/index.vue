@@ -11,8 +11,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, PropType, reactive } from 'vue'
-import { AnyObject } from '@/utils'
+import { computed, reactive } from 'vue'
 
 const props = defineProps({
   disableTime: {
@@ -32,7 +31,7 @@ const props = defineProps({
     default: false
   },
   buttonProp: {
-    type: Object as PropType<AnyObject>
+    type: Object
   }
 })
 
@@ -60,4 +59,8 @@ const countDown = () => {
     }
   }, 1000)
 }
+
+defineExpose({
+  countDown
+})
 </script>

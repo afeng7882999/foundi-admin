@@ -103,7 +103,7 @@
           @del="del"
         ></fd-column>
       </el-table>
-      <el-pagination v-bind="pageAttrs"></el-pagination>
+      <el-pagination v-bind="paginationAttrs"></el-pagination>
     </div>
     <el-backtop></el-backtop>
     <detail v-if="state.detailShow" ref="detailDialog" v-bind="detailAttrs"></detail>
@@ -118,7 +118,7 @@ export default {
 
 <script setup lang="ts">
 import useList from '@/components/crud/use-list'
-import { loginLogFields, loginLogDicts, loginLogQuery, loginLogList, loginLogDel, loginLogExport, ILoginLog } from '@/api/system/login-log'
+import { loginLogFields, loginLogDicts, loginLogQuery, loginLogList, loginLogDel, loginLogExport, LoginLog } from '@/api/system/login-log'
 import Detail from './detail.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import usePage from '@/components/crud/use-page'
@@ -135,16 +135,16 @@ const stateOption = {
   tableColumns: [] as TableColumn[]
 }
 
-const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList(stateOption)
-const { queryForm, tableWrapper, table, detailDialog } = mixRefs
-const { queryList, resetQuery, toggleQueryForm, showDetail: _showDetail, sortChanged, del, exportData } = mixMethods
-const { tableAttrs, pageAttrs, detailAttrs } = mixAttrs
+const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<LoginLog>(stateOption)
+const { queryForm, table, detailDialog } = mixRefs
+const { queryList, resetQuery, toggleQueryForm, showDetail: _showDetail, del, exportData } = mixMethods
+const { tableAttrs, paginationAttrs, detailAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 
-const showDetail = (row: ILoginLog, idx: number) => {
+const showDetail = (row: LoginLog, idx: number) => {
   _showDetail(idx)
 }
 </script>

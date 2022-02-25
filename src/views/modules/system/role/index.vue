@@ -5,12 +5,7 @@
       <template #left>
         <div class="fd-page__form">
           <el-form ref="queryForm" :inline="true" :model="state.query" @keyup.enter="queryList()">
-            <transition
-              name="expand"
-              @enter="expandEnter"
-              @after-enter="expandAfterEnter"
-              @before-leave="expandBeforeLeave"
-            >
+            <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
               <div v-show="state.queryFormShow" class="fd-page__query">
                 <el-form-item label="角色名称" prop="name">
                   <el-input v-model="state.query.name" clearable placeholder="请输入角色名称" />
@@ -34,7 +29,6 @@
               v-waves
               :disabled="state.selectedNodes.length <= 0"
               plain
-
               type="danger"
               @click="del()"
             >
@@ -42,26 +36,10 @@
               删除
             </el-button>
             <div class="action-right">
-              <el-button
-                v-show="hasAuth('system:role:add')"
-                v-waves
-                plain
-
-                type="primary"
-                @click="showEdit()"
-              >
-                新增
-              </el-button>
-              <el-button v-show="hasAuth('system:role:export')" v-waves @click="exportData()">
-                导出数据
-              </el-button>
+              <el-button v-show="hasAuth('system:role:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
+              <el-button v-show="hasAuth('system:role:export')" v-waves @click="exportData()">导出数据</el-button>
               <el-divider class="action-divider" direction="vertical"></el-divider>
-              <el-tooltip
-                :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'"
-                :show-after="500"
-                effect="dark"
-                placement="top"
-              >
+              <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
                 <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
                   <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
                 </el-badge>
@@ -70,14 +48,7 @@
           </div>
         </div>
         <div class="fd-page__table is-bordered">
-          <el-table
-            v-loading="state.loading"
-            :data="state.data"
-            highlight-current-row
-            row-key="id"
-            @selection-change="onSelectionChange"
-            @row-click="onTableRowClick"
-          >
+          <el-table v-loading="state.loading" v-bind="tableAttrs" @row-click="onTableRowClick">
             <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
             <el-table-column
               :show-overflow-tooltip="true"
@@ -93,13 +64,7 @@
               label="角色标识"
               prop="label"
             ></el-table-column>
-            <el-table-column
-              :show-overflow-tooltip="true"
-              align="center"
-              header-align="center"
-              label="数据范围"
-              prop="dataScopeDict"
-            >
+            <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="数据范围" prop="dataScopeDict">
               <template #default="scope">
                 <span>{{ dictVal(state.dicts.sysRoleDataScope, scope.row.dataScopeDict) }}</span>
               </template>
@@ -133,17 +98,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-pagination
-            :background="true"
-            :current-page="state.current"
-            :page-count="state.total"
-            :page-size="state.size"
-            :page-sizes="[10, 20, 50, 100, 200]"
-            :total="state.count"
-            layout="total, sizes, prev, pager, next, jumper"
-            @current-change="pageChange"
-            @size-change="sizeChange"
-          ></el-pagination>
+          <el-pagination v-bind="paginationAttrs"></el-pagination>
         </div>
       </template>
       <template #right>
@@ -163,13 +118,13 @@ export default {
 
 <script setup lang="ts">
 import useList from '@/components/crud/use-list'
-import { IRole, roleDel, roleDicts, roleExport, roleFields, roleList, roleQuery } from '@/api/system/role'
+import { Role, roleDel, roleDicts, roleExport, roleFields, roleList, roleQuery } from '@/api/system/role'
 import Edit from './edit.vue'
 import Detail from './detail.vue'
 import useExpandTransition from '@/components/transition/use-expand-transition'
 import FdSplitPane from '@/components/split-pane/index.vue'
-import { groupList, IGroup } from '@/api/system/group'
-import { IMenu, menuList } from '@/api/system/menu'
+import { groupList, Group } from '@/api/system/group'
+import { Menu, menuList } from '@/api/system/menu'
 import usePage from '@/components/crud/use-page'
 
 const stateOption = {
@@ -179,29 +134,16 @@ const stateOption = {
   exportApi: roleExport,
   dicts: roleDicts,
   query: roleQuery,
-
-  groupList: [] as IGroup[],
-  menuList: [] as IMenu[],
-  currentId: ''
+  groupList: [] as Group[],
+  menuList: [] as Menu[],
+  currentId: '',
+  tableRowSelectable: true
 }
 
-const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<Role>(stateOption)
 const { queryForm, editDialog, detailDialog } = mixRefs
-const {
-  getList,
-  pageChange,
-  sizeChange,
-  queryList,
-  resetQuery,
-  del,
-  dictVal,
-  exportData,
-  showEdit,
-  onSelectionChange,
-  toggleQueryForm,
-  onBeforeGetList,
-  onAfterGetList
-} = mixMethods
+const { getList, queryList, resetQuery, del, dictVal, exportData, showEdit, toggleQueryForm, onBeforeGetList, onAfterGetList } = mixMethods
+const { tableAttrs, paginationAttrs, detailAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 
@@ -215,18 +157,18 @@ onBeforeGetList(async () => {
   return true
 })
 
-const onTableRowClick = (row: IRole) => {
+const onTableRowClick = (row: Role) => {
   setCurrentData(row)
 }
 
 onAfterGetList(async () => {
   if (state.currentId) {
-    const current = state.data.find((d) => d.id === state.currentId) as IRole
+    const current = state.data.find((d) => d.id === state.currentId) as Role
     setCurrentData(current)
   }
 })
 
-const setCurrentData = (role: IRole) => {
+const setCurrentData = (role: Role) => {
   if (!role) {
     state.currentId = ''
     ;(mixRefs.detailDialog.value as any).close()

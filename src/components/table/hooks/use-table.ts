@@ -8,7 +8,7 @@ import useSortableRow, { SortableRowOption } from '@/components/table/hooks/use-
 
 export type TableOption = FocusRowOption & TableSettingsOption & SortableRowOption
 
-const useTable = (table: Ref<InstanceType<typeof ElTable>>, tableOption?: Partial<TableOption>) => {
+const useTable = (table: Ref<InstanceType<typeof ElTable> | undefined>, tableOption?: Partial<TableOption>) => {
   //===============================================================================
   // option
   //===============================================================================

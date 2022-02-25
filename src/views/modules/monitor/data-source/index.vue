@@ -3,7 +3,7 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="page-monitor-db__act">
-        <el-button @click="dbStatReset" type="primary" v-if="hasAuth('monitor:dataSource:edit')" v-waves>重置</el-button>
+        <el-button v-if="hasAuth('monitor:dataSource:edit')" v-waves type="primary" @click="dbStatReset">重置</el-button>
       </div>
     </div>
     <div class="fd-page__table is-bordered">
@@ -16,8 +16,8 @@
         <el-tab-pane label="URI监控" name="6"></el-tab-pane>
         <el-tab-pane label="Spring监控" name="7"></el-tab-pane>
       </el-tabs>
-      <div class="page-monitor-db__sub-title" v-show="state.activeTab === '1'">Stat Index:</div>
-      <ul class="db-stat-lst" v-show="state.activeTab === '1'">
+      <div v-show="state.activeTab === '1'" class="page-monitor-db__sub-title">Stat Index:</div>
+      <ul v-show="state.activeTab === '1'" class="db-stat-lst">
         <li class="db-stat-lst__item">
           <span class="db-stat-lst__title">版本</span>
           <span class="db-stat-lst__value">{{ state.statBasic.Version }}</span>
@@ -25,7 +25,7 @@
         <li class="db-stat-lst__item">
           <span class="db-stat-lst__title">驱动</span>
           <ul class="db-stat-lst__value">
-            <li class="db-stat-lst__value-item" v-for="item in state.statBasic.Drivers" :key="item">{{ item }}</li>
+            <li v-for="item in state.statBasic.Drivers" :key="item" class="db-stat-lst__value-item">{{ item }}</li>
           </ul>
         </li>
         <li class="db-stat-lst__item">
@@ -51,12 +51,12 @@
         <li class="db-stat-lst__item">
           <span class="db-stat-lst__title">classpath</span>
           <ul class="db-stat-lst__value">
-            <li class="db-stat-lst__value-item" v-for="item in state.statBasic.JavaClassPath" :key="item">{{ item }}</li>
+            <li v-for="item in state.statBasic.JavaClassPath" :key="item" class="db-stat-lst__value-item">{{ item }}</li>
           </ul>
         </li>
       </ul>
-      <div class="page-monitor-db__sub-title" v-show="state.activeTab === '2'">DataSourceStat List:</div>
-      <el-tabs type="card" model-value="tab0" v-show="state.activeTab === '2'">
+      <div v-show="state.activeTab === '2'" class="page-monitor-db__sub-title">DataSourceStat List:</div>
+      <el-tabs v-show="state.activeTab === '2'" type="card" model-value="tab0">
         <el-tab-pane v-for="(dataSource, i) in state.dataSourceList" :key="i" :label="dataSource.Name" :name="`tab${i}`">
           <ul class="db-stat-lst is-wide">
             <li class="db-stat-lst__item">
@@ -352,7 +352,9 @@
             <li class="db-stat-lst__item">
               <span class="db-stat-lst__title">连接持有时间分布</span>
               <span class="db-stat-lst__value">{{ dataSource.ConnectionHoldTimeHistogram }}</span>
-              <span class="db-stat-lst__append">连接持有时间分布，分布区间为[0-1 ms, 1-10 ms, 10-100 ms, 100ms-1s, 1-10 s, 10-100 s, 100-1000 s, >1000 s]</span>
+              <span class="db-stat-lst__append">
+                连接持有时间分布，分布区间为[0-1 ms, 1-10 ms, 10-100 ms, 100ms-1s, 1-10 s, 10-100 s, 100-1000 s, >1000 s]
+              </span>
             </li>
             <li class="db-stat-lst__item">
               <span class="db-stat-lst__title">Clob打开次数</span>
@@ -372,7 +374,7 @@
           </ul>
         </el-tab-pane>
       </el-tabs>
-      <el-row :gutter="10" v-show="state.activeTab === '3'">
+      <el-row v-show="state.activeTab === '3'" :gutter="10">
         <el-col :span="6">
           <div class="page-monitor-db__sub-title">SQL Stat:</div>
         </el-col>
@@ -387,15 +389,24 @@
               <el-option label="30S" value="30"></el-option>
               <el-option label="60S" value="60"></el-option>
             </el-select>
-            <el-button @click="sqlStatRefreshStop" v-waves size="small">停止刷新</el-button>
+            <el-button v-waves size="small" @click="sqlStatRefreshStop">停止刷新</el-button>
           </div>
         </el-col>
       </el-row>
-      <el-table :data="state.sqlStatList" size="small" border style="width: 100%" stripe key="table3" :default-sort="{ prop: 'ID', order: 'ascending' }" v-show="state.activeTab === '3'">
+      <el-table
+        v-show="state.activeTab === '3'"
+        key="table3"
+        :data="state.sqlStatList"
+        size="small"
+        border
+        style="width: 100%"
+        stripe
+        :default-sort="{ prop: 'ID', order: 'ascending' }"
+      >
         <el-table-column label="N" prop="ID" width="60" sortable></el-table-column>
         <el-table-column label="SQL" prop="SQL" min-width="400" sortable :show-overflow-tooltip="true">
           <template #default="scope">
-            <a @click="showFullSqlDlg(scope.row.ID)" class="page-monitor-db__link">{{ scope.row.SQL }}</a>
+            <a class="page-monitor-db__link" @click="showFullSqlDlg(scope.row.ID)">{{ scope.row.SQL }}</a>
           </template>
         </el-table-column>
         <el-table-column label="执行数" prop="ExecuteCount" width="70" sortable></el-table-column>
@@ -408,12 +419,17 @@
         <el-table-column label="执行中" prop="RunningCount" width="70" sortable></el-table-column>
         <el-table-column label="最大并发" prop="ConcurrentMax" width="70" sortable></el-table-column>
         <el-table-column label="执行时间分布" prop="Histogram" width="120" :formatter="arrayFormatter"></el-table-column>
-        <el-table-column label="执行+RS时分布" prop="ExecuteAndResultHoldTimeHistogram" width="120" :formatter="arrayFormatter"></el-table-column>
+        <el-table-column
+          label="执行+RS时分布"
+          prop="ExecuteAndResultHoldTimeHistogram"
+          width="120"
+          :formatter="arrayFormatter"
+        ></el-table-column>
         <el-table-column label="读取行分布" prop="FetchRowCountHistogram" width="120" :formatter="arrayFormatter"></el-table-column>
         <el-table-column label="更新行分布" prop="EffectedRowCountHistogram" width="120" :formatter="arrayFormatter"></el-table-column>
       </el-table>
-      <div class="page-monitor-db__sub-title" v-show="state.activeTab === '4'">防御统计:</div>
-      <ul class="db-stat-lst is-wide" v-show="state.activeTab === '4'">
+      <div v-show="state.activeTab === '4'" class="page-monitor-db__sub-title">防御统计:</div>
+      <ul v-show="state.activeTab === '4'" class="db-stat-lst is-wide">
         <li class="db-stat-lst__item">
           <span class="db-stat-lst__title">检查次数</span>
           <span class="db-stat-lst__value">{{ state.wallData.checkCount }}</span>
@@ -455,8 +471,16 @@
           <span class="db-stat-lst__append"></span>
         </li>
       </ul>
-      <div class="page-monitor-db__sub-title" v-show="state.activeTab === '4'">表访问统计:</div>
-      <el-table :data="state.wallData.tables" size="small" border style="width: 100%" stripe :default-sort="{ prop: 'name', order: 'ascending' }" v-show="state.activeTab === '4'">
+      <div v-show="state.activeTab === '4'" class="page-monitor-db__sub-title">表访问统计:</div>
+      <el-table
+        v-show="state.activeTab === '4'"
+        :data="state.wallData.tables"
+        size="small"
+        border
+        style="width: 100%"
+        stripe
+        :default-sort="{ prop: 'name', order: 'ascending' }"
+      >
         <el-table-column label="表名" prop="name" min-width="200" :show-overflow-tooltip="true" sortable></el-table-column>
         <el-table-column label="Select数" prop="selectCount" min-width="80" sortable></el-table-column>
         <el-table-column label="SelectInto数" prop="selectIntoCount" min-width="80" sortable></el-table-column>
@@ -475,13 +499,29 @@
         <el-table-column label="更新行数" prop="updateDataCount" min-width="80" sortable></el-table-column>
         <el-table-column label="更新行分布" prop="updateHisto" min-width="120" :formatter="arrayFormatter"></el-table-column>
       </el-table>
-      <div class="page-monitor-db__sub-title" v-show="state.activeTab === '4'">函数调用统计:</div>
-      <el-table :data="state.wallData.functions" size="small" border style="width: 100%" stripe :default-sort="{ prop: 'name', order: 'ascending' }" v-show="state.activeTab === '4'">
+      <div v-show="state.activeTab === '4'" class="page-monitor-db__sub-title">函数调用统计:</div>
+      <el-table
+        v-show="state.activeTab === '4'"
+        :data="state.wallData.functions"
+        size="small"
+        border
+        style="width: 100%"
+        stripe
+        :default-sort="{ prop: 'name', order: 'ascending' }"
+      >
         <el-table-column label="Function Name" prop="name" :show-overflow-tooltip="true" sortable></el-table-column>
         <el-table-column label="InvokeCount" prop="invokeCount" sortable></el-table-column>
       </el-table>
-      <div class="page-monitor-db__sub-title" v-show="state.activeTab === '4'">SQL防御统计 - 白名单:</div>
-      <el-table :data="state.wallData.whiteList" size="small" border style="width: 100%" stripe v-show="state.activeTab === '4'" :default-sort="{ prop: 'sql', order: 'ascending' }">
+      <div v-show="state.activeTab === '4'" class="page-monitor-db__sub-title">SQL防御统计 - 白名单:</div>
+      <el-table
+        v-show="state.activeTab === '4'"
+        :data="state.wallData.whiteList"
+        size="small"
+        border
+        style="width: 100%"
+        stripe
+        :default-sort="{ prop: 'sql', order: 'ascending' }"
+      >
         <el-table-column label="SQL" prop="sql" sortable min-width="400"></el-table-column>
         <el-table-column label="样本" prop="example" min-width="400"></el-table-column>
         <el-table-column label="执行数" prop="executeCount" sortable min-width="80"></el-table-column>
@@ -489,8 +529,16 @@
         <el-table-column label="读取行数" prop="fetchRowCount" sortable min-width="80"></el-table-column>
         <el-table-column label="更新行数" prop="updateCount" sortable min-width="80"></el-table-column>
       </el-table>
-      <div class="page-monitor-db__sub-title" v-show="state.activeTab === '4'">SQL防御统计 - 黑名单:</div>
-      <el-table :data="state.wallData.blackList" size="small" border style="width: 100%" stripe v-show="state.activeTab === '4'" :default-sort="{ prop: 'sql', order: 'ascending' }">
+      <div v-show="state.activeTab === '4'" class="page-monitor-db__sub-title">SQL防御统计 - 黑名单:</div>
+      <el-table
+        v-show="state.activeTab === '4'"
+        :data="state.wallData.blackList"
+        size="small"
+        border
+        style="width: 100%"
+        stripe
+        :default-sort="{ prop: 'sql', order: 'ascending' }"
+      >
         <el-table-column label="SQL" prop="sql" sortable min-width="300"></el-table-column>
         <el-table-column label="样本" prop="example" min-width="300"></el-table-column>
         <el-table-column label="violationMessage" prop="violationMessage" sortable min-width="200"></el-table-column>
@@ -498,8 +546,8 @@
         <el-table-column label="读取行数" prop="fetchRowCount" sortable min-width="80"></el-table-column>
         <el-table-column label="更新行数" prop="updateCount" sortable min-width="80"></el-table-column>
       </el-table>
-      <div class="page-monitor-db__sub-title" v-show="state.activeTab === '5'">WebAppStat List:</div>
-      <el-tabs type="card" model-value="tab0" v-show="state.activeTab === '5'">
+      <div v-show="state.activeTab === '5'" class="page-monitor-db__sub-title">WebAppStat List:</div>
+      <el-tabs v-show="state.activeTab === '5'" type="card" model-value="tab0">
         <el-tab-pane v-for="(webApp, i) in state.webAppList" :key="i" :label="webApp.ContextPath" :name="`tab${i}`">
           <ul class="db-stat-lst is-wide">
             <li class="db-stat-lst__item">
@@ -757,7 +805,7 @@
           </ul>
         </el-tab-pane>
       </el-tabs>
-      <el-row :gutter="10" v-show="state.activeTab === '6'">
+      <el-row v-show="state.activeTab === '6'" :gutter="10">
         <el-col :span="6">
           <div class="page-monitor-db__sub-title">Web URI Stat:</div>
         </el-col>
@@ -772,14 +820,23 @@
               <el-option label="30S" value="30"></el-option>
               <el-option label="60S" value="60"></el-option>
             </el-select>
-            <el-button @click="webUriRefreshStop" v-waves size="small">停止刷新</el-button>
+            <el-button v-waves size="small" @click="webUriRefreshStop">停止刷新</el-button>
           </div>
         </el-col>
       </el-row>
-      <el-table :data="state.webUriStatList" size="small" border style="width: 100%" stripe key="table6" :default-sort="{ prop: 'URI', order: 'ascending' }" v-show="state.activeTab === '6'">
+      <el-table
+        v-show="state.activeTab === '6'"
+        key="table6"
+        :data="state.webUriStatList"
+        size="small"
+        border
+        style="width: 100%"
+        stripe
+        :default-sort="{ prop: 'URI', order: 'ascending' }"
+      >
         <el-table-column label="URI" prop="URI" min-width="350" sortable :show-overflow-tooltip="true">
           <template #default="scope">
-            <a @click="showWebUriDlg(scope.row.URI)" class="page-monitor-db__link">{{ scope.row.URI }}</a>
+            <a class="page-monitor-db__link" @click="showWebUriDlg(scope.row.URI)">{{ scope.row.URI }}</a>
           </template>
         </el-table-column>
         <el-table-column label="请求次数" prop="RequestCount" width="70" sortable></el-table-column>
@@ -796,8 +853,17 @@
         <el-table-column label="更新行数" prop="JdbcUpdateCount" width="70" sortable></el-table-column>
         <el-table-column label="区间分布" prop="Histogram" width="120" :formatter="arrayFormatter"></el-table-column>
       </el-table>
-      <div class="page-monitor-db__sub-title" v-show="state.activeTab === '7'">Spring Stat:</div>
-      <el-table :data="state.springStatList" size="small" border style="width: 100%" stripe key="table7" :default-sort="{ prop: 'Class', order: 'ascending' }" v-show="state.activeTab === '7'">
+      <div v-show="state.activeTab === '7'" class="page-monitor-db__sub-title">Spring Stat:</div>
+      <el-table
+        v-show="state.activeTab === '7'"
+        key="table7"
+        :data="state.springStatList"
+        size="small"
+        border
+        style="width: 100%"
+        stripe
+        :default-sort="{ prop: 'Class', order: 'ascending' }"
+      >
         <el-table-column label="Class" prop="Class" min-width="300" sortable></el-table-column>
         <el-table-column label="Method" prop="Method" min-width="300" sortable></el-table-column>
         <el-table-column label="执行数" prop="ExecuteCount" width="70" sortable></el-table-column>
@@ -875,10 +941,10 @@ const getData = () => {
 
 const getStatBasicData = async () => {
   try {
-    const { data } = await (<any>request({
+    const { data } = await request({
       url: state.statBasicUrl,
       method: 'get'
-    }))
+    })
     state.statBasic = data.Content
     state.statBasic.JavaClassPath = textToArray(data.Content.JavaClassPath)
   } catch (e) {
@@ -888,10 +954,10 @@ const getStatBasicData = async () => {
 
 const getDataSourceData = async () => {
   try {
-    const { data } = await (<any>request({
+    const { data } = await request({
       url: state.dataSourceUrl,
       method: 'get'
-    }))
+    })
     state.dataSourceList = data.Content
   } catch (e) {
     console.log(e)
@@ -900,10 +966,10 @@ const getDataSourceData = async () => {
 
 const getSqlStatList = async () => {
   try {
-    const { data } = await (<any>request({
+    const { data } = await request({
       url: state.sqlStateUrl,
       method: 'get'
-    }))
+    })
     if (data.Content) {
       state.sqlStatList = data.Content
     }
@@ -914,10 +980,10 @@ const getSqlStatList = async () => {
 
 const getWallData = async () => {
   try {
-    const { data } = await (<any>request({
+    const { data } = await request({
       url: state.wallUrl,
       method: 'get'
-    }))
+    })
     state.wallData = data.Content
     if (!state.wallData.tables) {
       state.wallData.tables = [] as any[]
@@ -932,10 +998,10 @@ const getWallData = async () => {
 
 const getWebAppList = async () => {
   try {
-    const { data } = await (<any>request({
+    const { data } = await request({
       url: state.webAppUrl,
       method: 'get'
-    }))
+    })
     if (data.Content) {
       state.webAppList = data.Content
     }
@@ -946,22 +1012,24 @@ const getWebAppList = async () => {
 
 const getWebUriStatList = async () => {
   try {
-    const { data } = await (<any>request({
+    const { data } = await request({
       url: state.webUriUrl,
       method: 'get'
-    }))
+    })
     if (data.Content) {
       state.webUriStatList = data.Content
     }
-  } catch (e) {}
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 const getSpringStatList = async () => {
   try {
-    const { data } = await (<any>request({
+    const { data } = await request({
       url: state.springStatListUrl,
       method: 'get'
-    }))
+    })
     if (data.Content) {
       state.springStatList = data.Content
     }
@@ -972,12 +1040,12 @@ const getSpringStatList = async () => {
 
 const fullSqlDialog = ref()
 const showFullSqlDlg = (id: number) => {
-  ;(fullSqlDialog.value as typeof FullSqlDialog).init(id)
+  fullSqlDialog.value.init(id)
 }
 
 const webUriDetailDialog = ref()
 const showWebUriDlg = (id: string) => {
-  ;(webUriDetailDialog.value as typeof WebUriDetailDialog).init(id)
+  webUriDetailDialog.value.init(id)
 }
 
 const dbStatReset = async () => {

@@ -1,4 +1,3 @@
-import { AnyFunction, AnyObject } from '@/utils'
 import { CUSTOM_THEME } from '@/components/theme/theme'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
@@ -8,6 +7,7 @@ import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, Toolt
 import { LineChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
 import { UniversalTransition } from 'echarts/features'
+import { AnyFunction, Indexable } from '@/types/global'
 
 echarts.use([
   TitleComponent,
@@ -20,7 +20,7 @@ echarts.use([
   UniversalTransition
 ])
 
-export default function (option: AnyObject, optionLoadFunc: AnyFunction) {
+export default function (option: Indexable, optionLoadFunc: AnyFunction) {
   const chartElement = ref()
   let chart = undefined as echarts.ECharts | undefined
   let theme = 'light'
@@ -44,13 +44,7 @@ export default function (option: AnyObject, optionLoadFunc: AnyFunction) {
    * 设置图表主题色
    */
   const setChartTheme = () => {
-    const names = [
-      '--el-color-primary',
-      '--el-color-success',
-      '--el-color-warning',
-      '--el-color-danger',
-      '--el-color-info'
-    ]
+    const names = ['--el-color-primary', '--el-color-success', '--el-color-warning', '--el-color-danger', '--el-color-info']
     const color = [] as string[]
     names.forEach((n) => {
       if (storeState.app.theme && storeState.app.theme[n]) {

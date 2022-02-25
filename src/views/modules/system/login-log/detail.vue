@@ -48,7 +48,7 @@ export default {
 
 <script setup lang="ts">
 import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
-import { loginLogFields } from '@/api/system/login-log'
+import { LoginLog, loginLogFields } from '@/api/system/login-log'
 import { formatTimestamp } from '@/utils/time'
 
 const emit = defineEmits([OPEN_EDIT_EVENT, NAVIGATE_EVENT])
@@ -61,7 +61,7 @@ const stateOption = {
   }
 }
 
-const { mixState: state, mixComputed, mixMethods } = useDetail(stateOption, emit)
+const { mixState: state, mixComputed, mixMethods } = useDetail<LoginLog>(stateOption, emit)
 const { prevDisabled, nextDisabled } = mixComputed
 const { open, dictVal, onEdit, onPrev, onNext, close } = mixMethods
 

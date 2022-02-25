@@ -23,7 +23,6 @@
         <el-button
           v-show="state.ifEditable && hasAuth('system:config:edit')"
           plain
-
           type="primary"
           style="margin-right: auto"
           @click="onEdit"
@@ -52,7 +51,7 @@ export default {
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
 import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
-import { configFields } from '@/api/system/config'
+import { Config, configFields } from '@/api/system/config'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { formatJson } from '@/utils/lang'
 import usePage from '@/components/crud/use-page'
@@ -65,7 +64,7 @@ const stateOption = {
     configTypeDict: '',
     configKey: '',
     configValue: '',
-    enabled: '',
+    enabled: undefined,
     remark: ''
   },
   configValue: ''
@@ -73,7 +72,7 @@ const stateOption = {
 
 const emit = defineEmits([OPEN_EDIT_EVENT, NAVIGATE_EVENT])
 
-const { mixState: state, mixComputed, mixMethods } = useDetail(stateOption, emit)
+const { mixState: state, mixComputed, mixMethods } = useDetail<Config>(stateOption, emit)
 const { prevDisabled, nextDisabled } = mixComputed
 const { open, resetForm, dictVal, close, onCurrentChanged, onEdit, onPrev, onNext } = mixMethods
 

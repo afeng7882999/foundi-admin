@@ -12,7 +12,6 @@
           v-waves
           :disabled="selectedNodes.length <= 0"
           plain
-
           type="danger"
           @click="del()"
         >
@@ -20,9 +19,7 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:oauthUser:export')" v-waves @click="exportData()">
-            导出数据
-          </el-button>
+          <el-button v-show="hasAuth('system:oauthUser:export')" v-waves @click="exportData()">导出数据</el-button>
         </div>
       </div>
     </div>
@@ -52,14 +49,7 @@
           prop="nickName"
           width="150"
         ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="认证类型"
-          prop="oAuthTypeDict"
-          width="100"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="认证类型" prop="oAuthTypeDict" width="100">
           <template #default="scope">
             <span>{{ dictVal(dicts.sysOAuthType, scope.row.oAuthTypeDict) }}</span>
           </template>
@@ -72,14 +62,7 @@
           prop="userId"
           width="150"
         ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="性别"
-          prop="genderDict"
-          width="50"
-        >
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="性别" prop="genderDict" width="50">
           <template #default="scope">
             <span>{{ dictVal(dicts.gender, scope.row.genderDict) }}</span>
           </template>
@@ -92,13 +75,7 @@
           prop="createAt"
           width="160"
         ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="OpenId"
-          prop="openId"
-        ></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="OpenId" prop="openId"></el-table-column>
         <el-table-column align="center" fixed="right" header-align="center" label="操作" width="100">
           <template #default="scope">
             <el-tooltip :show-after="500" content="删除" placement="top">
@@ -136,18 +113,12 @@
 <script lang="ts">
 import { defineComponent, onBeforeMount, toRefs } from 'vue'
 import useList from '@/components/crud/use-list'
-import {
-  oauthUserDel,
-  oauthUserDicts,
-  oauthUserExport,
-  oauthUserFields,
-  oauthUserList,
-  oauthUserQuery
-} from '@/api/system/oauth-user'
+import { oauthUserDel, oauthUserDicts, oauthUserExport, oauthUserFields, oauthUserList, oauthUserQuery } from '@/api/system/oauth-user'
 import Edit from './edit.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import usePage from '@/components/crud/use-page'
+import { Message } from '@/api/system/message'
 
 export default defineComponent({
   name: 'SystemOauthUser',
@@ -166,7 +137,7 @@ export default defineComponent({
     const router = useRouter()
     const store = useStore()
 
-    const { mixRefs, mixState, mixMethods } = useList(stateOption)
+    const { mixRefs, mixState, mixMethods } = useList<Message>(stateOption)
 
     const { docMinHeight, showPageHeader, hasAuth } = usePage()
 

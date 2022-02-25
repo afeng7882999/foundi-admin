@@ -5,7 +5,12 @@
         <img :src="img.imgSrc" :style="cropperImgStyle" alt="vue-cropper-img" />
       </div>
     </div>
-    <div class="vue-cropper-drag" :class="{ 'cropper-move': !ifCrop, 'cropper-crop': ifCrop, 'cropper-modal': cropping }" @mousedown="moveRotateCropBegin" @touchstart="moveRotateCropBegin"></div>
+    <div
+      class="vue-cropper-drag"
+      :class="{ 'cropper-move': !ifCrop, 'cropper-crop': ifCrop, 'cropper-modal': cropping }"
+      @mousedown="moveRotateCropBegin"
+      @touchstart="moveRotateCropBegin"
+    ></div>
     <div v-show="cropping" class="vue-cropper-crop" :style="cropperCropStyle">
       <div class="vue-cropper-crop__canvas">
         <img :style="cropperCropImgStyle" :src="img.imgSrc" alt="vue-cropper-img" />
@@ -16,26 +21,74 @@
         {{ outputInfo.height }}
       </div>
       <div v-show="!cropSizeFixed">
-        <div class="vue-cropper-crop__line line-w" @mousedown="cropScaleBegin($event, false, true, 0, 1)" @touchstart="cropScaleBegin($event, false, true, 0, 1)">
+        <div
+          class="vue-cropper-crop__line line-w"
+          @mousedown="cropScaleBegin($event, false, true, 0, 1)"
+          @touchstart="cropScaleBegin($event, false, true, 0, 1)"
+        >
           <div class="vue-cropper-crop__line-inner"></div>
         </div>
-        <div class="vue-cropper-crop__line line-a" @mousedown="cropScaleBegin($event, true, false, 1, 0)" @touchstart="cropScaleBegin($event, true, false, 1, 0)">
+        <div
+          class="vue-cropper-crop__line line-a"
+          @mousedown="cropScaleBegin($event, true, false, 1, 0)"
+          @touchstart="cropScaleBegin($event, true, false, 1, 0)"
+        >
           <div class="vue-cropper-crop__line-inner"></div>
         </div>
-        <div class="vue-cropper-crop__line line-s" @mousedown="cropScaleBegin($event, false, true, 0, 2)" @touchstart="cropScaleBegin($event, false, true, 0, 2)">
+        <div
+          class="vue-cropper-crop__line line-s"
+          @mousedown="cropScaleBegin($event, false, true, 0, 2)"
+          @touchstart="cropScaleBegin($event, false, true, 0, 2)"
+        >
           <div class="vue-cropper-crop__line-inner"></div>
         </div>
-        <div class="vue-cropper-crop__line line-d" @mousedown="cropScaleBegin($event, true, false, 2, 0)" @touchstart="cropScaleBegin($event, true, false, 2, 0)">
+        <div
+          class="vue-cropper-crop__line line-d"
+          @mousedown="cropScaleBegin($event, true, false, 2, 0)"
+          @touchstart="cropScaleBegin($event, true, false, 2, 0)"
+        >
           <div class="vue-cropper-crop__line-inner"></div>
         </div>
-        <div class="vue-cropper-crop__point point1" @mousedown="cropScaleBegin($event, true, true, 1, 1)" @touchstart="cropScaleBegin($event, true, true, 1, 1)"></div>
-        <div class="vue-cropper-crop__point point2" @mousedown="cropScaleBegin($event, false, true, 0, 1)" @touchstart="cropScaleBegin($event, false, true, 0, 1)"></div>
-        <div class="vue-cropper-crop__point point3" @mousedown="cropScaleBegin($event, true, true, 2, 1)" @touchstart="cropScaleBegin($event, true, true, 2, 1)"></div>
-        <div class="vue-cropper-crop__point point4" @mousedown="cropScaleBegin($event, true, false, 1, 0)" @touchstart="cropScaleBegin($event, true, false, 1, 0)"></div>
-        <div class="vue-cropper-crop__point point5" @mousedown="cropScaleBegin($event, true, false, 2, 0)" @touchstart="cropScaleBegin($event, true, false, 2, 0)"></div>
-        <div class="vue-cropper-crop__point point6" @mousedown="cropScaleBegin($event, true, true, 1, 2)" @touchstart="cropScaleBegin($event, true, true, 1, 2)"></div>
-        <div class="vue-cropper-crop__point point7" @mousedown="cropScaleBegin($event, false, true, 0, 2)" @touchstart="cropScaleBegin($event, false, true, 0, 2)"></div>
-        <div class="vue-cropper-crop__point point8" @mousedown="cropScaleBegin($event, true, true, 2, 2)" @touchstart="cropScaleBegin($event, true, true, 2, 2)"></div>
+        <div
+          class="vue-cropper-crop__point point1"
+          @mousedown="cropScaleBegin($event, true, true, 1, 1)"
+          @touchstart="cropScaleBegin($event, true, true, 1, 1)"
+        ></div>
+        <div
+          class="vue-cropper-crop__point point2"
+          @mousedown="cropScaleBegin($event, false, true, 0, 1)"
+          @touchstart="cropScaleBegin($event, false, true, 0, 1)"
+        ></div>
+        <div
+          class="vue-cropper-crop__point point3"
+          @mousedown="cropScaleBegin($event, true, true, 2, 1)"
+          @touchstart="cropScaleBegin($event, true, true, 2, 1)"
+        ></div>
+        <div
+          class="vue-cropper-crop__point point4"
+          @mousedown="cropScaleBegin($event, true, false, 1, 0)"
+          @touchstart="cropScaleBegin($event, true, false, 1, 0)"
+        ></div>
+        <div
+          class="vue-cropper-crop__point point5"
+          @mousedown="cropScaleBegin($event, true, false, 2, 0)"
+          @touchstart="cropScaleBegin($event, true, false, 2, 0)"
+        ></div>
+        <div
+          class="vue-cropper-crop__point point6"
+          @mousedown="cropScaleBegin($event, true, true, 1, 2)"
+          @touchstart="cropScaleBegin($event, true, true, 1, 2)"
+        ></div>
+        <div
+          class="vue-cropper-crop__point point7"
+          @mousedown="cropScaleBegin($event, false, true, 0, 2)"
+          @touchstart="cropScaleBegin($event, false, true, 0, 2)"
+        ></div>
+        <div
+          class="vue-cropper-crop__point point8"
+          @mousedown="cropScaleBegin($event, true, true, 2, 2)"
+          @touchstart="cropScaleBegin($event, true, true, 2, 2)"
+        ></div>
       </div>
     </div>
   </div>
@@ -44,7 +97,6 @@
 <script lang="ts">
 import { computed, defineComponent, nextTick, onBeforeUnmount, onMounted, PropType, reactive, ref, toRefs, watch } from 'vue'
 import { throttle } from 'lodash-es'
-import { AnyFunction } from '@/utils'
 import { toBlobPolyfill, wheelEvt } from './utils'
 import { CropInfo, CropperContainer, CropperImg, ImgOperType, ImgTransform } from './types'
 import useImg from './use-img'
@@ -53,6 +105,7 @@ import useTransform from './use-transform'
 import useOutput from './use-output'
 import useAxis from '@/components/img-cropper/use-axis'
 import { nextFrame } from '@/utils/next-frame'
+import { AnyFunction } from '@/types/global'
 
 export default defineComponent({
   name: 'VueCropper',
@@ -237,17 +290,50 @@ export default defineComponent({
 
     const { load } = useImg(props, state.container, state.img, state.crop, state.transform)
     const { getImgAxis, getCropAxis } = useAxis(props, state.img, state.crop)
-    const { zoomByTyp, zoomByWheel, zoomByTouchBegin, zoomByTouch, moveBegin, move, rotateByTyp, rotateByMouseBegin, rotateByMouse, rotateEnd, flip, reset: transformReset } = useTransform(props, state.container, state.img, state.crop, state.transform)
-    const { create, createAuto, createBegin, scaleBegin, scale, moveBegin: _cropMoveBegin, move: _cropMove, clear } = useCrop(props, state.container, state.img, state.crop)
+    const {
+      zoomByTyp,
+      zoomByWheel,
+      zoomByTouchBegin,
+      zoomByTouch,
+      moveBegin,
+      move,
+      rotateByTyp,
+      rotateByMouseBegin,
+      rotateByMouse,
+      rotateEnd,
+      flip,
+      reset: transformReset
+    } = useTransform(props, state.container, state.img, state.crop, state.transform)
+    const {
+      create,
+      createAuto,
+      createBegin,
+      scaleBegin,
+      scale,
+      moveBegin: _cropMoveBegin,
+      move: _cropMove,
+      clear
+    } = useCrop(props, state.container, state.img, state.crop)
     const { outputBase64, outputBlob, getPreview, outputInfo } = useOutput(props, state.img, state.crop, state.transform)
 
     watch([() => props.img, () => props.imgMode], () => {
       loadImg()
     })
 
-    watch([() => state.crop.cropW, () => state.crop.cropH, () => state.crop.cropOffsetX, () => state.crop.cropOffsetY, () => state.transform.scale, () => state.transform.translateX, () => state.transform.translateY], () => {
-      updatePreview()
-    })
+    watch(
+      [
+        () => state.crop.cropW,
+        () => state.crop.cropH,
+        () => state.crop.cropOffsetX,
+        () => state.crop.cropOffsetY,
+        () => state.transform.scale,
+        () => state.transform.translateX,
+        () => state.transform.translateY
+      ],
+      () => {
+        updatePreview()
+      }
+    )
 
     watch([() => props.autoCrop, () => props.autoCropWidth, () => props.autoCropHeight], (val) => {
       if (val[0]) {
