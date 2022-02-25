@@ -30,7 +30,7 @@ export type ResData<T = any> = Partial<{
 export type ApiObj = Indexable
 
 // 返回的数据列表
-export type ApiList<T extends ApiObj> = {
+export type ApiObjList<T extends ApiObj> = {
   data: T[]
   resData: ResData<T>
 } & Partial<{
@@ -52,7 +52,7 @@ const getOne = async <T extends ApiObj>(getUrl: string, id: string): Promise<T> 
 }
 
 // 获取列表
-const getList = async <T extends ApiObj>(listUrl: string, query?: ApiQuery): Promise<ApiList<T>> => {
+const getList = async <T extends ApiObj>(listUrl: string, query?: ApiQuery): Promise<ApiObjList<T>> => {
   listUrl = addOrRemoveSlash(listUrl, false)
   if (query !== undefined) {
     listUrl =
