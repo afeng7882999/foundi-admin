@@ -370,14 +370,14 @@
     padding: 4px 0;
   }
   
-  &.is-den-high {
-    .el-table .el-table__body tr td {
+  .el-table.is-den-high {
+    .el-table__body tr td {
       padding: 2px 0;
     }
   }
   
-  &.is-den-low {
-    .el-table .el-table__body tr td {
+  .el-table.is-den-low {
+    .el-table__body tr td {
       padding: 8px 0;
     }
   }
