@@ -100,8 +100,8 @@ export interface CodePreview {
 }
 
 export interface GenData extends ApiObj {
-  table: Partial<GenTable>
-  columns: Partial<GenTableColumn>[]
+  table: GenTable
+  columns: GenTableColumn[]
 }
 
 export const genTableFields = {
