@@ -10,6 +10,7 @@ export interface TableColumn {
   label?: string
   type?: string
   fixed?: boolean | string
+  oldFixed?: boolean | string
 }
 export interface TableSettingProp {
   treeTable?: boolean

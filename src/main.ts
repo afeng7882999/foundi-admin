@@ -17,7 +17,7 @@ import FdContextmenu from '@/components/contextmenu'
 import FdIconButton from '@/components/icon-button'
 import FdTreeSelect from '@/components/tree-select'
 import FdDrawer from '@/components/drawer'
-import FdTable from '@/components/table'
+import FdTableAll from '@/components/table'
 
 const app = createApp(App)
 app.use(store)
@@ -32,6 +32,6 @@ app
   .use(FdIconButton)
   .use(FdTreeSelect)
   .use(FdDrawer)
-  .use(FdTable)
+  .use(FdTableAll)
 
 app.mount('#app')
