@@ -5,6 +5,7 @@ import { Indexable } from '@/types/global'
 import useFocusableRow, { FocusRowOption } from '@/components/table/hooks/use-focusable-row'
 import useSettings, { TableSettingsOption } from '@/components/table/hooks/use-settings'
 import useSortableRow, { SortableRowOption } from '@/components/table/hooks/use-sortable-row'
+import { computed } from 'vue'
 
 export type TableOption = FocusRowOption & TableSettingsOption & SortableRowOption
 
@@ -13,7 +14,11 @@ const useTable = (table: Ref<InstanceType<typeof ElTable> | undefined>, tableOpt
   // option
   //===============================================================================
 
-  const defaultOption = {}
+  const defaultOption = {
+    rowDraggable: false,
+    rowFocusable: true,
+    configurable: true
+  }
 
   const option = merge({}, defaultOption, tableOption)
 
@@ -26,14 +31,38 @@ const useTable = (table: Ref<InstanceType<typeof ElTable> | undefined>, tableOpt
   if (option.rowDraggable) {
     useSortableRow(table, option)
   }
+  if (option.configurable) {
+    const { columns, rowDensity, expandAll, stripe, border } = useSettings(table, option)
+    Object.assign(result, { columns, rowDensity, expandAll, stripe, border })
+  }
+
   if (option.rowFocusable) {
     const { focusCurrentRow } = useFocusableRow(table, option)
     result.focusCurrentRow = focusCurrentRow
   }
-  if (option.configurable) {
-    const { columns, rowDensity, expandAll, stripe, border, tableAttrs } = useSettings(table, option)
-    Object.assign(result, { columns, rowDensity, expandAll, stripe, border, tableAttrs })
-  }
+
+  //===============================================================================
+  // table props
+  //===============================================================================
+
+  result.tableAttrs = computed(() => {
+    const attrs = {} as Indexable
+
+    if (option.configurable) {
+      attrs.border = result.border.value
+      if (option.treeTable) {
+        attrs.defaultExpandAll = result.expandAll.value
+      } else {
+        attrs.stripe = result.stripe.value
+      }
+    }
+
+    if (option.rowFocusable) {
+      attrs.highlightCurrentRow = true
+    }
+
+    return attrs
+  })
 
   return result
 }
