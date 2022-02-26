@@ -8,11 +8,11 @@ import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { useRoute } from 'vue-router'
 import { getPageIdFromRoute } from '@/utils/query'
-import { addClass, removeClass } from '@/utils/dom'
 import { TreeNode, traverseTree } from '@/utils/data-tree'
 import { unrefElement, VueInstance } from '@vueuse/core'
 import { ApiObj } from '@/api'
 import { Indexable } from '@/types/global'
+import { addClass, hasClass, removeClass } from '@/utils/dom'
 
 export type TableSettingsOption = {
   // 数据
@@ -169,7 +169,8 @@ const useSettings = (table: Ref<InstanceType<typeof ElTable> | undefined>, table
         property: item.property,
         label: item.label,
         type: item.type,
-        fixed: item.fixed
+        fixed: item.fixed,
+        oldFixed: item.fixed
       } as TableColumn
     })
   }
@@ -203,8 +204,8 @@ const useSettings = (table: Ref<InstanceType<typeof ElTable> | undefined>, table
 
   // 改变表格行密度
   const changeRowDensity = (density: RowDensity) => {
-    const wrapperEl = tableElCo.value
-    if (wrapperEl) {
+    const wrapperEl = tableElCo.value.parentElement
+    if (wrapperEl && hasClass(wrapperEl, 'fd-page__table')) {
       if (density === 'high') {
         removeClass(wrapperEl, 'is-den-low')
         addClass(wrapperEl, 'is-den-high')

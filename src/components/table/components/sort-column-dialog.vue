@@ -1,7 +1,7 @@
 <template>
   <el-dialog v-model="state.visible" :close-on-click-modal="false" title="表格列设置" width="700px">
     <div ref="tableWrapper" class="fd-page__table is-den-high">
-      <el-table ref="table" v-bind="tableAttrs" stripe>
+      <el-table ref="table" :data="state.tableColumns" stripe>
         <el-table-column class-name="sortable-drag" label="" width="38">
           <template #default>
             <el-tooltip content="拖动排序当前行" :show-after="500" placement="left">
@@ -118,6 +118,7 @@ const submit = () => {
 const reset = () => {
   state.tableColumns.sort((a, b) => a.id - b.id)
   state.tableColumns.forEach((c) => (c.visible = true))
+  state.tableColumns.forEach((c) => (c.fixed = c.oldFixed))
 }
 
 const colEmptyFormatter = (row: any, column: any, cellValue: any) => {
