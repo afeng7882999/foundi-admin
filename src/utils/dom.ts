@@ -1,43 +1,74 @@
 /* eslint-disable prettier/prettier */
+
+/**
+ * 去除空格
+ */
+const trimArr = function (s: string) {
+  return (s || '').split(' ').filter((item) => !!item.trim())
+}
+
 /**
  * HTMLElement是否有某个class
  */
-export function hasClass(he: HTMLElement, cls: string): boolean {
-  return !!he.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'))
+export function hasClass(el: HTMLElement | Element, cls: string): boolean {
+  if (!el || !cls) return false
+  if (cls.indexOf(' ') !== -1) throw new Error('className should not contain space.')
+  if (el.classList) {
+    return el.classList.contains(cls)
+  } else {
+    const className = el.getAttribute('class') || ''
+    return className.split(' ').includes(cls)
+  }
 }
 
 /**
  * HTMLElement添加某个class
  */
-export function addClass(he: HTMLElement, cls: string): void {
-  if (!hasClass(he, cls)) he.className += ' ' + cls
+export function addClass(el: HTMLElement | Element, cls: string): void {
+  if (!el) return
+  let className = el.getAttribute('class') || ''
+  const curClass = trimArr(className)
+  const classes = (cls || '').split(' ').filter((item) => !curClass.includes(item) && !!item.trim())
+
+  if (el.classList) {
+    el.classList.add(...classes)
+  } else {
+    className += ` ${classes.join(' ')}`
+    el.setAttribute('class', className)
+  }
 }
 
 /**
  * HTMLElement移除某个class
  */
-export function removeClass(he: HTMLElement, cls: string): void {
-  if (hasClass(he, cls)) {
-    const reg = new RegExp('(\\s|^)' + cls + '(\\s|$)')
-    he.className = he.className.replace(reg, ' ')
+export function removeClass(el: HTMLElement | Element, cls: string): void {
+  if (!el || !cls) return
+  const classes = trimArr(cls)
+  let curClass = el.getAttribute('class') || ''
+
+  if (el.classList) {
+    el.classList.remove(...classes)
+    return
   }
+  classes.forEach((item) => {
+    curClass = curClass.replace(` ${item} `, ' ')
+  })
+  const className = trimArr(curClass).join(' ')
+  el.setAttribute('class', className)
 }
 
 /**
  * HTMLElement切换某个class
  */
-export function toggleClass(he: HTMLElement, cls: string): void {
-  if (!he || !cls) {
+export function toggleClass(el: HTMLElement | Element, cls: string): void {
+  if (!el || !cls) {
     return
   }
-  let classString = he.className
-  const nameIndex = classString.indexOf(cls)
-  if (nameIndex === -1) {
-    classString += '' + cls
+  if (hasClass(el, cls)) {
+    removeClass(el, cls)
   } else {
-    classString = classString.substr(0, nameIndex) + classString.substr(nameIndex + cls.length)
+    addClass(el, cls)
   }
-  he.className = classString
 }
 
 /**
