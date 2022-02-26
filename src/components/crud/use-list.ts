@@ -588,16 +588,16 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   // el-table默认参数
   const tableAttrs = computed(() => {
     const result = {
-      highlightCurrentRow: mixState.tableRowSelectable,
+      highlightCurrentRow: _tableAttrs.value.highlightCurrentRow,
       data: mixState.data,
       rowKey: mixState.idField,
-      border: _tableAttrs.border,
-      stripe: _tableAttrs.stripe,
+      border: _tableAttrs.value.border,
+      stripe: _tableAttrs.value.stripe,
       onSelectionChange: onSelectionChange,
       onRowClick: onTableRowClick
     } as Indexable
     if (stateOption.treeTable) {
-      result.defaultExpandAll = _tableAttrs.defaultExpandAll
+      result.defaultExpandAll = _tableAttrs.value.defaultExpandAll
       result.indent = 15
       result.onSelect = onTreeSelect
       result.onSelectAll = onTreeSelectAll
