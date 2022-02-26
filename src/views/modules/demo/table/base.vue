@@ -11,7 +11,7 @@
     </el-form>
   </div>
   <div ref="operLogTbWrapper" class="fd-page__table is-bordered">
-    <el-table ref="operLogTb" v-bind="tableAttrs">
+    <el-table ref="operLogTb" v-bind="tableAttrs" :data="state.operLogs" @row-click="onRowClick">
       <fd-column typ="selection"></fd-column>
       <fd-column typ="datetime" label="操作时间" prop="operTime" sortable></fd-column>
       <fd-column label="请求URL" prop="operUrl" sortable width="500"></fd-column>
@@ -45,8 +45,9 @@ export default {
 import { nextTick, reactive, ref } from 'vue'
 import { operLogData, sysOperLogStatus } from './data'
 import useTable from '@/components/table/hooks/use-table'
-import FdTableSetting from '@/components/table/table-setting.vue'
 import { Indexable } from '@/types/global'
+import { Ref } from '@vue/reactivity'
+import { ElTable } from 'element-plus'
 
 const state = reactive({
   operLogs: operLogData,
@@ -54,15 +55,15 @@ const state = reactive({
   currentIdx: null as number | null
 })
 
-const operLogTb = ref()
+const operLogTb = ref() as Ref<InstanceType<typeof ElTable>>
 
-const { tableAttrs, rowDensity, columns, expandAll, stripe, border, highlightCurrentRow } = useTable(operLogTb, {
+const { tableAttrs, rowDensity, columns, expandAll, stripe, border, focusCurrentRow } = useTable(operLogTb, {
   alias: '_1',
   data: () => state.operLogs,
   rowFocusable: true
 })
 
-tableAttrs.onRowClick = (row: Indexable) => {
+const onRowClick = (row: Indexable) => {
   state.currentIdx = state.operLogs.findIndex((o) => o.id === row.id)
   setCurrentData()
 }
@@ -77,10 +78,10 @@ const tableSettingOpt = {
 
 const setCurrentData = (idx?: number) => {
   if (idx !== undefined) {
-    ;(operLogTb.value as any).setCurrentRow(state.operLogs[idx])
+    operLogTb.value.setCurrentRow(state.operLogs[idx])
   }
   nextTick(() => {
-    highlightCurrentRow()
+    focusCurrentRow()
   })
 }
 

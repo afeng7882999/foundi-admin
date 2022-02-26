@@ -9,19 +9,19 @@
     </el-form>
   </div>
   <div ref="menuTbWrapper" class="fd-page__table is-bordered">
-    <el-table ref="menuTb" v-bind="tableAttrs">
+    <el-table ref="menuTb" v-bind="tableAttrs" :data="state.menus" row-key="id">
       <fd-column typ="selection"></fd-column>
       <fd-column label="菜单名称" prop="name" width="200"></fd-column>
       <fd-column typ="icon" label="菜单图标" prop="icon" width="80"></fd-column>
-      <fd-column typ="dict" label="类型" prop="typeDict" :dict="state.sysMenuType" width="80"></fd-column>
+      <fd-column typ="dict" label="类型" prop="typeDict" :dict="state.sysMenuType" width="60"></fd-column>
       <fd-column label="菜单缩写" prop="abbr" width="80"></fd-column>
       <fd-column typ="custom" label="是否显示" prop="visible" width="80">
         <template #default="scope">
-          <fd-icon v-show="scope.row.visible" class="fd-tb-icon fd-tb-icon-success" icon="check"></fd-icon>
+          <fd-icon v-show="scope.row.visible" class="tb-icon is-success" icon="check"></fd-icon>
         </template>
       </fd-column>
       <fd-column label="菜单URL" prop="url"></fd-column>
-      <fd-column typ="act" :edit="true" header-align="center" align="center" width="90"></fd-column>
+      <fd-column typ="act" :edit="true" :del="true" header-align="center" align="center" width="90"></fd-column>
     </el-table>
   </div>
 </template>
@@ -36,19 +36,21 @@ export default {
 import { reactive, ref } from 'vue'
 import { menuData, sysMenuType } from './data'
 import useTable from '@/components/table/hooks/use-table'
-import FdTableSetting from '@/components/table/table-setting.vue'
+import { Ref } from '@vue/reactivity'
+import { ElTable } from 'element-plus'
 
 const state = reactive({
   menus: menuData,
   sysMenuType: sysMenuType
 })
 
-const menuTb = ref()
+const menuTb = ref() as Ref<InstanceType<typeof ElTable>>
 
 const { tableAttrs, rowDensity, columns, expandAll, stripe, border } = useTable(menuTb, {
   alias: '_2',
   treeTable: true,
-  data: () => state.menus
+  data: () => state.menus,
+  rowFocusable: false
 })
 
 const tableSettingOpt = {
