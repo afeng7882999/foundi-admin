@@ -90,8 +90,6 @@ import {
   ElDescriptions,
   ElDescriptionsItem
 } from 'element-plus'
-// import ElButton from '@/components/element-plus/button'
-import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 
 const components = [
   ElAlert,
@@ -182,9 +180,6 @@ const components = [
 const plugins = [ElInfiniteScroll, ElLoading, ElMessage, ElMessageBox, ElNotification, ElPopover]
 
 export default function installElementPlus(app: App): void {
-  app.config.globalProperties.$ELEMENT = { size: 'medium', zIndex: 3000, locale: zhCn }
-  // @ts-ignore
-  // app.provide(LocaleInjectionKey, localeProviderMaker(zhCn))
   components.forEach((component) => {
     app.use(component)
   })
