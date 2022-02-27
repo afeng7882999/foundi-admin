@@ -218,7 +218,7 @@
 
 // fd-page
 .fd-page {
-  padding: 8px 16px 16px 16px;
+  padding: 8px 16px 0 16px;
   
   &.is-fix-height {
     display: flex;
@@ -353,7 +353,7 @@
       > .cell {
         position: absolute;
         display: flex;
-        padding: 0;
+        padding: 0 8px;
         top: 0;
         bottom: 0;
         align-items: stretch;
