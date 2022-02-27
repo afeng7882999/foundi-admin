@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <fd-split-pane :default-pos="300" shrink="right" :style="previewHeight">
+    <fd-split-pane :default-pos="300" shrink="right" :style="previewStyle">
       <template #left>
         <div v-loading="state.loading" class="fd-page__form page-generator-preview__tree" style="height: 100%">
           <div class="fd-page__sub-title"><span class="title-text">文件列表</span></div>
@@ -67,7 +67,7 @@ export default {
 <script setup lang="ts">
 import usePage from '@/components/crud/use-page'
 import { downloadFile, getFileExt } from '@/utils/file'
-import { computed, nextTick, onBeforeMount, reactive, ref } from 'vue'
+import { computed, nextTick, onBeforeMount, reactive, ref, Ref } from 'vue'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { CodePreview, preview } from '@/api/generator/gen-table'
 import { useRoute, useRouter } from 'vue-router'
@@ -78,9 +78,11 @@ import { CodePreviewNode, LANG_OF_FILENAME } from '@/views/modules/generator/typ
 import * as fflate from 'fflate'
 import { strToU8 } from 'fflate'
 import { Indexable } from '@/types/global'
+import { ElTree } from 'element-plus'
+import { FdCodeEditorInst } from '@/components/code-editor/code-editor'
 
-const codeEditor = ref()
-const codeTree = ref()
+const codeEditor = ref() as Ref<FdCodeEditorInst>
+const codeTree = ref() as Ref<InstanceType<typeof ElTree>>
 
 const state = reactive({
   data: [] as CodePreview[],
@@ -95,10 +97,10 @@ const state = reactive({
   genLoading: false
 })
 
-const { showPageHeader, docHeight, getDocHeight } = usePage()
+const { showPageHeader, docHeight, getDocHeightNoHeader, getDocHeight } = usePage()
 
-const previewHeight = computed(() => {
-  return { height: getDocHeight(145, 'px') }
+const previewStyle = computed(() => {
+  return { height: getDocHeightNoHeader(82, 'px') }
 })
 
 const route = useRoute()
@@ -161,9 +163,9 @@ onBeforeMount(async () => {
       state.data = await preview(ids as string)
       getCodeTree(0)
       compactCodeTree(null, state.nodeData)
-      nextTick(() => {
-        ;(codeTree.value as any).setCurrentKey(state.activeNode.id)
-        ;(codeEditor.value as any).refresh('100%', getDocHeight(152, 'px'))
+      await nextTick(() => {
+        codeTree.value.setCurrentKey(state.activeNode.id)
+        codeEditor.value.refresh('100%', getDocHeightNoHeader(126, 'px'))
         state.loading = false
       })
     } catch (e) {
@@ -173,11 +175,11 @@ onBeforeMount(async () => {
   }
 })
 
-const onTreeNodeClick = (node: CodePreviewNode) => {
+const onTreeNodeClick = async (node: CodePreviewNode) => {
   if (node.code) {
     state.activeNode = node
-    nextTick(() => {
-      ;(codeEditor.value as any).refresh('100%', getDocHeight(152, 'px'))
+    await nextTick(() => {
+      codeEditor.value.refresh('100%', getDocHeightNoHeader(126, 'px'))
     })
   }
 }
@@ -254,6 +256,10 @@ const handleGenerate = async () => {
       font-size: var(--el-font-size-base);
       font-weight: normal;
       margin: 16px 16px 8px 16px;
+    }
+
+    .CodeMirror-scrollbar-filler {
+      display: none !important;
     }
   }
 }

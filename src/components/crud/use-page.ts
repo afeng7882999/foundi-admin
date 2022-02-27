@@ -4,6 +4,7 @@ import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 import { getTreeNode } from '@/utils/data-tree'
+import { resizeConst } from '@/hooks/use-layout-resize'
 
 export default function () {
   const pageState = reactive({
@@ -72,6 +73,16 @@ export default function () {
     }
   }
 
+  // 获取Doc高度，去除 PageHeader 高度
+  const getDocHeightNoHeader = (remove: number, unit?: string): number | string => {
+    const header = storeState.app.enableTags ? 0 : resizeConst.pageHeaderHeight
+    if (unit) {
+      return (storeState.app.docHeight - remove - header + unit) as string
+    } else {
+      return (storeState.app.docHeight - remove - header) as number
+    }
+  }
+
   // 是否显示页面标题
   const showPageHeader = computed(() => {
     return !storeState.app.enableTags
@@ -127,6 +138,7 @@ export default function () {
     getBodyWidth,
     getBodyHeight,
     getDocWidth,
+    getDocHeightNoHeader,
     getDocHeight,
     hasAuth,
     getPageMeta,

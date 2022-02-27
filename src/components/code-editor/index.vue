@@ -29,8 +29,7 @@ import 'codemirror/mode/css/css.js'
 import 'codemirror/mode/xml/xml.js'
 import 'codemirror/mode/sql/sql.js'
 import 'codemirror/mode/vue/vue.js'
-
-const DARK_MODE_THEME = 'mbo'
+import { DARK_MODE_THEME } from '@/components/code-editor/code-editor'
 
 const props = defineProps({
   modelValue: {
