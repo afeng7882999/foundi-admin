@@ -24,7 +24,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useExpandTransition from '@/components/transition/use-expand-transition'
+import useExpandTransition from '@/hooks/use-expand-transition'
 import { computed, inject, PropType, ref } from 'vue'
 import { TreeNodeDefault } from '@/utils/data-tree'
 import { RootMenuProvided } from '@/components/nav-menu/types'

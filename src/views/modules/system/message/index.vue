@@ -146,7 +146,7 @@ import { defineComponent, toRefs } from 'vue'
 import useList from '@/components/crud/use-list'
 import { Message, messageDel, messageDicts, messageExport, messageFields, messageList, messageQuery } from '@/api/system/message'
 import Edit from './edit.vue'
-import useExpandTransition from '@/components/transition/use-expand-transition'
+import useExpandTransition from '@/hooks/use-expand-transition'
 import usePage from '@/components/crud/use-page'
 
 export default defineComponent({

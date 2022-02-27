@@ -120,7 +120,7 @@ export default {
 import useList from '@/components/crud/use-list'
 import { loginLogFields, loginLogDicts, loginLogQuery, loginLogList, loginLogDel, loginLogExport, LoginLog } from '@/api/system/login-log'
 import Detail from './detail.vue'
-import useExpandTransition from '@/components/transition/use-expand-transition'
+import useExpandTransition from '@/hooks/use-expand-transition'
 import usePage from '@/components/crud/use-page'
 import { TableColumn } from '@/components/table/types'
 

@@ -131,7 +131,7 @@ export default {
 <script setup lang="ts">
 import useList from '@/components/crud/use-list'
 import { fileDel, fileDicts, fileFields, fileList, FileObj, fileQuery } from '@/api/system/file'
-import useExpandTransition from '@/components/transition/use-expand-transition'
+import useExpandTransition from '@/hooks/use-expand-transition'
 import { configListOss, Config } from '@/api/system/config'
 import Upload from './upload.vue'
 import { localOrRemoteUrl } from '@/utils/query'

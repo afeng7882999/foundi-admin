@@ -181,7 +181,7 @@ import {
   taskStop
 } from '@/api/system/task'
 import Edit from './edit.vue'
-import useExpandTransition from '@/components/transition/use-expand-transition'
+import useExpandTransition from '@/hooks/use-expand-transition'
 import { dictKey } from '@/utils/dict'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import usePage from '@/components/crud/use-page'

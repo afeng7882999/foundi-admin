@@ -28,7 +28,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
-import useExpandTransition from '@/components/transition/use-expand-transition'
+import useExpandTransition from '@/hooks/use-expand-transition'
 
 const BG_TYPE = ['primary', 'success', 'warning', 'danger', 'info']
 

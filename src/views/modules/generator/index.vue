@@ -197,7 +197,7 @@ export default {
 <script setup lang="ts">
 import { onActivated, ref } from 'vue'
 import useList from '@/components/crud/use-list'
-import useExpandTransition from '@/components/transition/use-expand-transition'
+import useExpandTransition from '@/hooks/use-expand-transition'
 import { download, GenTable, genTableDel, genTableList, genTableQuery } from '@/api/generator/gen-table'
 import GeneratorImport from './import.vue'
 import { useRoute, useRouter } from 'vue-router'

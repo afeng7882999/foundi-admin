@@ -152,7 +152,7 @@ import useList from '@/components/crud/use-list'
 import { configDel, configDicts, configExport, configFields, configList, configQuery, Config } from '@/api/system/config'
 import Edit from './edit.vue'
 import Detail from './detail.vue'
-import useExpandTransition from '@/components/transition/use-expand-transition'
+import useExpandTransition from '@/hooks/use-expand-transition'
 import { formatTimestamp } from '@/utils/time'
 import usePage from '@/components/crud/use-page'
 

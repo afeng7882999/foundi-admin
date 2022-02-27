@@ -127,7 +127,7 @@
 import { defineComponent, toRefs } from 'vue'
 import { Menu, menuDel, menuDicts, menuExport, menuFields, menuList, menuQuery, menuTreeFields } from '@/api/system/menu'
 import Edit from './edit.vue'
-import useExpandTransition from '@/components/transition/use-expand-transition'
+import useExpandTransition from '@/hooks/use-expand-transition'
 import { arrayToTree } from '@/utils/data-tree'
 import usePage from '@/components/crud/use-page'
 import useList from '@/components/crud/use-list'
