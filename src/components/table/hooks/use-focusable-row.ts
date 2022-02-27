@@ -110,9 +110,9 @@ const useFocusableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, f
   let rowFocusableInitialized = false
 
   const tryInit = () => {
-    if (option.rowFocusable && bodyWrapperElCo.value && !rowFocusableInitialized) {
+    if (option.rowFocusable && tableElCo.value && !rowFocusableInitialized) {
       createHighlightBox()
-      addResizeListener(bodyWrapperElCo.value as ResizableElement, resizeHighlightBox)
+      addResizeListener(tableElCo.value as ResizableElement, resizeHighlightBox)
       rowFocusableInitialized = true
     }
   }
@@ -126,8 +126,8 @@ const useFocusableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, f
   })
 
   onUnmounted(() => {
-    if (option.rowFocusable && bodyWrapperElCo.value) {
-      removeResizeListener(bodyWrapperElCo.value as ResizableElement, resizeHighlightBox)
+    if (option.rowFocusable && tableElCo.value) {
+      removeResizeListener(tableElCo.value as ResizableElement, resizeHighlightBox)
     }
   })
 
