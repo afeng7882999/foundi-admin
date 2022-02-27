@@ -58,7 +58,7 @@ export default {
 import { onMounted, reactive, ref, watch } from 'vue'
 import FdThemeSelect from '@/components/theme/theme-select.vue'
 import { DEFAULT_THEMES, themeProcess } from '@/components/theme/theme'
-import useLayoutResize from './use-resize'
+import useLayoutResize from '@/hooks/use-layout-resize'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 

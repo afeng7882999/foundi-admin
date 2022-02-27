@@ -29,7 +29,7 @@ import { setDocumentTheme } from 'element-plus-dynamic-theme/theme'
 import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import { AllState } from '@/store'
 import { useStore } from 'vuex'
-import useLayoutResize from './use-resize'
+import useLayoutResize from '@/hooks/use-layout-resize'
 import { DeviceType, SidebarMode } from '@/store/modules/app'
 
 const store = useStore<AllState>()
