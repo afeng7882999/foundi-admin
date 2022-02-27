@@ -1,0 +1,30 @@
+// el-color-picker
+.el-color-picker {
+  height: 32px;
+  
+  .el-color-picker__trigger {
+    width: 32px;
+    height: 32px;
+    border: none;
+    padding: 0;
+    
+    .el-color-picker__color {
+      border: none;
+      
+      .el-color-picker__color-inner {
+        width: 32px;
+        height: 32px;
+        border: 2px solid var(--el-border-color-base);
+        border-radius: var(--el-border-radius-base);
+      }
+    }
+    
+    &:hover {
+      .el-color-picker__color {
+        .el-color-picker__color-inner {
+          border-color: var(--el-border-color-hover);
+        }
+      }
+    }
+  }
+}

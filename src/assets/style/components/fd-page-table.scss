@@ -1,0 +1,128 @@
+@use '../variable' as *;
+
+// fd-page__table
+.fd-page__table {
+  width: 100%;
+  padding: 24px 16px 24px 16px;
+  display: flex;
+  flex-flow: column;
+  align-items: stretch;
+  background-color: var(--el-fill-base);
+  border-radius: var(--el-border-radius-base);
+  
+  &.is-bordered {
+    border: 1px solid var(--el-border-color-lighter);
+  }
+  
+  // style fix
+  .el-table th.gutter {
+    display: table-cell !important;
+  }
+  
+  .el-table thead {
+    color: var(--el-text-color-regular);
+  }
+  
+  // row focus box
+  .el-table {
+    .row-focus-box {
+      position: absolute;
+      display: none;
+      border: 1px solid var(--el-color-primary);
+      z-index: 5;
+      pointer-events: none;
+    }
+  }
+  
+  // custom column
+  .el-table {
+    th.el-table__cell.is-custom {
+      padding: 0;
+      
+      > .cell {
+        position: absolute;
+        display: flex;
+        padding: 0 8px;
+        top: 0;
+        bottom: 0;
+        align-items: stretch;
+      }
+    }
+  }
+  
+  // row density
+  .el-table .cell .el-checkbox {
+    height: 24px;
+  }
+  
+  .el-table .el-table__body tr td {
+    padding: 4px 0;
+  }
+  
+  &.is-den-high {
+    .el-table .el-table__body tr td {
+      padding: 2px 0;
+    }
+  }
+  
+  &.is-den-low {
+    .el-table .el-table__body tr td {
+      padding: 8px 0;
+    }
+  }
+  
+  // icon, button
+  .tb-icon {
+    margin-top: 4px;
+    font-size: $icon-size-middle;
+    
+    &.is-success {
+      color: var(--el-color-success);
+    }
+    
+    &.is-danger {
+      color: var(--el-color-danger);
+    }
+  }
+  
+  .tb-act-btn {
+    font-size: $icon-size-tiny;
+    height: 28px;
+    padding: 0 6px;
+    
+    &__caption {
+      margin-left: 4px;
+      margin-top: 2px;
+    }
+    
+    & + .el-button {
+      margin-left: 8px;
+    }
+  }
+  
+  .tb-avatar {
+    display: flex;
+    justify-items: center;
+  }
+}
+
+// sortable
+.sortable-drag {
+  cursor: move;
+  span {
+    display: flex;
+    font-size: 18px;
+    color: var(--el-border-color-base);
+  }
+}
+
+.sortable-ghost {
+  opacity: .3;
+  color: #fff !important;
+  background: var(--el-color-primary) !important;
+}
+
+// .el-overlay
+.el-overlay {
+  background-color: rgba(0, 0, 0, 0.3);
+}

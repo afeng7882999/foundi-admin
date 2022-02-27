@@ -1,0 +1,49 @@
+@use '../variable' as *;
+
+// fd-icon
+.fd-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+  
+  &.success {
+    color: var(--el-color-success);
+  }
+  
+  &.danger {
+    color: var(--el-color-danger);
+  }
+  
+  &:focus {
+    outline: 0;
+  }
+  
+  &.is-in-btn {
+    margin: -1px 4px -1px 0;
+    font-size: $icon-size-small;
+    
+    &.is-right {
+      margin: -1px 0 -1px 4px;
+    }
+  }
+  
+  &.is-tip {
+    color: var(--el-text-color-placeholder);
+  }
+  
+  &.is-loading {
+    animation: rotating 1s linear infinite;
+  }
+}
+
+// fd-icon in el-input
+.icon-in-input {
+  padding: 0 0 0 4px;
+  color: $color-text-primary;
+  font-size: 16px;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+}

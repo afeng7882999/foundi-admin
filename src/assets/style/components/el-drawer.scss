@@ -1,0 +1,14 @@
+@use '../variable' as *;
+
+// el-drawer
+.el-drawer {
+  box-shadow: $box-shadow-dark;
+  
+  .el-drawer__body {
+    display: flex;
+    
+    .drawer-content {
+      flex: 1;
+    }
+  }
+}

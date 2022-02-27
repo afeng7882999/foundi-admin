@@ -1,0 +1,27 @@
+@use '../variable' as *;
+
+// el-dialog
+.el-dialog {
+  box-shadow: $real-shadow-base;
+}
+
+// v-modal
+.v-modal {
+  background-color: $modal-background-color;
+}
+
+// fd-dialog-footer
+.fd-dialog-footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  
+  &__right {
+    margin-right: 8px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+}

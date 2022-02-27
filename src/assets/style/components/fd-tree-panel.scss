@@ -1,0 +1,21 @@
+// .el-tree
+.el-tree {
+  background: none;
+}
+
+// fd-tree-panel
+.fd-tree-panel {
+  width: 100%;
+  border: 1px solid var(--el-border-color-base);
+  border-radius: var(--el-border-radius-base);
+  padding: 8px;
+  
+  &__action {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--el-border-color-base);
+  }
+}

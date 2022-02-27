@@ -1,0 +1,38 @@
+@use '../variable' as *;
+@use '../mixin' as *;
+
+// fd-icon-btn
+.fd-icon-btn {
+  font-size: $icon-size-middle;
+  border-radius: var(--el-border-radius-base) !important;
+  border: none;
+  padding: 0 7px !important;
+  color: inherit;
+  background: none;
+  
+  &:hover {
+    color: inherit;
+    background-color: var(--el-color-primary-light-9);
+  }
+  
+  &:focus {
+    color: inherit;
+    background: none;
+    
+    &:hover {
+      color: inherit;
+      background-color: var(--el-color-primary-light-9);
+    }
+  }
+  
+  @include theme-d() {
+    &:hover {
+      background-color: var(--el-color-primary-light-5);
+    }
+    &:focus {
+      &:hover {
+        background-color: var(--el-color-primary-light-5);
+      }
+    }
+  }
+}
