@@ -13,7 +13,7 @@ export default {
 <script setup lang="ts">
 import { computed } from 'vue'
 
-const LOADING_ICON = 'loading-four'
+const LOADING_ICON = '#svg-graphics-spinner'
 
 const props = defineProps({
   icon: {
@@ -32,7 +32,7 @@ const props = defineProps({
 
 const iconName = computed(() => {
   if (props.loading) {
-    return `#svg-icons-${LOADING_ICON}`
+    return LOADING_ICON
   }
   return `#svg-icons-${props.icon}`
 })
