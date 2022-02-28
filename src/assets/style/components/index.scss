@@ -15,4 +15,5 @@
 @use './fd-page';
 @use './fd-page-table';
 @use './fd-tree-panel';
-@use 'nprogress';
+@use './nprogress';
+@use './el-loading';

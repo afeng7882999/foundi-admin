@@ -68,7 +68,7 @@
       </el-form>
     </div>
     <div class="fd-page__table is-bordered">
-      <el-table v-loading="state.loading" :data="state.data" @selection-change="onSelectionChange">
+      <el-table v-loading="state.loading" v-bind="tableAttrs">
         <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
@@ -170,18 +170,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        small
-        :background="true"
-        :current-page="state.current"
-        :page-count="state.total"
-        :page-size="state.size"
-        :page-sizes="[10, 20, 50, 100]"
-        :total="state.count"
-        layout="total, sizes, prev, pager, next, jumper"
-        @current-change="pageChange"
-        @size-change="sizeChange"
-      ></el-pagination>
+      <el-pagination v-bind="paginationAttrs"></el-pagination>
     </div>
     <generator-import ref="generatorImport" @generator-imported="getList"></generator-import>
     <el-backtop></el-backtop>
@@ -219,9 +208,10 @@ const stateOption = {
 const router = useRouter()
 const route = useRoute()
 
-const { mixRefs, mixState: state, mixMethods } = useList(stateOption)
+const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<GenTable>(stateOption)
 const { queryForm } = mixRefs
-const { getList, pageChange, sizeChange, queryList, resetQuery, del, onSelectionChange, toggleQueryForm } = mixMethods
+const { getList, queryList, resetQuery, del, toggleQueryForm } = mixMethods
+const { tableAttrs, paginationAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth, setViewTitle } = usePage()
 

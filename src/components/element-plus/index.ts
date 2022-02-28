@@ -83,7 +83,7 @@ import {
   // ElCheckTag,
   // ElResult,
   ElInfiniteScroll,
-  ElLoading,
+  // ElLoading,
   ElMessage,
   ElMessageBox,
   ElNotification,
@@ -177,7 +177,7 @@ const components = [
   ElDescriptionsItem
 ]
 
-const plugins = [ElInfiniteScroll, ElLoading, ElMessage, ElMessageBox, ElNotification, ElPopover]
+const plugins = [ElInfiniteScroll, ElMessage, ElMessageBox, ElNotification, ElPopover]
 
 export default function installElementPlus(app: App): void {
   components.forEach((component) => {

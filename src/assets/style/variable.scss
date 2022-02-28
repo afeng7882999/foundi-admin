@@ -56,7 +56,8 @@ $real-shadow-base: 0 16px 38px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0,
 // z-index
 $index-normal: 1 !default;
 $index-top: 1000 !default;
-$index-top-bg: 999 !default;
+$index-top-bg: 2001 !default;
+$sidebar-z-index: 2002 !default;
 $index-popper: 2000 !default;
 
 // font
@@ -118,4 +119,3 @@ $sidebar-active-color: $color-primary !default;
 $sidebar-active-text-color: rgba($color-white, 0.9) !default;
 $sidebar-active-hover-color: $color-primary !default;
 $sidebar-background-img: 'none' !default;
-$sidebar-z-index: 2001 !default;
