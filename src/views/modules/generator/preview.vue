@@ -80,6 +80,7 @@ import { strToU8 } from 'fflate'
 import { Indexable } from '@/types/global'
 import { ElTree } from 'element-plus'
 import { FdCodeEditorInst } from '@/components/code-editor/code-editor'
+import { useDebounceFn } from '@vueuse/core'
 
 const codeEditor = ref() as Ref<FdCodeEditorInst>
 const codeTree = ref() as Ref<InstanceType<typeof ElTree>>
@@ -202,7 +203,7 @@ const handleGenerate = async () => {
     })
     const zipped = fflate.zipSync(files)
     downloadFile(zipped, 'code_generated', 'zip')
-    state.genLoading = false
+    window.setTimeout(() => state.genLoading = false, 1500)
   } catch (e) {
     console.log(e)
     state.genLoading = false
