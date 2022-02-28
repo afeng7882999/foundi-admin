@@ -1,0 +1,52 @@
+@use 'src/assets/style/variable' as *;
+
+.fd-page-header {
+  display: flex;
+  margin: 8px 0 16px;
+  line-height: 24px;
+  
+  &__back {
+    display: flex;
+    align-items: center;
+    font-size: var(--el-font-size-base);
+    cursor: pointer;
+    
+    .fd-icon {
+      font-size: var(--el-font-size-base);
+      margin-right: 8px;
+    }
+  }
+  
+  &__title {
+    display: flex;
+    align-items: center;
+    font-size: var(--el-font-size-large);
+    color: var(--el-text-color-primary);
+    margin-right: 8px;
+    position: relative;
+    
+    .fd-icon {
+      font-size: $icon-size-large;
+      margin: 0 16px 0 8px;
+      align-self: center;
+    }
+    
+    span {
+      margin: 0;
+      text-align: center;
+      color: var(--el-text-color-primary);
+    }
+  }
+  
+  &__divider {
+    height: 24px;
+    margin: 0 8px;
+  }
+  
+  &__desc {
+    margin-left: 8px;
+    color: var(--el-text-color-secondary);
+    font-size: var(--el-font-size-small);
+    font-weight: 500;
+  }
+}

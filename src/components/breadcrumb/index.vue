@@ -79,36 +79,3 @@ const handleLink = (item: TreeNodeDefault) => {
   router.push(url)
 }
 </script>
-
-<style rel="stylesheet/scss" lang="scss">
-@use 'src/assets/style/variable.scss' as *;
-
-.fd-breadcrumb {
-  display: inline-block;
-  margin-left: 20px;
-  font-size: $app-title-font-size;
-  cursor: text;
-
-  &__no-redirect,
-  &__with-redirect {
-    padding: 8px 5px;
-  }
-
-  &__with-redirect {
-    color: var(--el-color-primary);
-    font-weight: normal;
-    border-radius: var(--el-border-radius-base);
-    cursor: pointer;
-
-    &:hover {
-      background: var(--el-color-primary-light-9);
-    }
-  }
-}
-
-.fd-breadcrumb.el-breadcrumb {
-  .el-breadcrumb__inner a {
-    font-weight: normal;
-  }
-}
-</style>

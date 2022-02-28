@@ -1,12 +1,22 @@
 <template>
-  <el-dialog custom-class="fd-captcha-dialog" v-model="state.visible" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false" :center="false" title="" :width="200" @closed="hideDialog">
+  <el-dialog
+    v-model="state.visible"
+    custom-class="fd-captcha-dialog"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    :show-close="false"
+    :center="false"
+    title=""
+    :width="200"
+    @closed="hideDialog"
+  >
     <div class="fd-captcha-dialog__img">
       <img :src="state.captchaUrl" alt="" @click="getCaptcha" />
     </div>
     <div v-if="state.captcha.extra" class="fd-captcha-dialog__extra">
       <span>{{ state.captcha.extra }}</span>
     </div>
-    <el-form :model="state.captcha" :rules="state.captchaRule" label-position="left" label-width="0px" ref="captchaForm">
+    <el-form ref="captchaForm" :model="state.captcha" :rules="state.captchaRule" label-position="left" label-width="0px">
       <el-form-item prop="code">
         <el-input v-model="state.captcha.code" auto-complete="off" placeholder="" @keyup.enter="submit">
           <template #prefix>

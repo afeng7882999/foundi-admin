@@ -59,21 +59,3 @@ const onIconListChanged = (val: string) => {
   icon.value = val
 }
 </script>
-
-<style lang="scss">
-@use 'src/assets/style/variable.scss' as *;
-
-.fd-icon-selector {
-  .el-input__inner {
-    padding-left: 40px;
-  }
-
-  &__icon {
-    display: flex;
-    height: 100%;
-    margin: 0 10px;
-    font-size: $icon-size-middle;
-    color: var(--el-text-color-regular);
-  }
-}
-</style>

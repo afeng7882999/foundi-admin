@@ -36,14 +36,3 @@ const svgClass = computed(() => {
   }
 })
 </script>
-
-<style lang="scss" scoped>
-.fd-svg-image {
-  fill: currentColor;
-  overflow: hidden;
-
-  &:focus {
-    outline: 0;
-  }
-}
-</style>

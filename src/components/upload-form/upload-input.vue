@@ -93,17 +93,3 @@ const clearValue = () => {
   emit('update:modelValue', '')
 }
 </script>
-
-<style lang="scss">
-@use 'src/assets/style/variable' as *;
-
-.fd-upload-input {
-  .el-input .el-input-group__append {
-    padding: 0;
-  }
-
-  &__trigger {
-    padding: 4px 18px;
-  }
-}
-</style>
