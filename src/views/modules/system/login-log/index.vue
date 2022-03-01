@@ -82,26 +82,25 @@
     </div>
     <div ref="tableWrapper" class="fd-page__table is-bordered">
       <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs">
-        <fd-column typ="selection"></fd-column>
-        <fd-column typ="datetime" label="访问时间" prop="operTime"></fd-column>
-        <fd-column typ="dict" label="类型" prop="typeDict" :dict="state.dicts.sysLoginLogType" width="50"></fd-column>
-        <fd-column typ="dict" label="登录方式" prop="authcTypeDict" :dict="state.dicts.sysAuthcType" width="100"></fd-column>
-        <fd-column label="用户账号" prop="userName" sortable width="150" @sort-changed="sortChanged"></fd-column>
-        <fd-column label="IP地址" prop="ip" width="130" sortable @sort-changed="sortChanged"></fd-column>
-        <fd-column label="地点" prop="location" width="150"></fd-column>
-        <fd-column label="浏览器" prop="browser" width="150"></fd-column>
-        <fd-column label="操作系统" prop="os" width="150"></fd-column>
-        <fd-column typ="dict" label="状态" prop="statusDict" :dict="state.dicts.sysLoginLogStatus" width="50"></fd-column>
-        <fd-column label="提示消息" prop="message"></fd-column>
-        <fd-column
-          typ="act"
+        <fd-selection-col></fd-selection-col>
+        <fd-datetime-col label="访问时间" prop="operTime"></fd-datetime-col>
+        <fd-dict-col label="类型" prop="typeDict" :dict="state.dicts.sysLoginLogType" width="60"></fd-dict-col>
+        <fd-dict-col label="登录方式" prop="authcTypeDict" :dict="state.dicts.sysAuthcType" width="100"></fd-dict-col>
+        <fd-col label="用户账号" prop="userName" sortable width="150" @sort-changed="sortChanged"></fd-col>
+        <fd-col label="IP地址" prop="ip" width="130" sortable @sort-changed="sortChanged"></fd-col>
+        <fd-col label="地点" prop="location" width="150"></fd-col>
+        <fd-col label="浏览器" prop="browser" width="150"></fd-col>
+        <fd-col label="操作系统" prop="os" width="150"></fd-col>
+        <fd-dict-col label="状态" prop="statusDict" :dict="state.dicts.sysLoginLogStatus" width="60"></fd-dict-col>
+        <fd-col label="提示消息" prop="message" width="100"></fd-col>
+        <fd-act-col
           detail="system:loginLog:list"
           del="system:loginLog:delete"
           header-align="center"
           width="90"
           @detail="showDetail"
           @del="del"
-        ></fd-column>
+        ></fd-act-col>
       </el-table>
       <el-pagination v-bind="paginationAttrs"></el-pagination>
     </div>
@@ -123,7 +122,6 @@ import Detail from './detail.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import usePage from '@/components/crud/use-page'
 import { TableColumn } from '@/components/table/types'
-
 const stateOption = {
   idField: loginLogFields.idField,
   listApi: loginLogList,
@@ -137,7 +135,7 @@ const stateOption = {
 
 const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<LoginLog>(stateOption)
 const { queryForm, table, detailDialog } = mixRefs
-const { queryList, resetQuery, toggleQueryForm, showDetail: _showDetail, del, exportData } = mixMethods
+const { queryList, resetQuery, toggleQueryForm, showDetail: _showDetail, sortChanged, del, exportData } = mixMethods
 const { tableAttrs, paginationAttrs, detailAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()

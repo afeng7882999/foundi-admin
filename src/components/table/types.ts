@@ -3,6 +3,7 @@ import { Ref } from '@vue/reactivity'
 export type ColType = 'default' | 'custom' | 'datetime' | 'dict' | 'list' | 'act' | 'selection' | 'icon'
 export type RowDensity = 'high' | 'default' | 'low'
 export const TABLE_ID_PREFIX = 'table_'
+
 export interface TableColumn {
   id: number
   visible: boolean
@@ -19,4 +20,29 @@ export interface TableSettingProp {
   columns: () => Ref<TableColumn[] | null>
   stripe: () => Ref<boolean | null>
   border: () => Ref<boolean | null>
+}
+
+export const COL_DEFAULT_PROPS = {
+  showOverflowTooltip: {
+    type: Boolean,
+    default: true
+  },
+  align: {
+    type: String,
+    default: 'left'
+  },
+  headerAlign: {
+    type: String,
+    default: 'left'
+  },
+  width: {
+    type: String,
+    default: ''
+  },
+  auth: String,
+  sortable: {
+    type: Boolean,
+    default: false
+  },
+  onSortChanged: Function
 }

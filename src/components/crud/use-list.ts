@@ -312,6 +312,14 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     await queryList()
   }
 
+  // 表格排序
+  const sortChanged = async ({ prop, order }: { prop: string; order: string }) => {
+    if (prop) {
+      mixState.sort[prop] = order
+      await getList()
+    }
+  }
+
   //===============================================================================
   // page
   //===============================================================================
@@ -627,6 +635,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       del,
       dictVal,
       exportData,
+      sortChanged,
       showEdit,
       showDetail,
       getParentName,

@@ -12,15 +12,15 @@
   </div>
   <div ref="operLogTbWrapper" class="fd-page__table is-bordered">
     <el-table ref="operLogTb" v-bind="tableAttrs" :data="state.operLogs" @row-click="onRowClick">
-      <fd-column typ="selection"></fd-column>
-      <fd-column typ="datetime" label="操作时间" prop="operTime" sortable></fd-column>
-      <fd-column label="请求URL" prop="operUrl" sortable width="500"></fd-column>
-      <fd-column label="请求方式" prop="requestMethod" width="90"></fd-column>
-      <fd-column typ="dict" label="操作状态" prop="statusDict" :dict="state.sysOperLogStatus" width="80"></fd-column>
-      <fd-column label="账号" prop="operUserName" width="150"></fd-column>
-      <fd-column label="IP" prop="operIp" width="150"></fd-column>
-      <fd-column label="地点" prop="operLocation"></fd-column>
-      <fd-column typ="act" :detail="true" :del="true" :edit="true" header-align="center" align="center" width="200">
+      <fd-selection-col></fd-selection-col>
+      <fd-datetime-col label="操作时间" prop="operTime" sortable></fd-datetime-col>
+      <fd-col label="请求URL" prop="operUrl" sortable width="500"></fd-col>
+      <fd-col label="请求方式" prop="requestMethod" width="90"></fd-col>
+      <fd-dict-col label="操作状态" prop="statusDict" :dict="state.sysOperLogStatus" width="80"></fd-dict-col>
+      <fd-col label="账号" prop="operUserName" width="150"></fd-col>
+      <fd-col label="IP" prop="operIp" width="150"></fd-col>
+      <fd-col label="地点" prop="operLocation"></fd-col>
+      <fd-act-col :detail="true" :del="true" :edit="true" header-align="center" align="center" width="200">
         <template #prefix>
           <el-tooltip :show-after="500" content="生成并预览代码" placement="top">
             <el-button class="tb-act-btn" plain size="small" type="warning">
@@ -29,7 +29,7 @@
             </el-button>
           </el-tooltip>
         </template>
-      </fd-column>
+      </fd-act-col>
     </el-table>
   </div>
   <el-backtop></el-backtop>
