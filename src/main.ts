@@ -18,6 +18,7 @@ import FdIconButton from '@/components/icon-button'
 import FdTreeSelect from '@/components/tree-select'
 import FdDrawer from '@/components/drawer'
 import FdTableAll from '@/components/table'
+import FdFormAll from '@/components/form'
 
 const app = createApp(App)
 app.use(store)
@@ -33,5 +34,6 @@ app
   .use(FdTreeSelect)
   .use(FdDrawer)
   .use(FdTableAll)
+  .use(FdFormAll)
 
 app.mount('#app')

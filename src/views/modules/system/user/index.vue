@@ -7,39 +7,11 @@
           <el-form ref="queryForm" :inline="true" :model="query" @keyup.enter="queryList()">
             <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
               <div v-show="queryFormShow" class="fd-page__query">
-                <el-form-item label="账号" prop="account">
-                  <el-input v-model="query.account" clearable placeholder="用户名、手机号、邮箱" />
-                </el-form-item>
-                <el-form-item label="角色" prop="roleId">
-                  <el-select v-model="query.roleId" multiple clearable placeholder="角色">
-                    <el-option v-for="item in roleTree" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="用户组" prop="groupId">
-                  <fd-tree-select
-                    v-model="query.groupId"
-                    :data-list="groupTree"
-                    :select-params="{ multiple: true, placeholder: '用户组' }"
-                    :tree-params="{ 'default-expand-all': true, 'check-strictly': true }"
-                  ></fd-tree-select>
-                </el-form-item>
-                <el-form-item label="状态" prop="statusDict">
-                  <el-select v-model="query.statusDict" clearable>
-                    <el-option
-                      v-for="item in dicts.sysUserStatus"
-                      :key="item.itemKey"
-                      :label="item.itemValue"
-                      :value="item.itemKey"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item>
-                  <el-button plain type="primary" @click="queryList">
-                    <fd-icon class="is-in-btn" icon="search"></fd-icon>
-                    查询
-                  </el-button>
-                  <el-button @click="resetQuery">重置</el-button>
-                </el-form-item>
+                <fd-item label="账号" prop="account" placeholder="用户名、手机号、邮箱" width="auto" />
+                <fd-item-list label="角色" prop="roleId" :list="roleTree" multi />
+                <fd-item-tree label="用户组" prop="groupId" :list="groupTree" multi />
+                <fd-item-dict label="状态" prop="statusDict" :dict="dicts.sysUserStatus" />
+                <fd-item-act @query="queryList" @reset="resetQuery" />
               </div>
             </transition>
           </el-form>
@@ -244,10 +216,11 @@ import { Role, roleList } from '@/api/system/role'
 import { localOrRemoteUrl } from '@/utils/query'
 import { useRouter } from 'vue-router'
 import usePage from '@/components/crud/use-page'
+import FdItemDict from "@/components/form/components/form-item/item-dict.vue";
 
 export default defineComponent({
   name: 'SystemUser',
-  components: { FdSplitPane, Edit, Detail },
+  components: {FdItemDict, FdSplitPane, Edit, Detail },
   setup() {
     const stateOption = {
       listApi: userList,

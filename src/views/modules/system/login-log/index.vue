@@ -5,55 +5,12 @@
       <el-form ref="queryForm" :inline="true" :model="state.query" @keyup.enter="queryList()">
         <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
           <div v-show="state.queryFormShow" class="fd-page__query">
-            <el-form-item label="访问时间" prop="operTime">
-              <el-date-picker
-                v-model="state.query.operTime"
-                :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
-                end-placeholder="结束日期"
-                format="YYYY-MM-DD"
-                value-format="x"
-                range-separator="-"
-                start-placeholder="开始日期"
-                type="daterange"
-                style="width: 280px"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item label="登录方式" prop="authcTypeDict">
-              <el-select v-model="state.query.authcTypeDict" clearable placeholder="请选择登录方式" style="width: 150px">
-                <el-option
-                  v-for="item in state.dicts.sysAuthcType"
-                  :key="item.itemKey"
-                  :label="item.itemValue"
-                  :value="item.itemKey"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="用户账号" prop="userName">
-              <el-input v-model="state.query.userName" clearable placeholder="请输入用户账号" style="width: 150px" />
-            </el-form-item>
-            <el-form-item label="IP地址" prop="ip">
-              <el-input v-model="state.query.ip" clearable placeholder="请输入IP地址" style="width: 150px" />
-            </el-form-item>
-            <el-form-item label="状态" prop="statusDict">
-              <el-select v-model="state.query.statusDict" clearable placeholder="请选择状态" style="width: 150px">
-                <el-option
-                  v-for="item in state.dicts.sysLoginLogStatus"
-                  :key="item.itemKey"
-                  :label="item.itemValue"
-                  :value="item.itemKey"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-button plain type="primary" @click="queryList">
-                <fd-icon icon="search" class="is-in-btn"></fd-icon>
-                查询
-              </el-button>
-              <el-button @click="resetQuery">
-                <fd-icon icon="refresh" class="is-in-btn"></fd-icon>
-                重置
-              </el-button>
-            </el-form-item>
+            <fd-item-datetime label="访客时间" prop="operTime" />
+            <fd-item-dict label="登录方式" prop="authcTypeDict" :dict="state.dicts.sysAuthcType" />
+            <fd-item label="用户账号" prop="userName" />
+            <fd-item label="IP地址" prop="ip" />
+            <fd-item-dict label="状态" prop="statusDict" :dict="state.dicts.sysLoginLogStatus" />
+            <fd-item-act @query="queryList" @reset="resetQuery" />
           </div>
         </transition>
       </el-form>
@@ -85,17 +42,17 @@
     </div>
     <div ref="tableWrapper" class="fd-page__table is-bordered">
       <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs">
-        <fd-col-selection></fd-col-selection>
-        <fd-col-datetime label="访问时间" prop="operTime"></fd-col-datetime>
-        <fd-col-dict label="类型" prop="typeDict" :dict="state.dicts.sysLoginLogType" width="60"></fd-col-dict>
-        <fd-col-dict label="登录方式" prop="authcTypeDict" :dict="state.dicts.sysAuthcType" width="100"></fd-col-dict>
-        <fd-col label="用户账号" prop="userName" sortable width="150" @sort-changed="sortChanged"></fd-col>
-        <fd-col label="IP地址" prop="ip" width="130" sortable @sort-changed="sortChanged"></fd-col>
-        <fd-col label="地点" prop="location" width="150"></fd-col>
-        <fd-col label="浏览器" prop="browser" width="150"></fd-col>
-        <fd-col label="操作系统" prop="os" width="150"></fd-col>
-        <fd-col-dict label="状态" prop="statusDict" :dict="state.dicts.sysLoginLogStatus" width="60"></fd-col-dict>
-        <fd-col label="提示消息" prop="message" width="100"></fd-col>
+        <fd-col-selection />
+        <fd-col-datetime label="访问时间" prop="operTime" />
+        <fd-col-dict label="类型" prop="typeDict" :dict="state.dicts.sysLoginLogType" width="60" />
+        <fd-col-dict label="登录方式" prop="authcTypeDict" :dict="state.dicts.sysAuthcType" width="100" />
+        <fd-col label="用户账号" prop="userName" sortable width="150" @sort-changed="sortChanged" />
+        <fd-col label="IP地址" prop="ip" width="130" sortable @sort-changed="sortChanged" />
+        <fd-col label="地点" prop="location" width="150" />
+        <fd-col label="浏览器" prop="browser" width="150" />
+        <fd-col label="操作系统" prop="os" width="150" />
+        <fd-col-dict label="状态" prop="statusDict" :dict="state.dicts.sysLoginLogStatus" width="60" />
+        <fd-col label="提示消息" prop="message" width="100" />
         <fd-col-act
           detail="system:loginLog:list"
           del="system:loginLog:delete"
@@ -103,7 +60,7 @@
           width="90"
           @detail="showDetail"
           @del="del"
-        ></fd-col-act>
+        />
       </el-table>
       <el-pagination v-bind="paginationAttrs"></el-pagination>
     </div>
@@ -125,6 +82,8 @@ import Detail from './detail.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import usePage from '@/components/crud/use-page'
 import { TableColumn } from '@/components/table/types'
+import FdQueryItemDatetime from '@/components/form/components/query-item/query-item-datetime.vue'
+import FdQueryItemDict from '@/components/form/components/query-item/query-item-dict.vue'
 const stateOption = {
   idField: loginLogFields.idField,
   listApi: loginLogList,
