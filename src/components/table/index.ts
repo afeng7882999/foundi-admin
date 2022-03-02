@@ -2,23 +2,23 @@ import { App } from 'vue'
 import FdTableSortHeader from './components/sort-header.vue'
 import FdTableSetting from './components/table-setting.vue'
 
-import FdActCol from './components/column/act-col.vue'
-import FdCustomCol from './components/column/custom-col.vue'
-import FdDatetimeCol from './components/column/datetime-col.vue'
-import FdCol from './components/column/default-col.vue'
-import FdDictCol from './components/column/dict-col.vue'
-import FdIconCol from './components/column/icon-col.vue'
-import FdSelectionCol from './components/column/selection-col.vue'
+import FdColAct from './components/column/col-act.vue'
+import FdColCustom from './components/column/col-custom.vue'
+import FdColDatetime from './components/column/col-datetime.vue'
+import FdCol from './components/column/col.vue'
+import FdColDict from './components/column/col-dict.vue'
+import FdColIcon from './components/column/col-icon.vue'
+import FdColSelection from './components/column/col-selection.vue'
 
 export default function install(app: App) {
   app.component(FdTableSortHeader.name, FdTableSortHeader)
   app.component(FdTableSetting.name, FdTableSetting)
 
-  app.component(FdActCol.name, FdActCol)
-  app.component(FdCustomCol.name, FdCustomCol)
-  app.component(FdDatetimeCol.name, FdDatetimeCol)
+  app.component(FdColAct.name, FdColAct)
+  app.component(FdColCustom.name, FdColCustom)
+  app.component(FdColDatetime.name, FdColDatetime)
   app.component(FdCol.name, FdCol)
-  app.component(FdDictCol.name, FdDictCol)
-  app.component(FdIconCol.name, FdIconCol)
-  app.component(FdSelectionCol.name, FdSelectionCol)
+  app.component(FdColDict.name, FdColDict)
+  app.component(FdColIcon.name, FdColIcon)
+  app.component(FdColSelection.name, FdColSelection)
 }

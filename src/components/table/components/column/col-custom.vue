@@ -20,7 +20,7 @@
 
 <script lang="ts">
 export default {
-  name: 'FdCustomCol',
+  name: 'FdColCustom',
   inheritAttrs: false
 }
 </script>

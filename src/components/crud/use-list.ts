@@ -13,7 +13,7 @@ import { EditDialog } from '@/components/crud/use-edit'
 import { ApiObj, ApiQuery } from '@/api'
 import { DictList } from '@/api/system/dict-item'
 import { AnyFunction, Indexable } from '@/types/global'
-import { MaybeRef } from '@vueuse/core'
+import { MaybeRef, useThrottleFn } from '@vueuse/core'
 
 export type ListStateOption<T extends ApiObj> = Partial<{
   // 是否是树表
@@ -477,22 +477,27 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   //===============================================================================
 
   // 通用导出
-  const exportData = async () => {
-    if (!mixState.exportApi) {
-      return
-    }
-    if (!(await mixHandlers.beforeGetList())) {
-      return
-    }
-    mixState.exportLoading = true
-    try {
-      await mixState.exportApi(mixState.exportTitle, mixState.params)
-      mixState.exportLoading = false
-    } catch (e) {
-      console.log(e)
-      mixState.exportLoading = false
-    }
-  }
+  const exportData = useThrottleFn(
+    async () => {
+      if (!mixState.exportApi) {
+        return
+      }
+      if (!(await mixHandlers.beforeGetList())) {
+        return
+      }
+      mixState.exportLoading = true
+      try {
+        await mixState.exportApi(mixState.exportTitle, mixState.params)
+        window.setTimeout(() => (mixState.exportLoading = false), 1500)
+      } catch (e) {
+        console.log(e)
+        mixState.exportLoading = false
+      }
+    },
+    1500,
+    false,
+    true
+  )
 
   //===============================================================================
   // edit dialog

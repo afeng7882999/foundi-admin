@@ -10,7 +10,7 @@
 
 <script lang="ts">
 export default {
-  name: 'FdIconCol',
+  name: 'FdColIcon',
   inheritAttrs: false
 }
 </script>

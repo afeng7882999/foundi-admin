@@ -70,7 +70,10 @@
           删除
         </el-button>
         <div class="action-right">
-          <el-button v-show="hasAuth('system:loginLog:export')" v-waves plain @click="exportData">导出数据</el-button>
+          <el-button v-show="hasAuth('system:loginLog:export')" v-waves plain @click="exportData">
+            <fd-icon class="is-in-btn" icon="download" :loading="state.exportLoading"></fd-icon>
+            导出数据
+          </el-button>
           <el-divider direction="vertical" class="action-divider"></el-divider>
           <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
@@ -82,25 +85,25 @@
     </div>
     <div ref="tableWrapper" class="fd-page__table is-bordered">
       <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs">
-        <fd-selection-col></fd-selection-col>
-        <fd-datetime-col label="访问时间" prop="operTime"></fd-datetime-col>
-        <fd-dict-col label="类型" prop="typeDict" :dict="state.dicts.sysLoginLogType" width="60"></fd-dict-col>
-        <fd-dict-col label="登录方式" prop="authcTypeDict" :dict="state.dicts.sysAuthcType" width="100"></fd-dict-col>
+        <fd-col-selection></fd-col-selection>
+        <fd-col-datetime label="访问时间" prop="operTime"></fd-col-datetime>
+        <fd-col-dict label="类型" prop="typeDict" :dict="state.dicts.sysLoginLogType" width="60"></fd-col-dict>
+        <fd-col-dict label="登录方式" prop="authcTypeDict" :dict="state.dicts.sysAuthcType" width="100"></fd-col-dict>
         <fd-col label="用户账号" prop="userName" sortable width="150" @sort-changed="sortChanged"></fd-col>
         <fd-col label="IP地址" prop="ip" width="130" sortable @sort-changed="sortChanged"></fd-col>
         <fd-col label="地点" prop="location" width="150"></fd-col>
         <fd-col label="浏览器" prop="browser" width="150"></fd-col>
         <fd-col label="操作系统" prop="os" width="150"></fd-col>
-        <fd-dict-col label="状态" prop="statusDict" :dict="state.dicts.sysLoginLogStatus" width="60"></fd-dict-col>
+        <fd-col-dict label="状态" prop="statusDict" :dict="state.dicts.sysLoginLogStatus" width="60"></fd-col-dict>
         <fd-col label="提示消息" prop="message" width="100"></fd-col>
-        <fd-act-col
+        <fd-col-act
           detail="system:loginLog:list"
           del="system:loginLog:delete"
           header-align="center"
           width="90"
           @detail="showDetail"
           @del="del"
-        ></fd-act-col>
+        ></fd-col-act>
       </el-table>
       <el-pagination v-bind="paginationAttrs"></el-pagination>
     </div>

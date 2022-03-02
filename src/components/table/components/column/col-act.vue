@@ -26,7 +26,7 @@
 
 <script lang="ts">
 export default {
-  name: 'FdActCol',
+  name: 'FdColAct',
   inheritAttrs: false
 }
 </script>

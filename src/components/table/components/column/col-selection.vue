@@ -6,7 +6,7 @@
 
 <script lang="ts">
 export default {
-  name: 'FdSelectionCol',
+  name: 'FdColSelection',
   inheritAttrs: false
 }
 </script>

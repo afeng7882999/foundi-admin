@@ -80,7 +80,7 @@ import { strToU8 } from 'fflate'
 import { Indexable } from '@/types/global'
 import { ElTree } from 'element-plus'
 import { FdCodeEditorInst } from '@/components/code-editor/code-editor'
-import { useDebounceFn } from '@vueuse/core'
+import { useThrottleFn } from '@vueuse/core'
 
 const codeEditor = ref() as Ref<FdCodeEditorInst>
 const codeTree = ref() as Ref<InstanceType<typeof ElTree>>
@@ -194,7 +194,7 @@ const close = () => {
 
 const { hasAuth } = usePage()
 
-const handleGenerate = async () => {
+const handleGenerate = useThrottleFn(() => {
   state.genLoading = true
   const files = {} as Indexable
   try {
@@ -208,7 +208,7 @@ const handleGenerate = async () => {
     console.log(e)
     state.genLoading = false
   }
-}
+}, 1500, false, true)
 </script>
 
 <style lang="scss">

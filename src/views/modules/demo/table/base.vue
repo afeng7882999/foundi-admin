@@ -12,15 +12,15 @@
   </div>
   <div ref="operLogTbWrapper" class="fd-page__table is-bordered">
     <el-table ref="operLogTb" v-bind="tableAttrs" :data="state.operLogs" @row-click="onRowClick">
-      <fd-selection-col></fd-selection-col>
-      <fd-datetime-col label="操作时间" prop="operTime" sortable></fd-datetime-col>
+      <fd-col-selection></fd-col-selection>
+      <fd-col-datetime label="操作时间" prop="operTime" sortable></fd-col-datetime>
       <fd-col label="请求URL" prop="operUrl" sortable width="500"></fd-col>
       <fd-col label="请求方式" prop="requestMethod" width="90"></fd-col>
-      <fd-dict-col label="操作状态" prop="statusDict" :dict="state.sysOperLogStatus" width="80"></fd-dict-col>
+      <fd-col-dict label="操作状态" prop="statusDict" :dict="state.sysOperLogStatus" width="80"></fd-col-dict>
       <fd-col label="账号" prop="operUserName" width="150"></fd-col>
       <fd-col label="IP" prop="operIp" width="150"></fd-col>
       <fd-col label="地点" prop="operLocation"></fd-col>
-      <fd-act-col :detail="true" :del="true" :edit="true" header-align="center" align="center" width="200">
+      <fd-col-act :detail="true" :del="true" :edit="true" header-align="center" align="center" width="200">
         <template #prefix>
           <el-tooltip :show-after="500" content="生成并预览代码" placement="top">
             <el-button class="tb-act-btn" plain size="small" type="warning">
@@ -29,7 +29,7 @@
             </el-button>
           </el-tooltip>
         </template>
-      </fd-act-col>
+      </fd-col-act>
     </el-table>
   </div>
   <el-backtop></el-backtop>
