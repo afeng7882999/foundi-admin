@@ -33,7 +33,6 @@ export default {
 
 <script setup lang="ts">
 import { computed, PropType } from 'vue'
-import { isBoolean } from '@vueuse/core'
 import { Indexable } from '@/types/global'
 import { COL_DEFAULT_PROPS } from '@/components/table/types'
 import useColumn from '@/components/table/hooks/use-column'
@@ -56,7 +55,7 @@ const props = defineProps({
 
 const emit = defineEmits(['detail', 'edit', 'del'])
 
-const { visible, hasAuth } = useColumn(props)
+const { visible, booleanOrAuth } = useColumn(props)
 
 const widthCo = computed(() => {
   if (props.width) {
@@ -66,33 +65,15 @@ const widthCo = computed(() => {
 })
 
 const detailVisible = computed(() => {
-  if (isBoolean(props.detail)) {
-    return props.detail
-  }
-  if (props.detail) {
-    return hasAuth(props.detail)
-  }
-  return true
+  return booleanOrAuth(props.detail)
 })
 
 const editVisible = computed(() => {
-  if (isBoolean(props.edit)) {
-    return props.edit
-  }
-  if (props.edit) {
-    return hasAuth(props.edit)
-  }
-  return true
+  return booleanOrAuth(props.edit)
 })
 
 const delVisible = computed(() => {
-  if (isBoolean(props.del)) {
-    return props.del
-  }
-  if (props.del) {
-    return hasAuth(props.del)
-  }
-  return true
+  return booleanOrAuth(props.del)
 })
 
 const actionEmit = (event: 'detail' | 'edit' | 'del', row: Indexable, idx: number) => {
