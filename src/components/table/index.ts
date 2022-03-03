@@ -1,6 +1,5 @@
 import { App } from 'vue'
 import FdTableSortHeader from './components/sort-header.vue'
-import FdTableSetting from './components/table-setting.vue'
 
 import FdColAct from './components/column/col-act.vue'
 import FdColCustom from './components/column/col-custom.vue'
@@ -12,7 +11,6 @@ import FdColSelection from './components/column/col-selection.vue'
 
 export default function install(app: App) {
   app.component(FdTableSortHeader.name, FdTableSortHeader)
-  app.component(FdTableSetting.name, FdTableSetting)
 
   app.component(FdColAct.name, FdColAct)
   app.component(FdColCustom.name, FdColCustom)
