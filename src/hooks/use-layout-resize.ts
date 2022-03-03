@@ -4,7 +4,10 @@ import { AllState } from '@/store'
 import { DeviceType } from '@/store/modules/app'
 
 export const resizeConst = {
-  width: 1024,
+  sm: 768,
+  md: 992,
+  lg: 1200,
+  xl: 1920,
   ratio: 3,
   titleHeight: 48,
   tabHeight: 48,
@@ -69,7 +72,7 @@ export default function useLayoutResize() {
   }
 
   const isMobile = () => {
-    return bodyRect.width - resizeConst.ratio < resizeConst.width
+    return bodyRect.width - resizeConst.ratio < resizeConst.md
   }
 
   return {
