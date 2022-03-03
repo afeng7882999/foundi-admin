@@ -1,5 +1,5 @@
 import { computed, nextTick, onMounted, reactive, ref, unref } from 'vue'
-import { merge } from 'lodash-es'
+import { merge, omit } from 'lodash-es'
 import { ElForm, ElMessage, ElMessageBox } from 'element-plus'
 import useDict from './use-dict'
 import { scrollDocToTop } from '@/utils/smooth-scroll'
@@ -478,7 +478,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 通用导出
   const exportData = useThrottleFn(
-    async () => {
+    async (range: 'all' | 'page' = 'page') => {
       if (!mixState.exportApi) {
         return
       }
@@ -486,8 +486,21 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         return
       }
       mixState.exportLoading = true
+
+      let queryParams = getQueryParam()
+      if (range === 'all') {
+        queryParams = omit(queryParams, ['current', 'size'])
+      }
+
       try {
-        await mixState.exportApi(mixState.exportTitle, mixState.params)
+        if (range === 'all') {
+          await ElMessageBox.confirm(`是否导出全部页数据？`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+        }
+        await mixState.exportApi(mixState.exportTitle, queryParams)
         window.setTimeout(() => (mixState.exportLoading = false), 1500)
       } catch (e) {
         console.log(e)
