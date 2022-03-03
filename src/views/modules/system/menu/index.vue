@@ -129,7 +129,7 @@ import { Menu, menuDel, menuDicts, menuExport, menuFields, menuList, menuQuery, 
 import Edit from './edit.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { arrayToTree } from '@/utils/data-tree'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 import useList from '@/components/crud/use-list'
 
 export default defineComponent({

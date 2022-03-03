@@ -21,7 +21,7 @@ export default {
 <script setup lang="ts">
 import BaseTableDemo from './base.vue'
 import TreeTableDemo from './tree.vue'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 </script>

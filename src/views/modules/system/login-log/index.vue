@@ -1,5 +1,5 @@
 <template>
-  <div ref="moduleRoot" :style="docMinHeight" class="page-system-loginLog fd-page">
+  <div :style="docMinHeight" class="page-system-loginLog fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="state.query" @keyup.enter="queryList()">
@@ -15,6 +15,13 @@
         </transition>
       </el-form>
       <div class="fd-page__action">
+        <fd-page-act
+          del="system:loginLog:delete"
+          export="system:loginLog:export"
+          @del="del()"
+          @export="exportData"
+          @export-all="exportData('all')"
+        ></fd-page-act>
         <el-button
           v-show="hasAuth('system:loginLog:delete')"
           v-waves
@@ -80,10 +87,8 @@ import useList from '@/components/crud/use-list'
 import { loginLogFields, loginLogDicts, loginLogQuery, loginLogList, loginLogDel, loginLogExport, LoginLog } from '@/api/system/login-log'
 import Detail from './detail.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 import { TableColumn } from '@/components/table/types'
-import FdQueryItemDatetime from '@/components/form/components/query-item/query-item-datetime.vue'
-import FdQueryItemDict from '@/components/form/components/query-item/query-item-dict.vue'
 const stateOption = {
   idField: loginLogFields.idField,
   listApi: loginLogList,

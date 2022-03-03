@@ -125,7 +125,7 @@ import useExpandTransition from '@/hooks/use-expand-transition'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { groupList, Group } from '@/api/system/group'
 import { Menu, menuList } from '@/api/system/menu'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 
 const stateOption = {
   idField: roleFields.idField,

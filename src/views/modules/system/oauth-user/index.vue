@@ -117,7 +117,7 @@ import { oauthUserDel, oauthUserDicts, oauthUserExport, oauthUserFields, oauthUs
 import Edit from './edit.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 import { Message } from '@/api/system/message'
 
 export default defineComponent({

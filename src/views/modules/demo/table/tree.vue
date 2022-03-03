@@ -1,12 +1,6 @@
 <template>
   <div class="fd-page__form">
-    <el-form>
-      <div class="fd-page__action">
-        <div class="action-right">
-          <fd-table-setting :option="tableSettingOpt"></fd-table-setting>
-        </div>
-      </div>
-    </el-form>
+    <fd-page-act :table-option="tableSettingOpt" />
   </div>
   <div ref="menuTbWrapper" class="fd-page__table is-bordered">
     <el-table ref="menuTb" v-bind="tableAttrs" :data="state.menus" row-key="id">

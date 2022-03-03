@@ -78,7 +78,7 @@ import {
   userMessageDicts,
   userMessageQuery
 } from '@/api/system/message'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 
 export default defineComponent({
   name: 'SystemMessage',

@@ -65,7 +65,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 import { downloadFile, getFileExt } from '@/utils/file'
 import { computed, nextTick, onBeforeMount, reactive, ref, Ref } from 'vue'
 import FdCodeEditor from '@/components/code-editor/index.vue'

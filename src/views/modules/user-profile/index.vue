@@ -219,7 +219,7 @@ import {
 import { groupList, Group } from '@/api/system/group'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 import { getQQUrl, getWeiboUrl } from '@/api/system/login'
 import settings from '@/app/settings'
 import { localOrRemoteUrl } from '@/utils/query'

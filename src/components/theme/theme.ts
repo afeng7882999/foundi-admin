@@ -99,6 +99,7 @@ export const DEFAULT_THEMES: Theme[] = [
     '--fd-sidebar-active-hover-color': '#79a598',
     '--el-border-radius-base': '0px',
     '--el-border-radius-small': '0px'
+    // '--el-body-bg-color': '#ffffff'
   }
 ]
 

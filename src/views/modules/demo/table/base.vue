@@ -1,14 +1,16 @@
 <template>
   <div class="fd-page__form">
-    <el-form>
-      <div class="fd-page__action">
-        <div class="action-right">
-          <el-button v-waves plain @click.stop="onPrev">上一项</el-button>
-          <el-button v-waves plain @click.stop="onNext">下一项</el-button>
-          <fd-table-setting :option="tableSettingOpt"></fd-table-setting>
-        </div>
-      </div>
-    </el-form>
+    <fd-page-act :table-option="tableSettingOpt" :export="true" :query="false">
+      <template #buttons>
+        <el-button v-waves plain class="hidden-sm-and-down" @click.stop="onPrev">上一项</el-button>
+        <el-button v-waves plain class="hidden-sm-and-down" @click.stop="onNext">下一项</el-button>
+      </template>
+      <template #menu>
+        <fd-contextmenu-item label="上一项" class="hidden-md-and-up" @click="onPrev"></fd-contextmenu-item>
+        <fd-contextmenu-item label="下一项" class="hidden-md-and-up" @click="onNext"></fd-contextmenu-item>
+        <fd-contextmenu-item class="hidden-md-and-up" divider></fd-contextmenu-item>
+      </template>
+    </fd-page-act>
   </div>
   <div ref="operLogTbWrapper" class="fd-page__table is-bordered">
     <el-table ref="operLogTb" v-bind="tableAttrs" :data="state.operLogs" @row-click="onRowClick">

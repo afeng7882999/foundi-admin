@@ -35,7 +35,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, ref, useSlots } from 'vue'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 
 const props = defineProps({
   title: {

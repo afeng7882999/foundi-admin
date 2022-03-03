@@ -111,7 +111,7 @@ import useExpandTransition from '@/hooks/use-expand-transition'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { dictGetOne } from '@/api/system/dict'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 
 const contextMenu = ref()
 

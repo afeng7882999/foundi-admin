@@ -74,7 +74,7 @@ export default {
 <script setup lang="ts">
 import { groupFields, groupTreeFields, groupList, groupDel, groupExport, Group } from '@/api/system/group'
 import Edit from './edit.vue'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 import useList from '@/components/crud/use-list'
 
 const stateOption = {

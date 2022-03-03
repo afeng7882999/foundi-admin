@@ -10,7 +10,7 @@ export default {
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 
 const props = defineProps({
   theUrl: String

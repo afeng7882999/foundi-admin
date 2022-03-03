@@ -38,7 +38,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { reactive } from 'vue'
 

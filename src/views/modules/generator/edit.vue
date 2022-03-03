@@ -290,7 +290,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, onBeforeMount, reactive, ref } from 'vue'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 import { filterTree, TreeNodeDefault } from '@/utils/data-tree'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'

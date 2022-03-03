@@ -133,7 +133,7 @@ import Detail from './detail.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { useRouter } from 'vue-router'
 import FdSplitPane from '@/components/split-pane/index.vue'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 
 const stateOption = {
   idField: dictFields.idField,

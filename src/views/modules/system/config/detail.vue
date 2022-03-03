@@ -54,7 +54,7 @@ import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/us
 import { Config, configFields } from '@/api/system/config'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { formatJson } from '@/utils/lang'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 
 const stateOption = {
   ifEditable: true,

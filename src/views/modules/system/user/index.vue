@@ -215,7 +215,7 @@ import { arrayToTree } from '@/utils/data-tree'
 import { Role, roleList } from '@/api/system/role'
 import { localOrRemoteUrl } from '@/utils/query'
 import { useRouter } from 'vue-router'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 import FdItemDict from "@/components/form/components/form-item/item-dict.vue";
 
 export default defineComponent({

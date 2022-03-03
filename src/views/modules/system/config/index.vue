@@ -154,7 +154,7 @@ import Edit from './edit.vue'
 import Detail from './detail.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { formatTimestamp } from '@/utils/time'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 
 const stateOption = {
   idField: configFields.idField,

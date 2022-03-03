@@ -136,7 +136,7 @@ import { configListOss, Config } from '@/api/system/config'
 import Upload from './upload.vue'
 import { localOrRemoteUrl } from '@/utils/query'
 import { formatTimestamp } from '@/utils/time'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
 

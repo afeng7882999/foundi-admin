@@ -17,6 +17,7 @@ import FdContextmenu from '@/components/contextmenu'
 import FdIconButton from '@/components/icon-button'
 import FdTreeSelect from '@/components/tree-select'
 import FdDrawer from '@/components/drawer'
+import FdPageAll from '@/components/page'
 import FdTableAll from '@/components/table'
 import FdFormAll from '@/components/form'
 
@@ -33,6 +34,7 @@ app
   .use(FdIconButton)
   .use(FdTreeSelect)
   .use(FdDrawer)
+  .use(FdPageAll)
   .use(FdTableAll)
   .use(FdFormAll)
 

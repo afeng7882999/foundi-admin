@@ -19,7 +19,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 import FdUploadInput from '@/components/upload-form/upload-input.vue'
 import FdUploadImg from '@/components/upload-form/upload-img.vue'
 import { ref } from 'vue'

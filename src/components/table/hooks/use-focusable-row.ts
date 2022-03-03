@@ -3,7 +3,7 @@ import { ElTable } from 'element-plus'
 import { addResizeListener, removeResizeListener, ResizableElement } from '@/utils/resize-event'
 import { computed, onMounted, onUnmounted, onUpdated } from 'vue'
 import { getDocumentTop, scrollDocH } from '@/utils/smooth-scroll'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 import { merge } from 'lodash-es'
 import { unrefElement, VueInstance } from '@vueuse/core'
 

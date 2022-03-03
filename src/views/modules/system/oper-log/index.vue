@@ -223,7 +223,7 @@ import { OperLog, operLogDel, operLogDicts, operLogExport, operLogFields, operLo
 import useExpandTransition from '@/hooks/use-expand-transition'
 import Detail from './detail.vue'
 import { formatTimestamp } from '@/utils/time'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 
 const stateOption: ListStateOption<OperLog> = {
   idField: operLogFields.idField,

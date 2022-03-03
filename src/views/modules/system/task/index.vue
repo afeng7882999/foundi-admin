@@ -184,7 +184,7 @@ import Edit from './edit.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { dictKey } from '@/utils/dict'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import usePage from '@/components/crud/use-page'
+import usePage from '@/components/page/use-page'
 
 export default defineComponent({
   name: 'SystemTask',
