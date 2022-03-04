@@ -14,7 +14,7 @@
         <span class="title-text">{{ title }}</span>
         <fd-icon-button class="title-button" icon="close-small" @click="hide"></fd-icon-button>
       </div>
-      <el-scrollbar :style="scrollbarStyle">
+      <el-scrollbar class="fd-drawer__scroll" :style="scrollbarStyle">
         <div class="fd-drawer__main">
           <slot />
         </div>
