@@ -1,14 +1,18 @@
-import { TableColumn, TableSettingProp } from '@/components/table/types'
-import { ExtractPropTypes, PropType, ref } from 'vue'
+import { RowDensity, TableColumn, TableSettingProp } from '@/components/table/types'
+import { ref } from 'vue'
 
-const useTableSetting = (props: Readonly<ExtractPropTypes<{ tableOption: PropType<TableSettingProp> }>>) => {
+const useTableSetting = (tableOption: TableSettingProp) => {
   const sortColumnDialog = ref()
 
-  const expandAll = props.tableOption?.expandAll()
-  const rowDensity = props.tableOption?.rowDensity()
-  const columns = props.tableOption?.columns()
-  const stripe = props.tableOption?.stripe()
-  const border = props.tableOption?.border()
+  const expandAll = tableOption.expandAll()
+  const rowDensity = tableOption.rowDensity()
+  const columns = tableOption.columns()
+  const stripe = tableOption.stripe()
+  const border = tableOption.border()
+
+  const setRowDensity = (density: RowDensity) => {
+    rowDensity != undefined && (rowDensity.value = density)
+  }
 
   const toggleExpandAll = () => {
     expandAll !== undefined && (expandAll.value = !expandAll.value)
@@ -39,6 +43,7 @@ const useTableSetting = (props: Readonly<ExtractPropTypes<{ tableOption: PropTyp
     columns,
     stripe,
     border,
+    setRowDensity,
     toggleExpandAll,
     toggleStripe,
     toggleBorder,

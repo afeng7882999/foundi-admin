@@ -10,7 +10,7 @@ import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus/es'
 import { DetailDialog } from '@/components/crud/use-detail'
 import { EditDialog } from '@/components/crud/use-edit'
-import { ApiObj, ApiQuery } from '@/api'
+import { ApiObj, ApiQuery, ExportRange } from '@/api'
 import { DictList } from '@/api/system/dict-item'
 import { AnyFunction, Indexable } from '@/types/global'
 import { MaybeRef, useThrottleFn } from '@vueuse/core'
@@ -478,7 +478,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 通用导出
   const exportData = useThrottleFn(
-    async (range: 'all' | 'page' = 'page') => {
+    async (range: ExportRange = 'page') => {
       if (!mixState.exportApi) {
         return
       }
@@ -486,11 +486,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         return
       }
       mixState.exportLoading = true
-
-      let queryParams = getQueryParam()
-      if (range === 'all') {
-        queryParams = omit(queryParams, ['current', 'size'])
-      }
 
       try {
         if (range === 'all') {
@@ -500,7 +495,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
             type: 'warning'
           })
         }
-        await mixState.exportApi(mixState.exportTitle, queryParams)
+        await mixState.exportApi(mixState.exportTitle, getQueryParam(), range)
         window.setTimeout(() => (mixState.exportLoading = false), 1500)
       } catch (e) {
         console.log(e)
@@ -611,6 +606,19 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     defaultExpandAll: mixState.defaultExpandAll
   })
 
+  // fd-page-act默认参数
+  const pageActAttrs = computed(() => {
+    return {
+      tableOption: {
+        expandAll: () => expandAll,
+        rowDensity: () => rowDensity,
+        columns: () => columns,
+        stripe: () => stripe,
+        border: () => border
+      }
+    }
+  })
+
   // el-table默认参数
   const tableAttrs = computed(() => {
     const result = {
@@ -667,7 +675,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     mixAttrs: {
       tableAttrs,
       paginationAttrs,
-      detailAttrs
+      detailAttrs,
+      pageActAttrs
     }
   }
 }

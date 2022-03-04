@@ -14,38 +14,14 @@
           </div>
         </transition>
       </el-form>
-      <div class="fd-page__action">
-        <fd-page-act
-          del="system:loginLog:delete"
-          export="system:loginLog:export"
-          @del="del()"
-          @export="exportData"
-          @export-all="exportData('all')"
-        ></fd-page-act>
-        <el-button
-          v-show="hasAuth('system:loginLog:delete')"
-          v-waves
-          :disabled="state.selectedNodes.length <= 0"
-          plain
-          type="danger"
-          @click="del()"
-        >
-          <fd-icon class="is-in-btn" icon="delete"></fd-icon>
-          删除
-        </el-button>
-        <div class="action-right">
-          <el-button v-show="hasAuth('system:loginLog:export')" v-waves plain @click="exportData">
-            <fd-icon class="is-in-btn" icon="download" :loading="state.exportLoading"></fd-icon>
-            导出数据
-          </el-button>
-          <el-divider direction="vertical" class="action-divider"></el-divider>
-          <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
-            <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
-              <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
-            </el-badge>
-          </el-tooltip>
-        </div>
-      </div>
+      <fd-page-act
+        del="system:loginLog:delete"
+        export="system:loginLog:export"
+        v-bind="pageActAttrs"
+        @del="del()"
+        @export="exportData"
+        @export-all="exportData('all')"
+      ></fd-page-act>
     </div>
     <div ref="tableWrapper" class="fd-page__table is-bordered">
       <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs">
@@ -103,7 +79,7 @@ const stateOption = {
 const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<LoginLog>(stateOption)
 const { queryForm, table, detailDialog } = mixRefs
 const { queryList, resetQuery, toggleQueryForm, showDetail: _showDetail, sortChanged, del, exportData } = mixMethods
-const { tableAttrs, paginationAttrs, detailAttrs } = mixAttrs
+const { tableAttrs, paginationAttrs, detailAttrs, pageActAttrs } = mixAttrs
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 

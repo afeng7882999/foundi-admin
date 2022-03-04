@@ -15,7 +15,6 @@
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <el-divider v-if="delVisible" class="action-divider" direction="vertical"></el-divider>
         <slot name="buttons" />
         <el-button v-show="createVisible" v-waves plain type="primary" @click="emit('create')">
           <fd-icon class="is-in-btn" icon="plus"></fd-icon>
@@ -46,9 +45,15 @@
           ></fd-contextmenu-item>
           <fd-contextmenu-item icon="table" :label="border ? '隐藏边框' : '显示边框'" @click="toggleBorder"></fd-contextmenu-item>
           <fd-contextmenu-submenu icon="table-row" label="表格行密度">
-            <fd-contextmenu-item v-model:radio-value="rowDensity" act-as="radioGroup" radio-label="high">高</fd-contextmenu-item>
-            <fd-contextmenu-item v-model:radio-value="rowDensity" act-as="radioGroup" radio-label="low">低</fd-contextmenu-item>
-            <fd-contextmenu-item v-model:radio-value="rowDensity" act-as="radioGroup" radio-label="default">默认</fd-contextmenu-item>
+            <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="high" @click="setRowDensity('high')">
+              高
+            </fd-contextmenu-item>
+            <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="low" @click="setRowDensity('low')">
+              低
+            </fd-contextmenu-item>
+            <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="default" @click="setRowDensity('default')">
+              默认
+            </fd-contextmenu-item>
           </fd-contextmenu-submenu>
           <fd-contextmenu-item icon="table-col" label="表格列设置" @click="showSortColumnDialog"></fd-contextmenu-item>
         </fd-contextmenu>
@@ -69,7 +74,7 @@ import { computed, PropType, ref } from 'vue'
 import usePage from '@/components/page/use-page'
 import { isBoolean } from 'lodash-es'
 import { TableSettingProp } from '@/components/table/types'
-import useTableSetting from '@/components/page/use-table-setting'
+import useTableSetting from '@/components/table/hooks/use-table-setting'
 import FdSortColumnDialog from '@/components/table/components/sort-column-dialog.vue'
 import FdContextmenuItem from '@/components/contextmenu/item.vue'
 
@@ -145,10 +150,11 @@ const {
   rowDensity,
   stripe,
   border,
+  setRowDensity,
   toggleExpandAll,
   toggleStripe,
   toggleBorder,
   showSortColumnDialog,
   setTableColumns
-} = useTableSetting(props)
+} = useTableSetting(props.tableOption)
 </script>
