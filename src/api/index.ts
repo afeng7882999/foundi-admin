@@ -45,6 +45,9 @@ export type ApiObjList<T extends ApiObj> = {
 // 查询条件
 export type ApiQuery = Indexable
 
+// 导出范围
+export type ExportRange = 'all' | 'page'
+
 // 获取单个项目
 const getOne = async <T extends ApiObj>(getUrl: string, id: string): Promise<T> => {
   getUrl = addOrRemoveSlash(getUrl, true)
