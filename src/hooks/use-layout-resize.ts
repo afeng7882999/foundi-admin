@@ -2,6 +2,7 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { DeviceType } from '@/store/modules/app'
+import { throttle } from 'lodash-es'
 
 export const resizeConst = {
   sm: 768,
@@ -37,22 +38,27 @@ export default function useLayoutResize() {
     window.addEventListener('resize', resizeLayout)
   }
 
-  const resizeLayout = async () => {
-    if (!document.hidden) {
-      bodyRect = document.body.getBoundingClientRect()
-      await store.dispatch('app/setBodyHeight', bodyRect.height)
-      await store.dispatch('app/setBodyWidth', bodyRect.width)
-      await store.dispatch('app/setDocHeight', getDocHeight())
-      await store.dispatch('app/setDocWidth', getDocWidth())
-      if (isMobile()) {
-        await store.dispatch('app/toggleDevice', DeviceType.Mobile)
-        await store.dispatch('app/setSidebarMode', { offScreen: true, opened: false })
-      } else {
-        await store.dispatch('app/toggleDevice', DeviceType.Desktop)
-        await store.dispatch('app/setSidebarMode', { offScreen: false, opened: false })
+  const resizeLayout = throttle(
+    async () => {
+      if (!document.hidden) {
+        bodyRect = document.body.getBoundingClientRect()
+        await store.dispatch('app/setBodyHeight', bodyRect.height)
+        await store.dispatch('app/setBodyWidth', bodyRect.width)
+        await store.dispatch('app/setDocHeight', getDocHeight())
+        await store.dispatch('app/setDocWidth', getDocWidth())
+        await store.dispatch('app/setBodyWidthRange', getWidthRange(bodyRect.width))
+        if (isMobile()) {
+          await store.dispatch('app/toggleDevice', DeviceType.Mobile)
+          await store.dispatch('app/setSidebarMode', { offScreen: true, opened: false })
+        } else {
+          await store.dispatch('app/toggleDevice', DeviceType.Desktop)
+          await store.dispatch('app/setSidebarMode', { offScreen: false, opened: false })
+        }
       }
-    }
-  }
+    },
+    300,
+    { leading: true, trailing: false }
+  )
 
   const getDocHeight = () => {
     const height = storeState.app.enableTags
@@ -73,6 +79,16 @@ export default function useLayoutResize() {
 
   const isMobile = () => {
     return bodyRect.width - resizeConst.ratio < resizeConst.md
+  }
+
+  const getWidthRange = (w: number) => {
+    return (
+      (w >= resizeConst.xl && 'xl') ||
+      (w >= resizeConst.lg && 'lg') ||
+      (w >= resizeConst.md && 'md') ||
+      (w >= resizeConst.sm && 'sm') ||
+      'xs'
+    )
   }
 
   return {

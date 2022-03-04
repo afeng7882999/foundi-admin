@@ -25,6 +25,7 @@ export interface AppState {
   bodyWidth: number
   docHeight: number
   docWidth: number
+  bodyWidthRange: string
   device: DeviceType
   sidebarMode: SidebarMode | null
   theme: Theme | null
@@ -40,6 +41,7 @@ const state: AppState = {
   bodyWidth: 0,
   docHeight: 0,
   docWidth: 0,
+  bodyWidthRange: 'lg',
   device: DeviceType.Desktop, // mobile
   sidebarMode: JSON.parse(window.localStorage.getItem('app.sidebarMode') || DEFAULT_SIDEBAR_MODE),
   theme: JSON.parse(window.localStorage.getItem('app.theme') || '{}'),
@@ -66,6 +68,9 @@ const mutations = {
   },
   SET_DOC_WIDTH: (state: AppState, width: number) => {
     state.docWidth = width
+  },
+  SET_BODY_WIDTH_RANGE: (state: AppState, range: string) => {
+    state.bodyWidthRange = range
   },
   TOGGLE_DEVICE: (state: AppState, device: DeviceType) => {
     state.device = device
@@ -118,6 +123,9 @@ const actions = {
   },
   setDocWidth({ commit }: ActionContext<AppState, unknown>, width: number) {
     commit('SET_DOC_WIDTH', width)
+  },
+  setBodyWidthRange({ commit }: ActionContext<AppState, unknown>, range: string) {
+    commit('SET_BODY_WIDTH_RANGE', range)
   },
   toggleDevice({ commit }: ActionContext<AppState, unknown>, device: DeviceType) {
     commit('TOGGLE_DEVICE', device)
