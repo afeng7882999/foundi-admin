@@ -1,4 +1,4 @@
-import Api, {ApiObj, ApiQuery} from '@/api'
+import Api, { ApiObj, ApiQuery } from '@/api'
 
 export interface Group extends ApiObj {
   // 主键

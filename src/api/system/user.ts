@@ -139,7 +139,7 @@ export const getCurrentInfo = async () => {
     method: 'get'
   })) as Response
 
-  const { user, roles, groups, menu, perms } = data.content
+  const { user, roles, groups, menu, perms } = data
   return {
     user,
     roles,

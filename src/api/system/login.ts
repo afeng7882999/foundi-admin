@@ -218,9 +218,9 @@ export const checkUserExist = async (username: string) => {
     }
   })) as Response
   return {
-    exist: data.content.exist as boolean,
-    mobile: data.content.mobile as string,
-    email: data.content.email as string
+    exist: data.exist as boolean,
+    mobile: data.mobile as string,
+    email: data.email as string
   }
 }
 
@@ -252,7 +252,7 @@ export const getAgreement = async () => {
     method: 'get'
   })) as Response
   return {
-    agreement: data.content.userAgreement as string,
-    privacy: data.content.userPrivacy as string
+    agreement: data.userAgreement as string,
+    privacy: data.userPrivacy as string
   }
 }

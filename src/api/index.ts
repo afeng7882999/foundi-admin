@@ -18,13 +18,17 @@ export type ResPage = Partial<{
 }>
 
 // http返回数据，response.data
-export type ResData<T = any> = Partial<{
-  msg: string | string[]
-  ex: string
-  content: T | T[] | Indexable<T>
-  page: ResPage
-  token: string
-}>
+export type ResData<T = any> = Partial<
+  {
+    msg: string | string[]
+    ex: string
+    content: T | T[] | Indexable<T>
+    page: ResPage
+    token: string
+  } & {
+    [key: string]: any
+  }
+>
 
 // 提交或返回的单一数据
 export type ApiObj = Indexable
