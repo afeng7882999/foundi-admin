@@ -355,7 +355,6 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      console.log((cropper.value as HTMLElement).offsetWidth)
       updatePreview()
       loadImg()
     })

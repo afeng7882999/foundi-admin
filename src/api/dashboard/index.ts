@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import request from '@/app/request'
 import { ApiObj } from '@/api'
-import { isNumber } from '@vueuse/core'
+import { isNumber } from 'lodash-es'
 
 export interface ContentStat extends ApiObj {
   // 日期

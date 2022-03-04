@@ -67,7 +67,7 @@ export default {
 <script setup lang="ts">
 import { computed, PropType, ref } from 'vue'
 import usePage from '@/components/page/use-page'
-import { isBoolean } from '@vueuse/core'
+import { isBoolean } from 'lodash-es'
 import { TableSettingProp } from '@/components/table/types'
 import useTableSetting from '@/components/page/use-table-setting'
 import FdSortColumnDialog from '@/components/table/components/sort-column-dialog.vue'

@@ -1,6 +1,6 @@
 import { getDateListByRange, getLastDateList } from '@/utils/time'
 import { ContentStat } from '@/api/dashboard'
-import { isNumber } from '@vueuse/core'
+import { isNumber } from 'lodash-es'
 
 export type ContentStatRange = number | Date[]
 

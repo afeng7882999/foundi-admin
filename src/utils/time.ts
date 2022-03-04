@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
-import { isString } from '@vueuse/core'
+import { isString } from 'lodash-es'
 
 dayjs.locale('zh-cn')
 

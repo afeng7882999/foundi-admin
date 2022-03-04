@@ -1,5 +1,5 @@
 import { rAF } from '@/utils/next-frame'
-import { isNumber } from '@vueuse/core'
+import { isNumber } from 'lodash-es'
 
 /**
  * 曲线函数

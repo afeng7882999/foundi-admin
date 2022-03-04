@@ -120,7 +120,7 @@ import { localOrRemoteUrl } from '@/utils/query'
 import { computed, defineComponent, PropType, reactive, ref, toRefs, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { upload } from '@/api/system/file'
-import { isObject } from '@vueuse/core'
+import { isObject } from 'lodash-es'
 import { Indexable } from '@/types/global'
 
 export default defineComponent({

@@ -72,7 +72,7 @@ import { generateId } from '@/utils/lang'
 import { merge } from 'lodash-es'
 import { computed, nextTick, onBeforeMount, onBeforeUnmount, onMounted, PropType, reactive, ref, watch } from 'vue'
 import { DEFAULT_SELECT_PARAMS, DEFAULT_TREE_FIELDS, DEFAULT_TREE_PARAMS } from '@/components/tree-select/types'
-import { isString } from '@vueuse/core'
+import { isString } from 'lodash-es'
 
 const props = defineProps({
   dataList: {

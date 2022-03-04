@@ -2,7 +2,7 @@ import Api, { ApiObj, ApiQuery } from '@/api'
 import request from '@/app/request'
 import { downloadFile } from '@/utils/file'
 import { DictItem } from '@/api/system/dict-item'
-import { isString } from '@vueuse/core'
+import { isString } from 'lodash-es'
 
 export interface GenTable extends ApiObj {
   // 主键

@@ -1,5 +1,5 @@
 import { generateId } from './lang'
-import { isString } from '@vueuse/core'
+import { isString } from 'lodash-es'
 
 /**
  * 下载文件
