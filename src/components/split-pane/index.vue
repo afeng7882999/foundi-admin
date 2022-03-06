@@ -50,10 +50,17 @@ const props = defineProps({
     default: 'right',
     validator: (val: string) => ['left', 'right'].includes(val)
   },
-  // shrink to zero
+  // toggle shrinking to zero
   shrinkAll: {
     type: Boolean,
     default: false
+  },
+  // 'not' modifier of shrinkAll
+  shrinkAllModifiers: {
+    type: Object,
+    default: () => ({
+      not: false
+    })
   },
   // hide the resize when shrink to zero
   shrinkToHide: {
@@ -125,6 +132,9 @@ const resizerVisible = computed(() => {
 watch(
   () => props.shrinkAll,
   (val) => {
+    if (props.shrinkAllModifiers.not) {
+      val = !val
+    }
     if (val && state.finalPos !== 0) {
       state.reservedPos = state.finalPos
       state.pos = 0
@@ -133,7 +143,8 @@ watch(
       state.pos = state.reservedPos
       state.finalPos = state.pos
     }
-  }
+  },
+  { immediate: true }
 )
 
 const onMouseDown = () => {
@@ -154,7 +165,9 @@ const onMouseUp = () => {
   }
   state.active = false
   state.finalPos = state.pos
-  emit('update:shrinkAll', state.finalPos === 0)
+
+  const shrunk = props.shrinkAllModifiers.not ? state.finalPos !== 0 : state.finalPos === 0
+  emit('update:shrinkAll', shrunk)
 }
 
 const onMouseMove = (e: MouseEvent) => {
