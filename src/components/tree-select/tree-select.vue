@@ -106,7 +106,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['tree-search', 'node-click', 'node-check', 'select-clear', 'update:modelValue'])
+const emit = defineEmits(['tree-search', 'node-click', 'node-check', 'select-clear', 'update:modelValue', 'change'])
 
 const treeSelect = ref<HTMLElement | null>(null)
 const treeCom = ref()
@@ -312,13 +312,17 @@ const onRemoveTag = (tag: string) => {
 const onSelectClear = () => {
   state.ids = []
   const { multiple } = selectParamsCo.value
-  emit('update:modelValue', multiple ? [] : '')
+  const val = multiple ? [] : ''
+  emit('update:modelValue', val)
   emit('select-clear')
+  emit('change', val)
 }
 
 const emitValue = () => {
   const { multiple } = selectParamsCo.value
-  emit('update:modelValue', multiple ? state.ids : state.ids.length > 0 ? state.ids[0] : '')
+  const val = multiple ? state.ids : state.ids.length > 0 ? state.ids[0] : ''
+  emit('update:modelValue', val)
+  emit('change', val)
 }
 
 const toggleVisible = () => {
