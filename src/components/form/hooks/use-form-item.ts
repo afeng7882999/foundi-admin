@@ -1,7 +1,8 @@
-import { computed, ExtractPropTypes, inject } from 'vue'
+import { computed, ExtractPropTypes, getCurrentInstance, inject } from 'vue'
 import { FORM_ITEM_DEFAULT_PROPS } from '@/components/form/type'
 import { Indexable } from '@/types/global'
 import { ElFormContext, elFormKey } from 'element-plus'
+import { isString, upperFirst } from 'lodash-es'
 
 export interface UseQueryItemDefaultOpt {
   width: string
@@ -9,7 +10,16 @@ export interface UseQueryItemDefaultOpt {
 }
 
 const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_PROPS>>, option?: Partial<UseQueryItemDefaultOpt>) => {
-  const elForm = inject(elFormKey, {} as ElFormContext)
+  const formCtx = inject(elFormKey, {} as ElFormContext)
+
+  const vm = getCurrentInstance()
+  const formInstCo = computed(() => {
+    let parent = vm?.parent
+    while (parent && parent.type.name !== 'ElForm') {
+      parent = parent.parent
+    }
+    return parent
+  })
 
   const placeholderCo = computed(() => {
     const p = props.placeholder ?? option?.placeholder
@@ -22,7 +32,8 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
 
   const styleCo = computed(() => {
     const style = {} as Indexable
-    const w = props.width ?? option?.width
+    // 如果不是 inline form， 宽度设置为100%
+    const w = props.width ?? !formCtx.inline ? '100%' : option?.width
     if (w && w !== 'auto') {
       if (w.endsWith('px') || w.endsWith('%')) {
         style.width = w
@@ -41,12 +52,28 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
     return props.disabled
   })
 
+  const formSubmit = () => {
+    // 仅在 inline form 起作用
+    if (!formCtx.inline) {
+      return
+    }
+    if (props.trigger && isString(props.trigger)) {
+      const fun = 'on' + upperFirst(props.trigger)
+      const attrs = formInstCo.value?.attrs as Indexable
+      if (attrs && attrs[fun]) {
+        attrs[fun]()
+      }
+    }
+  }
+
   return {
-    model: elForm.model,
+    model: formCtx.model,
+    formInstCo,
     placeholderCo,
     visibleCo,
     disabledCo,
-    styleCo
+    styleCo,
+    formSubmit
   }
 }
 

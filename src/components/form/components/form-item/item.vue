@@ -1,7 +1,15 @@
 <template>
   <template v-if="visibleCo">
     <el-form-item :label="label" :prop="prop">
-      <el-input v-model="model[prop]" clearable :placeholder="placeholderCo" :style="styleCo" :disabled="disabledCo" />
+      <el-input
+        v-model="model[prop]"
+        clearable
+        :placeholder="placeholderCo"
+        :style="styleCo"
+        :disabled="disabledCo"
+        @keyup.enter="formSubmit"
+        @clear="formSubmit"
+      />
     </el-form-item>
   </template>
 </template>
@@ -21,5 +29,8 @@ const props = defineProps({
   ...FORM_ITEM_DEFAULT_PROPS
 })
 
-const { model, placeholderCo, visibleCo, disabledCo, styleCo } = useFormItem(props, { width: '150', placeholder: `请输入${props.label}` })
+const { model, placeholderCo, visibleCo, disabledCo, styleCo, formSubmit } = useFormItem(props, {
+  width: '150',
+  placeholder: `请输入${props.label}`
+})
 </script>
