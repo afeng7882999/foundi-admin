@@ -216,11 +216,11 @@ import { Role, roleList } from '@/api/system/role'
 import { localOrRemoteUrl } from '@/utils/query'
 import { useRouter } from 'vue-router'
 import usePage from '@/components/page/use-page'
-import FdItemDict from "@/components/form/components/form-item/item-dict.vue";
+import FdItemDict from '@/components/form/components/form-item/item-dict.vue'
 
 export default defineComponent({
   name: 'SystemUser',
-  components: {FdItemDict, FdSplitPane, Edit, Detail },
+  components: { FdItemDict, FdSplitPane, Edit, Detail },
   setup() {
     const stateOption = {
       listApi: userList,
