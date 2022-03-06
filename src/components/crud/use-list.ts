@@ -1,5 +1,5 @@
 import { computed, nextTick, onMounted, reactive, ref, unref } from 'vue'
-import { merge, omit } from 'lodash-es'
+import { merge } from 'lodash-es'
 import { ElForm, ElMessage, ElMessageBox } from 'element-plus'
 import useDict from './use-dict'
 import { scrollDocToTop } from '@/utils/smooth-scroll'
@@ -28,8 +28,6 @@ export type ListStateOption<T extends ApiObj> = Partial<{
   params: ApiQuery
   // 查询数据的对象
   query: ApiQuery
-  // 查询数据的条件个数
-  queryLen: number
   // 每页数据条数
   siz: number
   // 导出Excel文件名前缀
@@ -95,8 +93,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     params: {} as ApiQuery,
     // 查询数据的对象
     query: {} as ApiQuery,
-    // 查询数据的条件个数
-    queryLen: 0,
     // 排序规则，支持多字段排序 { id: 'desc', createTime: 'asc' }
     sort: {} as Indexable,
     // 当前ID
@@ -276,19 +272,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         orderByList.push(`${key}:${mixState.sort[key]}`)
       }
     })
-
-    let len = 0
-    for (const key in mixState.query) {
-      const val = mixState.query[key]
-      if (!val) {
-        continue
-      }
-      if (Array.isArray(val) && val.length === 0) {
-        continue
-      }
-      len++
-    }
-    mixState.queryLen = len
 
     return {
       current: mixState.current,

@@ -1,15 +1,24 @@
 <template>
   <template v-if="visibleCo">
-    <div class="fd-page__action">
-      <el-tooltip v-if="query" :content="queryVisible ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
-        <fd-icon-button
-          :class="queryVisible ? 'expanded' : ''"
-          class="action-query-toggle"
-          icon="search-more"
-          @click="emit('update:queryVisible')"
-        ></fd-icon-button>
-      </el-tooltip>
-      <slot v-if="query" name="query" />
+    <div class="fd-page__action fd-page-act">
+      <template v-if="query">
+        <el-tooltip :content="queryVisible ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
+          <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="action-badge">
+            <fd-icon-button
+              :class="queryVisible ? 'expanded' : ''"
+              class="action-icon-btn"
+              icon="search-more"
+              @click="toggleQueryVisible"
+            ></fd-icon-button>
+          </el-badge>
+        </el-tooltip>
+        <el-divider class="action-divider" direction="vertical" style="margin-left: 16px"></el-divider>
+        <div class="query-compact">
+          <el-form :model="queryData" inline @submit="queryFn">
+            <slot name="query" />
+          </el-form>
+        </div>
+      </template>
       <div class="action-right">
         <el-button v-show="delVisible" v-waves plain type="danger" @click="emit('del')">
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
@@ -20,7 +29,7 @@
           <fd-icon class="is-in-btn" icon="plus"></fd-icon>
           新增
         </el-button>
-        <el-divider v-if="props.more" class="action-divider" direction="vertical"></el-divider>
+        <el-divider v-if="more" class="action-divider" direction="vertical"></el-divider>
         <el-tooltip content="更多" :show-after="500" effect="dark" placement="top">
           <fd-icon-button class="action-icon-btn" icon="more" @click.stop="openMoreMenu"></fd-icon-button>
         </el-tooltip>
@@ -77,6 +86,7 @@ import { TableSettingProp } from '@/components/table/types'
 import useTableSetting from '@/components/table/hooks/use-table-setting'
 import FdSortColumnDialog from '@/components/table/components/sort-column-dialog.vue'
 import FdContextmenuItem from '@/components/contextmenu/item.vue'
+import { ApiQuery } from '@/api'
 
 const props = defineProps({
   visible: {
@@ -99,13 +109,15 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  more: {
-    type: Boolean,
-    default: true
-  },
+  queryData: Object as PropType<ApiQuery>,
+  queryFn: Function,
   queryVisible: {
     type: Boolean,
     default: false
+  },
+  more: {
+    type: Boolean,
+    default: true
   },
   tableOption: {
     type: Object as PropType<TableSettingProp>,
@@ -139,10 +151,29 @@ const exportVisible = computed(() => {
 
 const emit = defineEmits(['del', 'create', 'export', 'exportAll', 'update:queryVisible'])
 
+const toggleQueryVisible = () => {
+  emit('update:queryVisible', !props.queryVisible)
+}
+
 const contextMenu = ref()
 const openMoreMenu = (e: Event) => {
   contextMenu.value.show(e)
 }
+
+const queryLenCo = computed(() => {
+  let len = 0
+  for (const key in props.queryData) {
+    const val = props.queryData[key]
+    if (!val) {
+      continue
+    }
+    if (Array.isArray(val) && val.length === 0) {
+      continue
+    }
+    len++
+  }
+  return len
+})
 
 const {
   sortColumnDialog,

@@ -62,6 +62,12 @@
     align-items: center;
     height: 32px;
     
+    .query-compact {
+      .el-form--inline .el-form-item {
+        margin-right: 16px;
+      }
+    }
+    
     .action-right {
       margin-left: auto;
       display: flex;
