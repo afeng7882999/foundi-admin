@@ -44,3 +44,9 @@ export const DEFAULT_ITEM_DATA_FIELDS: ItemDataFields = {
   parent: 'parentId',
   children: 'children'
 }
+
+export type SortFieldResult = Partial<{
+  prop: string
+  comment: string
+  order: 'asc' | 'desc'
+}>

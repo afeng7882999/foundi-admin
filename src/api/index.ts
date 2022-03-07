@@ -45,6 +45,12 @@ export type ApiObjList<T extends ApiObj> = {
 // 查询条件
 export type ApiQuery = Indexable
 
+// 排序字段
+export type SortField = {
+  name: string
+  comment: string
+}
+
 // 导出范围
 export type ExportRange = 'all' | 'page'
 

@@ -33,5 +33,8 @@ const props = defineProps({
   ...FORM_ITEM_DEFAULT_PROPS
 })
 
-const { model, placeholderCo, visibleCo, disabledCo, styleCo, formSubmit } = useFormItem(props, { width: '250', placeholder: '开始日期,结束日期' })
+const { model, placeholderCo, visibleCo, disabledCo, styleCo, formSubmit } = useFormItem(props, {
+  width: '250',
+  placeholder: '开始日期,结束日期'
+})
 </script>

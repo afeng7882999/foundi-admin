@@ -1,47 +1,48 @@
 <template>
   <div :style="docMinHeight" class="page-system-loginLog fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <fd-split-pane v-model:shrink-all.not="state.queryFormShow" :default-pos="280" shrink="right" :shrink-to-hide="true">
+    <fd-split-pane v-model:shrink-all="s.queryFormShow" :default-pos="280" shrink="right" :shrink-to-hide="true">
       <template #left>
-        <fd-page-query :query-data="state.query" :query-fn="queryList" :reset-fn="resetQuery">
+        <fd-page-query :query-data="s.query" :query-fn="m.queryList" :reset-fn="m.resetQuery">
           <fd-item-datetime label="访问时间" prop="operTime" />
-          <fd-item-dict label="登录方式" prop="authcTypeDict" :dict="state.dicts.sysAuthcType" />
+          <fd-item-dict label="登录方式" prop="authcTypeDict" :dict="s.dicts.sysAuthcType" />
           <fd-item label="用户账号" prop="userName" />
           <fd-item label="IP地址" prop="ip" />
-          <fd-item-dict label="状态" prop="statusDict" :dict="state.dicts.sysLoginLogStatus" />
+          <fd-item-dict label="状态" prop="statusDict" :dict="s.dicts.sysLoginLogStatus" />
+          <fd-item-sort label="排序" :fields="loginLogSortFields"></fd-item-sort>
         </fd-page-query>
       </template>
       <template #right>
         <div class="fd-page__form">
           <fd-page-act
-            v-model:queryVisible="state.queryFormShow"
+            v-model:queryVisible="s.queryFormShow"
             del="system:loginLog:delete"
             export="system:loginLog:export"
-            :query-data="state.query"
-            :query-fn="queryList"
+            :query-data="s.query"
+            :query-fn="m.queryList"
             v-bind="pageActAttrs"
-            @del="del()"
-            @export="exportData"
-            @export-all="exportData('all')"
+            @del="m.del"
+            @export="m.exportData"
+            @export-all="m.exportData('all')"
           >
             <template #query>
               <fd-item-datetime prop="operTime" />
-              <fd-item-dict prop="statusDict" :dict="state.dicts.sysLoginLogStatus" placeholder="请选择状态" />
+              <fd-item-dict prop="statusDict" :dict="s.dicts.sysLoginLogStatus" placeholder="请选择状态" />
             </template>
           </fd-page-act>
         </div>
         <div ref="tableWrapper" class="fd-page__table is-bordered">
-          <el-table ref="table" v-loading="state.loading" v-bind="tableAttrs">
+          <el-table ref="table" v-loading="s.loading" v-bind="tableAttrs">
             <fd-col-selection />
             <fd-col-datetime label="访问时间" prop="operTime" />
-            <fd-col-dict label="类型" prop="typeDict" :dict="state.dicts.sysLoginLogType" width="60" />
-            <fd-col-dict label="登录方式" prop="authcTypeDict" :dict="state.dicts.sysAuthcType" width="100" />
-            <fd-col label="用户账号" prop="userName" sortable width="150" @sort-changed="sortChanged" />
-            <fd-col label="IP地址" prop="ip" width="130" sortable @sort-changed="sortChanged" />
+            <fd-col-dict label="类型" prop="typeDict" :dict="s.dicts.sysLoginLogType" width="60" />
+            <fd-col-dict label="登录方式" prop="authcTypeDict" :dict="s.dicts.sysAuthcType" width="100" />
+            <fd-col label="用户账号" prop="userName" sortable width="150" @sort-changed="m.sortChanged" />
+            <fd-col label="IP地址" prop="ip" width="130" sortable @sort-changed="m.sortChanged" />
             <fd-col label="地点" prop="location" width="150" />
             <fd-col label="浏览器" prop="browser" width="150" />
             <fd-col label="操作系统" prop="os" width="150" />
-            <fd-col-dict label="状态" prop="statusDict" :dict="state.dicts.sysLoginLogStatus" width="60" />
+            <fd-col-dict label="状态" prop="statusDict" :dict="s.dicts.sysLoginLogStatus" width="60" />
             <fd-col label="提示消息" prop="message" width="100" />
             <fd-col-act
               detail="system:loginLog:list"
@@ -49,7 +50,7 @@
               header-align="center"
               width="90"
               @detail="showDetail"
-              @del="del"
+              @del="m.del"
             />
           </el-table>
           <el-pagination v-bind="paginationAttrs"></el-pagination>
@@ -57,7 +58,7 @@
       </template>
     </fd-split-pane>
     <el-backtop></el-backtop>
-    <detail v-if="state.detailShow" ref="detailDialog" v-bind="detailAttrs"></detail>
+    <detail v-if="s.detailShow" ref="detailDialog" v-bind="detailAttrs"></detail>
   </div>
 </template>
 
@@ -69,11 +70,18 @@ export default {
 
 <script setup lang="ts">
 import useList from '@/components/crud/use-list'
-import { loginLogFields, loginLogDicts, loginLogQuery, loginLogList, loginLogDel, loginLogExport, LoginLog } from '@/api/system/login-log'
+import {
+  loginLogFields,
+  loginLogDicts,
+  loginLogQuery,
+  loginLogSortFields,
+  loginLogList,
+  loginLogDel,
+  loginLogExport,
+  LoginLog
+} from '@/api/system/login-log'
 import Detail from './detail.vue'
-import useExpandTransition from '@/hooks/use-expand-transition'
 import usePage from '@/components/page/use-page'
-import { TableColumn } from '@/components/table/types'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import FdPageQuery from '@/components/page/page-query.vue'
 
@@ -84,20 +92,16 @@ const stateOption = {
   exportApi: loginLogExport,
   dicts: loginLogDicts,
   query: loginLogQuery,
-
-  tableColumns: [] as TableColumn[]
+  tableRowSelectable: true
 }
 
-const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<LoginLog>(stateOption)
-const { queryForm, table, detailDialog } = mixRefs
-const { queryList, resetQuery, toggleQueryForm, showDetail: _showDetail, sortChanged, del, exportData } = mixMethods
+const { mixRefs, mixAttrs, mixState: s, mixMethods: m } = useList<LoginLog>(stateOption)
+const { table, detailDialog } = mixRefs
 const { tableAttrs, paginationAttrs, detailAttrs, pageActAttrs } = mixAttrs
 
-const { docMinHeight, showPageHeader, hasAuth } = usePage()
-
-const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
+const { docMinHeight, showPageHeader } = usePage()
 
 const showDetail = (row: LoginLog, idx: number) => {
-  _showDetail(idx)
+  m.showDetail(idx)
 }
 </script>

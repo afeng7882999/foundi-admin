@@ -1,4 +1,4 @@
-import Api, { ApiObj, ApiQuery, ExportRange } from '@/api'
+import Api, { ApiObj, ApiQuery, ExportRange, SortField } from '@/api'
 import { DictItem } from '@/api/system/dict-item'
 
 export interface LoginLog extends ApiObj {
@@ -30,6 +30,11 @@ export const loginLogFields = {
   idField: 'id'
 }
 
+export const loginLogSortFields: SortField[] = [
+  { name: 'userName', comment: '用户账号' },
+  { name: 'ip', comment: 'IP地址' }
+]
+
 export const loginLogDicts = {
   sysLoginLogType: [] as DictItem[],
   sysAuthcType: [] as DictItem[],
@@ -42,7 +47,8 @@ export const loginLogQuery = {
   authcTypeDict: undefined,
   userName: undefined,
   ip: undefined,
-  statusDict: undefined
+  statusDict: undefined,
+  orderByList: [] as string[]
 } as ApiQuery
 
 // api url
