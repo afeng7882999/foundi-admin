@@ -1,6 +1,6 @@
 import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus'
-import { computed, onMounted, onUpdated } from 'vue'
+import { computed, onMounted, onUnmounted, onUpdated } from 'vue'
 import { merge } from 'lodash-es'
 import Sortable, { SortableEvent } from 'sortablejs'
 import { unrefElement, VueInstance } from '@vueuse/core'
@@ -67,13 +67,15 @@ const useSortableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, so
     option.onRowDragEnd && option.onRowDragEnd(e)
   }
 
+  let sortable = null as Sortable | null
+
   // 初始化可拖动行
   const initRowDrag = () => {
     if (!bodyWrapperElCo.value) {
       return
     }
     const tBodyEl = bodyWrapperElCo.value.querySelector('table > tbody') as HTMLElement
-    Sortable.create(tBodyEl, {
+    sortable = Sortable.create(tBodyEl, {
       handle: option.rowDragClass,
       animation: 150,
       onEnd: _onRowDragEnd
@@ -99,6 +101,10 @@ const useSortableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, so
 
   onUpdated(() => {
     tryInit()
+  })
+
+  onUnmounted(() => {
+    sortable?.destroy()
   })
 }
 

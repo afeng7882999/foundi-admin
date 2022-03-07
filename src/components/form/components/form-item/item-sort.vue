@@ -51,7 +51,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted, PropType, reactive, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, PropType, reactive, ref, watch } from 'vue'
 import { SortFieldResult } from '@/components/form/type'
 import { SortField } from '@/api'
 import FdIconButton from '@/components/icon-button/icon-button.vue'
@@ -135,19 +135,38 @@ const onSortEnd = (e: SortableEvent) => {
 }
 
 const itemWrapper = ref()
+let sortable = null as Sortable | null
 const initDrag = () => {
   const el = itemWrapper.value as HTMLElement
   if (el) {
-    Sortable.create(el, {
+    sortable = Sortable.create(el, {
       handle: '.sortable-drag',
+      chosenClass: 'sortable-chosen',
       animation: 150,
       onEnd: onSortEnd
     })
   }
 }
+
 onMounted(() => {
   initDrag()
 })
+
+onUnmounted(() => {
+  sortable?.destroy()
+})
+
+watch(
+  () => props.disabled,
+  (val) => {
+    if (val) {
+      sortable?.option('disabled', true)
+    } else {
+      sortable?.option('disabled', false)
+    }
+  },
+  { immediate: true }
+)
 
 watch(
   () => props.modelValue,
@@ -171,7 +190,6 @@ watch(
 const emit = defineEmits(['update:modelValue'])
 const returnValue = () => {
   emit('update:modelValue', state.data)
-  console.log(state.data)
 }
 </script>
 
@@ -192,6 +210,12 @@ const returnValue = () => {
   }
   &__toggle {
     margin-left: 4px;
+  }
+  .sortable-chosen {
+    .el-input .el-input__inner {
+      border: none;
+      background: none;
+    }
   }
 }
 </style>
