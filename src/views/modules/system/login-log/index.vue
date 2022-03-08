@@ -1,7 +1,7 @@
 <template>
-  <fd-page-main v-model:queryFormShow="s.queryFormShow" name="system-loginLog">
+  <fd-page-main v-bind="pageMainAttrs" name="system-loginLog">
     <template #query>
-      <fd-page-query :query-data="s.query" :query-fn="m.queryList" :reset-fn="m.resetQuery">
+      <fd-page-query v-bind="pageQueryAttrs">
         <fd-item-datetime label="访问时间" prop="operTime" />
         <fd-item-dict label="登录方式" prop="authcTypeDict" :dict="s.dicts.sysAuthcType" />
         <fd-item label="用户账号" prop="userName" />
@@ -11,17 +11,7 @@
       </fd-page-query>
     </template>
     <template #act>
-      <fd-page-act
-        v-model:queryVisible="s.queryFormShow"
-        del="system:loginLog:delete"
-        export="system:loginLog:export"
-        :query-data="s.query"
-        :query-fn="m.queryList"
-        v-bind="pageActAttrs"
-        @del="m.del"
-        @export="m.exportData"
-        @export-all="m.exportData('all')"
-      >
+      <fd-page-act del="system:loginLog:delete" export="system:loginLog:export" v-bind="pageActAttrs">
         <template #query>
           <fd-item-datetime prop="operTime" />
           <fd-item-dict prop="statusDict" :dict="s.dicts.sysLoginLogStatus" placeholder="请选择状态" />
@@ -89,7 +79,7 @@ const stateOption = {
 
 const { mixRefs, mixAttrs, mixState: s, mixMethods: m } = useList<LoginLog>(stateOption)
 const { table, detailDialog } = mixRefs
-const { tableAttrs, paginationAttrs, detailAttrs, pageActAttrs } = mixAttrs
+const { pageMainAttrs, pageQueryAttrs, tableAttrs, paginationAttrs, detailAttrs, pageActAttrs } = mixAttrs
 
 const showDetail = (row: LoginLog, idx: number) => {
   m.showDetail(idx)

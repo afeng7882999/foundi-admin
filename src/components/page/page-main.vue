@@ -1,7 +1,7 @@
 <template>
   <div :style="docMinHeight" :class="`page-${name} fd-page`">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <fd-split-pane v-model:shrink-all.not="queryFormShowCo" :default-pos="280" shrink="right" :shrink-to-hide="true">
+    <fd-split-pane v-model:shrink-all.not="queryVisibleCo" :default-pos="280" shrink="right" :shrink-to-hide="true">
       <template #left>
         <slot name="query" />
       </template>
@@ -31,19 +31,19 @@ import { computed } from 'vue'
 
 const props = defineProps({
   name: String,
-  queryFormShow: {
+  queryVisible: {
     type: Boolean,
     default: false
   }
 })
 
-const emit = defineEmits(['update:queryFormShow'])
-const queryFormShowCo = computed({
+const emit = defineEmits(['update:queryVisible'])
+const queryVisibleCo = computed({
   get: () => {
-    return props.queryFormShow
+    return props.queryVisible
   },
   set: (val) => {
-    emit('update:queryFormShow', val)
+    emit('update:queryVisible', val)
   }
 })
 

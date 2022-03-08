@@ -1,4 +1,4 @@
-import { computed, nextTick, onMounted, reactive, ref, unref, watch } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, unref } from 'vue'
 import { merge } from 'lodash-es'
 import { ElForm, ElMessage, ElMessageBox } from 'element-plus'
 import useDict from './use-dict'
@@ -346,21 +346,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     scrollDocToTop()
   }
 
-  // el-pagination默认参数
-  const paginationAttrs = computed(() => {
-    return {
-      background: 'background',
-      currentPage: mixState.current,
-      pageCount: mixState.count,
-      pageSize: mixState.siz,
-      pageSizes: [10, 15, 20, 50, 100, 200],
-      total: mixState.total,
-      layout: 'total, sizes, prev, pager, next, jumper',
-      onCurrentChange: pageChange,
-      onSizeChange: sizeChange
-    }
-  })
-
   //===============================================================================
   // tree table
   //===============================================================================
@@ -514,6 +499,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     true
   )
 
+  const exportDataAll = async () => {
+    await exportData('all')
+  }
+
   //===============================================================================
   // edit dialog
   //===============================================================================
@@ -613,9 +602,37 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     defaultExpandAll: mixState.defaultExpandAll
   })
 
+  //===============================================================================
+  // default attrs
+  //===============================================================================
+
+  // fd-page-main默认参数
+  const pageMainAttrs = computed(() => {
+    return {
+      queryVisible: mixState.queryFormShow,
+      'onUpdate:queryVisible': (val: boolean) => (mixState.queryFormShow = val)
+    }
+  })
+
+  // fd-page-query默认参数
+  const pageQueryAttrs = computed(() => {
+    return {
+      queryData: mixState.query,
+      queryFn: queryList,
+      resetFn: resetQuery
+    }
+  })
+
   // fd-page-act默认参数
   const pageActAttrs = computed(() => {
     return {
+      queryData: mixState.query,
+      queryFn: queryList,
+      queryVisible: mixState.queryFormShow,
+      'onUpdate:queryVisible': (val: boolean) => (mixState.queryFormShow = val),
+      onDel: del,
+      onExport: exportData,
+      onExportAll: exportDataAll,
       tableOption: {
         expandAll: () => expandAll,
         rowDensity: () => rowDensity,
@@ -644,6 +661,21 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       result.onSelectAll = onTreeSelectAll
     }
     return result
+  })
+
+  // el-pagination默认参数
+  const paginationAttrs = computed(() => {
+    return {
+      background: 'background',
+      currentPage: mixState.current,
+      pageCount: mixState.count,
+      pageSize: mixState.siz,
+      pageSizes: [10, 15, 20, 50, 100, 200],
+      total: mixState.total,
+      layout: 'total, sizes, prev, pager, next, jumper',
+      onCurrentChange: pageChange,
+      onSizeChange: sizeChange
+    }
   })
 
   return {
@@ -680,6 +712,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       colEmptyFormatter
     },
     mixAttrs: {
+      pageMainAttrs,
+      pageQueryAttrs,
       tableAttrs,
       paginationAttrs,
       detailAttrs,
