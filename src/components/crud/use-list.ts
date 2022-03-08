@@ -1,4 +1,4 @@
-import { computed, nextTick, onMounted, reactive, ref, unref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, unref, watch } from 'vue'
 import { merge } from 'lodash-es'
 import { ElForm, ElMessage, ElMessageBox } from 'element-plus'
 import useDict from './use-dict'
@@ -14,6 +14,7 @@ import { ApiObj, ApiQuery, ExportRange } from '@/api'
 import { DictList } from '@/api/system/dict-item'
 import { AnyFunction, Indexable } from '@/types/global'
 import { MaybeRef, useThrottleFn } from '@vueuse/core'
+import { SortFieldResult } from '@/components/form/type'
 
 export type ListStateOption<T extends ApiObj> = Partial<{
   // 是否是树表
@@ -28,6 +29,8 @@ export type ListStateOption<T extends ApiObj> = Partial<{
   params: ApiQuery
   // 查询数据的对象
   query: ApiQuery
+  // 表头排序是否支持多字段
+  sortMulti: boolean
   // 每页数据条数
   siz: number
   // 导出Excel文件名前缀
@@ -93,8 +96,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     params: {} as ApiQuery,
     // 查询数据的对象
     query: {} as ApiQuery,
-    // 排序规则，支持多字段排序 { id: 'desc', createTime: 'asc' }
-    sort: {} as Indexable,
+    // 排序规则，支持多字段排序
+    sort: [] as SortFieldResult[],
+    // 表头排序是否支持多字段
+    sortMulti: true,
     // 当前ID
     currentId: '',
     // 页码
@@ -267,11 +272,11 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
 
     const orderByList = [] as string[]
-    Object.keys(mixState.sort).forEach((key) => {
-      if (mixState.sort[key]) {
-        orderByList.push(`${key}:${mixState.sort[key]}`)
-      }
+    mixState.sort.forEach((s) => {
+      orderByList.push(`${s.prop}:${s.order}`)
     })
+
+    console.log(orderByList)
 
     return {
       current: mixState.current,
@@ -290,17 +295,36 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 重置查询
   const resetQuery = async () => {
-    queryForm.value.resetFields()
-    mixState.sort = {}
+    mixState.sort = []
     await queryList()
   }
 
   // 表格排序
-  const sortChanged = async ({ prop, order }: { prop: string; order: string }) => {
-    if (prop) {
-      mixState.sort[prop] = order
-      await getList()
+  const sortChanged = async ({ prop, order }: { prop: string; order: 'asc' | 'desc' | 'none' }) => {
+    if (!prop || !order) {
+      return
     }
+
+    if (order === 'none') {
+      mixState.sort = mixState.sort.filter((f) => f.prop !== prop)
+      await getList()
+      return
+    }
+
+    const o = order as 'asc' | 'desc'
+    if (mixState.sortMulti) {
+      const field = mixState.sort.find((s) => s.prop === prop)
+      if (field) {
+        field.order = o
+      } else {
+        mixState.sort.push({ prop, order: o })
+      }
+      await getList()
+      return
+    }
+
+    mixState.sort = [{ prop, order: o }]
+    await getList()
   }
 
   //===============================================================================

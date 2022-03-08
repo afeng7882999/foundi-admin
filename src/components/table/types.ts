@@ -1,4 +1,6 @@
 import { Ref } from '@vue/reactivity'
+import { SortFieldResult } from '@/components/form/type'
+import { PropType } from 'vue'
 
 export type ColType = 'default' | 'custom' | 'datetime' | 'dict' | 'list' | 'act' | 'selection' | 'icon'
 export type RowDensity = 'high' | 'default' | 'low'
@@ -40,9 +42,9 @@ export const COL_DEFAULT_PROPS = {
     default: ''
   },
   auth: String,
-  sortable: {
-    type: Boolean,
-    default: false
+  sort: {
+    type: Array as PropType<SortFieldResult[]>,
+    default: () => []
   },
   onSortChanged: Function
 }

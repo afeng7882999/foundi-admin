@@ -11,7 +11,7 @@
         <span>{{ dictVal(dict, scope.row[attrs.prop]) }}</span>
       </template>
       <template v-if="sortable" #header="scope">
-        <fd-table-sort-header :column="scope.column" @sort-changed="onSortChanged"></fd-table-sort-header>
+        <fd-table-sort-header :value="sort" :column="scope.column" @sort-changed="onSortChanged"></fd-table-sort-header>
       </template>
     </el-table-column>
   </template>
@@ -42,7 +42,8 @@ const props = defineProps({
 const attrs = useAttrs()
 
 const { dictVal } = useDict()
-const { visible } = useColumn(props)
+
+const { visible, sortable } = useColumn(props)
 
 const widthCo = computed(() => {
   if (props.width) {

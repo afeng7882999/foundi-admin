@@ -54,7 +54,7 @@ http.interceptors.response.use(
       res = decryptResponse(response)
     }
 
-    console.log('[Foundi Response]: ', res)
+    // console.log('[Foundi Response]: ', res)
 
     // Blob，use response directly
     if (res instanceof Blob) {

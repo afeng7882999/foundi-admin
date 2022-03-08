@@ -30,7 +30,8 @@ const props = defineProps({
     default: true
   },
   queryData: Object as PropType<ApiQuery>,
-  queryFn: Function
+  queryFn: Function,
+  resetFn: Function
 })
 
 const queryForm = ref()
@@ -39,11 +40,6 @@ const visibleCo = computed(() => {
   return props.visible
 })
 
-const reset = () => {
-  queryForm.value.resetFields()
-  props.queryFn?.()
-}
-
 const { getDocHeightNoHeader } = usePage()
 
 const scrollbarStyle = computed(() => {
@@ -51,6 +47,11 @@ const scrollbarStyle = computed(() => {
     maxHeight: getDocHeightNoHeader(128, 'px')
   }
 })
+
+const reset = () => {
+  queryForm.value.resetFields()
+  props.resetFn?.()
+}
 </script>
 
 <style lang="scss">

@@ -1,9 +1,20 @@
 <template>
   <template v-if="visibleCo">
     <el-form-item :label="label" class="fd-item-sort">
+      <template #label>
+        <div class="fd-item-sort__label">
+          <span>{{ label }}</span>
+          <el-tooltip content="添加排序字段" :disabled="disabled" :show-after="500" placement="top">
+            <el-button type="text" :disabled="addDisabled" @click="addField">
+              <fd-icon icon="plus" class="is-in-btn"></fd-icon>
+              添加
+            </el-button>
+          </el-tooltip>
+        </div>
+      </template>
       <div ref="itemWrapper" class="fd-item-sort__wrapper">
         <div v-for="item in state.data" :key="item.prop" class="fd-item-sort__item">
-          <el-tooltip content="拖动排序字段" :disabled="disabled" :show-after="500" placement="top">
+          <el-tooltip content="拖动排序字段" :disabled="disabled" :show-after="500" placement="left">
             <div class="fd-item-sort__drag sortable-drag">
               <fd-icon icon="drag"></fd-icon>
             </div>
@@ -25,20 +36,6 @@
             ></fd-icon-button>
           </el-tooltip>
         </div>
-      </div>
-      <div class="fd-item-sort__item">
-        <div>
-          <fd-icon icon="plus" class="fd-item-sort__drag"></fd-icon>
-        </div>
-        <el-select
-          style="width: 100%; margin-right: 36px"
-          :disabled="disabled"
-          :placeholder="placeholder"
-          no-data-text="无可排序字段"
-          @change="addField"
-        >
-          <el-option v-for="field in getFields()" :key="field.name" :label="field.comment" :value="field.name"></el-option>
-        </el-select>
       </div>
     </el-form-item>
   </template>
@@ -92,18 +89,25 @@ const visibleCo = computed(() => {
   return props.visible
 })
 
+const addDisabled = computed(() => {
+  return props.disabled || getNotSortFields().length <= 0
+})
+
 const getFields = (self?: SortFieldResult) => {
   if (self) {
     return props.fields?.filter((f) => state.data.findIndex((d) => d.prop === f.name) === -1 || f.name === self.prop)
   }
+  return getNotSortFields()
+}
+
+const getNotSortFields = () => {
   return props.fields?.filter((f) => state.data.findIndex((d) => d.prop === f.name) === -1)
 }
 
-const addField = (val: string) => {
-  const add = props.fields?.find((f) => f.name === val)
-  if (add) {
-    state.data.push({ prop: add.name, comment: add.comment, order: 'asc' })
-    returnValue()
+const addField = () => {
+  const empty = state.data?.find((d) => d.prop === '')
+  if (!empty && getNotSortFields().length > 0) {
+    state.data.push({ prop: '', comment: '', order: 'asc' })
   }
 }
 
@@ -174,17 +178,16 @@ watch(
     state.data = [] as SortFieldResult[]
     if (val?.length) {
       val.forEach((d) => {
-        const idx = ['asc', 'desc'].findIndex((s) => s === d.order)
-        if (idx !== -1) {
+        if (d) {
           const field = props.fields?.find((f) => f.name === d.prop)
           if (field) {
-            state.data.push({ prop: field.name, comment: field.comment, order: idx === 0 ? 'asc' : 'desc' })
+            state.data.push({ prop: field.name, comment: field.comment, order: d.order })
           }
         }
       })
     }
   },
-  { immediate: true }
+  { immediate: true, deep: true }
 )
 
 const emit = defineEmits(['update:modelValue'])
@@ -195,10 +198,17 @@ const returnValue = () => {
 
 <style lang="scss">
 .fd-item-sort {
+  &__label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   &__drag {
     color: var(--el-text-color-placeholder);
     margin-right: 4px;
   }
+
   &__item {
     display: flex;
     flex-flow: row;
@@ -208,9 +218,18 @@ const returnValue = () => {
       flex: 1;
     }
   }
+
   &__toggle {
     margin-left: 4px;
   }
+
+  .el-form-item__content {
+    display: flex;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+
   .sortable-chosen {
     .el-input .el-input__inner {
       border: none;

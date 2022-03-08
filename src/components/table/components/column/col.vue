@@ -9,7 +9,7 @@
       :label-class-name="sortable ? 'is-custom' : ''"
     >
       <template v-if="sortable" #header="scope">
-        <fd-table-sort-header :column="scope.column" @sort-changed="onSortChanged"></fd-table-sort-header>
+        <fd-table-sort-header :value="sort" :column="scope.column" @sort-changed="onSortChanged"></fd-table-sort-header>
       </template>
     </el-table-column>
   </template>
@@ -28,5 +28,5 @@ import useColumn from '@/components/table/hooks/use-column'
 
 const props = defineProps({ ...COL_DEFAULT_PROPS })
 
-const { visible } = useColumn(props)
+const { visible, sortable } = useColumn(props)
 </script>

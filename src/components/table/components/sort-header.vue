@@ -1,5 +1,5 @@
 <template>
-  <el-tooltip :show-after="tipShowAfter" :content="tip" placement="top">
+  <el-tooltip :show-after="tipShowAfter" :content="state.tip" placement="top">
     <div class="fd-table-sort-header" :class="headerClass" @click="onHeaderClick">
       <span class="fd-table-sort-header__label">{{ column.label }}</span>
       <span class="caret-wrapper">
@@ -17,10 +17,18 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, PropType, reactive, watch } from 'vue'
+import { SortFieldResult } from '@/components/form/type'
 
 const props = defineProps({
-  column: Object,
+  value: {
+    type: Array as PropType<SortFieldResult[]>,
+    default: () => []
+  },
+  column: {
+    type: Object,
+    required: true
+  },
   default: null,
   tipShowAfter: {
     type: Number,
@@ -28,80 +36,94 @@ const props = defineProps({
   }
 })
 
-const sortOrder = ref('')
-
-const tip = ref('点击切换降序')
+const state = reactive({
+  sortOrder: 'none' as 'asc' | 'desc' | 'none',
+  tip: '点击切换降序'
+})
 
 const headerClass = computed(() => {
   return {
-    ascending: sortOrder.value === 'asc',
-    descending: sortOrder.value === 'desc'
+    ascending: state.sortOrder === 'asc',
+    descending: state.sortOrder === 'desc'
   }
 })
 
 const onHeaderClick = () => {
-  if (sortOrder.value === 'desc') {
-    sortOrder.value = 'asc'
-  } else if (sortOrder.value === 'asc') {
-    sortOrder.value = ''
+  if (state.sortOrder === 'desc') {
+    sortedEmit('asc')
+  } else if (state.sortOrder === 'asc') {
+    sortedEmit('none')
   } else {
-    sortOrder.value = 'desc'
+    sortedEmit('desc')
   }
-  sortedEmit()
   setTimeout(setTip, props.tipShowAfter)
 }
 
 const onAscClick = () => {
-  if (sortOrder.value === 'asc') {
-    sortOrder.value = ''
+  if (state.sortOrder === 'asc') {
+    sortedEmit('none')
   } else {
-    sortOrder.value = 'asc'
+    sortedEmit('asc')
   }
-  sortedEmit()
   setTimeout(setTip, props.tipShowAfter)
 }
 
 const onDescClick = () => {
-  if (sortOrder.value === 'desc') {
-    sortOrder.value = ''
+  if (state.sortOrder === 'desc') {
+    sortedEmit('none')
   } else {
-    sortOrder.value = 'desc'
+    sortedEmit('desc')
   }
-  sortedEmit()
   setTimeout(setTip, props.tipShowAfter)
 }
 
 const emit = defineEmits(['sort-changed'])
 
-const sortedEmit = () => {
-  if (props.column) {
-    emit('sort-changed', { prop: props.column.property, order: sortOrder.value })
-  }
+const sortedEmit = (order: 'asc' | 'desc' | 'none') => {
+  emit('sort-changed', { prop: props.column.property, order })
 }
 
+watch(
+  () => props.value,
+  (val) => {
+    if (val?.length) {
+      const field = props.value.find((f) => f.prop === props.column.property)
+      if (field && field.order) {
+        state.sortOrder = field.order
+        setTip()
+      } else {
+        state.sortOrder = 'none'
+      }
+    } else {
+      state.sortOrder = 'none'
+    }
+  },
+  { immediate: true, deep: true }
+)
+
 const setTip = () => {
-  if (sortOrder.value === 'desc') {
-    tip.value = '点击切换升序'
-  } else if (sortOrder.value === 'asc') {
-    tip.value = '点击取消排序'
+  if (state.sortOrder === 'desc') {
+    state.tip = '点击切换升序'
+  } else if (state.sortOrder === 'asc') {
+    state.tip = '点击取消排序'
   } else {
-    tip.value = '点击切换降序'
+    state.tip = '点击切换降序'
   }
 }
 
 const onAscOver = () => {
-  if (sortOrder.value === 'asc') {
-    tip.value = '点击取消排序'
+  if (state.sortOrder === 'asc') {
+    state.tip = '点击取消排序'
   } else {
-    tip.value = '点击切换升序'
+    state.tip = '点击切换升序'
   }
 }
 
 const onDescOver = () => {
-  if (sortOrder.value === 'desc') {
-    tip.value = '点击取消排序'
+  if (state.sortOrder === 'desc') {
+    state.tip = '点击取消排序'
   } else {
-    tip.value = '点击切换降序'
+    state.tip = '点击切换降序'
   }
 }
 </script>

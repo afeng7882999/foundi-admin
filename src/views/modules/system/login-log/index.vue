@@ -1,7 +1,7 @@
 <template>
   <div :style="docMinHeight" class="page-system-loginLog fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <fd-split-pane v-model:shrink-all="s.queryFormShow" :default-pos="280" shrink="right" :shrink-to-hide="true">
+    <fd-split-pane v-model:shrink-all.not="s.queryFormShow" :default-pos="280" shrink="right" :shrink-to-hide="true">
       <template #left>
         <fd-page-query :query-data="s.query" :query-fn="m.queryList" :reset-fn="m.resetQuery">
           <fd-item-datetime label="访问时间" prop="operTime" />
@@ -9,7 +9,7 @@
           <fd-item label="用户账号" prop="userName" />
           <fd-item label="IP地址" prop="ip" />
           <fd-item-dict label="状态" prop="statusDict" :dict="s.dicts.sysLoginLogStatus" />
-          <fd-item-sort label="排序" :fields="loginLogSortFields"></fd-item-sort>
+          <fd-item-sort v-model="s.sort" label="排序" :fields="loginLogSortFields"></fd-item-sort>
         </fd-page-query>
       </template>
       <template #right>
@@ -37,8 +37,8 @@
             <fd-col-datetime label="访问时间" prop="operTime" />
             <fd-col-dict label="类型" prop="typeDict" :dict="s.dicts.sysLoginLogType" width="60" />
             <fd-col-dict label="登录方式" prop="authcTypeDict" :dict="s.dicts.sysAuthcType" width="100" />
-            <fd-col label="用户账号" prop="userName" sortable width="150" @sort-changed="m.sortChanged" />
-            <fd-col label="IP地址" prop="ip" width="130" sortable @sort-changed="m.sortChanged" />
+            <fd-col :sort="s.sort" label="用户账号" prop="userName" width="150" @sort-changed="m.sortChanged" />
+            <fd-col :sort="s.sort" label="IP地址" prop="ip" width="130" @sort-changed="m.sortChanged" />
             <fd-col label="地点" prop="location" width="150" />
             <fd-col label="浏览器" prop="browser" width="150" />
             <fd-col label="操作系统" prop="os" width="150" />

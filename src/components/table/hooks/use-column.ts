@@ -23,8 +23,13 @@ const useColumn = (props: Readonly<ExtractPropTypes<typeof COL_DEFAULT_PROPS>>) 
     return true
   }
 
+  const sortable = computed(() => {
+    return !!props.onSortChanged
+  })
+
   return {
     visible,
+    sortable,
     hasAuth,
     booleanOrAuth
   }
