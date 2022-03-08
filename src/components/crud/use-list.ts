@@ -99,7 +99,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     // 排序规则，支持多字段排序
     sort: [] as SortFieldResult[],
     // 表头排序是否支持多字段
-    sortMulti: true,
+    sortMulti: false,
     // 当前ID
     currentId: '',
     // 页码
