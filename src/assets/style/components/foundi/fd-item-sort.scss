@@ -1,0 +1,41 @@
+// fd-item-sort
+.fd-item-sort {
+  &__label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  &__drag {
+    color: var(--el-text-color-placeholder);
+    margin-right: 4px;
+  }
+  
+  &__item {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    margin-bottom: 8px;
+    .el-select {
+      flex: 1;
+    }
+  }
+  
+  &__toggle {
+    margin-left: 4px;
+  }
+  
+  .el-form-item__content {
+    display: flex;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+  
+  .sortable-chosen {
+    .el-input .el-input__inner {
+      border: none;
+      background: none;
+    }
+  }
+}
