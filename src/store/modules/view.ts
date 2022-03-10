@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { _RouteLocationBase } from 'vue-router'
+import { _RouteLocationBase, LocationQuery, RouteParams } from 'vue-router'
 import { ActionContext } from 'vuex'
+import { Indexable } from '@/types/global'
 
 interface ViewTitle {
   path: string
@@ -8,9 +9,19 @@ interface ViewTitle {
 }
 
 export interface ViewState {
-  visitedViews: _RouteLocationBase[]
+  visitedViews: ViewLocation[]
   cachedViews: string[]
   viewTitles: ViewTitle[]
+}
+
+export interface ViewLocation {
+  path: string
+  fullPath: string
+  query: LocationQuery
+  name: string | symbol | null | undefined
+  params: RouteParams
+  meta: Indexable
+  title: string | undefined
 }
 
 const state: ViewState = {
@@ -22,12 +33,20 @@ const state: ViewState = {
 const mutations = {
   ADD_VISITED_VIEW: (state: ViewState, view: _RouteLocationBase) => {
     if (state.visitedViews.some((v) => v.path === view.path)) return
+
     const viewTitle = state.viewTitles.filter((t) => t.path === view.path)[0]
-    state.visitedViews.push(
-      Object.assign({}, view, {
-        title: (viewTitle && viewTitle.title) || (view.meta && view.meta.title) || 'no-name'
-      })
-    )
+    const title = ((viewTitle && viewTitle.title) || (view.meta && view.meta.title) || 'no-name') as string | undefined
+
+    state.visitedViews.push({
+      path: view.path,
+      fullPath: view.fullPath,
+      query: view.query,
+      name: view.name,
+      params: view.params,
+      meta: view.meta,
+      title
+    })
+
     window.localStorage.setItem('view.visitedViews', JSON.stringify(state.visitedViews))
   },
   ADD_CACHED_VIEW: (state: ViewState, view: _RouteLocationBase) => {
@@ -42,7 +61,6 @@ const mutations = {
       state.viewTitles.push(viewTitle)
     }
   },
-
   DEL_VISITED_VIEW: (state: ViewState, view: _RouteLocationBase) => {
     for (const [i, v] of state.visitedViews.entries()) {
       if (v.path === view.path) {
