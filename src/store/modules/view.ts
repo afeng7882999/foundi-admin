@@ -8,12 +8,6 @@ interface ViewTitle {
   title?: string
 }
 
-export interface ViewState {
-  visitedViews: ViewLocation[]
-  cachedViews: string[]
-  viewTitles: ViewTitle[]
-}
-
 export interface ViewLocation {
   path: string
   fullPath: string
@@ -22,6 +16,12 @@ export interface ViewLocation {
   params: RouteParams
   meta: Indexable
   title: string | undefined
+}
+
+export interface ViewState {
+  visitedViews: ViewLocation[]
+  cachedViews: string[]
+  viewTitles: ViewTitle[]
 }
 
 const state: ViewState = {

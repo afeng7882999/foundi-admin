@@ -4,7 +4,7 @@
     <div class="fd-layout__main">
       <div class="fd-layout__header">
         <fd-title @app-setting-show="showAppSetting"></fd-title>
-        <fd-tags v-show="enableTags"></fd-tags>
+        <fd-router-tags v-show="enableTags"></fd-router-tags>
       </div>
       <fd-main></fd-main>
     </div>
@@ -23,7 +23,7 @@ import FdSidebar from './sidebar/index.vue'
 import FdSetting from './setting.vue'
 import FdMain from './main.vue'
 import FdTitle from './title.vue'
-import FdTags from './tags.vue'
+import FdRouterTags from '@/components/router-tags/index.vue'
 import { DEFAULT_AVATAR } from '@/store/modules/user'
 import { setDocumentTheme } from 'element-plus-dynamic-theme/theme'
 import { computed, onBeforeMount, onMounted, ref } from 'vue'

@@ -1,29 +1,29 @@
 <template>
-  <div class="fd-tags">
-    <div class="fd-tags__ops is-left">
+  <div class="fd-router-tags">
+    <div class="fd-router-tags__ops is-left">
       <el-tooltip :show-after="500" content="左翻页" effect="dark" placement="bottom">
         <fd-icon-button icon="left-one" @click="pageLeft"></fd-icon-button>
       </el-tooltip>
     </div>
-    <fd-scroll-panel ref="scrollPanel" scroll-item-class-name="fd-tags-list__item">
-      <div class="fd-tags-list">
+    <fd-scroll-panel ref="scrollPanel" scroll-item-class-name="fd-router-tags__item">
+      <div class="fd-router-tags__list">
         <router-link
           v-for="tag in visitedViews"
           :key="tag.fullPath"
           :class="isActive(tag) ? 'is-active' : ''"
           :to="{ path: tag.path, name: tag.name, query: tag.query, params: tag.params, fullPath: tag.fullPath }"
-          class="fd-tags-list__item"
+          class="fd-router-tags__item"
           @contextmenu.prevent.stop="openMenu(tag, $event)"
         >
-          <span class="fd-tags-list__title">{{ tag.title }}</span>
-          <span v-if="!isAffix(tag)" class="fd-tags-list__close" @click.prevent="closeSelectedTag(tag)">
-            <fd-icon class="close-icon" icon="close-small"></fd-icon>
+          <span class="item-title">{{ tag.title }}</span>
+          <span v-if="!isAffix(tag)" class="item-close" @click.prevent="closeSelectedTag(tag)">
+            <fd-icon class="item-close__icon" icon="close-small"></fd-icon>
           </span>
-          <span v-else class="fd-tags-list__affix"></span>
+          <span v-else class="item-affix"></span>
         </router-link>
       </div>
     </fd-scroll-panel>
-    <div class="fd-tags__ops">
+    <div class="fd-router-tags__ops">
       <el-tooltip :show-after="500" content="右翻页" effect="dark" placement="bottom">
         <fd-icon-button icon="right-one" @click="pageRight"></fd-icon-button>
       </el-tooltip>
@@ -31,7 +31,7 @@
         <fd-icon-button icon="refresh" @click="refreshCurrentTag"></fd-icon-button>
       </el-tooltip>
     </div>
-    <fd-contextmenu ref="contextMenu" class="fd-tags__context-menu">
+    <fd-contextmenu ref="contextMenu" class="fd-router-tags__menu">
       <fd-contextmenu-item icon="refresh" label="刷新" @click="refreshSelectedTag(state.selectedTag)"></fd-contextmenu-item>
       <fd-contextmenu-item
         v-if="state.closable"
@@ -47,7 +47,7 @@
 
 <script lang="ts">
 export default {
-  name: 'FdTags'
+  name: 'FdRouterTags'
 }
 </script>
 
@@ -57,7 +57,7 @@ import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { AllState } from '@/store'
 import { useStore } from 'vuex'
 import { _RouteLocationBase, onBeforeRouteUpdate, RouteMeta, RouteRecordRaw, useRoute, useRouter } from 'vue-router'
-import { DEFAULT_ROUTE } from './types'
+import { DEFAULT_ROUTE } from '@/components/router-tags/types'
 import { Indexable } from '@/types/global'
 
 const scrollPanel = ref()
@@ -241,194 +241,3 @@ const openMenu = (tag: _RouteLocationBase, e: MouseEvent) => {
   state.closable = !(tag.meta && tag.meta.affix)
 }
 </script>
-
-<style lang="scss">
-@use 'src/assets/style/variable.scss' as *;
-@use 'src/assets/style/mixin.scss' as *;
-
-$tags-inner-height: $app-tags-height - 8;
-
-.fd-tags {
-  display: flex;
-  padding-top: 8px;
-  background-color: var(--fd-app-tags-bg-color);
-  width: 100%;
-  height: $app-tags-height;
-
-  &__ops {
-    display: flex;
-    align-items: center;
-    margin-right: 16px;
-    color: var(--el-text-color-placeholder);
-
-    .el-button {
-      margin: 0;
-    }
-
-    &.is-left {
-      margin: 0 0 0 16px;
-    }
-  }
-
-  &__context-menu {
-    font-size: $font-size-small;
-  }
-}
-
-.fd-tags {
-  .fd-scroll-panel {
-    .el-scrollbar__bar {
-      bottom: -6px;
-    }
-
-    .el-scrollbar__wrap {
-      height: 56px;
-    }
-
-    .scrollbar-track-x {
-      bottom: 0;
-      height: 0;
-
-      .scrollbar-thumb-x {
-        height: 0;
-        border-radius: 0;
-      }
-    }
-  }
-}
-
-.fd-tags-list {
-  width: 100%;
-  display: flex;
-
-  &__item {
-    display: inline-block;
-    position: relative;
-    height: $tags-inner-height;
-    color: var(--el-text-color-primary);
-    font-size: $app-tags-font-size;
-    border-radius: $app-tags-radius $app-tags-radius 0 0;
-
-    &.is-active {
-      background-color: var(--el-body-bg-color);
-      color: var(--el-text-color-primary);
-      border-color: var(--el-body-bg-color);
-
-      &:hover {
-        background-color: var(--el-body-bg-color);
-      }
-    }
-
-    &:hover {
-      color: var(--el-text-color-primary);
-      background-color: var(--el-color-primary-light-9);
-    }
-
-    &:first-child {
-      margin-left: 8px;
-    }
-  }
-
-  &__title {
-    position: relative;
-    display: inline-block;
-    height: $tags-inner-height;
-    line-height: $tags-inner-height;
-    padding: 0 8px 0 36px;
-    cursor: pointer;
-  }
-
-  &__close {
-    position: relative;
-    display: inline-block;
-    height: $tags-inner-height;
-    line-height: $tags-inner-height;
-    padding: 0 12px 0 4px;
-    vertical-align: bottom;
-    cursor: pointer;
-
-    .close-icon {
-      border-radius: 50%;
-      color: var(--el-text-color-secondary);
-    }
-
-    &:hover {
-      .close-icon {
-        padding: 2px;
-        color: var(--el-body-bg-color);
-        background-color: var(--el-text-color-placeholder);
-      }
-    }
-  }
-
-  &__affix {
-    display: inline-block;
-    height: $tags-inner-height;
-    vertical-align: bottom;
-    width: 32px;
-  }
-
-  &:after {
-    content: ' ';
-    flex-shrink: 0;
-    height: $tags-inner-height;
-    width: 16px;
-  }
-}
-
-.fd-tags-list__item {
-  &:before,
-  &:after {
-    position: absolute;
-    display: none;
-    bottom: 0;
-    content: '';
-    width: 20px;
-    height: 20px;
-    border-radius: 100%;
-    box-shadow: 0 0 0 40px var(--el-body-bg-color);
-  }
-
-  &:before {
-    left: -20px;
-    clip-path: inset(50% -10px 0 50%);
-  }
-
-  &:after {
-    clip-path: inset(50% 50% 0 -10px);
-  }
-
-  &.is-active {
-    z-index: 1;
-    &:before,
-    &:after {
-      display: inline-block;
-    }
-    &:hover {
-      &:before,
-      &:after {
-        box-shadow: 0 0 0 40px var(--el-body-bg-color);
-      }
-    }
-  }
-
-  &:hover {
-    &:before,
-    &:after {
-      display: inline-block;
-      box-shadow: 0 0 0 40px var(--el-color-primary-light-9);
-    }
-  }
-
-  @include theme($sharp-mode) {
-    border-radius: 0;
-
-    &.is-active::before,
-    &.is-active::after,
-    &:hover::before,
-    &:hover::after {
-      display: none;
-    }
-  }
-}
-</style>

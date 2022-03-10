@@ -276,8 +276,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       orderByList.push(`${s.prop}:${s.order}`)
     })
 
-    console.log(orderByList)
-
     return {
       current: mixState.current,
       size: mixState.siz,

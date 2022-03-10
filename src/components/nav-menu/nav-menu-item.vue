@@ -1,6 +1,16 @@
 <template>
   <li class="fd-nav-menu-item" :class="{ 'is-active': isActive, 'is-expanded': isExpanded, 'is-desc-active': isDescActive }">
-    <a class="fd-nav-menu-item__inner" :style="menuLinkStyle" :href="menuItem.url" rel="noopener" target="_blank" v-waves @mouseenter="mouseHover = true" @mouseleave="mouseHover = false" @click.prevent="onMenuLinkClick">
+    <a
+      v-waves
+      class="fd-nav-menu-item__inner"
+      :style="menuLinkStyle"
+      :href="menuItem.url"
+      rel="noopener"
+      target="_blank"
+      @mouseenter="mouseHover = true"
+      @mouseleave="mouseHover = false"
+      @click.prevent="onMenuLinkClick"
+    >
       <div class="fd-nav-menu-item__flag"></div>
       <fd-icon v-if="hasIcon" class="fd-nav-menu-item__icon" :icon="menuItem.icon"></fd-icon>
       <span v-else-if="hasAbbr" class="fd-nav-menu-item__abbr">{{ menuItem.abbr }}</span>
