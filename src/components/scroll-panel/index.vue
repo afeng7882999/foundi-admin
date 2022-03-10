@@ -14,7 +14,7 @@ export default {
 
 <script setup lang="ts">
 import { scrollElementH } from '@/utils/smooth-scroll'
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 const props = defineProps({
   horizontal: {
@@ -29,32 +29,33 @@ const props = defineProps({
 
 const scrollPanel = ref<HTMLElement | null>(null)
 
-const scrollContainer = computed(() => {
+const getScrollContainer = () => {
   return (scrollPanel.value as HTMLElement).firstElementChild as HTMLElement
-})
+}
 
-const scrollWrapper = computed(() => {
-  return scrollContainer.value.firstElementChild as HTMLElement
-})
+const getScrollWrapper = () => {
+  return getScrollContainer().firstElementChild as HTMLElement
+}
 
 onMounted(() => {
-  scrollWrapper.value.addEventListener('scroll', emitScroll, true)
+  getScrollWrapper().addEventListener('scroll', emitScroll, true)
 })
 
 onBeforeUnmount(() => {
-  scrollWrapper.value.removeEventListener('scroll', emitScroll)
+  getScrollWrapper().removeEventListener('scroll', emitScroll)
 })
 
 const getScrollItems = () => {
-  const $wrapper = scrollWrapper.value
+  const $wrapper = getScrollWrapper()
   const result = [] as HTMLElement[]
   $wrapper.querySelectorAll(`.${props.scrollItemClassName}`).forEach((e) => result.push(e as HTMLElement))
   return result
 }
 
 const onScrollbarScroll = (e: WheelEvent) => {
+  const $wrapper = getScrollWrapper()
   const eventDelta = -e.deltaY * 40
-  scrollWrapper.value.scrollLeft = scrollWrapper.value.scrollLeft + eventDelta / 4
+  $wrapper.scrollLeft = $wrapper.scrollLeft + eventDelta / 4
 }
 
 const emit = defineEmits(['scroll'])
@@ -64,44 +65,46 @@ const emitScroll = () => {
 }
 
 const pageRight = () => {
-  const $container = scrollContainer.value
+  const $container = getScrollContainer()
+  const $wrapper = getScrollWrapper()
   const $items = getScrollItems()
   const containerWidth = $container.offsetWidth
-  const scrollWidth = scrollWrapper.value.scrollLeft + containerWidth
+  const scrollWidth = $wrapper.scrollLeft + containerWidth
   const len = $items.length
   let idx = 0
   for (; idx < len; idx++) {
     if ($items[idx].offsetLeft > scrollWidth) {
-      scrollElementH(scrollWrapper.value, $items[idx - 1].offsetLeft)
+      scrollElementH($wrapper, $items[idx - 1].offsetLeft)
       break
     }
   }
   if (idx === len) {
-    scrollElementH(scrollWrapper.value, scrollWidth)
+    scrollElementH($wrapper, scrollWidth)
   }
 }
 
 const pageLeft = () => {
-  const $container = scrollContainer.value
+  const $container = getScrollContainer()
+  const $wrapper = getScrollWrapper()
   const $items = getScrollItems()
   const containerWidth = $container.offsetWidth
-  const scrollWidth = scrollWrapper.value.scrollLeft - containerWidth
+  const scrollWidth = $wrapper.scrollLeft - containerWidth
   if (scrollWidth <= 0) {
-    scrollElementH(scrollWrapper.value, 0)
+    scrollElementH($wrapper, 0)
     return
   }
   const len = $items.length
   for (let idx = 0; idx < len; idx++) {
     if ($items[idx].offsetLeft > scrollWidth) {
-      scrollElementH(scrollWrapper.value, $items[idx].offsetLeft)
+      scrollElementH($wrapper, $items[idx].offsetLeft)
       break
     }
   }
 }
 
 const moveToTarget = (target: HTMLElement) => {
-  const $container = scrollContainer.value
-  const $wrapper = scrollWrapper.value
+  const $container = getScrollContainer()
+  const $wrapper = getScrollWrapper()
   const $items = getScrollItems()
   const containerWidth = $container.offsetWidth
 
@@ -115,9 +118,9 @@ const moveToTarget = (target: HTMLElement) => {
   }
 
   if (first === target) {
-    scrollElementH(scrollWrapper.value, 0)
+    scrollElementH($wrapper, 0)
   } else if (last === target) {
-    scrollElementH(scrollWrapper.value, $wrapper.scrollWidth - containerWidth)
+    scrollElementH($wrapper, $wrapper.scrollWidth - containerWidth)
   } else {
     // find previous and next one
     const currentIdx = $items.findIndex((item) => item === target)
@@ -131,23 +134,23 @@ const moveToTarget = (target: HTMLElement) => {
     const beforePrevOffsetLeft = prev.offsetLeft
 
     if (afterNextOffsetLeft > $wrapper.scrollLeft + containerWidth) {
-      scrollElementH(scrollWrapper.value, afterNextOffsetLeft - containerWidth)
+      scrollElementH($wrapper, afterNextOffsetLeft - containerWidth)
     } else if (beforePrevOffsetLeft < $wrapper.scrollLeft) {
-      scrollElementH(scrollWrapper.value, beforePrevOffsetLeft)
+      scrollElementH($wrapper, beforePrevOffsetLeft)
     }
   }
 }
 
 const moveToIdx = (idx: number) => {
-  const $container = scrollContainer.value
-  const $wrapper = scrollWrapper.value
+  const $container = getScrollContainer()
+  const $wrapper = getScrollWrapper()
   const $items = getScrollItems()
   const containerWidth = $container.offsetWidth
 
   if (idx === 0) {
-    scrollElementH(scrollWrapper.value, 0)
+    scrollElementH($wrapper, 0)
   } else if (idx === $items.length - 1) {
-    scrollElementH(scrollWrapper.value, $wrapper.scrollWidth - containerWidth)
+    scrollElementH($wrapper, $wrapper.scrollWidth - containerWidth)
   } else {
     const prev = $items[idx - 1]
     const next = $items[idx + 1]
@@ -159,9 +162,9 @@ const moveToIdx = (idx: number) => {
     const beforePrevOffsetLeft = prev.offsetLeft
 
     if (afterNextOffsetLeft > $wrapper.scrollLeft + containerWidth) {
-      scrollElementH(scrollWrapper.value, afterNextOffsetLeft - containerWidth)
+      scrollElementH($wrapper, afterNextOffsetLeft - containerWidth)
     } else if (beforePrevOffsetLeft < $wrapper.scrollLeft) {
-      scrollElementH(scrollWrapper.value, beforePrevOffsetLeft)
+      scrollElementH($wrapper, beforePrevOffsetLeft)
     }
   }
 }
