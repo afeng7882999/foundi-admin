@@ -1,5 +1,5 @@
 <template>
-  <fd-page-main v-bind="pageMainAttrs" name="system-loginLog">
+  <fd-page v-bind="pageMainAttrs" name="system-loginLog">
     <template #query>
       <fd-page-query v-bind="pageQueryAttrs">
         <fd-item-datetime label="访问时间" prop="operTime" />
@@ -42,7 +42,7 @@
       </el-table>
       <el-pagination v-bind="paginationAttrs"></el-pagination>
     </template>
-  </fd-page-main>
+  </fd-page>
   <detail v-if="s.detailShow" ref="detailDialog" v-bind="detailAttrs"></detail>
 </template>
 
