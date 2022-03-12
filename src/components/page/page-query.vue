@@ -40,11 +40,11 @@ const visibleCo = computed(() => {
   return props.visible
 })
 
-const { getDocHeightNoHeader } = usePage()
+const { getDocHeightNoHeaderFooter } = usePage()
 
 const scrollbarStyle = computed(() => {
   return {
-    maxHeight: getDocHeightNoHeader(128, 'px')
+    maxHeight: getDocHeightNoHeaderFooter(128, 'px')
   }
 })
 
@@ -53,23 +53,3 @@ const reset = () => {
   props.resetFn?.()
 }
 </script>
-
-<style lang="scss">
-.fd-page-query {
-  padding: 16px 0;
-  .fd-page__sub-title {
-    margin: 0 16px 16px 16px;
-  }
-  &__scrollbar {
-    padding: 0 16px;
-  }
-  .el-form-item {
-    margin: 16px 0 8px 0;
-  }
-  .el-form-item__content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-</style>

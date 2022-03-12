@@ -1,25 +1,25 @@
 <template>
   <template v-if="visibleCo">
-    <div class="fd-page__action fd-page-act">
+    <div class="fd-page-act">
       <template v-if="query">
         <el-tooltip :content="queryVisible ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
-          <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="action-badge">
+          <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="fd-page-act__badge">
             <fd-icon-button
               :class="queryVisible ? 'expanded' : ''"
-              class="action-icon-btn"
+              class="fd-page-act__icon-btn"
               icon="search-more"
               @click="toggleQueryVisible"
             ></fd-icon-button>
           </el-badge>
         </el-tooltip>
-        <el-divider class="action-divider" direction="vertical" style="margin-left: 16px"></el-divider>
+        <el-divider class="fd-page-act__divider" direction="vertical" style="margin-left: 16px"></el-divider>
         <div class="query-compact">
           <el-form :model="queryData" inline @submit="queryFn">
             <slot name="query" />
           </el-form>
         </div>
       </template>
-      <div class="action-right">
+      <div class="fd-page-act__right">
         <el-button v-show="delVisible" v-waves plain type="danger" @click="emit('del')">
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
@@ -29,9 +29,9 @@
           <fd-icon class="is-in-btn" icon="plus"></fd-icon>
           新增
         </el-button>
-        <el-divider v-if="more" class="action-divider" direction="vertical"></el-divider>
+        <el-divider v-if="more" class="fd-page-act__divider" direction="vertical"></el-divider>
         <el-tooltip content="更多" :show-after="500" effect="dark" placement="top">
-          <fd-icon-button class="action-icon-btn" icon="more" @click.stop="openMoreMenu"></fd-icon-button>
+          <fd-icon-button class="fd-page-act__icon-btn" icon="more" @click.stop="openMoreMenu"></fd-icon-button>
         </el-tooltip>
         <fd-contextmenu ref="contextMenu">
           <slot name="menu" />

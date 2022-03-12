@@ -52,52 +52,90 @@
     background-color: var(--el-fill-base);
     margin-bottom: 8px;
   }
+}
+
+.fd-page-act {
+  display: flex;
+  align-items: center;
+  height: 32px;
   
-  &__query {
-    @include expandTransition($default-transition-time);
+  .query-compact {
+    .el-form--inline .el-form-item {
+      margin-right: 16px;
+    }
   }
   
-  &__action {
+  &__right {
+    margin-left: auto;
     display: flex;
     align-items: center;
-    height: 32px;
+  }
+  
+  &__icon-btn {
+    color: var(--el-text-color-placeholder);
     
-    .query-compact {
-      .el-form--inline .el-form-item {
-        margin-right: 16px;
-      }
-    }
-    
-    .action-right {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-    }
-    
-    .action-icon-btn {
+    &:hover {
       color: var(--el-text-color-placeholder);
-      
-      &:hover {
-        color: var(--el-text-color-placeholder);
-      }
     }
-    
-    .action-badge {
-      sup {
-        height: 12px;
-        line-height: 12px;
-        border: none;
-        border-radius: 10px;
-      }
+  }
+  
+  &__badge {
+    sup {
+      height: 12px;
+      line-height: 12px;
+      border: none;
+      border-radius: 10px;
     }
-    
-    .action-divider {
-      margin: 0 8px;
-      height: 32px;
-    }
-    
-    .el-form-item {
-      margin-bottom: 0;
-    }
+  }
+  
+  &__divider {
+    margin: 0 8px;
+    height: 32px;
+  }
+  
+  .el-form-item {
+    margin-bottom: 0;
+  }
+}
+
+.fd-page-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: $app-footer-height;
+  padding: 16px 0 16px;
+  color: var(--el-text-color-placeholder);
+  user-select: none;
+  
+  &__icon {
+    height: 16px;
+    width: 16px;
+    color: var(--el-text-color-placeholder);
+    margin-right: 4px;
+  }
+  
+  &__text {
+    display: flex;
+    justify-content: center;
+    color: var(--el-text-color-placeholder);
+    font-size: var(--el-font-size-extra-small);
+  }
+}
+
+.fd-page-query {
+  padding: 16px 0;
+  .fd-page__sub-title {
+    margin: 0 16px 16px 16px;
+  }
+  &__scrollbar {
+    padding: 0 16px;
+  }
+  .el-form-item {
+    margin: 16px 0 8px 0;
+  }
+  .el-form-item__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
