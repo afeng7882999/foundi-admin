@@ -2,7 +2,7 @@
   <div v-if="hasAuth('demo:splitPane:list')" :style="docMinHeight" class="page-demo-split-pane fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <div class="fd-page__action">
+      <div class="fd-page-act">
         <el-button @click="onLeftShrinkClick">{{ state.leftShrinkAll ? '展开左侧' : '收缩左侧' }}</el-button>
         <el-checkbox v-model="state.leftShrinkToHide" style="margin-left: 16px">收缩时隐藏手柄</el-checkbox>
       </div>
@@ -29,6 +29,7 @@
       </template>
     </fd-split-pane>
   </div>
+  <fd-page-footer></fd-page-footer>
 </template>
 
 <script lang="ts">
@@ -41,6 +42,7 @@ export default {
 import usePage from '@/components/page/use-page'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { reactive } from 'vue'
+import FdPageFooter from '@/components/page/page-footer.vue'
 
 const state = reactive({
   leftShrinkAll: false,
@@ -51,7 +53,7 @@ const onLeftShrinkClick = () => {
   state.leftShrinkAll = !state.leftShrinkAll
 }
 
-const { docMinHeight, showPageHeader, hasAuth } = usePage()
+const { docMinHeight, showPageHeader, hasAuth } = usePage({ footerVisible: true })
 </script>
 
 <style lang="scss">

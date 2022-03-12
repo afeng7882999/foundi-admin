@@ -16,7 +16,7 @@ const props = defineProps({
   theUrl: String
 })
 
-const { getDocWidth, getDocHeight } = usePage()
+const { getDocWidth, getDocHeight } = usePage({ footerVisible: false })
 
 const iframeStyle = computed(() => {
   return {

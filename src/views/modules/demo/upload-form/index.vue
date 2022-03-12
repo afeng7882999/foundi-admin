@@ -10,6 +10,7 @@
       <fd-upload-img v-model="imgVal"></fd-upload-img>
     </div>
   </div>
+  <fd-page-footer></fd-page-footer>
 </template>
 
 <script lang="ts">
@@ -23,6 +24,7 @@ import usePage from '@/components/page/use-page'
 import FdUploadInput from '@/components/upload-form/upload-input.vue'
 import FdUploadImg from '@/components/upload-form/upload-img.vue'
 import { ref } from 'vue'
+import FdPageFooter from '@/components/page/page-footer.vue'
 
 const inputVal = ref('')
 const imgVal = ref('')

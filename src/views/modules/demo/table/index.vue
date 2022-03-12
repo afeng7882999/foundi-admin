@@ -10,6 +10,7 @@
       </el-tab-pane>
     </el-tabs>
   </div>
+  <fd-page-footer></fd-page-footer>
 </template>
 
 <script lang="ts">
@@ -22,6 +23,7 @@ export default {
 import BaseTableDemo from './base.vue'
 import TreeTableDemo from './tree.vue'
 import usePage from '@/components/page/use-page'
+import FdPageFooter from '@/components/page/page-footer.vue'
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 </script>

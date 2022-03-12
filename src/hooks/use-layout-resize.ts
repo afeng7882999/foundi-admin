@@ -62,8 +62,8 @@ export default function useLayoutResize() {
 
   const getDocHeight = () => {
     const height = storeState.app.enableTags
-      ? resizeConst.tabHeight + resizeConst.titleHeight + resizeConst.titlePadding + resizeConst.footerHeight
-      : resizeConst.titleHeight + resizeConst.titlePadding + resizeConst.footerHeight
+      ? resizeConst.tabHeight + resizeConst.titleHeight + resizeConst.titlePadding
+      : resizeConst.titleHeight + resizeConst.titlePadding
     return bodyRect.height - height
   }
 
