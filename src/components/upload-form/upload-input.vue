@@ -64,7 +64,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'medium'
+    default: 'default'
   }
 })
 
