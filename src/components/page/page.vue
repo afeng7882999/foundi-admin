@@ -16,6 +16,7 @@
     </fd-split-pane>
     <el-backtop></el-backtop>
   </div>
+  <fd-page-footer :visible="footerVisible"></fd-page-footer>
 </template>
 
 <script lang="ts">
@@ -34,6 +35,10 @@ const props = defineProps({
   queryVisible: {
     type: Boolean,
     default: false
+  },
+  footerVisible: {
+    type: Boolean,
+    default: true
   }
 })
 

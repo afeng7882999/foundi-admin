@@ -5,16 +5,33 @@ import { AllState } from '@/store'
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 import { getTreeNode } from '@/utils/data-tree'
 import { resizeConst } from '@/hooks/use-layout-resize'
+import { merge } from 'lodash-es'
 
-export default function () {
-  const pageState = reactive({
+export type PageStateOption = Partial<{
+  // 页面标题
+  title: string
+  // 页面图标
+  icon: string
+  // 页面描述
+  desc: string
+  // 是否显示页脚
+  footerVisible: boolean
+}>
+
+export default function (stateOption?: PageStateOption) {
+  const defaultState = reactive({
     // 页面标题
     title: '',
     // 页面图标
     icon: '',
     // 页面描述
-    desc: ''
+    desc: '',
+    // 是否显示页脚
+    footerVisible: true
   })
+
+  const pageState = reactive(merge({}, defaultState, stateOption) as typeof defaultState & PageStateOption)
+
   const store = useStore<AllState>()
   const storeState = store.state as AllState
   const route = useRoute()
@@ -27,13 +44,15 @@ export default function () {
 
   // Doc最小高度
   const docMinHeight = computed(() => {
-    const height = storeState.app.docHeight
+    const footer = pageState.footerVisible ? resizeConst.footerHeight : 0
+    const height = storeState.app.docHeight - footer
     return { minHeight: height + 'px' }
   })
 
   // Doc高度
   const docHeight = computed(() => {
-    const height = storeState.app.docHeight
+    const footer = pageState.footerVisible ? resizeConst.footerHeight : 0
+    const height = storeState.app.docHeight - footer
     return { height: height + 'px' }
   })
 
@@ -66,20 +85,22 @@ export default function () {
 
   // 获取Doc高度
   const getDocHeight = (remove: number, unit?: string): number | string => {
+    const footer = pageState.footerVisible ? resizeConst.footerHeight : 0
     if (unit) {
-      return (storeState.app.docHeight - remove + unit) as string
+      return (storeState.app.docHeight - remove - footer + unit) as string
     } else {
-      return (storeState.app.docHeight - remove) as number
+      return (storeState.app.docHeight - remove - footer) as number
     }
   }
 
-  // 获取Doc高度，去除 PageHeader 高度
-  const getDocHeightNoHeader = (remove: number, unit?: string): number | string => {
+  // 获取Doc高度，去除 PageHeader, PageFooter 高度
+  const getDocHeightNoHeaderFooter = (remove: number, unit?: string): number | string => {
     const header = storeState.app.enableTags ? 0 : resizeConst.pageHeaderHeight
+    const footer = pageState.footerVisible ? resizeConst.footerHeight : 0
     if (unit) {
-      return (storeState.app.docHeight - remove - header + unit) as string
+      return (storeState.app.docHeight - remove - header - footer + unit) as string
     } else {
-      return (storeState.app.docHeight - remove - header) as number
+      return (storeState.app.docHeight - remove - header - footer) as number
     }
   }
 
@@ -138,7 +159,7 @@ export default function () {
     getBodyWidth,
     getBodyHeight,
     getDocWidth,
-    getDocHeightNoHeader,
+    getDocHeightNoHeaderFooter,
     getDocHeight,
     hasAuth,
     getPageMeta,
