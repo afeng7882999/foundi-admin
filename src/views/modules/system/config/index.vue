@@ -29,7 +29,7 @@
           </div>
         </transition>
       </el-form>
-      <div class="fd-page__action">
+      <div class="fd-page-act">
         <el-button
           v-show="hasAuth('system:config:delete')"
           v-waves
@@ -41,7 +41,7 @@
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <div class="action-right">
+        <div class="fd-page-act__right">
           <el-button v-show="hasAuth('system:config:add')" v-waves type="primary" plain @click="showEdit()">
             <fd-icon class="is-in-btn" icon="plus"></fd-icon>
             新增

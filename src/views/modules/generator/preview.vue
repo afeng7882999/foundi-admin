@@ -2,12 +2,12 @@
   <div :style="docHeight" class="page-generator-preview fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <div class="fd-page__action">
+      <div class="fd-page-act">
         <el-button @click="close()">
           <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
         </el-button>
-        <div class="action-right">
+        <div class="fd-page-act__right">
           <el-button v-show="hasAuth('generator:genTable:edit')" v-waves plain type="primary" @click="handleGenerate">
             <fd-icon class="is-in-btn" icon="download" :loading="state.genLoading"></fd-icon>
             生成
@@ -98,10 +98,10 @@ const state = reactive({
   genLoading: false
 })
 
-const { showPageHeader, docHeight, getDocHeightNoHeader, getDocHeight } = usePage()
+const { showPageHeader, docHeight, getDocHeightNoHeaderFooter, getDocHeight } = usePage()
 
 const previewStyle = computed(() => {
-  return { height: getDocHeightNoHeader(82, 'px') }
+  return { height: getDocHeightNoHeaderFooter(82, 'px') }
 })
 
 const route = useRoute()
@@ -166,7 +166,7 @@ onBeforeMount(async () => {
       compactCodeTree(null, state.nodeData)
       await nextTick(() => {
         codeTree.value.setCurrentKey(state.activeNode.id)
-        codeEditor.value.refresh('100%', getDocHeightNoHeader(126, 'px'))
+        codeEditor.value.refresh('100%', getDocHeightNoHeaderFooter(126, 'px'))
         state.loading = false
       })
     } catch (e) {
@@ -180,7 +180,7 @@ const onTreeNodeClick = async (node: CodePreviewNode) => {
   if (node.code) {
     state.activeNode = node
     await nextTick(() => {
-      codeEditor.value.refresh('100%', getDocHeightNoHeader(126, 'px'))
+      codeEditor.value.refresh('100%', getDocHeightNoHeaderFooter(126, 'px'))
     })
   }
 }

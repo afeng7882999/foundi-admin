@@ -32,7 +32,7 @@
             </el-form-item>
           </div>
         </transition>
-        <div class="fd-page__action">
+        <div class="fd-page-act">
           <el-button
             v-show="hasAuth('generator:genTable:delete')"
             v-waves
@@ -44,7 +44,7 @@
             <fd-icon class="is-in-btn" icon="delete"></fd-icon>
             删除
           </el-button>
-          <div class="action-right">
+          <div class="fd-page-act__right">
             <el-button v-show="hasAuth('generator:genTable:edit')" v-waves plain type="primary" @click="handleGenerate(null)">
               <fd-icon class="is-in-btn" icon="download" :loading="state.generating['batch']"></fd-icon>
               生成

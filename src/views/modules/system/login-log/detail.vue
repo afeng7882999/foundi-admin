@@ -1,10 +1,11 @@
 <template>
-  <fd-drawer
+  <component
+    :is="state.component"
     v-model="state.visible"
     :close-on-click-modal="false"
     :modal="false"
     :title="`系统访问日志详细 (${state.idx + 1} / ${state.data.length})`"
-    size="600px"
+    size="380px"
   >
     <el-descriptions :column="2" :title="`ID: ${state.data[state.idx].id}`" border>
       <el-descriptions-item :span="2" label="访问时间">
@@ -37,7 +38,7 @@
         </el-button>
       </template>
     </el-descriptions>
-  </fd-drawer>
+  </component>
 </template>
 
 <script lang="ts">
@@ -58,7 +59,8 @@ const stateOption = {
   ifEditable: false,
   resetFormData: {
     id: ''
-  }
+  },
+  component: 'ElDialog'
 }
 
 const { mixState: state, mixComputed, mixMethods } = useDetail<LoginLog>(stateOption, emit)

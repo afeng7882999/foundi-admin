@@ -2,7 +2,7 @@
   <div ref="moduleRoot" :style="docMinHeight" class="page-system-group fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <div class="fd-page__action">
+      <div class="fd-page-act">
         <el-button
           v-show="hasAuth('system:group:delete')"
           v-waves
@@ -14,7 +14,7 @@
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <div class="action-right">
+        <div class="fd-page-act__right">
           <el-button v-show="hasAuth('system:group:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
           <el-button v-show="hasAuth('system:group:export')" v-waves plain @click="exportData()">导出数据</el-button>
         </div>

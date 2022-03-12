@@ -2,7 +2,7 @@
   <div ref="pageRoot" :style="docMinHeight" class="page-generator-edit fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <div class="fd-page__action">
+      <div class="fd-page-act">
         <el-button @click="close()">
           <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
@@ -11,7 +11,7 @@
           <fd-icon class="is-in-btn" icon="refresh"></fd-icon>
           与数据库同步
         </el-button>
-        <div class="action-right">
+        <div class="fd-page-act__right">
           <el-button type="primary" @click="submitForm()">提交</el-button>
           <el-button @click="close()">取消</el-button>
         </div>

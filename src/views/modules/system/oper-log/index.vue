@@ -40,7 +40,7 @@
           </div>
         </transition>
       </el-form>
-      <div class="fd-page__action">
+      <div class="fd-page-act">
         <el-button
           v-show="hasAuth('system:operLog:delete')"
           v-waves
@@ -54,7 +54,7 @@
         </el-button>
         <el-divider class="action-divider" direction="vertical"></el-divider>
         <el-button v-show="hasAuth('system:operLog:export')" v-waves @click="exportData()">导出数据</el-button>
-        <div class="action-right">
+        <div class="fd-page-act__right">
           <el-form v-show="!state.queryFormShow" ref="queryFormQuick" :inline="true" :model="state.query" @keyup.enter="queryList()">
             <el-form-item label="时间" prop="operTime" style="height: 36px">
               <el-date-picker

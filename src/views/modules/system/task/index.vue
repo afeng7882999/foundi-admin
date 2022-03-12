@@ -23,12 +23,12 @@
           </div>
         </transition>
       </el-form>
-      <div class="fd-page__action">
+      <div class="fd-page-act">
         <el-button v-show="hasAuth('system:task:delete')" v-waves :disabled="selectedNodes.length <= 0" plain type="danger" @click="del()">
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <div class="action-right">
+        <div class="fd-page-act__right">
           <el-button v-show="hasAuth('system:task:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
           <el-button v-show="hasAuth('system:task:export')" v-waves @click="exportData()">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>

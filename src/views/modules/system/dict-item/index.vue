@@ -1,5 +1,5 @@
 <template>
-  <div ref="moduleRoot" :style="docMinHeight" class="system-page-dictItem fd-page">
+  <el-dialog :modelValue="true" ref="moduleRoot" :style="docMinHeight" class="system-page-dictItem fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="state.query" @keyup.enter="queryList()">
@@ -21,7 +21,7 @@
           </div>
         </transition>
       </el-form>
-      <div class="fd-page__action">
+      <div class="fd-page-act">
         <el-button @click="close()">
           <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
@@ -37,7 +37,7 @@
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <div class="action-right">
+        <div class="fd-page-act__right">
           <el-button v-show="hasAuth('system:dictItem:add')" v-waves plain type="primary" @click="showDictItemEdit()">新增</el-button>
           <el-button v-show="hasAuth('system:dictItem:export')" @click.prevent.stop="openMenu($event)">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
@@ -93,7 +93,7 @@
       <fd-contextmenu-item @click="exportDictItemData('all')">导出所有数据</fd-contextmenu-item>
     </fd-contextmenu>
     <edit v-if="state.editShow" ref="editDialog" @refresh-data-list="getList"></edit>
-  </div>
+  </el-dialog>
 </template>
 
 <script lang="ts">

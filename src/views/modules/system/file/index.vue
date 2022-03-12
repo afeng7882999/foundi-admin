@@ -37,7 +37,7 @@
           </div>
         </transition>
       </el-form>
-      <div class="fd-page__action">
+      <div class="fd-page-act">
         <el-button
           v-show="hasAuth('system:file:delete')"
           v-waves
@@ -49,7 +49,7 @@
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <div class="action-right">
+        <div class="fd-page-act__right">
           <el-button v-show="hasAuth('system:file:upload')" v-waves type="primary" @click="showEdit()">上传文件</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
           <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">

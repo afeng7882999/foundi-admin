@@ -2,7 +2,7 @@
   <div ref="moduleRoot" :style="docMinHeight" class="page-oauthUser fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <div class="fd-page__action">
+      <div class="fd-page-act">
         <el-button @click="close()">
           <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
@@ -18,7 +18,7 @@
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <div class="action-right">
+        <div class="fd-page-act__right">
           <el-button v-show="hasAuth('system:oauthUser:export')" v-waves @click="exportData()">导出数据</el-button>
         </div>
       </div>
