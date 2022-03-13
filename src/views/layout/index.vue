@@ -25,12 +25,12 @@ import FdMain from './main.vue'
 import FdTitle from './title.vue'
 import FdRouterTags from '@/components/router-tags/index.vue'
 import { DEFAULT_AVATAR } from '@/store/modules/user'
-import { setDocumentTheme } from 'element-plus-dynamic-theme/theme'
 import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import { AllState } from '@/store'
 import { useStore } from 'vuex'
 import useLayoutResize from '@/hooks/use-layout-resize'
 import { DeviceType, SidebarMode } from '@/store/modules/app'
+import { setDocumentTheme } from '@/components/theme/theme'
 
 const store = useStore<AllState>()
 const storeState = store.state as AllState

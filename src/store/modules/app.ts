@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { ActionContext } from 'vuex'
-import { Theme, setDocumentTheme } from 'element-plus-dynamic-theme/theme'
+import { Theme } from 'element-plus-dynamic-theme/theme'
+import { setDocumentTheme } from '@/components/theme/theme'
 
 const DEFAULT_SIDEBAR_MODE = '{"minimized":false,"offScreen":false,"opened":false,"useGrouped":true,"showLogo":true,"showUser":true}'
 
