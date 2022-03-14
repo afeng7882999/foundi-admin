@@ -116,7 +116,7 @@
       </el-tabs>
     </el-form>
     <template #footer>
-      <span class="fd-dialog-footer">
+      <span class="fd-dialog__footer">
         <el-button @click="state.visible = false">取消</el-button>
         <el-button type="primary" @click="submit">确定</el-button>
       </span>

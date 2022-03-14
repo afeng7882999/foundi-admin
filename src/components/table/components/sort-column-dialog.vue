@@ -39,8 +39,8 @@
       </el-table>
     </div>
     <template #footer>
-      <div class="fd-dialog-footer">
-        <div class="fd-dialog-footer__right">
+      <div class="fd-dialog__footer">
+        <div class="fd-dialog__footer is-right">
           <el-button @click="reset">重置</el-button>
         </div>
         <el-button type="primary" @click="submit">设置</el-button>

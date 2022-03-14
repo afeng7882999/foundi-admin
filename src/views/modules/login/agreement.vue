@@ -9,7 +9,7 @@
       </el-scrollbar>
     </div>
     <template #footer>
-      <span class="fd-dialog-footer">
+      <span class="fd-dialog__footer">
         <el-button type="primary" @click="state.visible = false">确定</el-button>
       </span>
     </template>

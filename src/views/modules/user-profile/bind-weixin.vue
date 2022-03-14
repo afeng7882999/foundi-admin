@@ -5,7 +5,7 @@
       <span>请使用微信扫码登录, 点击刷新</span>
     </div>
     <template #footer>
-      <span class="fd-dialog-footer">
+      <span class="fd-dialog__footer">
         <el-button @click="state.visible = false">取消</el-button>
       </span>
     </template>

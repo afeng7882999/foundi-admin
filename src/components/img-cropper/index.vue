@@ -104,7 +104,7 @@
         </el-col>
       </el-row>
       <template #footer>
-        <span class="fd-dialog-footer">
+        <span class="fd-dialog__footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="saveImg">确 定</el-button>
         </span>

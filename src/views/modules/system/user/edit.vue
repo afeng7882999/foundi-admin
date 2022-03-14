@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="visible" :close-on-click-modal="false" :title="isCreate ? '新增' : '修改'" width="720px" @closed="hideDialog">
+  <fd-dialog v-model="visible" :title="isCreate ? '新增' : '修改'" width="720px" @closed="hideDialog">
     <el-form ref="form" :model="formData" :rules="formRule" label-width="80px" @keyup.enter="submit">
       <el-row>
         <el-col :span="16">
@@ -86,28 +86,19 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <span class="fd-dialog-footer">
+      <span class="fd-dialog__footer">
         <el-button @click="visible = false">取消</el-button>
         <el-button type="primary" @click="submit">确定</el-button>
       </span>
     </template>
-  </el-dialog>
+  </fd-dialog>
   <ChangePassword ref="changePasswordDialog"></ChangePassword>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, ref, toRefs } from 'vue'
 import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
-import {
-  checkEmail,
-  checkMobile,
-  checkUsername,
-  User,
-  userDicts,
-  userGetOne,
-  userPostOne,
-  userPutOne
-} from '@/api/system/user'
+import { checkEmail, checkMobile, checkUsername, User, userDicts, userGetOne, userPostOne, userPutOne } from '@/api/system/user'
 import FdImageCropper from '@/components/img-cropper/index.vue'
 import { validEmail, validMobile, validPassword, validUsername } from '@/utils/validate'
 import FdRegionCascader from '@/components/region-cascader/index.vue'

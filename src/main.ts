@@ -16,6 +16,7 @@ import FdPageHeader from '@/components/page-header'
 import FdContextmenu from '@/components/contextmenu'
 import FdIconButton from '@/components/icon-button'
 import FdTreeSelect from '@/components/tree-select'
+import FdDialog from '@/components/dialog'
 import FdDrawer from '@/components/drawer'
 import FdPageAll from '@/components/page'
 import FdTableAll from '@/components/table'
@@ -33,6 +34,7 @@ app
   .use(FdContextmenu)
   .use(FdIconButton)
   .use(FdTreeSelect)
+  .use(FdDialog)
   .use(FdDrawer)
   .use(FdPageAll)
   .use(FdTableAll)

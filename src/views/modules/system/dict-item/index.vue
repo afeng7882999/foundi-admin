@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :modelValue="true" ref="moduleRoot" :style="docMinHeight" class="system-page-dictItem fd-page">
+  <el-dialog :modelValue="true" ref="moduleRoot" draggable :style="docMinHeight" class="system-page-dictItem fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <el-form ref="queryForm" :inline="true" :model="state.query" @keyup.enter="queryList()">

@@ -10,18 +10,41 @@
   background-color: $modal-background-color;
 }
 
-// fd-dialog-footer
-.fd-dialog-footer {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  
-  &__right {
-    margin-right: 8px;
-    flex: 1;
+// fd-dialog
+.fd-dialog {
+  &__title {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    color: var(--el-text-color-regular);
+  
+    .title-icon {
+      font-size: $icon-size-large;
+      margin-right: 8px;
+      align-self: center;
+    }
+  
+    .title-text {
+      text-align: center;
+      font-size: $font-size-large;
+    }
+    
+    .title-inner {
+      flex: 1;
+    }
+  }
+  
+  &__footer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    
+    &.is-right {
+      margin-right: 8px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
   }
 }

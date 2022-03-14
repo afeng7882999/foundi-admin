@@ -47,7 +47,7 @@
       @size-change="sizeChange"
     />
     <template #footer>
-      <span class="fd-dialog-footer">
+      <span class="fd-dialog__footer">
         <el-button type="primary" @click="importTableHandle">确 定</el-button>
         <el-button @click="hideDialog">取 消</el-button>
       </span>

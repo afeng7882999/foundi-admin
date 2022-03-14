@@ -34,7 +34,7 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <span class="fd-dialog-footer">
+      <span class="fd-dialog__footer">
         <el-button @click="state.visible = false">确定</el-button>
       </span>
     </template>
