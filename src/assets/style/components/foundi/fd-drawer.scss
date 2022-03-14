@@ -26,15 +26,15 @@
     color: var(--el-text-color-regular);
     
     .fd-drawer__scroll {
-      padding-top: 24px;
+      padding-top: 30px;
     }
   }
   
   &__title {
-    padding: 16px 24px;
+    padding: 20px 20px 10px;
     display: flex;
     align-items: center;
-    height: 48px;
+    height: 62px;
     
     .title-icon {
       font-size: $icon-size-large;
@@ -49,14 +49,14 @@
     
     .title-button {
       position: absolute !important;
-      top: 8px;
-      right: 16px;
+      top: 20px;
+      right: 20px;
     }
   }
   
   &__main {
     flex: 1;
-    padding: 0 24px 24px 24px;
+    padding: 0 20px 30px 20px;
   }
   
   &.has-footer {
@@ -70,8 +70,8 @@
     }
     
     .fd-drawer__footer {
-      height: 80px;
-      padding: 24px;
+      height: 86px;
+      padding: 30px 20px 20px 20px;
     }
   }
   

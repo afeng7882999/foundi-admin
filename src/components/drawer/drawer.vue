@@ -81,7 +81,7 @@ const objClass = computed(() => {
 const { pageState, getBodyHeight } = usePage()
 
 const scrollbarStyle = computed(() => {
-  const remove = useSlots().footer ? 120 : 48
+  const remove = useSlots().footer ? 142 : 62
   return { maxHeight: getBodyHeight(remove, 'px') }
 })
 
