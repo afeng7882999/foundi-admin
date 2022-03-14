@@ -24,6 +24,19 @@
           prop="name"
           width="200"
         ></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="菜单图标" prop="icon" width="80">
+          <template #default="scope">
+            <fd-icon :icon="scope.row.icon" class="tb-icon"></fd-icon>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :show-overflow-tooltip="true"
+          align="center"
+          header-align="center"
+          label="菜单缩写"
+          prop="abbr"
+          width="80"
+        ></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
           align="left"
@@ -61,19 +74,6 @@
             <span>{{ dictVal(dicts.sysMenuType, scope.row.typeDict) }}</span>
           </template>
         </el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="菜单图标" prop="icon" width="80">
-          <template #default="scope">
-            <fd-icon :icon="scope.row.icon" class="tb-icon"></fd-icon>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="center"
-          header-align="center"
-          label="菜单缩写"
-          prop="abbr"
-          width="80"
-        ></el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
           align="center"
