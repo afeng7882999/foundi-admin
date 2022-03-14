@@ -26,18 +26,19 @@
     color: var(--el-text-color-regular);
     
     .fd-drawer__scroll {
-      height: calc(100% - 50px);
+      padding-top: 24px;
     }
   }
   
   &__title {
-    padding: 15px 20px;
+    padding: 16px 24px;
     display: flex;
-    height: 50px;
+    align-items: center;
+    height: 48px;
     
     .title-icon {
-      font-size: 24px;
-      margin-right: 10px;
+      font-size: $icon-size-large;
+      margin-right: 8px;
       align-self: center;
     }
     
@@ -48,15 +49,14 @@
     
     .title-button {
       position: absolute !important;
-      top: 10px;
-      right: 15px;
+      top: 8px;
+      right: 16px;
     }
   }
   
   &__main {
     flex: 1;
-    max-height: calc(100% - 126px);
-    padding: 30px 20px 20px 20px;
+    padding: 0 24px 24px 24px;
   }
   
   &.has-footer {
@@ -70,8 +70,8 @@
     }
     
     .fd-drawer__footer {
-      height: 76px;
-      padding: 20px;
+      height: 80px;
+      padding: 24px;
     }
   }
   

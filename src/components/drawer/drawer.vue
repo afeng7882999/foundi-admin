@@ -36,6 +36,7 @@ export default {
 <script setup lang="ts">
 import { computed, ref, useSlots } from 'vue'
 import usePage from '@/components/page/use-page'
+import { ElDrawer } from 'element-plus'
 
 const props = defineProps({
   title: {
@@ -64,7 +65,7 @@ const props = defineProps({
   }
 })
 
-const drawer = ref()
+const drawer = ref<InstanceType<typeof ElDrawer>>()
 
 const objClass = computed(() => {
   const clazz = ['fd-drawer']
@@ -80,7 +81,7 @@ const objClass = computed(() => {
 const { pageState, getBodyHeight } = usePage()
 
 const scrollbarStyle = computed(() => {
-  const remove = useSlots().footer ? 126 : 50
+  const remove = useSlots().footer ? 120 : 48
   return { maxHeight: getBodyHeight(remove, 'px') }
 })
 
@@ -89,6 +90,6 @@ const currentIcon = computed(() => {
 })
 
 const hide = () => {
-  ;(drawer.value as any).handleClose()
+  drawer.value?.handleClose()
 }
 </script>
