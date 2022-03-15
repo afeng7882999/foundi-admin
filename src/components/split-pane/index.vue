@@ -72,6 +72,11 @@ const props = defineProps({
     type: String as PropType<'vertical' | 'horizontal'>,
     default: 'vertical',
     validator: (val: string) => ['vertical', 'horizontal'].includes(val)
+  },
+  // shrink animation
+  animation: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -105,21 +110,25 @@ const cursor = computed(() => {
 })
 
 const wrapperClass = computed(() => {
-  return [`is-${props.split}`, `is-shrink-${props.shrink}`]
+  const clazz = [`is-${props.split}`, `is-shrink-${props.shrink}`]
+  if (props.animation) {
+    clazz.push('is-animation')
+  }
+  return clazz
 })
 
 const leftStyle = computed(() => {
   if (props.shrink === 'left') {
     return {}
   }
-  return { [type.value]: state.finalPos + 'px', display: state.finalPos ? 'block' : 'none' }
+  return { [type.value]: state.finalPos + 'px' }
 })
 
 const rightStyle = computed(() => {
   if (props.shrink === 'right') {
     return {}
   }
-  return { [type.value]: state.finalPos + 'px', display: state.finalPos ? 'block' : 'none' }
+  return { [type.value]: state.finalPos + 'px' }
 })
 
 const resizerVisible = computed(() => {
@@ -283,6 +292,20 @@ const onMouseMove = (e: MouseEvent) => {
   &.is-shrink-right {
     > .fd-split-pane__pane.is-right {
       flex: 1;
+    }
+  }
+
+  &.is-animation {
+    &.is-shrink-left {
+      > .fd-split-pane__pane.is-right {
+        transition: all $default-transition-time;
+      }
+    }
+
+    &.is-shrink-right {
+      > .fd-split-pane__pane.is-left {
+        transition: all $default-transition-time;
+      }
     }
   }
 }

@@ -7,17 +7,23 @@
         <el-checkbox v-model="state.leftShrinkToHide" style="margin-left: 16px">收缩时隐藏手柄</el-checkbox>
       </div>
     </div>
-    <fd-split-pane v-model:shrink-all="state.leftShrinkAll" :default-pos="400" shrink="right" :shrink-to-hide="state.leftShrinkToHide">
+    <fd-split-pane
+      v-model:shrink-all="state.leftShrinkAll"
+      animation
+      :default-pos="400"
+      shrink="right"
+      :shrink-to-hide="state.leftShrinkToHide"
+    >
       <template #left>
         <div class="fd-page__form is-left">
-          <div class="fd-page__sub-title"><span class="title-text">form1</span></div>
+          <div class="fd-page__sub-title"><span class="title-text">form1 (animation)</span></div>
         </div>
       </template>
       <template #right>
         <fd-split-pane :default-pos="400" split="horizontal" shrink="right">
           <template #left>
             <div class="fd-page__form is-right-top">
-              <div class="fd-page__sub-title"><span class="title-text">form2</span></div>
+              <div class="fd-page__sub-title"><span class="title-text">form2 (no animation)</span></div>
             </div>
           </template>
           <template #right>
