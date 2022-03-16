@@ -1,13 +1,13 @@
 import { App } from 'vue'
 import FdTableSortHeader from './components/sort-header.vue'
 
-import FdColAct from './components/column/col-act.vue'
-import FdColCustom from './components/column/col-custom.vue'
-import FdColDatetime from './components/column/col-datetime.vue'
-import FdCol from './components/column/col.vue'
-import FdColDict from './components/column/col-dict.vue'
-import FdColIcon from './components/column/col-icon.vue'
-import FdColSelection from './components/column/col-selection.vue'
+import FdColAct from './components/col-act.vue'
+import FdColCustom from './components/col-custom.vue'
+import FdColDatetime from './components/col-datetime.vue'
+import FdCol from './components/col.vue'
+import FdColDict from './components/col-dict.vue'
+import FdColIcon from './components/col-icon.vue'
+import FdColSelection from './components/col-selection.vue'
 
 export default function install(app: App) {
   app.component(FdTableSortHeader.name, FdTableSortHeader)

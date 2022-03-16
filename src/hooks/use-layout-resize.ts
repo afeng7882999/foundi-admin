@@ -2,7 +2,6 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { DeviceType } from '@/store/modules/app'
-import { throttle } from 'lodash-es'
 
 export const breakpoints = {
   sm: 768,
