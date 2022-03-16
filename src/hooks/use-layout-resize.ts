@@ -4,11 +4,14 @@ import { AllState } from '@/store'
 import { DeviceType } from '@/store/modules/app'
 import { throttle } from 'lodash-es'
 
-export const resizeConst = {
+export const breakpoints = {
   sm: 768,
   md: 992,
   lg: 1200,
-  xl: 1920,
+  xl: 1920
+}
+
+export const resizeConst = {
   ratio: 3,
   titleHeight: 48,
   tabHeight: 48,
@@ -46,7 +49,6 @@ export default function useLayoutResize() {
         await store.dispatch('app/setBodyWidth', bodyRect.width)
         await store.dispatch('app/setDocHeight', getDocHeight())
         await store.dispatch('app/setDocWidth', getDocWidth())
-        await store.dispatch('app/setBodyWidthRange', getWidthRange(bodyRect.width))
         if (isMobile()) {
           await store.dispatch('app/toggleDevice', DeviceType.Mobile)
           await store.dispatch('app/setSidebarMode', { offScreen: true, opened: false })
@@ -78,17 +80,7 @@ export default function useLayoutResize() {
   }
 
   const isMobile = () => {
-    return bodyRect.width - resizeConst.ratio < resizeConst.md
-  }
-
-  const getWidthRange = (w: number) => {
-    return (
-      (w >= resizeConst.xl && 'xl') ||
-      (w >= resizeConst.lg && 'lg') ||
-      (w >= resizeConst.md && 'md') ||
-      (w >= resizeConst.sm && 'sm') ||
-      'xs'
-    )
+    return bodyRect.width - resizeConst.ratio < breakpoints.md
   }
 
   return {
