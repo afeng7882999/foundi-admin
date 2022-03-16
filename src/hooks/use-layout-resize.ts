@@ -41,26 +41,22 @@ export default function useLayoutResize() {
     window.addEventListener('resize', resizeLayout)
   }
 
-  const resizeLayout = throttle(
-    async () => {
-      if (!document.hidden) {
-        bodyRect = document.body.getBoundingClientRect()
-        await store.dispatch('app/setBodyHeight', bodyRect.height)
-        await store.dispatch('app/setBodyWidth', bodyRect.width)
-        await store.dispatch('app/setDocHeight', getDocHeight())
-        await store.dispatch('app/setDocWidth', getDocWidth())
-        if (isMobile()) {
-          await store.dispatch('app/toggleDevice', DeviceType.Mobile)
-          await store.dispatch('app/setSidebarMode', { offScreen: true, opened: false })
-        } else {
-          await store.dispatch('app/toggleDevice', DeviceType.Desktop)
-          await store.dispatch('app/setSidebarMode', { offScreen: false, opened: false })
-        }
+  const resizeLayout = async () => {
+    if (!document.hidden) {
+      bodyRect = document.body.getBoundingClientRect()
+      await store.dispatch('app/setBodyHeight', bodyRect.height)
+      await store.dispatch('app/setBodyWidth', bodyRect.width)
+      await store.dispatch('app/setDocHeight', getDocHeight())
+      await store.dispatch('app/setDocWidth', getDocWidth())
+      if (isMobile()) {
+        await store.dispatch('app/toggleDevice', DeviceType.Mobile)
+        await store.dispatch('app/setSidebarMode', { offScreen: true, opened: false })
+      } else {
+        await store.dispatch('app/toggleDevice', DeviceType.Desktop)
+        await store.dispatch('app/setSidebarMode', { offScreen: false, opened: false })
       }
-    },
-    300,
-    { leading: true, trailing: false }
-  )
+    }
+  }
 
   const getDocHeight = () => {
     const height = storeState.app.enableTags
