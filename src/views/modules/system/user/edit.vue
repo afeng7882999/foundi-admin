@@ -14,6 +14,7 @@
                 v-model="formData.groupId"
                 :data-list="groupList"
                 :select-params="{ placeholder: '请选择用户组' }"
+                style="width: 100%"
               ></fd-tree-select>
             </el-form-item>
           </el-row>
