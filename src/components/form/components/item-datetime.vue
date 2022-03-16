@@ -20,7 +20,7 @@
 
 <script lang="ts">
 export default {
-  name: 'FdItemDatetime',
+  name: 'FdFmiDatetime',
   inheritAttrs: false
 }
 </script>

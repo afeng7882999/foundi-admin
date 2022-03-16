@@ -2,19 +2,19 @@
   <fd-page v-bind="pageMainAttrs" name="system-loginLog">
     <template #query>
       <fd-page-query v-bind="pageQueryAttrs">
-        <fd-item-datetime label="访问时间" prop="operTime" />
-        <fd-item-dict label="登录方式" prop="authcTypeDict" :dict="s.dicts.sysAuthcType" />
-        <fd-item label="用户账号" prop="userName" />
-        <fd-item label="IP地址" prop="ip" />
-        <fd-item-dict label="状态" prop="statusDict" :dict="s.dicts.sysLoginLogStatus" />
-        <fd-item-sort v-model="s.sort" label="排序" :fields="loginLogSortFields"></fd-item-sort>
+        <fd-fmi-datetime label="访问时间" prop="operTime" />
+        <fd-fmi-dict label="登录方式" prop="authcTypeDict" :dict="s.dicts.sysAuthcType" />
+        <fd-fmi label="用户账号" prop="userName" />
+        <fd-fmi label="IP地址" prop="ip" />
+        <fd-fmi-dict label="状态" prop="statusDict" :dict="s.dicts.sysLoginLogStatus" />
+        <fd-fmi-sort v-model="s.sort" label="排序" :fields="loginLogSortFields"></fd-fmi-sort>
       </fd-page-query>
     </template>
     <template #act>
       <fd-page-act del="system:loginLog:delete" export="system:loginLog:export" v-bind="pageActAttrs">
         <template #query>
-          <fd-item-datetime prop="operTime" />
-          <fd-item-dict prop="statusDict" :dict="s.dicts.sysLoginLogStatus" placeholder="请选择状态" />
+          <fd-fmi-datetime prop="operTime" />
+          <fd-fmi-dict prop="statusDict" :dict="s.dicts.sysLoginLogStatus" placeholder="请选择状态" />
         </template>
       </fd-page-act>
     </template>

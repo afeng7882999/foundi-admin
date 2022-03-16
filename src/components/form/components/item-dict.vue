@@ -16,7 +16,7 @@
 
 <script lang="ts">
 export default {
-  name: 'FdItemDict',
+  name: 'FdFmiDict',
   inheritAttrs: false
 }
 </script>

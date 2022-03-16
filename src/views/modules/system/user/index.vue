@@ -7,11 +7,11 @@
           <el-form ref="queryForm" :inline="true" :model="query" @keyup.enter="queryList()">
             <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
               <div v-show="queryFormShow" class="fd-page__query">
-                <fd-item label="账号" prop="account" placeholder="用户名、手机号、邮箱" width="auto" />
-                <fd-item-list label="角色" prop="roleId" :list="roleTree" multi />
-                <fd-item-tree label="用户组" prop="groupId" :list="groupTree" multi />
-                <fd-item-dict label="状态" prop="statusDict" :dict="dicts.sysUserStatus" />
-                <fd-item-act @query="queryList" @reset="resetQuery" />
+                <fd-fmi label="账号" prop="account" placeholder="用户名、手机号、邮箱" width="auto" />
+                <fd-fmi-list label="角色" prop="roleId" :list="roleTree" multi />
+                <fd-fmi-tree label="用户组" prop="groupId" :list="groupTree" multi />
+                <fd-fmi-dict label="状态" prop="statusDict" :dict="dicts.sysUserStatus" />
+                <fd-fmi-act @query="queryList" @reset="resetQuery" />
               </div>
             </transition>
           </el-form>
@@ -216,11 +216,11 @@ import { Role, roleList } from '@/api/system/role'
 import { localOrRemoteUrl } from '@/utils/query'
 import { useRouter } from 'vue-router'
 import usePage from '@/components/page/use-page'
-import FdItemDict from '@/components/form/components/form-item/item-dict.vue'
+import FdFmiDict from '@/components/form/components/item-dict.vue'
 
 export default defineComponent({
   name: 'SystemUser',
-  components: { FdItemDict, FdSplitPane, Edit, Detail },
+  components: { FdFmiDict, FdSplitPane, Edit, Detail },
   setup() {
     const stateOption = {
       listApi: userList,

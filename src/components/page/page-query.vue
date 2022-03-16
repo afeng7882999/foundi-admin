@@ -6,7 +6,7 @@
         <el-scrollbar class="fd-page-query__scrollbar" :style="scrollbarStyle">
           <slot />
         </el-scrollbar>
-        <fd-item-act @query="queryFn" @reset="reset" />
+        <fd-fmi-act @query="queryFn" @reset="reset" />
       </el-form>
     </div>
   </template>
