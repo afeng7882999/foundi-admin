@@ -1,11 +1,11 @@
 import { App } from 'vue'
-import FdItemDatetime from './components/form-item/item-datetime.vue'
-import FdItemDict from './components/form-item/item-dict.vue'
-import FdItem from './components/form-item/item.vue'
-import FdItemAct from './components/form-item/item-act.vue'
-import FdItemList from './components/form-item/item-list.vue'
-import FdItemTree from './components/form-item/item-tree.vue'
-import FdItemSort from './components/form-item/item-sort.vue'
+import FdItemDatetime from './components/item-datetime.vue'
+import FdItemDict from './components/item-dict.vue'
+import FdItem from './components/item.vue'
+import FdItemAct from './components/item-act.vue'
+import FdItemList from './components/item-list.vue'
+import FdItemTree from './components/item-tree.vue'
+import FdItemSort from './components/item-sort.vue'
 
 export default function install(app: App) {
   app.component(FdItemDatetime.name, FdItemDatetime)
