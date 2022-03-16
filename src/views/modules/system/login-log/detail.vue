@@ -1,13 +1,15 @@
 <template>
-  <component
-    :is="state.component"
+  <fd-drawer
     v-model="state.visible"
     :close-on-click-modal="false"
     :modal="false"
     :title="`系统访问日志详细 (${state.idx + 1} / ${state.data.length})`"
-    size="380px"
+    size="600px"
   >
-    <el-descriptions :column="2" :title="`ID: ${state.data[state.idx].id}`" border>
+    <el-descriptions :column="2" border>
+      <el-descriptions-item :span="2" label="ID">
+        {{ state.data[state.idx].id }}
+      </el-descriptions-item>
       <el-descriptions-item :span="2" label="访问时间">
         {{ formatTimestamp(state.data[state.idx].operTime) }}
       </el-descriptions-item>
@@ -28,17 +30,19 @@
       <el-descriptions-item :span="2" label="提示消息">{{ state.data[state.idx].message }}</el-descriptions-item>
       <template #extra>
         <el-button v-show="state.ifEditable" type="primary" @click="onEdit">编辑</el-button>
-        <el-button v-show="state.ifShowNavigation" :disabled="prevDisabled" @click="onPrev">
-          <fd-icon icon="left-small" class="is-in-btn"></fd-icon>
-          上一个
-        </el-button>
-        <el-button v-show="state.ifShowNavigation" :disabled="nextDisabled" @click="onNext">
-          下一个
-          <fd-icon icon="right-small" class="is-in-btn is-right"></fd-icon>
-        </el-button>
+        <el-button-group>
+          <el-button v-show="state.ifShowNavigation" :disabled="prevDisabled" @click="onPrev">
+            <fd-icon icon="left-small" class="is-in-btn"></fd-icon>
+            上一个
+          </el-button>
+          <el-button v-show="state.ifShowNavigation" :disabled="nextDisabled" @click="onNext">
+            下一个
+            <fd-icon icon="right-small" class="is-in-btn is-right"></fd-icon>
+          </el-button>
+        </el-button-group>
       </template>
     </el-descriptions>
-  </component>
+  </fd-drawer>
 </template>
 
 <script lang="ts">
@@ -59,8 +63,7 @@ const stateOption = {
   ifEditable: false,
   resetFormData: {
     id: ''
-  },
-  component: 'ElDialog'
+  }
 }
 
 const { mixState: state, mixComputed, mixMethods } = useDetail<LoginLog>(stateOption, emit)

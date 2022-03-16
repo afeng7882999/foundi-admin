@@ -21,7 +21,7 @@
       <el-form-item label="键" prop="configKey">
         <el-input v-model="state.formData.configKey" placeholder="请输入键"></el-input>
       </el-form-item>
-      <el-form-item class="json-editor-form-item" label="值" prop="configValue">
+      <el-form-item class="fd-code-editor-form-item" label="值" prop="configValue">
         <fd-code-editor ref="jsonEditor" v-model="state.formData.configValue" border language="application/json" line-numbers />
       </el-form-item>
       <el-form-item label="是否启用" prop="enabled">
@@ -100,15 +100,3 @@ defineExpose({
   open
 })
 </script>
-
-<style lang="scss" scoped>
-.el-form-item.json-editor-form-item {
-  ::v-deep(.el-form-item__content) {
-    min-height: 75px;
-    overflow: hidden;
-    .fd-code-editor {
-      height: 100%;
-    }
-  }
-}
-</style>

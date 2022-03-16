@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use 'src/assets/style/variable' as *;
 
 // el-drawer
@@ -79,5 +80,22 @@
     display: flex;
     align-items: flex-start;
     justify-content: flex-end;
+  }
+}
+
+// for xs breakpoint
+@media only screen and #{map.get($breakpoints, 'xs')} {
+  .fd-drawer {
+    width: 100% !important;
+  }
+  
+  .fd-drawer .el-form .el-form-item {
+    display: block;
+  }
+  
+  .fd-drawer .el-col {
+    max-width: 100%;
+    width: 100%;
+    flex: 0 0 100%;
   }
 }

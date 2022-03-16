@@ -6,7 +6,8 @@
     :title="`系统操作日志详细 (${state.idx + 1} / ${state.data.length})`"
     size="600px"
   >
-    <el-descriptions :column="2" :title="`ID: ${state.data[state.idx].id}`" border>
+    <el-descriptions :column="2" border>
+      <el-descriptions-item :span="2" label="ID">{{ state.data[state.idx].id }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="模块标题">{{ state.data[state.idx].title }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="操作时间">
         {{ formatTimestamp(state.data[state.idx].operTime) }}
@@ -36,14 +37,16 @@
       <el-descriptions-item :span="2" label="错误消息">{{ state.data[state.idx].errorMsg }}</el-descriptions-item>
       <template #extra>
         <el-button v-show="state.ifEditable" type="primary" @click="onEdit">编辑</el-button>
-        <el-button v-show="state.ifShowNavigation" :disabled="prevDisabled" @click="onPrev">
-          <fd-icon class="is-in-btn" icon="left-small"></fd-icon>
-          上一个
-        </el-button>
-        <el-button v-show="state.ifShowNavigation" :disabled="nextDisabled" @click="onNext">
-          下一个
-          <fd-icon class="is-in-btn is-right" icon="right-small"></fd-icon>
-        </el-button>
+        <el-button-group>
+          <el-button v-show="state.ifShowNavigation" :disabled="prevDisabled" @click="onPrev">
+            <fd-icon class="is-in-btn" icon="left-small"></fd-icon>
+            上一个
+          </el-button>
+          <el-button v-show="state.ifShowNavigation" :disabled="nextDisabled" @click="onNext">
+            下一个
+            <fd-icon class="is-in-btn is-right" icon="right-small"></fd-icon>
+          </el-button>
+        </el-button-group>
       </template>
     </el-descriptions>
   </fd-drawer>
