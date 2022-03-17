@@ -23,7 +23,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, inject, PropType, reactive, ref } from 'vue'
-import { AnyFunction } from '@/types/global'
+import { AnyFunction } from '@/app/types'
 
 const props = defineProps({
   icon: String,

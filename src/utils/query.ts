@@ -1,6 +1,6 @@
 import { cleanArray } from '@/utils/lang'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
-import { Indexable } from '@/types/global'
+import { Indexable } from '@/app/types'
 
 /**
  * 判断url是本地还是远端，自动添加服务器地址

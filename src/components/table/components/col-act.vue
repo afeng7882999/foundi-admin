@@ -33,7 +33,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, PropType } from 'vue'
-import { Indexable } from '@/types/global'
+import { Indexable } from '@/app/types'
 import { COL_DEFAULT_PROPS } from '@/components/table/types'
 import useColumn from '@/components/table/hooks/use-column'
 

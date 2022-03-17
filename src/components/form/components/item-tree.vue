@@ -23,7 +23,7 @@ export default {
 <script setup lang="ts">
 import { DEFAULT_ITEM_DATA_FIELDS, FORM_ITEM_DEFAULT_PROPS, ItemDataFields } from '@/components/form/type'
 import { PropType } from 'vue'
-import { Indexable } from '@/types/global'
+import { Indexable } from '@/app/types'
 import useFormItem from '@/components/form/hooks/use-form-item'
 
 const props = defineProps({

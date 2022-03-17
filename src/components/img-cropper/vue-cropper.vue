@@ -105,7 +105,7 @@ import useTransform from './use-transform'
 import useOutput from './use-output'
 import useAxis from '@/components/img-cropper/use-axis'
 import { nextFrame } from '@/utils/next-frame'
-import { AnyFunction } from '@/types/global'
+import { AnyFunction } from '@/app/types'
 
 export default defineComponent({
   name: 'VueCropper',

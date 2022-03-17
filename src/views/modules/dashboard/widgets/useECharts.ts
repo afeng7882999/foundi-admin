@@ -7,7 +7,7 @@ import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, Toolt
 import { LineChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
 import { UniversalTransition } from 'echarts/features'
-import { AnyFunction, Indexable } from '@/types/global'
+import { AnyFunction, Indexable } from '@/app/types'
 
 echarts.use([
   TitleComponent,

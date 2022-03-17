@@ -49,7 +49,7 @@ import { Group } from '@/api/system/group'
 import { Role } from '@/api/system/role'
 import { OAuthUser, oauthUserList } from '@/api/system/oauth-user'
 import { DictItem } from '@/api/system/dict-item'
-import { Indexable } from '@/types/global'
+import { Indexable } from '@/app/types'
 
 export default defineComponent({
   name: 'SystemUserDetail',

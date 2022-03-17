@@ -19,7 +19,7 @@ import { defineComponent, toRefs } from 'vue'
 import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
 import { validEmail } from '@/utils/validate'
 import { currentChangeEmail, currentCheckEmail } from '@/api/system/user'
-import { Indexable } from '@/types/global'
+import { Indexable } from '@/app/types'
 
 export default defineComponent({
   name: 'UserProfileChangeEmail',

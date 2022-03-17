@@ -224,7 +224,7 @@ import { getQQUrl, getWeiboUrl } from '@/api/system/login'
 import settings from '@/app/settings'
 import { localOrRemoteUrl } from '@/utils/query'
 import { Role } from '@/api/system/role'
-import { AnyFunction } from '@/types/global'
+import { AnyFunction } from '@/app/types'
 
 const state = reactive({
   currentUser: {} as User,

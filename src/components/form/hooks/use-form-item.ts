@@ -1,6 +1,6 @@
 import { computed, ExtractPropTypes, getCurrentInstance, inject } from 'vue'
 import { FORM_ITEM_DEFAULT_PROPS } from '@/components/form/type'
-import { Indexable } from '@/types/global'
+import { Indexable } from '@/app/types'
 import { ElFormContext, elFormKey } from 'element-plus'
 import { isString, upperFirst } from 'lodash-es'
 
