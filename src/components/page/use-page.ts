@@ -4,9 +4,8 @@ import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 import { getTreeNode } from '@/utils/data-tree'
-import { breakpoints, resizeConst } from '@/hooks/use-layout-resize'
+import { resizeConst } from '@/hooks/use-layout-resize'
 import { merge } from 'lodash-es'
-import { useBreakpoints } from '@vueuse/core'
 
 export type PageStateOption = Partial<{
   // 页面标题
@@ -105,9 +104,6 @@ export default function (stateOption?: PageStateOption) {
     }
   }
 
-  // 视口尺寸断点
-  const breakpoint = useBreakpoints(breakpoints)
-
   // 是否显示页面标题
   const showPageHeader = computed(() => {
     return !storeState.app.enableTags
@@ -165,7 +161,6 @@ export default function (stateOption?: PageStateOption) {
     getDocWidth,
     getDocHeightNoHeaderFooter,
     getDocHeight,
-    breakpoint,
     hasAuth,
     getPageMeta,
     setViewTitle,

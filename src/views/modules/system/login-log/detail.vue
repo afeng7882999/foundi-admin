@@ -55,7 +55,7 @@ export default {
 import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
 import { LoginLog, loginLogFields } from '@/api/system/login-log'
 import { formatTimestamp } from '@/utils/time'
-import usePage from '@/components/page/use-page'
+import { breakpoint } from '@/hooks/use-layout-resize'
 
 const emit = defineEmits([OPEN_EDIT_EVENT, NAVIGATE_EVENT])
 
@@ -71,7 +71,6 @@ const { mixState: state, mixComputed, mixMethods } = useDetail<LoginLog>(stateOp
 const { prevDisabled, nextDisabled } = mixComputed
 const { open, dictVal, onEdit, onPrev, onNext, close } = mixMethods
 
-const { breakpoint } = usePage()
 const isXs = breakpoint.smaller('sm')
 
 defineExpose({
