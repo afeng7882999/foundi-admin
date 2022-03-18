@@ -2,14 +2,7 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { DeviceType } from '@/store/modules/app'
-import { useBreakpoints } from '@vueuse/core'
-
-export const breakpoints = {
-  sm: 768,
-  md: 992,
-  lg: 1200,
-  xl: 1920
-}
+import { breakpoints } from '@/hooks/use-breakpoint'
 
 export const resizeConst = {
   ratio: 3,
@@ -21,8 +14,6 @@ export const resizeConst = {
   footerHeight: 48,
   pageHeaderHeight: 48
 }
-
-export const breakpoint = useBreakpoints(breakpoints)
 
 export default function useLayoutResize() {
   let bodyRect = {
