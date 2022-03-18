@@ -52,7 +52,7 @@ import { Role, roleFields } from '@/api/system/role'
 import { Menu } from '@/api/system/menu'
 import { Group } from '@/api/system/group'
 import { arrayToTree } from '@/utils/data-tree'
-import { Indexable } from '@/app/types'
+import { Indexable } from '@/common/types'
 
 const stateOption: DetailStateOption<Role> = {
   idField: roleFields.idField,

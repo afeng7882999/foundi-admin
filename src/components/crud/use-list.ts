@@ -12,7 +12,7 @@ import { DetailDialog } from '@/components/crud/use-detail'
 import { EditDialog } from '@/components/crud/use-edit'
 import { ApiObj, ApiQuery, ExportRange } from '@/api'
 import { DictList } from '@/api/system/dict-item'
-import { AnyFunction, Indexable } from '@/app/types'
+import { AnyFunction, Indexable } from '@/common/types'
 import { MaybeRef, useThrottleFn } from '@vueuse/core'
 import { SortFieldResult } from '@/components/form/type'
 

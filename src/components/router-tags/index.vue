@@ -58,7 +58,7 @@ import { AllState } from '@/store'
 import { useStore } from 'vuex'
 import { _RouteLocationBase, onBeforeRouteUpdate, RouteMeta, RouteRecordRaw, useRoute, useRouter } from 'vue-router'
 import { DEFAULT_ROUTE } from '@/components/router-tags/types'
-import { Indexable } from '@/app/types'
+import { Indexable } from '@/common/types'
 
 const scrollPanel = ref()
 const contextMenu = ref()

@@ -1,7 +1,7 @@
 import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus'
 import { merge } from 'lodash-es'
-import { Indexable } from '@/app/types'
+import { Indexable } from '@/common/types'
 import useFocusableRow, { FocusRowOption } from '@/components/table/hooks/use-focusable-row'
 import useSettings, { TableSettingsOption } from '@/components/table/hooks/use-settings'
 import useSortableRow, { SortableRowOption } from '@/components/table/hooks/use-sortable-row'

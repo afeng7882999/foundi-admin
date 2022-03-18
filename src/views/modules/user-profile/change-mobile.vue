@@ -32,7 +32,7 @@ import { validMobile } from '@/utils/validate'
 import FdCountDownButton from '@/components/count-down-button/index.vue'
 import { currentChangeMobile, currentChangeMobileValid, currentCheckMobile } from '@/api/system/user'
 import { ElMessage } from 'element-plus'
-import { Indexable } from '@/app/types'
+import { Indexable } from '@/common/types'
 
 export default defineComponent({
   name: 'UserProfileChangeMobile',

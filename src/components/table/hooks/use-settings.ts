@@ -11,7 +11,7 @@ import { getPageIdFromRoute } from '@/utils/query'
 import { TreeNode, traverseTree } from '@/utils/data-tree'
 import { unrefElement, VueInstance } from '@vueuse/core'
 import { ApiObj } from '@/api'
-import { Indexable } from '@/app/types'
+import { Indexable } from '@/common/types'
 import { addClass, hasClass, removeClass } from '@/utils/dom'
 
 export type TableSettingsOption = {

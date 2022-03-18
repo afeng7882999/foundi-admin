@@ -1,4 +1,4 @@
-import { AnyFunction } from '@/app/types'
+import { AnyFunction } from '@/common/types'
 
 // vue cropper
 export interface IVueCropper {

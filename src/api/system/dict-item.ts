@@ -1,6 +1,6 @@
 import Api, { ApiObj, ApiQuery } from '@/api'
 import request from '@/app/request'
-import { Indexable } from '@/app/types'
+import { Indexable } from '@/common/types'
 
 export type DictList = Indexable<DictItem[]>
 

@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash-es'
-import { Indexable } from '@/app/types'
+import { Indexable } from '@/common/types'
 
 export type TreeNode = Indexable
 

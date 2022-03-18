@@ -29,7 +29,7 @@ import request from '@/app/request'
 import SystemMessageContentDialog from './message-content.vue'
 import { defineComponent, nextTick, onBeforeUnmount, onMounted, reactive, ref, toRefs } from 'vue'
 import { Message } from '@/api/system/message'
-import { Indexable } from '@/app/types'
+import { Indexable } from '@/common/types'
 
 export default defineComponent({
   name: 'SystemMessageButton',

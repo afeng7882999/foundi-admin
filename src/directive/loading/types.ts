@@ -1,5 +1,5 @@
 import { ElLoadingService as Loading } from 'element-plus/es/components/loading'
-import { Indexable } from '@/app/types'
+import { Indexable } from '@/common/types'
 
 export const INSTANCE_KEY = Symbol('ElLoading')
 

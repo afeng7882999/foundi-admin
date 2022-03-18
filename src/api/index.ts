@@ -4,7 +4,7 @@ import { downloadFile } from '@/utils/file'
 import { getToken } from '@/app/account'
 import axios, { AxiosResponse } from 'axios'
 import { addOrRemoveSlash } from '@/utils/query'
-import { Indexable } from '@/app/types'
+import { Indexable } from '@/common/types'
 
 // axios response
 export type Response<T = ResData> = AxiosResponse<T>

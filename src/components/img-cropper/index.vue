@@ -121,7 +121,7 @@ import { computed, defineComponent, PropType, reactive, ref, toRefs, watch } fro
 import { ElMessage } from 'element-plus'
 import { upload } from '@/api/system/file'
 import { isObject } from 'lodash-es'
-import { Indexable } from '@/app/types'
+import { Indexable } from '@/common/types'
 
 export default defineComponent({
   name: 'FdImageCropper',

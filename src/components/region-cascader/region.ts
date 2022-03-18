@@ -2,7 +2,7 @@
 
 import REGION_DATA from 'china-area-data'
 import { cloneDeep } from 'lodash-es'
-import { Indexable } from '@/app/types'
+import { Indexable } from '@/common/types'
 
 const regionData = REGION_DATA as Indexable
 const provinceObject = regionData['86']

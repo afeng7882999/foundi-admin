@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { _RouteLocationBase, LocationQuery, RouteParams } from 'vue-router'
 import { ActionContext } from 'vuex'
-import { Indexable } from '@/app/types'
+import { Indexable } from '@/common/types'
 
 interface ViewTitle {
   path: string
