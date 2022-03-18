@@ -3,7 +3,8 @@ import { ActionContext } from 'vuex'
 import Cookies from 'js-cookie'
 import config from '@/app/settings'
 import { TreeNodeDefault } from '@/utils/data-tree'
-import { AnyObject } from '@/utils'
+import { User } from '@/api/system/user'
+import { Role } from '@/api/system/role'
 
 const TokenKey = config.TokenKey
 export const DEFAULT_AVATAR = '/static/img/default-user-icon.png'
@@ -11,8 +12,8 @@ const DEFAULT_USER = '{"username":"","avatar":"' + DEFAULT_AVATAR + '"}'
 
 export interface UserState {
   token?: string
-  user: AnyObject
-  roles?: AnyObject[]
+  user: User
+  roles?: Role[]
   menu?: TreeNodeDefault[]
   perms?: string[]
 }
@@ -34,14 +35,14 @@ const mutations = {
     state.token = ''
     Cookies.remove(TokenKey)
   },
-  SET_USER: (state: UserState, user: AnyObject) => {
+  SET_USER: (state: UserState, user: User) => {
     state.user = user
     if (!state.user.avatar) {
       state.user.avatar = DEFAULT_AVATAR
     }
     window.localStorage.setItem('user', JSON.stringify(user))
   },
-  SET_ROLES: (state: UserState, roles: AnyObject[]) => {
+  SET_ROLES: (state: UserState, roles: Role[]) => {
     state.roles = roles
     window.localStorage.setItem('user.roles', JSON.stringify(roles))
   },
@@ -75,10 +76,10 @@ const actions = {
   removeToken({ commit }: ActionContext<UserState, unknown>) {
     commit('REMOVE_TOKEN')
   },
-  setUser({ commit }: ActionContext<UserState, unknown>, user: AnyObject) {
+  setUser({ commit }: ActionContext<UserState, unknown>, user: User) {
     commit('SET_USER', user)
   },
-  setRoles({ commit }: ActionContext<UserState, unknown>, roles: AnyObject[]) {
+  setRoles({ commit }: ActionContext<UserState, unknown>, roles: Role[]) {
     commit('SET_ROLES', roles)
   },
   setPerms({ commit }: ActionContext<UserState, unknown>, perms: string[]) {
@@ -89,7 +90,7 @@ const actions = {
   },
   setUserInfo(
     { commit }: ActionContext<UserState, unknown>,
-    info: { user: AnyObject; roles: string[]; perms: string[]; menu: TreeNodeDefault[] }
+    info: { user: User; roles: string[]; perms: string[]; menu: TreeNodeDefault[] }
   ) {
     commit('SET_USER', info.user)
     commit('SET_ROLES', info.roles)
