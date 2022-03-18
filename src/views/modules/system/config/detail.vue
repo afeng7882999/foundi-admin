@@ -8,7 +8,7 @@
   >
     <el-descriptions :column="2" border direction="vertical">
       <el-descriptions-item label="配置分类">
-        {{ dictVal(state.dicts.sysConfigType, state.data[state.idx].configTypeDict) }}
+        <fd-fmt-dict :dict="state.dicts.sysConfigType" :data="state.data[state.idx].configTypeDict" />
       </el-descriptions-item>
       <el-descriptions-item label="是否启用">
         <el-tag v-if="state.data[state.idx].enabled" size="small" type="success">启用</el-tag>
@@ -16,7 +16,7 @@
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="键">{{ state.data[state.idx].configKey }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="值">
-        <fd-code-editor v-model="state.configValue" language="application/json" readonly />
+        <fd-fmt-json :data="state.data[state.idx].configValue" />
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="备注">{{ state.data[state.idx].remark }}</el-descriptions-item>
       <template #extra>
@@ -52,8 +52,6 @@ export default {
 import { onBeforeMount } from 'vue'
 import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
 import { Config, configFields } from '@/api/system/config'
-import FdCodeEditor from '@/components/code-editor/index.vue'
-import { formatJson } from '@/utils/lang'
 import usePage from '@/components/page/use-page'
 
 const stateOption = {
@@ -66,24 +64,19 @@ const stateOption = {
     configValue: '',
     enabled: undefined,
     remark: ''
-  },
-  configValue: ''
+  }
 }
 
 const emit = defineEmits([OPEN_EDIT_EVENT, NAVIGATE_EVENT])
 
 const { mixState: state, mixComputed, mixMethods } = useDetail<Config>(stateOption, emit)
 const { prevDisabled, nextDisabled } = mixComputed
-const { open, resetForm, dictVal, close, onCurrentChanged, onEdit, onPrev, onNext } = mixMethods
+const { open, resetForm, close, onEdit, onPrev, onNext } = mixMethods
 
 const { hasAuth } = usePage()
 
 onBeforeMount(async () => {
   resetForm()
-})
-
-onCurrentChanged(async (idx: number) => {
-  state.configValue = formatJson(state.data[idx].configValue)
 })
 
 defineExpose({

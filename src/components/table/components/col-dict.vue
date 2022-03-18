@@ -8,7 +8,9 @@
       :label-class-name="sortable ? 'is-custom' : ''"
     >
       <template #default="scope">
-        <span>{{ dictVal(dict, scope.row[attrs.prop]) }}</span>
+        <span>
+          <fd-fmt-dict :dict="dict" :data="scope.row[attrs.prop]"></fd-fmt-dict>
+        </span>
       </template>
       <template v-if="sortable" #header="scope">
         <fd-table-sort-header :value="sort" :column="scope.column" @sort-changed="onSortChanged"></fd-table-sort-header>
@@ -25,23 +27,20 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, useAttrs } from 'vue'
+import { computed, PropType, useAttrs } from 'vue'
 import { DictItem } from '@/api/system/dict-item'
-import useDict from '@/components/crud/use-dict'
 import { COL_DEFAULT_PROPS } from '@/components/table/types'
 import useColumn from '@/components/table/hooks/use-column'
 
 const props = defineProps({
   ...COL_DEFAULT_PROPS,
   dict: {
-    type: Array,
+    type: Array as PropType<DictItem[]>,
     default: () => [] as DictItem[]
   }
 })
 
 const attrs = useAttrs()
-
-const { dictVal } = useDict()
 
 const { visible, sortable } = useColumn(props)
 

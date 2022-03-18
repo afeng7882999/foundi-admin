@@ -2,7 +2,7 @@
   <template v-if="visible">
     <el-table-column v-bind="$attrs" :align="align" :header-align="headerAlign" :width="widthCo">
       <template #default="scope">
-        <fd-icon :icon="scope.row[attrs.prop]" class="tb-icon"></fd-icon>
+        <fd-fmt-icon :icon="scope.row[attrs.prop]"></fd-fmt-icon>
       </template>
     </el-table-column>
   </template>

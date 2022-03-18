@@ -9,7 +9,9 @@
       :label-class-name="sortable ? 'is-custom' : ''"
     >
       <template #default="scope">
-        <span>{{ formatTimestamp(scope.row.operTime) }}</span>
+        <span>
+          <fd-fmt-datetime :data="scope.row[attrs.prop]"></fd-fmt-datetime>
+        </span>
       </template>
       <template v-if="sortable" #header="scope">
         <fd-table-sort-header :value="sort" :column="scope.column" @sort-changed="onSortChanged"></fd-table-sort-header>
@@ -26,12 +28,13 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { formatTimestamp } from '@/utils/time'
+import { computed, useAttrs } from 'vue'
 import { COL_DEFAULT_PROPS } from '@/components/table/types'
 import useColumn from '@/components/table/hooks/use-column'
 
 const props = defineProps({ ...COL_DEFAULT_PROPS })
+
+const attrs = useAttrs()
 
 const { visible, sortable } = useColumn(props)
 
