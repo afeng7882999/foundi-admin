@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
 import { messageDicts, messageFields, messageGetOne, messagePostOne, messagePutOne } from '@/api/system/message'
 
 export default defineComponent({

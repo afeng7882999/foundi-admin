@@ -68,7 +68,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useList from '@/components/crud/use-list'
+import useList from '@/extend/crud/use-list'
 import SystemMessageContentDialog from './message-content.vue'
 import { ElMessage } from 'element-plus'
 import {
@@ -78,7 +78,7 @@ import {
   userMessageDicts,
   userMessageQuery
 } from '@/api/system/message'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 
 export default defineComponent({
   name: 'SystemMessage',

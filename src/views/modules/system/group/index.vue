@@ -74,8 +74,8 @@ export default {
 <script setup lang="ts">
 import { groupFields, groupTreeFields, groupList, groupDel, groupExport, Group } from '@/api/system/group'
 import Edit from './edit.vue'
-import usePage from '@/components/page/use-page'
-import useList from '@/components/crud/use-list'
+import usePage from '@/extend/page/use-page'
+import useList from '@/extend/crud/use-list'
 
 const stateOption = {
   treeTable: true,

@@ -49,7 +49,7 @@ export default {
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
+import { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
 import { configListOss, Config } from '@/api/system/config'
 import useUpload from '@/components/upload-form/use-upload'
 import { DEFAULT_OSS } from '@/api/system/file'

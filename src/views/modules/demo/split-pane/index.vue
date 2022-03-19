@@ -45,10 +45,10 @@ export default {
 </script>
 
 <script setup lang="ts">
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { reactive } from 'vue'
-import FdPageFooter from '@/components/page/page-footer.vue'
+import FdPageFooter from '@/extend/page/page-footer.vue'
 
 const state = reactive({
   leftShrinkAll: false,

@@ -50,9 +50,9 @@ export default {
 
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
-import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
+import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/extend/crud/use-detail'
 import { Config, configFields } from '@/api/system/config'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 
 const stateOption = {
   ifEditable: true,

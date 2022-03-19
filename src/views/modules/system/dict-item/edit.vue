@@ -33,7 +33,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
 import { dictItemFields, dictItemGetOne, dictItemPostOne, dictItemPutOne } from '@/api/system/dict-item'
 
 const emit = defineEmits([REFRESH_DATA_EVENT])

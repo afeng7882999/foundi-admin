@@ -129,14 +129,14 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useList from '@/components/crud/use-list'
+import useList from '@/extend/crud/use-list'
 import { fileDel, fileDicts, fileFields, fileList, FileObj, fileQuery } from '@/api/system/file'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { configListOss, Config } from '@/api/system/config'
 import Upload from './upload.vue'
 import { localOrRemoteUrl } from '@/utils/query'
 import { formatTimestamp } from '@/utils/time'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
 

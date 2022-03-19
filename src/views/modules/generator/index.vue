@@ -185,14 +185,14 @@ export default {
 
 <script setup lang="ts">
 import { onActivated, ref } from 'vue'
-import useList from '@/components/crud/use-list'
+import useList from '@/extend/crud/use-list'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { download, GenTable, genTableDel, genTableList, genTableQuery } from '@/api/generator/gen-table'
 import GeneratorImport from './import.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { formatTimestamp } from '@/utils/time'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 
 const generatorImport = ref()
 

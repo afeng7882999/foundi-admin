@@ -68,7 +68,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
 import { Menu, menuDicts, menuFields, menuGetOne, menuList, menuPostOne, menuPutOne, menuTreeFields } from '@/api/system/menu'
 import FdTagInput from '@/components/tag-input/index.vue'
 import FdIconSelector from '@/components/icon/icon-selector.vue'

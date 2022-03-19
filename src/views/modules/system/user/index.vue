@@ -204,7 +204,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useList from '@/components/crud/use-list'
+import useList from '@/extend/crud/use-list'
 import Edit from './edit.vue'
 import Detail from './detail.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
@@ -215,8 +215,8 @@ import { arrayToTree } from '@/utils/data-tree'
 import { Role, roleList } from '@/api/system/role'
 import { localOrRemoteUrl } from '@/utils/query'
 import { useRouter } from 'vue-router'
-import usePage from '@/components/page/use-page'
-import FdFmiDict from '@/components/form/components/item-dict.vue'
+import usePage from '@/extend/page/use-page'
+import FdFmiDict from '@/extend/form/components/item-dict.vue'
 
 export default defineComponent({
   name: 'SystemUser',

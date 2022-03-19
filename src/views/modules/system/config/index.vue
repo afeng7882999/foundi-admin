@@ -148,13 +148,13 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useList from '@/components/crud/use-list'
+import useList from '@/extend/crud/use-list'
 import { configDel, configDicts, configExport, configFields, configList, configQuery, Config } from '@/api/system/config'
 import Edit from './edit.vue'
 import Detail from './detail.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { formatTimestamp } from '@/utils/time'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 
 const stateOption = {
   idField: configFields.idField,

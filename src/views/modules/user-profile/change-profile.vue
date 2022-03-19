@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
 import FdRegionCascader from '@/components/region-cascader/index.vue'
 import { currentCheckUsername, currentEdit, User, userGetOne } from '@/api/system/user'
 import { DictItem } from '@/api/system/dict-item'

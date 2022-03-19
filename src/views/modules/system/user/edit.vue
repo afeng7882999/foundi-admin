@@ -98,7 +98,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref, toRefs } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
 import { checkEmail, checkMobile, checkUsername, User, userDicts, userGetOne, userPostOne, userPutOne } from '@/api/system/user'
 import FdImageCropper from '@/components/img-cropper/index.vue'
 import { validEmail, validMobile, validPassword, validUsername } from '@/utils/validate'

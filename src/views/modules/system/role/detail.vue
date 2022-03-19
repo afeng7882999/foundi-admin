@@ -47,7 +47,7 @@ export default {
 
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
-import useDetail, { DetailStateOption, OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
+import useDetail, { DetailStateOption, OPEN_EDIT_EVENT } from '@/extend/crud/use-detail'
 import { Role, roleFields } from '@/api/system/role'
 import { Menu } from '@/api/system/menu'
 import { Group } from '@/api/system/group'

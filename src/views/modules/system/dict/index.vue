@@ -126,14 +126,14 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useList from '@/components/crud/use-list'
+import useList from '@/extend/crud/use-list'
 import { dictDel, dictExport, dictFields, dictList, dictQuery, Dict } from '@/api/system/dict'
 import Edit from './edit.vue'
 import Detail from './detail.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { useRouter } from 'vue-router'
 import FdSplitPane from '@/components/split-pane/index.vue'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 
 const stateOption = {
   idField: dictFields.idField,

@@ -1,0 +1,197 @@
+<template>
+  <template v-if="visibleCo">
+    <el-form-item :label="label" class="fd-fmi-sort">
+      <template #label>
+        <div class="fd-fmi-sort__label">
+          <span>{{ label }}</span>
+          <el-tooltip content="添加排序字段" :disabled="disabled" :show-after="500" placement="top">
+            <el-button type="text" :disabled="addDisabled" @click="addField">
+              <fd-icon icon="plus" class="is-in-btn"></fd-icon>
+              添加
+            </el-button>
+          </el-tooltip>
+        </div>
+      </template>
+      <div ref="itemWrapper" class="fd-fmi-sort__wrapper">
+        <div v-for="item in state.data" :key="item.prop" class="fd-fmi-sort__item">
+          <el-tooltip content="拖动排序字段" :disabled="disabled" :show-after="500" placement="left">
+            <div class="fd-fmi-sort__drag sortable-drag">
+              <fd-icon icon="drag"></fd-icon>
+            </div>
+          </el-tooltip>
+          <el-select v-model="item.prop" clearable :disabled="disabled" @change="changeField" @clear="removeField(item)">
+            <el-option v-for="field in getFields(item)" :key="field.name" :label="field.comment" :value="field.name"></el-option>
+          </el-select>
+          <el-tooltip
+            :content="item.order === 'asc' ? '点击切换升序' : '点击切换降序'"
+            :disabled="disabled"
+            :show-after="500"
+            placement="top"
+          >
+            <fd-icon-button
+              class="fd-fmi-sort__toggle"
+              :icon="item.order === 'asc' ? 'up-small' : 'down-small'"
+              :disabled="disabled"
+              @click="toggleOrder(item)"
+            ></fd-icon-button>
+          </el-tooltip>
+        </div>
+      </div>
+    </el-form-item>
+  </template>
+</template>
+
+<script lang="ts">
+export default {
+  name: 'FdFmiSort'
+}
+</script>
+
+<script setup lang="ts">
+import { computed, onMounted, onUnmounted, PropType, reactive, ref, watch } from 'vue'
+import { SortFieldResult } from '@/extend/form/type'
+import { SortField } from '@/api'
+import FdIconButton from '@/components/icon-button/icon-button.vue'
+import Sortable, { SortableEvent } from 'sortablejs'
+
+const props = defineProps({
+  label: {
+    type: String,
+    default: '排序'
+  },
+  modelValue: {
+    type: Array as PropType<SortFieldResult[]>,
+    default: () => []
+  },
+  fields: {
+    type: Array as PropType<SortField[]>,
+    default: () => []
+  },
+  placeholder: {
+    type: String,
+    default: '添加排序字段'
+  },
+  visible: {
+    type: Boolean,
+    default: true
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const state = reactive({
+  data: [] as SortFieldResult[]
+})
+
+const visibleCo = computed(() => {
+  return props.visible
+})
+
+const addDisabled = computed(() => {
+  return props.disabled || getNotSortFields().length <= 0
+})
+
+const getFields = (self?: SortFieldResult) => {
+  if (self) {
+    return props.fields?.filter((f) => state.data.findIndex((d) => d.prop === f.name) === -1 || f.name === self.prop)
+  }
+  return getNotSortFields()
+}
+
+const getNotSortFields = () => {
+  return props.fields?.filter((f) => state.data.findIndex((d) => d.prop === f.name) === -1)
+}
+
+const addField = () => {
+  const empty = state.data?.find((d) => d.prop === '')
+  if (!empty && getNotSortFields().length > 0) {
+    state.data.push({ prop: '', comment: '', order: 'asc' })
+  }
+}
+
+const changeField = (val: string) => {
+  const changed = state.data.find((d) => d.prop === val)
+  const field = props.fields.find((f) => f.name === val)
+  if (changed && field) {
+    changed.comment = field.comment
+    returnValue()
+  }
+}
+
+const removeField = (val: SortFieldResult) => {
+  state.data = state.data.filter((d) => d.prop !== val.prop)
+  returnValue()
+}
+
+const toggleOrder = (item: SortFieldResult) => {
+  item.order = item.order === 'asc' ? 'desc' : 'asc'
+  returnValue()
+}
+
+const onSortEnd = (e: SortableEvent) => {
+  if (state.data?.length) {
+    const target = state.data.splice(e.oldIndex as number, 1)[0]
+    state.data.splice(e.newIndex as number, 0, target)
+    returnValue()
+  }
+}
+
+const itemWrapper = ref()
+let sortable = null as Sortable | null
+const initDrag = () => {
+  const el = itemWrapper.value as HTMLElement
+  if (el) {
+    sortable = Sortable.create(el, {
+      handle: '.sortable-drag',
+      chosenClass: 'sortable-chosen',
+      animation: 150,
+      onEnd: onSortEnd
+    })
+  }
+}
+
+onMounted(() => {
+  initDrag()
+})
+
+onUnmounted(() => {
+  sortable?.destroy()
+})
+
+watch(
+  () => props.disabled,
+  (val) => {
+    if (val) {
+      sortable?.option('disabled', true)
+    } else {
+      sortable?.option('disabled', false)
+    }
+  },
+  { immediate: true }
+)
+
+watch(
+  () => props.modelValue,
+  (val) => {
+    state.data = [] as SortFieldResult[]
+    if (val?.length) {
+      val.forEach((d) => {
+        if (d) {
+          const field = props.fields?.find((f) => f.name === d.prop)
+          if (field) {
+            state.data.push({ prop: field.name, comment: field.comment, order: d.order })
+          }
+        }
+      })
+    }
+  },
+  { immediate: true, deep: true }
+)
+
+const emit = defineEmits(['update:modelValue'])
+const returnValue = () => {
+  emit('update:modelValue', state.data)
+}
+</script>

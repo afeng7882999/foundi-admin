@@ -193,7 +193,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
-import useDict from '@/components/crud/use-dict'
+import useDict from '@/extend/crud/use-dict'
 import FdImageCropper from '@/components/img-cropper/index.vue'
 import { userLogout } from '@/app/account'
 import ChangePassword from '../system/user/change-password.vue'
@@ -219,7 +219,7 @@ import {
 import { groupList, Group } from '@/api/system/group'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 import { getQQUrl, getWeiboUrl } from '@/api/system/login'
 import settings from '@/app/settings'
 import { localOrRemoteUrl } from '@/utils/query'

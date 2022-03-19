@@ -46,7 +46,7 @@ export default {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
 import { Config, configDicts, configFields, configGetOne, configPostOne, configPutOne } from '@/api/system/config'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { nextFrame } from '@/utils/next-frame'

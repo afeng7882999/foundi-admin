@@ -47,7 +47,7 @@ export default {
 import { computed, reactive, ref, watch } from 'vue'
 import FdIconButton from '@/components/icon-button/icon-button.vue'
 import { ElDialog } from 'element-plus'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 
 const props = defineProps({
   title: String,

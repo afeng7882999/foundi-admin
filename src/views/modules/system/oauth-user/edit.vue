@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
 import { OAuthUser, oauthUserDicts, oauthUserFields, oauthUserGetOne, oauthUserPostOne, oauthUserPutOne } from '@/api/system/oauth-user'
 
 export default defineComponent({

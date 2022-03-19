@@ -290,7 +290,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, onBeforeMount, reactive, ref } from 'vue'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 import { filterTree, TreeNodeDefault } from '@/utils/data-tree'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -299,7 +299,7 @@ import { ElForm, ElMessage, ElMessageBox, ElTable } from 'element-plus'
 import { genTableGetOne, genTablePutOne, genTableSyncDb, GenTableColumn, GenTable } from '@/api/generator/gen-table'
 import { dictList, Dict } from '@/api/system/dict'
 import { DEFAULT_HTML_TYPES, DEFAULT_QUERY_TYPES } from '@/views/modules/generator/types'
-import useSortableRow from '@/components/table/hooks/use-sortable-row'
+import useSortableRow from '@/extend/table/hooks/use-sortable-row'
 
 const form = ref<InstanceType<typeof ElForm>>()
 const tableWrapper = ref<HTMLElement>()

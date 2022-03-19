@@ -117,7 +117,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useList from '@/components/crud/use-list'
+import useList from '@/extend/crud/use-list'
 import { Role, roleDel, roleDicts, roleExport, roleFields, roleList, roleQuery } from '@/api/system/role'
 import Edit from './edit.vue'
 import Detail from './detail.vue'
@@ -125,7 +125,7 @@ import useExpandTransition from '@/hooks/use-expand-transition'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { groupList, Group } from '@/api/system/group'
 import { Menu, menuList } from '@/api/system/menu'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 
 const stateOption = {
   idField: roleFields.idField,

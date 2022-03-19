@@ -112,12 +112,12 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, toRefs } from 'vue'
-import useList from '@/components/crud/use-list'
+import useList from '@/extend/crud/use-list'
 import { oauthUserDel, oauthUserDicts, oauthUserExport, oauthUserFields, oauthUserList, oauthUserQuery } from '@/api/system/oauth-user'
 import Edit from './edit.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 import { Message } from '@/api/system/message'
 
 export default defineComponent({

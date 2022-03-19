@@ -132,7 +132,7 @@ export default {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import useEdit, { ListEditStateOption, REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
+import useEdit, { ListEditStateOption, REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
 import { Role, roleDicts, roleFields, roleGetOne, rolePostOne, rolePutOne } from '@/api/system/role'
 import { groupList, Group } from '@/api/system/group'
 import { Menu, menuList } from '@/api/system/menu'

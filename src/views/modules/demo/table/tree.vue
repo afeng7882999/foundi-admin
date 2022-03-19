@@ -29,7 +29,7 @@ export default {
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { menuData, sysMenuType } from './data'
-import useTable from '@/components/table/hooks/use-table'
+import useTable from '@/extend/table/hooks/use-table'
 import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus'
 

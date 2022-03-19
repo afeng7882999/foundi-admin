@@ -104,14 +104,14 @@ export default {
 
 <script setup lang="ts">
 import { nextTick, onBeforeMount, ref } from 'vue'
-import useList from '@/components/crud/use-list'
+import useList from '@/extend/crud/use-list'
 import { DictItem, dictItemDel, dictItemExport, dictItemFields, dictItemList, dictItemParams, dictItemQuery } from '@/api/system/dict-item'
 import Edit from './edit.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { dictGetOne } from '@/api/system/dict'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 
 const contextMenu = ref()
 

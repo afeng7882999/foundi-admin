@@ -59,7 +59,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
+import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/extend/crud/use-detail'
 import { OperLog, operLogFields } from '@/api/system/oper-log'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { formatJson } from '@/utils/lang'

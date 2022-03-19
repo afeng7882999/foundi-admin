@@ -892,7 +892,7 @@ export default {
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, reactive, ref } from 'vue'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 import request from '@/app/request'
 import FullSqlDialog from './full-sql.vue'
 import WebUriDetailDialog from './web-uri-detail.vue'

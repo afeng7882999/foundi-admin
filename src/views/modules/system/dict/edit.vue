@@ -27,7 +27,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useEdit, { REFRESH_DATA_EVENT } from '@/components/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
 import { Dict, dictFields, dictGetOne, dictPostOne, dictPutOne } from '@/api/system/dict'
 
 const stateOption = {

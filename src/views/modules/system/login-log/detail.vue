@@ -52,7 +52,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/components/crud/use-detail'
+import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/extend/crud/use-detail'
 import { LoginLog, loginLogFields } from '@/api/system/login-log'
 import { formatTimestamp } from '@/utils/time'
 import breakpoint from "@/common/breakpoint";

@@ -23,7 +23,7 @@ export default {
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 
 const props = defineProps({
   icon: {

@@ -53,7 +53,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useList from '@/components/crud/use-list'
+import useList from '@/extend/crud/use-list'
 import {
   loginLogFields,
   loginLogDicts,
@@ -65,7 +65,7 @@ import {
   LoginLog
 } from '@/api/system/login-log'
 import Detail from './detail.vue'
-import FdPageQuery from '@/components/page/page-query.vue'
+import FdPageQuery from '@/extend/page/page-query.vue'
 
 const stateOption = {
   idField: loginLogFields.idField,

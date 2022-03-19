@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, toRefs } from 'vue'
-import useDetail from '@/components/crud/use-detail'
+import useDetail from '@/extend/crud/use-detail'
 import { User } from '@/api/system/user'
 import { Group } from '@/api/system/group'
 import { Role } from '@/api/system/role'

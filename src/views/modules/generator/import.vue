@@ -62,7 +62,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useList from '@/components/crud/use-list'
+import useList from '@/extend/crud/use-list'
 import { GenTable, genTableImportDb, genTableListDb } from '@/api/generator/gen-table'
 import { ElMessage } from 'element-plus'
 import { formatTimestamp } from '@/utils/time'

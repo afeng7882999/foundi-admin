@@ -167,7 +167,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useList from '@/components/crud/use-list'
+import useList from '@/extend/crud/use-list'
 import {
   Task,
   TASK_STATUS_DICT,
@@ -184,7 +184,7 @@ import Edit from './edit.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { dictKey } from '@/utils/dict'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 
 export default defineComponent({
   name: 'SystemTask',

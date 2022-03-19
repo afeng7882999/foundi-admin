@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useEdit from '@/components/crud/use-edit'
+import useEdit from '@/extend/crud/use-edit'
 import { changePassword, PasswordParam } from '@/api/system/user'
 import { validPassword } from '@/utils/validate'
 import { omit } from 'lodash-es'

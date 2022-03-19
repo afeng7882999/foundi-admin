@@ -22,8 +22,8 @@ export default {
 <script setup lang="ts">
 import BaseTableDemo from './base.vue'
 import TreeTableDemo from './tree.vue'
-import usePage from '@/components/page/use-page'
-import FdPageFooter from '@/components/page/page-footer.vue'
+import usePage from '@/extend/page/use-page'
+import FdPageFooter from '@/extend/page/page-footer.vue'
 
 const { docMinHeight, showPageHeader, hasAuth } = usePage()
 </script>

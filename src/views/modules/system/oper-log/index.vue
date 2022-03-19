@@ -218,12 +218,12 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useList, { ListStateOption } from '@/components/crud/use-list'
+import useList, { ListStateOption } from '@/extend/crud/use-list'
 import { OperLog, operLogDel, operLogDicts, operLogExport, operLogFields, operLogList, operLogQuery } from '@/api/system/oper-log'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import Detail from './detail.vue'
 import { formatTimestamp } from '@/utils/time'
-import usePage from '@/components/page/use-page'
+import usePage from '@/extend/page/use-page'
 
 const stateOption: ListStateOption<OperLog> = {
   idField: operLogFields.idField,
