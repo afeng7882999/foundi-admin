@@ -33,7 +33,7 @@ export default {
 import { onMounted, onUnmounted, reactive } from 'vue'
 import FdWidgetPanel from './panel.vue'
 import * as echarts from 'echarts/core'
-import { getContentStat } from '@/api-mock/dashboard'
+import { getContentStat } from '@/api/mock/dashboard'
 import useECharts from '@/views/modules/dashboard/widgets/useECharts'
 
 const option = {
