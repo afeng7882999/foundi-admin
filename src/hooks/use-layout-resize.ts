@@ -2,7 +2,7 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { DeviceType } from '@/store/modules/app'
-import { breakpoints } from '@/hooks/use-breakpoint'
+import { breakpoints } from '@/common/breakpoint'
 
 export const resizeConst = {
   ratio: 3,
