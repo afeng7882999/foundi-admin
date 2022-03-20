@@ -25,7 +25,7 @@ module.exports = defineConfig({
   ],
   rules: {
     'vue/max-attributes-per-line': 'off',
-    indent: ['error', 2, { SwitchCase: 1 }],
+    indent: ['off', 2, { SwitchCase: 1 }],
     'no-debugger': 'off',
     'no-prototype-builtins': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
