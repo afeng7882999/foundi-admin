@@ -65,13 +65,13 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { TreeFields, TreeNode, traverseTree } from '@/utils/data-tree'
+import { TreeFields, TreeNode, traverseTree, DEFAULT_TREE_FIELDS } from '@/utils/data-tree'
 import { nextFrame } from '@/utils/next-frame'
 import { off, on } from '@/utils/dom'
 import { generateId } from '@/utils/lang'
 import { merge } from 'lodash-es'
 import { computed, nextTick, onBeforeMount, onBeforeUnmount, onMounted, PropType, reactive, ref, watch } from 'vue'
-import { DEFAULT_SELECT_PARAMS, DEFAULT_TREE_FIELDS, DEFAULT_TREE_PARAMS } from '@/components/tree-select/types'
+import { DEFAULT_SELECT_PARAMS, DEFAULT_TREE_PARAMS } from '@/components/tree-select/types'
 import { isString } from 'lodash-es'
 
 const props = defineProps({

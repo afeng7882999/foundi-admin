@@ -1,5 +1,3 @@
-import { TreeFields } from '@/utils/data-tree'
-
 export const DEFAULT_SELECT_PARAMS = {
   multiple: false,
   clearable: true,
@@ -16,12 +14,4 @@ export const DEFAULT_TREE_PARAMS = {
     label: 'name',
     disabled: 'disabled'
   }
-}
-export const DEFAULT_TREE_FIELDS: TreeFields = {
-  idField: 'id',
-  labelField: 'name',
-  parentIdField: 'parentId',
-  sortField: 'sort',
-  childrenField: 'children',
-  disabledField: 'disabled'
 }

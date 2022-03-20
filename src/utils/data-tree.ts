@@ -21,6 +21,7 @@ export interface TreeFields {
   sortField: string
   levelField?: string
   childrenField: string
+  labelField?: string
 
   [key: string]: any
 }
@@ -32,7 +33,8 @@ export const DEFAULT_TREE_FIELDS: Partial<TreeFields> = {
   parentPathField: 'parentPath',
   sortField: 'sort',
   levelField: 'level',
-  childrenField: 'children'
+  childrenField: 'children',
+  labelField: 'name'
 }
 
 /**
