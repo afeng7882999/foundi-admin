@@ -2,7 +2,7 @@
   <template v-if="visible">
     <el-table-column v-bind="$attrs" :align="align" :header-align="headerAlign" :width="widthCo">
       <template #default="scope">
-        <fd-fmt-icon :icon="scope.row[attrs.prop]"></fd-fmt-icon>
+        <fd-fmt-icon :icon="scope.row[attrs.prop]" :mapping="mapping"></fd-fmt-icon>
       </template>
     </el-table-column>
   </template>
@@ -16,12 +16,13 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, useAttrs } from 'vue'
-import { COL_DEFAULT_PROPS } from '@/extend/table/types'
+import { computed, PropType, useAttrs } from 'vue'
+import { COL_DEFAULT_PROPS, FormatMapping } from '@/extend/table/types'
 import useColumn from '@/extend/table/hooks/use-column'
 
 const props = defineProps({
-  ...COL_DEFAULT_PROPS
+  ...COL_DEFAULT_PROPS,
+  mapping: Array as PropType<string[] | FormatMapping>
 })
 
 const attrs = useAttrs()

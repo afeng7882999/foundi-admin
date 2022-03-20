@@ -1,6 +1,6 @@
 import { Ref } from '@vue/reactivity'
 import { SortFieldResult } from '@/extend/form/type'
-import { PropType } from 'vue'
+import {ExtractPropTypes, PropType} from 'vue'
 
 export type ColType = 'default' | 'custom' | 'datetime' | 'dict' | 'list' | 'act' | 'selection' | 'icon'
 export type RowDensity = 'high' | 'default' | 'low'
@@ -22,6 +22,19 @@ export interface TableSettingProp {
   columns: () => Ref<TableColumn[] | null>
   stripe: () => Ref<boolean | null>
   border: () => Ref<boolean | null>
+}
+
+export interface FormatMappingItem {
+  key: string
+  val?: string
+  color?: string
+}
+
+export type FormatMapping = FormatMappingItem[]
+
+export const FORMATTER_DEFAULT_PROPS = {
+  data: [String, Number, Array] as PropType<string | number | string[] | number[]>,
+  mapping: [String, Array] as PropType<string[] | FormatMapping>
 }
 
 export const COL_DEFAULT_PROPS = {

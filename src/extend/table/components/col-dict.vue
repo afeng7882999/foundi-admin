@@ -9,7 +9,7 @@
     >
       <template #default="scope">
         <span>
-          <fd-fmt-dict :dict="dict" :data="scope.row[attrs.prop]"></fd-fmt-dict>
+          <fd-fmt-dict :dict="dict" :data="scope.row[attrs.prop]" :tag="tag" :mapping="mapping"></fd-fmt-dict>
         </span>
       </template>
       <template v-if="sortable" #header="scope">
@@ -29,7 +29,7 @@ export default {
 <script setup lang="ts">
 import { computed, PropType, useAttrs } from 'vue'
 import { DictItem } from '@/api/system/dict-item'
-import { COL_DEFAULT_PROPS } from '@/extend/table/types'
+import { COL_DEFAULT_PROPS, FormatMapping } from '@/extend/table/types'
 import useColumn from '@/extend/table/hooks/use-column'
 
 const props = defineProps({
@@ -37,7 +37,12 @@ const props = defineProps({
   dict: {
     type: Array as PropType<DictItem[]>,
     default: () => [] as DictItem[]
-  }
+  },
+  tag: {
+    type: Boolean,
+    default: false
+  },
+  mapping: Array as PropType<string[] | FormatMapping>
 })
 
 const attrs = useAttrs()
