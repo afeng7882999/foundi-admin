@@ -72,19 +72,6 @@
   }
   
   // icon, button
-  .tb-icon {
-    margin-top: 4px;
-    font-size: $icon-size-middle;
-    
-    &.is-success {
-      color: var(--el-color-success);
-    }
-    
-    &.is-danger {
-      color: var(--el-color-danger);
-    }
-  }
-  
   .tb-act-btn {
     font-size: $icon-size-tiny;
     height: 28px;

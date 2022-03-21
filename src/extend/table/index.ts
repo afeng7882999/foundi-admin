@@ -6,6 +6,7 @@ import FdFmtDict from './formatter/fmt-dict.vue'
 import FdFmtIcon from './formatter/fmt-icon.vue'
 import FdFmtJson from './formatter/fmt-json.vue'
 import FdFmtList from './formatter/fmt-list.vue'
+import FdFmtBoolean from './formatter/fmt-boolean.vue'
 
 import FdColAct from './components/col-act.vue'
 import FdColCustom from './components/col-custom.vue'
@@ -24,6 +25,7 @@ export default function install(app: App) {
   app.component(FdFmtIcon.name, FdFmtIcon)
   app.component(FdFmtJson.name, FdFmtJson)
   app.component(FdFmtList.name, FdFmtList)
+  app.component(FdFmtBoolean.name, FdFmtBoolean)
 
   app.component(FdColAct.name, FdColAct)
   app.component(FdColCustom.name, FdColCustom)

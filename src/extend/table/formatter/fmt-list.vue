@@ -41,25 +41,20 @@ const formatted = computed(() => {
   if (!props.data) {
     return []
   }
-
   const arr = isArray(props.data)
     ? props.data
     : props.data
         ?.split(',')
         .map((d) => d.trim())
         .filter((d) => !!d)
-
   if (!props.list) {
     return arr
   }
-
   const idField = props.fields?.idField ?? (DEFAULT_TREE_FIELDS.idField as string)
   const labelField = props.fields?.labelField ?? (DEFAULT_TREE_FIELDS.labelField as string)
-
   const mapped = isTreeData(props.list)
     ? arr.map((a) => getTreeNode(props.list, (l) => l[idField] === a))
     : arr.map((a) => props.list.find((l) => l[idField] === a))
-
   return mapped.map((m, i) => (m ? m[labelField] : arr[i]))
 })
 

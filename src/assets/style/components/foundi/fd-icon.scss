@@ -8,12 +8,24 @@
   fill: currentColor;
   overflow: hidden;
   
-  &.success {
+  &.is-primary {
+    color: var(--el-color-priamry);
+  }
+  
+  &.is-success {
     color: var(--el-color-success);
   }
   
-  &.danger {
+  &.is-danger {
     color: var(--el-color-danger);
+  }
+  
+  &.is-warning {
+    color: var(--el-color-warning);
+  }
+  
+  &.is-info {
+    color: var(--el-color-info);
   }
   
   &:focus {

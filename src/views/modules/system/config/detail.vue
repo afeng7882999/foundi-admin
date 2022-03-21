@@ -11,8 +11,7 @@
         <fd-fmt-dict :dict="state.dicts.sysConfigType" :data="state.data[state.idx].configTypeDict" />
       </el-descriptions-item>
       <el-descriptions-item label="是否启用">
-        <el-tag v-if="state.data[state.idx].enabled" size="small" type="success">启用</el-tag>
-        <el-tag v-else size="small" type="danger">禁用</el-tag>
+        <fd-fmt-boolean :data="state.data[state.idx].enabled" labels="启用,禁用" />
       </el-descriptions-item>
       <el-descriptions-item :span="2" label="键">{{ state.data[state.idx].configKey }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="值">
