@@ -7,7 +7,7 @@
         <fd-fmi label="用户账号" prop="userName" />
         <fd-fmi label="IP地址" prop="ip" />
         <fd-fmi-dict label="状态" prop="statusDict" :dict="s.dicts.sysLoginLogStatus" />
-        <fd-fmi-sort v-model="s.sort" label="排序" :fields="loginLogSortFields"></fd-fmi-sort>
+        <fd-fmi-sort label="排序" prop="sort" :fields="loginLogSortFields"></fd-fmi-sort>
       </fd-page-query>
     </template>
     <template #act>
@@ -24,8 +24,8 @@
         <fd-col-datetime label="访问时间" prop="operTime" />
         <fd-col-dict label="类型" prop="typeDict" :dict="s.dicts.sysLoginLogType" width="60" />
         <fd-col-dict label="登录方式" prop="authcTypeDict" :dict="s.dicts.sysAuthcType" width="100" />
-        <fd-col :sort="s.sort" label="用户账号" prop="userName" width="150" @sort-changed="m.sortChanged" />
-        <fd-col :sort="s.sort" label="IP地址" prop="ip" width="130" @sort-changed="m.sortChanged" />
+        <fd-col :sort="s.query.sort" label="用户账号" prop="userName" width="150" @sort-changed="m.sortChanged" />
+        <fd-col :sort="s.query.sort" label="IP地址" prop="ip" width="130" @sort-changed="m.sortChanged" />
         <fd-col label="地点" prop="location" width="150" />
         <fd-col label="浏览器" prop="browser" width="150" />
         <fd-col label="操作系统" prop="os" width="150" />

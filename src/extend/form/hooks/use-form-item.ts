@@ -67,7 +67,7 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
   }
 
   return {
-    model: formCtx.model,
+    model: () => formCtx.model,
     formInstCo,
     placeholderCo,
     visibleCo,

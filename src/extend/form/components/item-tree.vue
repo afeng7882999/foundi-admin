@@ -2,7 +2,7 @@
   <template v-if="visibleCo">
     <el-form-item :label="label" :prop="prop">
       <fd-tree-select
-        v-model="model[prop]"
+        v-model="model()[prop]"
         :data-list="list"
         :disabled="disabledCo"
         :select-params="{ multiple: multi, placeholder: placeholderCo }"

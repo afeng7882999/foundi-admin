@@ -49,12 +49,18 @@ export default {
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, PropType, reactive, ref, watch } from 'vue'
-import { SortFieldResult } from '@/extend/form/type'
+import { FORM_ITEM_DEFAULT_PROPS, SortFieldResult } from '@/extend/form/type'
 import { SortField } from '@/api'
 import FdIconButton from '@/components/icon-button/icon-button.vue'
 import Sortable, { SortableEvent } from 'sortablejs'
+import useFormItem from '@/extend/form/hooks/use-form-item'
 
 const props = defineProps({
+  ...FORM_ITEM_DEFAULT_PROPS,
+  prop: {
+    type: String,
+    default: 'sort'
+  },
   label: {
     type: String,
     default: '排序'
@@ -66,18 +72,6 @@ const props = defineProps({
   fields: {
     type: Array as PropType<SortField[]>,
     default: () => []
-  },
-  placeholder: {
-    type: String,
-    default: '添加排序字段'
-  },
-  visible: {
-    type: Boolean,
-    default: true
-  },
-  disabled: {
-    type: Boolean,
-    default: false
   }
 })
 
@@ -172,16 +166,18 @@ watch(
   { immediate: true }
 )
 
+const { model } = useFormItem(props)
 watch(
-  () => props.modelValue,
+  () => model()?.[props.prop],
   (val) => {
     state.data = [] as SortFieldResult[]
-    if (val?.length) {
-      val.forEach((d) => {
-        if (d) {
-          const field = props.fields?.find((f) => f.name === d.prop)
+    const v = val as SortFieldResult[]
+    if (v.length) {
+      v.forEach((s) => {
+        if (s) {
+          const field = props.fields?.find((f) => f.name === s.prop)
           if (field) {
-            state.data.push({ prop: field.name, comment: field.comment, order: d.order })
+            state.data.push({ prop: field.name, comment: field.comment, order: s.order })
           }
         }
       })
@@ -190,8 +186,8 @@ watch(
   { immediate: true, deep: true }
 )
 
-const emit = defineEmits(['update:modelValue'])
 const returnValue = () => {
-  emit('update:modelValue', state.data)
+  const m = model()
+  m && (m[props.prop] = state.data)
 }
 </script>

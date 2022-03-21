@@ -47,8 +47,7 @@ export const loginLogQuery = {
   authcTypeDict: undefined,
   userName: undefined,
   ip: undefined,
-  statusDict: undefined,
-  orderByList: [] as string[]
+  statusDict: undefined
 } as ApiQuery
 
 // api url

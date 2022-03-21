@@ -16,6 +16,11 @@ import { AnyFunction, Indexable } from '@/common/types'
 import { MaybeRef, useThrottleFn } from '@vueuse/core'
 import { SortFieldResult } from '@/extend/form/type'
 
+export type ApiQueryWithOrder = ApiQuery & {
+  // 排序规则，支持多字段排序
+  sort: SortFieldResult[]
+}
+
 export type ListStateOption<T extends ApiObj> = Partial<{
   // 是否是树表
   treeTable: boolean
@@ -28,7 +33,7 @@ export type ListStateOption<T extends ApiObj> = Partial<{
   // 获取数据的固定参数
   params: ApiQuery
   // 查询数据的对象
-  query: ApiQuery
+  query: ApiQueryWithOrder
   // 表头排序是否支持多字段
   sortMulti: boolean
   // 每页数据条数
@@ -95,9 +100,9 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     // 获取数据的固定参数
     params: {} as ApiQuery,
     // 查询数据的对象
-    query: {} as ApiQuery,
-    // 排序规则，支持多字段排序
-    sort: [] as SortFieldResult[],
+    query: {
+      sort: []
+    } as ApiQueryWithOrder,
     // 表头排序是否支持多字段
     sortMulti: false,
     // 当前ID
@@ -272,7 +277,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
 
     const orderByList = [] as string[]
-    mixState.sort.forEach((s) => {
+    mixState.query.sort.forEach((s) => {
       orderByList.push(`${s.prop}:${s.order}`)
     })
 
@@ -293,7 +298,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 重置查询
   const resetQuery = async () => {
-    mixState.sort = []
+    mixState.query.sort = []
     await queryList()
   }
 
@@ -304,24 +309,24 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
 
     if (order === 'none') {
-      mixState.sort = mixState.sort.filter((f) => f.prop !== prop)
+      mixState.query.sort = mixState.query.sort.filter((f) => f.prop !== prop)
       await getList()
       return
     }
 
     const o = order as 'asc' | 'desc'
     if (mixState.sortMulti) {
-      const field = mixState.sort.find((s) => s.prop === prop)
+      const field = mixState.query.sort.find((s) => s.prop === prop)
       if (field) {
         field.order = o
       } else {
-        mixState.sort.push({ prop, order: o })
+        mixState.query.sort.push({ prop, order: o })
       }
       await getList()
       return
     }
 
-    mixState.sort = [{ prop, order: o }]
+    mixState.query.sort = [{ prop, order: o }]
     await getList()
   }
 
@@ -616,6 +621,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const pageQueryAttrs = computed(() => {
     return {
       queryData: mixState.query,
+      'onUpdate:queryData': (val: ApiQueryWithOrder) => (mixState.query = val),
       queryFn: queryList,
       resetFn: resetQuery
     }

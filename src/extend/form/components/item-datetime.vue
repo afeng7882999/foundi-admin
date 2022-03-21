@@ -2,7 +2,7 @@
   <template v-if="visibleCo">
     <el-form-item v-bind="$attrs" :label="noLabel ? '' : label" :prop="prop">
       <el-date-picker
-        v-model="model[prop]"
+        v-model="model()[prop]"
         :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
         :end-placeholder="placeholderCo[1]"
         format="YYYY-MM-DD"

@@ -2,7 +2,7 @@
   <template v-if="visibleCo">
     <el-form-item :label="label" :prop="prop">
       <el-input
-        v-model="model[prop]"
+        v-model="model()[prop]"
         clearable
         :placeholder="placeholderCo"
         :style="styleCo"
