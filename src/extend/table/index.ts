@@ -8,14 +8,14 @@ import FdFmtJson from './formatter/fmt-json.vue'
 import FdFmtList from './formatter/fmt-list.vue'
 import FdFmtBoolean from './formatter/fmt-boolean.vue'
 
-import FdColAct from './components/col-act.vue'
-import FdColCustom from './components/col-custom.vue'
-import FdColDatetime from './components/col-datetime.vue'
-import FdCol from './components/col.vue'
-import FdColDict from './components/col-dict.vue'
-import FdColIcon from './components/col-icon.vue'
-import FdColList from './components/col-list.vue'
-import FdColSelection from './components/col-selection.vue'
+import FdColAct from './column/col-act.vue'
+import FdColCustom from './column/col-custom.vue'
+import FdColDatetime from './column/col-datetime.vue'
+import FdCol from './column/col.vue'
+import FdColDict from './column/col-dict.vue'
+import FdColIcon from './column/col-icon.vue'
+import FdColList from './column/col-list.vue'
+import FdColSelection from './column/col-selection.vue'
 
 export default function install(app: App) {
   app.component(FdTableSortHeader.name, FdTableSortHeader)
