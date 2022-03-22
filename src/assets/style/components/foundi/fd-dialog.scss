@@ -50,19 +50,17 @@
   }
 }
 
-// for xs breakpoint
-@media only screen and #{map.get($breakpoints, 'xs')} {
-  .fd-dialog {
-    transform: none !important;
-    margin: 0;
-    width: 100%;
-  }
+// is-mobile
+.fd-dialog.is-mobile {
+  transform: none !important;
+  margin: 0;
+  width: 100%;
   
-  .fd-dialog .el-form .el-form-item {
+  .el-form .el-form-item {
     display: block;
   }
   
-  .fd-dialog .el-col {
+  .el-col {
     max-width: 100%;
     width: 100%;
     flex: 0 0 100%;

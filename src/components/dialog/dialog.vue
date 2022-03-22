@@ -2,7 +2,7 @@
   <el-dialog
     v-bind="$attrs"
     ref="dialog"
-    custom-class="fd-dialog"
+    :custom-class="objClass"
     :draggable="true"
     :fullscreen="state.fullscreen"
     :close-on-click-modal="false"
@@ -44,10 +44,11 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue'
+import {computed, reactive, ref, useSlots, watch} from 'vue'
 import FdIconButton from '@/components/icon-button/icon-button.vue'
 import { ElDialog } from 'element-plus'
 import usePage from '@/extend/page/use-page'
+import useBreakpoint from "@/hooks/use-breakpoint";
 
 const props = defineProps({
   title: String,
@@ -78,6 +79,15 @@ watch(
   },
   { immediate: true }
 )
+
+const { isMobile } = useBreakpoint()
+const objClass = computed(() => {
+  const clazz = ['fd-dialog']
+  if (isMobile.value) {
+    clazz.push('is-mobile')
+  }
+  return clazz.join(' ')
+})
 
 const { pageState } = usePage()
 

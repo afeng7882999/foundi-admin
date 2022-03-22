@@ -37,6 +37,7 @@ export default {
 import { computed, ref, useSlots } from 'vue'
 import usePage from '@/extend/page/use-page'
 import { ElDrawer } from 'element-plus'
+import useBreakpoint from '@/hooks/use-breakpoint'
 
 const props = defineProps({
   title: {
@@ -67,6 +68,7 @@ const props = defineProps({
 
 const drawer = ref<InstanceType<typeof ElDrawer>>()
 
+const { isMobile } = useBreakpoint()
 const objClass = computed(() => {
   const clazz = ['fd-drawer']
   if (props.customClass) {
@@ -74,6 +76,9 @@ const objClass = computed(() => {
   }
   if (useSlots().footer) {
     clazz.push('has-footer')
+  }
+  if (isMobile.value) {
+    clazz.push('is-mobile')
   }
   return clazz.join(' ')
 })

@@ -83,17 +83,15 @@
   }
 }
 
-// for xs breakpoint
-@media only screen and #{map.get($breakpoints, 'xs')} {
-  .fd-drawer {
-    width: 100% !important;
-  }
-  
-  .fd-drawer .el-form .el-form-item {
+// is-mobile
+.fd-drawer.is-mobile {
+  width: 100% !important;
+
+  .el-form .el-form-item {
     display: block;
   }
-  
-  .fd-drawer .el-col {
+
+  .el-col {
     max-width: 100%;
     width: 100%;
     flex: 0 0 100%;
