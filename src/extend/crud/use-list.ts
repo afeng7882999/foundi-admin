@@ -277,9 +277,11 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
 
     const orderByList = [] as string[]
-    mixState.query.sort.forEach((s) => {
-      orderByList.push(`${s.prop}:${s.order}`)
-    })
+    if (mixState.query.sort) {
+      mixState.query.sort.forEach((s) => {
+        orderByList.push(`${s.prop}:${s.order}`)
+      })
+    }
 
     return {
       current: mixState.current,
