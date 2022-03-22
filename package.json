@@ -2,7 +2,7 @@
   "name": "foundi-admin",
   "version": "0.6.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "serve": "vite preview",
     "lint:eslint": "eslint --fix src/**/*.{vue,ts,tsx}",
