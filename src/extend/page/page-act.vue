@@ -40,31 +40,33 @@
             <fd-contextmenu-item label="导出全部页" @click="emit('exportAll')"></fd-contextmenu-item>
           </fd-contextmenu-submenu>
           <fd-contextmenu-item v-if="exportVisible" divider></fd-contextmenu-item>
-          <fd-contextmenu-item
-            v-if="tableOption.treeTable"
-            icon="row-height"
-            :label="expandAll ? '收缩所有行' : '展开所有行'"
-            @click="toggleExpandAll"
-          ></fd-contextmenu-item>
-          <fd-contextmenu-item
-            v-if="!tableOption.treeTable"
-            icon="table-stripe"
-            :label="stripe ? '隐藏斑马纹' : '显示斑马纹'"
-            @click="toggleStripe"
-          ></fd-contextmenu-item>
-          <fd-contextmenu-item icon="table" :label="border ? '隐藏边框' : '显示边框'" @click="toggleBorder"></fd-contextmenu-item>
-          <fd-contextmenu-submenu icon="table-row" label="表格行密度">
-            <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="high" @click="setRowDensity('high')">
-              高
-            </fd-contextmenu-item>
-            <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="low" @click="setRowDensity('low')">
-              低
-            </fd-contextmenu-item>
-            <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="default" @click="setRowDensity('default')">
-              默认
-            </fd-contextmenu-item>
+          <fd-contextmenu-submenu icon="table-row" label="表格设置">
+            <fd-contextmenu-item
+              v-if="tableOption.treeTable"
+              icon="row-height"
+              :label="expandAll ? '收缩所有行' : '展开所有行'"
+              @click="toggleExpandAll"
+            ></fd-contextmenu-item>
+            <fd-contextmenu-item
+              v-if="!tableOption.treeTable"
+              icon="table-stripe"
+              :label="stripe ? '隐藏斑马纹' : '显示斑马纹'"
+              @click="toggleStripe"
+            ></fd-contextmenu-item>
+            <fd-contextmenu-item icon="table" :label="border ? '隐藏边框' : '显示边框'" @click="toggleBorder"></fd-contextmenu-item>
+            <fd-contextmenu-submenu icon="table-row" label="表格行密度">
+              <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="high" @click="setRowDensity('high')">
+                高
+              </fd-contextmenu-item>
+              <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="low" @click="setRowDensity('low')">
+                低
+              </fd-contextmenu-item>
+              <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="default" @click="setRowDensity('default')">
+                默认
+              </fd-contextmenu-item>
+            </fd-contextmenu-submenu>
+            <fd-contextmenu-item icon="table-col" label="表格列设置" @click="showSortColumnDialog"></fd-contextmenu-item>
           </fd-contextmenu-submenu>
-          <fd-contextmenu-item icon="table-col" label="表格列设置" @click="showSortColumnDialog"></fd-contextmenu-item>
         </fd-contextmenu>
         <fd-sort-column-dialog ref="sortColumnDialog" @submit="setTableColumns"></fd-sort-column-dialog>
       </div>
@@ -86,7 +88,8 @@ import { TableSettingProp } from '@/extend/table/types'
 import useTableSetting from '@/extend/table/hooks/use-table-setting'
 import FdSortColumnDialog from '@/extend/table/components/sort-column-dialog.vue'
 import FdContextmenuItem from '@/components/contextmenu/item.vue'
-import { ApiQuery } from '@/api'
+import FdContextmenuSubmenu from '@/components/contextmenu/submenu.vue'
+import { ApiQuery } from '@/extend/crud/use-list'
 
 const props = defineProps({
   visible: {
@@ -163,6 +166,9 @@ const openMoreMenu = (e: Event) => {
 const queryLenCo = computed(() => {
   let len = 0
   for (const key in props.queryData) {
+    if (key === 'sort') {
+      continue
+    }
     const val = props.queryData[key]
     if (!val) {
       continue

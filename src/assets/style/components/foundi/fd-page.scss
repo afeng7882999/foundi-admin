@@ -54,6 +54,7 @@
   }
 }
 
+// fd-page-act
 .fd-page-act {
   display: flex;
   align-items: center;
@@ -98,6 +99,7 @@
   }
 }
 
+// fd-page-footer
 .fd-page-footer {
   display: flex;
   align-items: center;
@@ -122,8 +124,11 @@
   }
 }
 
+// fd-page-query
 .fd-page-query {
   padding: 16px 0;
+  margin-bottom: 0;
+  
   .fd-page__sub-title {
     margin: 0 16px 16px 16px;
   }
@@ -137,5 +142,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+}
+
+// fd-page is-mobile
+.fd-page.is-mobile {
+  .fd-page-act .query-compact {
+    display: none;
   }
 }

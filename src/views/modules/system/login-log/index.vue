@@ -1,14 +1,12 @@
 <template>
   <fd-page v-bind="pageMainAttrs" name="system-loginLog">
     <template #query>
-      <fd-page-query v-bind="pageQueryAttrs">
-        <fd-fmi-datetime label="访问时间" prop="operTime" />
-        <fd-fmi-dict label="登录方式" prop="authcTypeDict" :dict="s.dicts.sysAuthcType" />
-        <fd-fmi label="用户账号" prop="userName" />
-        <fd-fmi label="IP地址" prop="ip" />
-        <fd-fmi-dict label="状态" prop="statusDict" :dict="s.dicts.sysLoginLogStatus" />
-        <fd-fmi-sort label="排序" prop="sort" :fields="loginLogSortFields"></fd-fmi-sort>
-      </fd-page-query>
+      <fd-fmi-datetime label="访问时间" prop="operTime" />
+      <fd-fmi-dict label="登录方式" prop="authcTypeDict" :dict="s.dicts.sysAuthcType" />
+      <fd-fmi label="用户账号" prop="userName" />
+      <fd-fmi label="IP地址" prop="ip" />
+      <fd-fmi-dict label="状态" prop="statusDict" :dict="s.dicts.sysLoginLogStatus" />
+      <fd-fmi-sort label="排序" prop="sort" :fields="loginLogSortFields"></fd-fmi-sort>
     </template>
     <template #act>
       <fd-page-act del="system:loginLog:delete" export="system:loginLog:export" v-bind="pageActAttrs">
@@ -65,7 +63,6 @@ import {
   LoginLog
 } from '@/api/system/login-log'
 import Detail from './detail.vue'
-import FdPageQuery from '@/extend/page/page-query.vue'
 
 const stateOption = {
   idField: loginLogFields.idField,
@@ -79,7 +76,7 @@ const stateOption = {
 
 const { mixRefs, mixAttrs, mixState: s, mixMethods: m } = useList<LoginLog>(stateOption)
 const { table, detailDialog } = mixRefs
-const { pageMainAttrs, pageQueryAttrs, tableAttrs, paginationAttrs, detailAttrs, pageActAttrs } = mixAttrs
+const { pageMainAttrs, tableAttrs, paginationAttrs, detailAttrs, pageActAttrs } = mixAttrs
 
 const showDetail = (row: LoginLog, idx: number) => {
   m.showDetail(idx)
