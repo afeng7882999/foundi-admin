@@ -14,12 +14,6 @@ import { ApiObj, ApiQuery, ExportRange } from '@/api'
 import { DictList } from '@/api/system/dict-item'
 import { AnyFunction, Indexable } from '@/common/types'
 import { MaybeRef, useThrottleFn } from '@vueuse/core'
-import { SortFieldResult } from '@/extend/form/type'
-
-export type ApiQueryWithOrder = ApiQuery & {
-  // 排序规则，支持多字段排序
-  sort: SortFieldResult[]
-}
 
 export type ListStateOption<T extends ApiObj> = Partial<{
   // 是否是树表
@@ -33,7 +27,7 @@ export type ListStateOption<T extends ApiObj> = Partial<{
   // 获取数据的固定参数
   params: ApiQuery
   // 查询数据的对象
-  query: ApiQueryWithOrder
+  query: ApiQuery
   // 表头排序是否支持多字段
   sortMulti: boolean
   // 每页数据条数
@@ -102,7 +96,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     // 查询数据的对象
     query: {
       sort: []
-    } as ApiQueryWithOrder,
+    } as ApiQuery,
     // 表头排序是否支持多字段
     sortMulti: false,
     // 当前ID
@@ -311,18 +305,18 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
 
     if (order === 'none') {
-      mixState.query.sort = mixState.query.sort.filter((f) => f.prop !== prop)
+      mixState.query.sort = mixState.query.sort?.filter((f) => f.prop !== prop)
       await getList()
       return
     }
 
     const o = order as 'asc' | 'desc'
     if (mixState.sortMulti) {
-      const field = mixState.query.sort.find((s) => s.prop === prop)
+      const field = mixState.query.sort?.find((s) => s.prop === prop)
       if (field) {
         field.order = o
       } else {
-        mixState.query.sort.push({ prop, order: o })
+        mixState.query.sort?.push({ prop, order: o })
       }
       await getList()
       return
@@ -614,16 +608,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   // fd-page-main默认参数
   const pageMainAttrs = computed(() => {
     return {
-      queryVisible: mixState.queryFormShow,
-      'onUpdate:queryVisible': (val: boolean) => (mixState.queryFormShow = val)
-    }
-  })
-
-  // fd-page-query默认参数
-  const pageQueryAttrs = computed(() => {
-    return {
       queryData: mixState.query,
-      'onUpdate:queryData': (val: ApiQueryWithOrder) => (mixState.query = val),
+      'onUpdate:queryData': (val: ApiQuery) => (mixState.query = val),
+      queryVisible: mixState.queryFormShow,
+      'onUpdate:queryVisible': (val: boolean) => (mixState.queryFormShow = val),
       queryFn: queryList,
       resetFn: resetQuery
     }
@@ -719,7 +707,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     },
     mixAttrs: {
       pageMainAttrs,
-      pageQueryAttrs,
       tableAttrs,
       paginationAttrs,
       detailAttrs,

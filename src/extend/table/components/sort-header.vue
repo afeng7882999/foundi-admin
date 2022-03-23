@@ -18,11 +18,11 @@ export default {
 
 <script setup lang="ts">
 import { computed, PropType, reactive, watch } from 'vue'
-import { SortFieldResult } from '@/extend/form/type'
+import { SortField } from '@/api'
 
 const props = defineProps({
   value: {
-    type: Array as PropType<SortFieldResult[]>,
+    type: Array as PropType<SortField[]>,
     default: () => []
   },
   column: {

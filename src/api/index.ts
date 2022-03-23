@@ -42,14 +42,18 @@ export type ApiObjList<T extends ApiObj> = {
   count: number
 }>
 
-// 查询条件
-export type ApiQuery = Indexable
-
 // 排序字段
-export type SortField = {
-  name: string
+export type SortField = Partial<{
+  prop: string
   comment: string
-}
+  order: 'asc' | 'desc'
+}>
+
+// 查询条件
+export type ApiQuery = Indexable &
+  Partial<{
+    sort: SortField[]
+  }>
 
 // 导出范围
 export type ExportRange = 'all' | 'page'

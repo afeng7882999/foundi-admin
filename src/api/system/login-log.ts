@@ -31,8 +31,8 @@ export const loginLogFields = {
 }
 
 export const loginLogSortFields: SortField[] = [
-  { name: 'userName', comment: '用户账号' },
-  { name: 'ip', comment: 'IP地址' }
+  { prop: 'userName', comment: '用户账号' },
+  { prop: 'ip', comment: 'IP地址' }
 ]
 
 export const loginLogDicts = {

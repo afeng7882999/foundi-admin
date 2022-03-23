@@ -20,7 +20,7 @@
             </div>
           </el-tooltip>
           <el-select v-model="item.prop" clearable :disabled="disabled" @change="changeField" @clear="removeField(item)">
-            <el-option v-for="field in getFields(item)" :key="field.name" :label="field.comment" :value="field.name"></el-option>
+            <el-option v-for="field in getFields(item)" :key="field.prop" :label="field.comment" :value="field.prop"></el-option>
           </el-select>
           <el-tooltip
             :content="item.order === 'asc' ? '点击切换升序' : '点击切换降序'"
@@ -49,7 +49,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, PropType, reactive, ref, watch } from 'vue'
-import { FORM_ITEM_DEFAULT_PROPS, SortFieldResult } from '@/extend/form/type'
+import { FORM_ITEM_DEFAULT_PROPS } from '@/extend/form/type'
 import { SortField } from '@/api'
 import FdIconButton from '@/components/icon-button/icon-button.vue'
 import Sortable, { SortableEvent } from 'sortablejs'
@@ -66,7 +66,7 @@ const props = defineProps({
     default: '排序'
   },
   modelValue: {
-    type: Array as PropType<SortFieldResult[]>,
+    type: Array as PropType<SortField[]>,
     default: () => []
   },
   fields: {
@@ -76,7 +76,7 @@ const props = defineProps({
 })
 
 const state = reactive({
-  data: [] as SortFieldResult[]
+  data: [] as SortField[]
 })
 
 const visibleCo = computed(() => {
@@ -87,15 +87,15 @@ const addDisabled = computed(() => {
   return props.disabled || getNotSortFields().length <= 0
 })
 
-const getFields = (self?: SortFieldResult) => {
+const getFields = (self?: SortField) => {
   if (self) {
-    return props.fields?.filter((f) => state.data.findIndex((d) => d.prop === f.name) === -1 || f.name === self.prop)
+    return props.fields?.filter((f) => state.data.findIndex((d) => d.prop === f.prop) === -1 || f.prop === self.prop)
   }
   return getNotSortFields()
 }
 
 const getNotSortFields = () => {
-  return props.fields?.filter((f) => state.data.findIndex((d) => d.prop === f.name) === -1)
+  return props.fields?.filter((f) => state.data.findIndex((d) => d.prop === f.prop) === -1)
 }
 
 const addField = () => {
@@ -107,19 +107,19 @@ const addField = () => {
 
 const changeField = (val: string) => {
   const changed = state.data.find((d) => d.prop === val)
-  const field = props.fields.find((f) => f.name === val)
+  const field = props.fields.find((f) => f.prop === val)
   if (changed && field) {
     changed.comment = field.comment
     returnValue()
   }
 }
 
-const removeField = (val: SortFieldResult) => {
+const removeField = (val: SortField) => {
   state.data = state.data.filter((d) => d.prop !== val.prop)
   returnValue()
 }
 
-const toggleOrder = (item: SortFieldResult) => {
+const toggleOrder = (item: SortField) => {
   item.order = item.order === 'asc' ? 'desc' : 'asc'
   returnValue()
 }
@@ -170,14 +170,14 @@ const { model } = useFormItem(props)
 watch(
   () => model()?.[props.prop],
   (val) => {
-    state.data = [] as SortFieldResult[]
-    const v = val as SortFieldResult[]
+    state.data = [] as SortField[]
+    const v = val as SortField[]
     if (v.length) {
       v.forEach((s) => {
         if (s) {
-          const field = props.fields?.find((f) => f.name === s.prop)
+          const field = props.fields?.find((f) => f.prop === s.prop)
           if (field) {
-            state.data.push({ prop: field.name, comment: field.comment, order: s.order })
+            state.data.push({ prop: field.prop, comment: field.comment, order: s.order })
           }
         }
       })
