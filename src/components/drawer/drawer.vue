@@ -97,4 +97,8 @@ const currentIcon = computed(() => {
 const hide = () => {
   drawer.value?.handleClose()
 }
+
+defineExpose({
+  hide
+})
 </script>
