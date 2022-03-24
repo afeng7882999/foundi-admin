@@ -44,6 +44,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
   lineNumbers: {
     type: Boolean,
     default: false
@@ -71,7 +75,7 @@ const state = reactive({
     smartIndent: true,
     tabSize: 2,
     lineNumbers: props.lineNumbers,
-    readOnly: (props.readonly ? 'nocursor' : false) as any,
+    readOnly: (props.readonly || props.disabled ? 'nocursor' : false) as any,
     autoCloseBrackets: true,
     matchBrackets: true,
     autoRefresh: true,
@@ -108,6 +112,19 @@ watch(
     }
   },
   { deep: true }
+)
+
+watch(
+  () => props.disabled,
+  (val) => {
+    if (cmInstance) {
+      if (val) {
+        cmInstance.setOption('readOnly', 'nocursor')
+      } else {
+        cmInstance.setOption('readOnly', false)
+      }
+    }
+  }
 )
 
 onMounted(() => {
