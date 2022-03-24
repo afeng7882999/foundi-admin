@@ -1,5 +1,5 @@
 import { cloneDeep, merge } from 'lodash-es'
-import {InjectionKey, provide, reactive, ref, unref} from 'vue'
+import { InjectionKey, provide, reactive, ref, unref } from 'vue'
 import { ElForm, ElMessage } from 'element-plus'
 import useDict from '@/extend/crud/use-dict'
 import { arrayToTree, TreeFields } from '@/utils/data-tree'
@@ -54,7 +54,7 @@ export interface EditContext {
   onBeforeSubmit: (fn: () => Promise<boolean>) => void
   onAfterClose: (fn: () => Promise<void>) => void
 }
-export const editContextKey: InjectionKey<EditContext> = Symbol('editContextKey')
+export const editContextKey: InjectionKey<Partial<EditContext>> = Symbol('editContextKey')
 
 export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> | TreeEditStateOption<T>, emit: AnyFunction) {
   //===============================================================================
