@@ -3,6 +3,7 @@ import { FORM_ITEM_DEFAULT_PROPS } from '@/extend/form/type'
 import { Indexable } from '@/common/types'
 import { ElFormContext, elFormKey } from 'element-plus'
 import { isString, upperFirst } from 'lodash-es'
+import { editContextKey, EditContext } from '@/extend/crud/use-edit'
 
 export interface UseQueryItemDefaultOpt {
   width: string
@@ -66,6 +67,9 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
     }
   }
 
+  const detailContext = inject(editContextKey, {} as EditContext)
+  const { onAfterGetData, onBeforeOpen, onBeforeSubmitData, onBeforeSubmit, onAfterClose } = detailContext
+
   return {
     model: () => formCtx.model,
     formInstCo,
@@ -73,7 +77,12 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
     visibleCo,
     disabledCo,
     styleCo,
-    formSubmit
+    formSubmit,
+    onAfterGetData,
+    onBeforeOpen,
+    onBeforeSubmitData,
+    onBeforeSubmit,
+    onAfterClose
   }
 }
 

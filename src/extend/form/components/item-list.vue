@@ -1,7 +1,14 @@
 <template>
   <template v-if="visibleCo">
     <el-form-item :label="label" :prop="prop">
-      <el-select v-model="model()[prop]" :multiple="multi" clearable :placeholder="placeholderCo" :disabled="disabledCo" @change="formSubmit">
+      <el-select
+        v-model="model()[prop]"
+        :multiple="multi"
+        clearable
+        :placeholder="placeholderCo"
+        :disabled="disabledCo"
+        @change="formSubmit"
+      >
         <el-option v-for="item in list" :key="item[fields.id]" :label="item[fields.label]" :value="item[fields.id]"></el-option>
       </el-select>
     </el-form-item>
