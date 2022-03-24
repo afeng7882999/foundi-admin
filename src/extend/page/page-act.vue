@@ -14,7 +14,7 @@
         </el-tooltip>
         <el-divider class="fd-page-act__divider" direction="vertical" style="margin-left: 16px"></el-divider>
         <div class="query-compact">
-          <el-form :model="queryData" inline @submit="queryFn">
+          <el-form :model="queryData" inline compact @submit="queryFn">
             <slot name="query" />
           </el-form>
         </div>
@@ -89,7 +89,7 @@ import useTableSetting from '@/extend/table/hooks/use-table-setting'
 import FdSortColumnDialog from '@/extend/table/components/sort-column-dialog.vue'
 import FdContextmenuItem from '@/components/contextmenu/item.vue'
 import FdContextmenuSubmenu from '@/components/contextmenu/submenu.vue'
-import { ApiQuery } from '@/extend/crud/use-list'
+import { ApiQuery } from '@/api'
 
 const props = defineProps({
   visible: {

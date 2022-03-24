@@ -1,7 +1,15 @@
 <template>
   <template v-if="visibleCo">
-    <el-form-item class="fd-code-editor-form-item" :label="label" :prop="prop">
-      <fd-code-editor ref="jsonEditor" v-model="model()[prop]" border language="application/json" line-numbers />
+    <el-form-item class="fd-code-editor-form-item" v-bind="$attrs" :label="label" :prop="prop">
+      <fd-code-editor
+        ref="jsonEditor"
+        v-model="model()[prop]"
+        border
+        language="application/json"
+        :disabled="disabledCo"
+        :style="styleCo"
+        line-numbers
+      />
     </el-form-item>
   </template>
 </template>
@@ -27,7 +35,7 @@ const props = defineProps({
 
 const jsonEditor = ref()
 
-const { model, visibleCo, onBeforeOpen, onBeforeSubmitData } = useFormItem(props)
+const { model, visibleCo, disabledCo, styleCo, onBeforeOpen, onBeforeSubmitData } = useFormItem(props)
 
 const initData = () => {
   const m = model?.()
@@ -43,14 +51,18 @@ onMounted(() => {
   initData()
 })
 
-onBeforeOpen(async () => {
-  initData()
-})
+if (onBeforeOpen) {
+  onBeforeOpen(async () => {
+    initData()
+  })
+}
 
-onBeforeSubmitData(async () => {
-  const m = model?.()
-  if (props.prop && m) {
-    m[props.prop] = cleanStr(m[props.prop] as string)
-  }
-})
+if (onBeforeSubmitData) {
+  onBeforeSubmitData(async () => {
+    const m = model?.()
+    if (props.prop && m) {
+      m[props.prop] = cleanStr(m[props.prop] as string)
+    }
+  })
+}
 </script>

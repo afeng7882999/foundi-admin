@@ -1,6 +1,6 @@
 <template>
   <template v-if="visibleCo">
-    <el-form-item :label="label" class="fd-fmi-sort">
+    <el-form-item v-bind="$attrs" :label="label" class="fd-fmi-sort">
       <template #label>
         <div class="fd-fmi-sort__label">
           <span>{{ label }}</span>

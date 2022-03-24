@@ -14,12 +14,26 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
   const formCtx = inject(elFormKey, {} as ElFormContext)
 
   const vm = getCurrentInstance()
-  const formInstCo = computed(() => {
+  const formInstance = computed(() => {
     let parent = vm?.parent
     while (parent && parent.type.name !== 'ElForm') {
       parent = parent.parent
     }
     return parent
+  })
+
+  const formCompact = computed(() => {
+    const attrs = formInstance.value?.attrs as Indexable
+    return attrs && (attrs.compact === true || attrs.compact === '')
+  })
+
+  const formSubmit = computed(() => {
+    const attrs = formInstance.value?.attrs as Indexable
+    if (attrs && props.trigger && isString(props.trigger)) {
+      const fun = 'on' + upperFirst(props.trigger)
+      return attrs[fun]
+    }
+    return null
   })
 
   const placeholderCo = computed(() => {
@@ -33,8 +47,7 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
 
   const styleCo = computed(() => {
     const style = {} as Indexable
-    // 如果不是 inline form， 宽度设置为100%
-    const w = props.width ?? !formCtx.inline ? '100%' : option?.width
+    const w = props.width ?? !formCompact.value ? '100%' : option?.width
     if (w && w !== 'auto') {
       if (w.endsWith('px') || w.endsWith('%')) {
         style.width = w
@@ -53,31 +66,23 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
     return props.disabled
   })
 
-  const formSubmit = () => {
-    // 仅在 inline form 起作用
-    if (!formCtx.inline) {
-      return
-    }
-    if (props.trigger && isString(props.trigger)) {
-      const fun = 'on' + upperFirst(props.trigger)
-      const attrs = formInstCo.value?.attrs as Indexable
-      if (attrs && attrs[fun]) {
-        attrs[fun]()
-      }
+  const submit = () => {
+    if (formSubmit.value) {
+      formSubmit.value()
     }
   }
 
-  const detailContext = inject(editContextKey, {} as EditContext)
+  const detailContext = inject(editContextKey, {} as Partial<EditContext>)
   const { onAfterGetData, onBeforeOpen, onBeforeSubmitData, onBeforeSubmit, onAfterClose } = detailContext
 
   return {
     model: () => formCtx.model,
-    formInstCo,
+    formInstance,
     placeholderCo,
     visibleCo,
     disabledCo,
     styleCo,
-    formSubmit,
+    submit,
     onAfterGetData,
     onBeforeOpen,
     onBeforeSubmitData,
