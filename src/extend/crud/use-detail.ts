@@ -59,14 +59,18 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
   const mixHandlers = {
     // 显示之前
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    beforeOpen: async (data: T[], idx: number, extra?: Indexable) => {
-      return
-    },
+    beforeOpen: [
+      async (data: T[], idx: number, extra?: Indexable) => {
+        return
+      }
+    ],
     // 改变当前项之后
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    currentChanged: async (idx: number) => {
-      return
-    }
+    currentChanged: [
+      async (idx: number) => {
+        return
+      }
+    ]
   }
 
   // 上一条按钮是否可用
@@ -83,29 +87,35 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
   watch(
     () => mixState.idx,
     async (val: number) => {
-      await mixHandlers.currentChanged(val)
+      for (const fn of mixHandlers.currentChanged) {
+        await fn?.(val)
+      }
     }
   )
 
   // 显示之前
   const onBeforeOpen = (fn: (data: T[], idx: number, extra?: Indexable) => Promise<void>) => {
-    mixHandlers.beforeOpen = fn
+    mixHandlers.beforeOpen.push(fn)
   }
 
   // 改变当前项之后
   const onCurrentChanged = async (fn: (idx: number) => Promise<void>) => {
-    mixHandlers.currentChanged = fn
+    mixHandlers.currentChanged.push(fn)
   }
 
   // 显示
   const open = async (data: T[], idx: number, extra?: Indexable) => {
-    await mixHandlers.beforeOpen(data, idx, extra)
+    for (const fn of mixHandlers.beforeOpen) {
+      await fn?.(data, idx, extra)
+    }
     mixState.idx = idx
     mixState.data = data
     if (extra && extra.dicts) {
       mixState.dicts = { ...mixState.dicts, ...extra.dicts }
     }
-    await mixHandlers.currentChanged(idx)
+    for (const fn of mixHandlers.currentChanged) {
+      await fn?.(idx)
+    }
     mixState.visible = true
   }
 

@@ -1,5 +1,5 @@
 import { cloneDeep, merge } from 'lodash-es'
-import { reactive, ref, unref } from 'vue'
+import {InjectionKey, provide, reactive, ref, unref} from 'vue'
 import { ElForm, ElMessage } from 'element-plus'
 import useDict from '@/extend/crud/use-dict'
 import { arrayToTree, TreeFields } from '@/utils/data-tree'
@@ -46,6 +46,15 @@ export type TreeEditStateOption<T extends ApiObj> = ListEditStateOption<T> &
   }
 
 export const REFRESH_DATA_EVENT = 'refresh-data-list'
+
+export interface EditContext {
+  onAfterGetData: (fn: (data: ApiObj) => Promise<void>) => void
+  onBeforeOpen: (fn: () => Promise<void>) => void
+  onBeforeSubmitData: (fn: () => Promise<void>) => void
+  onBeforeSubmit: (fn: () => Promise<boolean>) => void
+  onAfterClose: (fn: () => Promise<void>) => void
+}
+export const editContextKey: InjectionKey<EditContext> = Symbol('editContextKey')
 
 export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> | TreeEditStateOption<T>, emit: AnyFunction) {
   //===============================================================================
@@ -109,50 +118,60 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
   const mixHandlers = {
     // 处理获取的数据
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    afterGetData: async (data: T) => {
-      return
-    },
+    afterGetData: [
+      async (data: T) => {
+        return
+      }
+    ],
     // 页面显示之前
-    beforeOpen: async () => {
-      return
-    },
+    beforeOpen: [
+      async () => {
+        return
+      }
+    ],
     // 处理提交的数据
-    beforeSubmitData: async () => {
-      return
-    },
+    beforeSubmitData: [
+      async () => {
+        return
+      }
+    ],
     // 提交之前
-    beforeSubmit: async () => {
-      return true
-    },
+    beforeSubmit: [
+      async () => {
+        return true
+      }
+    ],
     // 关闭之前
-    afterClose: async () => {
-      return
-    }
+    afterClose: [
+      async () => {
+        return
+      }
+    ]
   }
 
   // 处理获取的数据
   const onAfterGetData = (fn: (data: T) => Promise<void>) => {
-    mixHandlers.afterGetData = fn
+    mixHandlers.afterGetData.push(fn)
   }
 
   // 页面显示之前
   const onBeforeOpen = (fn: () => Promise<void>) => {
-    mixHandlers.beforeOpen = fn
+    mixHandlers.beforeOpen.push(fn)
   }
 
   // 处理提交的数据
   const onBeforeSubmitData = (fn: () => Promise<void>) => {
-    mixHandlers.beforeSubmitData = fn
+    mixHandlers.beforeSubmitData.push(fn)
   }
 
   // 提交之前
   const onBeforeSubmit = (fn: () => Promise<boolean>) => {
-    mixHandlers.beforeSubmit = fn
+    mixHandlers.beforeSubmit.push(fn)
   }
 
   // 关闭之前
   const onAfterClose = (fn: () => Promise<void>) => {
-    mixHandlers.afterClose = fn
+    mixHandlers.afterClose.push(fn)
   }
 
   //===============================================================================
@@ -172,7 +191,9 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
     if (!mixState.isCreate) {
       await getFormData(id)
     }
-    await mixHandlers.beforeOpen()
+    for (const fn of mixHandlers.beforeOpen) {
+      await fn?.()
+    }
     mixState.visible = true
   }
 
@@ -194,7 +215,9 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
         data[mixState.treeFields.treeParentIdField] =
           data[mixState.treeFields.treeParentIdField] === '0' ? '' : data[mixState.treeFields.treeParentIdField]
       }
-      await mixHandlers.afterGetData(data)
+      for (const fn of mixHandlers.afterGetData) {
+        await fn?.(data)
+      }
       mixState.formData = data
     } catch (e) {
       console.log(e)
@@ -233,12 +256,16 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
     if (mixState.treeTable && !mixState.formData[mixState.treeFields.treeParentIdField]) {
       ;(mixState.formData as ApiObj)[mixState.treeFields.treeParentIdField] = '0'
     }
-    if (!(await mixHandlers.beforeSubmit())) {
-      return
+    for (const fn of mixHandlers.beforeSubmit) {
+      if (!(await fn?.())) {
+        return
+      }
     }
     try {
       await (form.value as any).validate()
-      await mixHandlers.beforeSubmitData()
+      for (const fn of mixHandlers.beforeSubmitData) {
+        await fn?.()
+      }
       if (mixState.isCreate) {
         mixState.postApi && (await mixState.postApi(mixState.formData))
       } else {
@@ -260,7 +287,9 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
   const hideDialog = async () => {
     mixState.visible = false
     resetForm()
-    await mixHandlers.afterClose()
+    for (const fn of mixHandlers.afterClose) {
+      await fn?.()
+    }
   }
 
   //===============================================================================
@@ -271,6 +300,18 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
   const getFormTitle = () => {
     return mixState.isCreate ? `新增${mixState.title}` : `编辑${mixState.title}`
   }
+
+  //===============================================================================
+  // inject
+  //===============================================================================
+
+  provide(editContextKey, {
+    onAfterGetData,
+    onBeforeOpen,
+    onBeforeSubmitData,
+    onBeforeSubmit,
+    onAfterClose
+  })
 
   return {
     mixRefs: {

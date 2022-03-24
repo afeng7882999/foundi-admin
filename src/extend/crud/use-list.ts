@@ -170,42 +170,50 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   const mixHandlers = {
     // 获取数据列表之前
-    beforeGetList: async () => {
-      return true
-    },
+    beforeGetList: [
+      async () => {
+        return true
+      }
+    ],
     // 获取数据列表之后
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    afterGetList: async (resData: Indexable) => {
-      return
-    },
+    afterGetList: [
+      async (resData: Indexable) => {
+        return
+      }
+    ],
     // 删除之前
-    beforeDel: async () => {
-      return true
-    },
+    beforeDel: [
+      async () => {
+        return true
+      }
+    ],
     // 删除之后
-    afterDel: async () => {
-      return
-    }
+    afterDel: [
+      async () => {
+        return
+      }
+    ]
   }
 
   // 获取数据列表之前
   const onBeforeGetList = (fn: () => Promise<boolean>) => {
-    mixHandlers.beforeGetList = fn
+    mixHandlers.beforeGetList.push(fn)
   }
 
   // 获取数据列表之后
   const onAfterGetList = (fn: (resData: Indexable) => Promise<void>) => {
-    mixHandlers.afterGetList = fn
+    mixHandlers.afterGetList.push(fn)
   }
 
   // 删除之前
   const onBeforeDel = (fn: () => Promise<boolean>) => {
-    mixHandlers.beforeDel = fn
+    mixHandlers.beforeDel.push(fn)
   }
 
   // 删除之后
   const onAfterDel = (fn: () => Promise<void>) => {
-    mixHandlers.afterDel = fn
+    mixHandlers.afterDel.push(fn)
   }
 
   //===============================================================================
@@ -220,14 +228,16 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     if (!mixState.listApi) {
       return
     }
-    if (!(await mixHandlers.beforeGetList())) {
-      return
+    for (const fn of mixHandlers.beforeGetList) {
+      if (!(await fn?.())) {
+        return
+      }
     }
     try {
       mixState.loading = true
       await getDictData()
       const query = getQueryParam()
-      const { data, total, count, ApiData } = await mixState.listApi(query)
+      const { data, total, count, resData } = await mixState.listApi(query)
       if (stateOption.treeTable) {
         setTreeData(data)
       } else {
@@ -236,7 +246,9 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         mixState.data = data
       }
       mixState.selectedNodes = []
-      await mixHandlers.afterGetList(ApiData)
+      for (const fn of mixHandlers.afterGetList) {
+        await fn?.(resData)
+      }
       if (mixState.tableRowSelectable && mixState.currentId) {
         setCurrentData(mixState.currentId)
       }
@@ -417,8 +429,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     if (!mixState.delApi) {
       return
     }
-    if (!(await mixHandlers.beforeDel())) {
-      return
+    for (const fn of mixHandlers.beforeDel) {
+      if (!(await fn?.())) {
+        return
+      }
     }
     const rows = row ? [row] : mixState.selectedNodes
     const promptStr = prompt ? prompt : '选择的项目'
@@ -448,7 +462,9 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       })
       mixState.delLoading = false
       setPageAfterDel()
-      await mixHandlers.afterDel()
+      for (const fn of mixHandlers.afterDel) {
+        await fn?.()
+      }
       await getList()
     } catch (e) {
       mixState.delLoading = false
@@ -473,8 +489,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       if (!mixState.exportApi) {
         return
       }
-      if (!(await mixHandlers.beforeGetList())) {
-        return
+      for (const fn of mixHandlers.beforeGetList) {
+        if (!(await fn?.())) {
+          return
+        }
       }
       mixState.exportLoading = true
 
