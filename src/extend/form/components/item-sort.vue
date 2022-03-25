@@ -1,8 +1,8 @@
 <template>
   <template v-if="visibleCo">
-    <el-form-item v-bind="$attrs" :label="label" class="fd-fmi-sort">
+    <el-form-item v-bind="$attrs" :label="label" class="fd-item-sort">
       <template #label>
-        <div class="fd-fmi-sort__label">
+        <div class="fd-item-sort__label">
           <span>{{ label }}</span>
           <el-tooltip content="添加排序字段" :disabled="disabled" :show-after="500" placement="top">
             <el-button type="text" :disabled="addDisabled" @click="addField">
@@ -12,10 +12,10 @@
           </el-tooltip>
         </div>
       </template>
-      <div ref="itemWrapper" class="fd-fmi-sort__wrapper">
-        <div v-for="item in state.data" :key="item.prop" class="fd-fmi-sort__item">
+      <div ref="itemWrapper" class="fd-item-sort__wrapper">
+        <div v-for="item in state.data" :key="item.prop" class="fd-item-sort__item">
           <el-tooltip content="拖动排序字段" :disabled="disabled" :show-after="500" placement="left">
-            <div class="fd-fmi-sort__drag sortable-drag">
+            <div class="fd-item-sort__drag sortable-drag">
               <fd-icon icon="drag"></fd-icon>
             </div>
           </el-tooltip>
@@ -29,7 +29,7 @@
             placement="top"
           >
             <fd-icon-button
-              class="fd-fmi-sort__toggle"
+              class="fd-item-sort__toggle"
               :icon="item.order === 'asc' ? 'up-small' : 'down-small'"
               :disabled="disabled"
               @click="toggleOrder(item)"
@@ -43,7 +43,7 @@
 
 <script lang="ts">
 export default {
-  name: 'FdFmiSort'
+  name: 'FdItemSort'
 }
 </script>
 

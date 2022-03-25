@@ -16,7 +16,7 @@
 
 <script lang="ts">
 export default {
-  name: 'FdFmi',
+  name: 'FdItem',
   inheritAttrs: false
 }
 </script>

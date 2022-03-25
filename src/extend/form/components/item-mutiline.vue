@@ -16,7 +16,7 @@
 
 <script lang="ts">
 export default {
-  name: 'FdFmiMultiline',
+  name: 'FdItemMultiline',
   inheritAttrs: false
 }
 </script>

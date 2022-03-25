@@ -24,7 +24,7 @@
 
 <script lang="ts">
 export default {
-  name: 'FdFmiBoolean',
+  name: 'FdItemBoolean',
   inheritAttrs: false
 }
 </script>

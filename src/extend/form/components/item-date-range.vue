@@ -20,7 +20,7 @@
 
 <script lang="ts">
 export default {
-  name: 'FdFmiDateRange',
+  name: 'FdItemDateRange',
   inheritAttrs: false
 }
 </script>
