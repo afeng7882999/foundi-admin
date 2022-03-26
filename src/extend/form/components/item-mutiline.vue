@@ -1,11 +1,11 @@
 <template>
   <template v-if="visibleCo">
-    <el-form-item v-bind="$attrs" :label="label" :prop="prop">
+    <el-form-item v-bind="$attrs" :label="label" :style="itemStyle" :prop="prop">
       <el-input
         v-model="model()[prop]"
         clearable
         :placeholder="placeholderCo"
-        :style="styleCo"
+        :style="comStyle"
         :disabled="disabledCo"
         :autosize="{ minRows: 3 }"
         type="textarea"

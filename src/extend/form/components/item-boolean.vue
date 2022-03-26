@@ -1,19 +1,19 @@
 <template>
   <template v-if="visibleCo">
-    <el-form-item v-bind="$attrs" :label="label" :prop="prop">
+    <el-form-item v-bind="$attrs" :label="label" :style="itemStyle" :prop="prop">
       <template v-if="type === 'switch'">
         <el-switch
           v-model="model()[prop]"
           clearable
           :placeholder="placeholderCo"
-          :style="styleCo"
+          :style="comStyle"
           :disabled="disabledCo"
           :active-text="labelsCo[0]"
           :inactive-text="labelsCo[1]"
         />
       </template>
       <template v-else>
-        <el-select v-model="model()[prop]" clearable :disabled="disabledCo" :placeholder="placeholderCo" :style="styleCo" @change="submit">
+        <el-select v-model="model()[prop]" clearable :disabled="disabledCo" :placeholder="placeholderCo" :style="comStyle" @change="submit">
           <el-option :label="labelsCo[0]" :value="true"></el-option>
           <el-option :label="labelsCo[1]" :value="false"></el-option>
         </el-select>
@@ -55,5 +55,5 @@ const labelsCo = computed(() => {
   return ['是', '否']
 })
 
-const { model, placeholderCo, visibleCo, disabledCo, styleCo, submit } = useFormItem(props)
+const { model, placeholderCo, visibleCo, disabledCo, itemStyle, comStyle, submit } = useFormItem(props)
 </script>

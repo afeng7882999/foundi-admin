@@ -1,13 +1,13 @@
 <template>
   <template v-if="visibleCo">
-    <el-form-item v-bind="$attrs" :label="label" :prop="prop">
+    <el-form-item v-bind="$attrs" :label="label" :style="itemStyle" :prop="prop">
       <fd-tree-select
         v-model="model()[prop]"
         :data-list="list"
         :disabled="disabledCo"
         :select-params="{ multiple: multi, placeholder: placeholderCo }"
         :tree-params="{ 'default-expand-all': defaultExpandAll, 'check-strictly': checkStrictly }"
-        :style="styleCo"
+        :style="comStyle"
         @change="submit"
       ></fd-tree-select>
     </el-form-item>
@@ -51,5 +51,7 @@ const props = defineProps({
   }
 })
 
-const { model, visibleCo, placeholderCo, disabledCo, styleCo, submit } = useFormItem(props, { placeholder: `请选择${props.label}` })
+const { model, visibleCo, placeholderCo, disabledCo, itemStyle, comStyle, submit } = useFormItem(props, {
+  placeholder: `请选择${props.label}`
+})
 </script>

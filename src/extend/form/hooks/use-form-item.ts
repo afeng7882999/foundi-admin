@@ -45,7 +45,7 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
     return ''
   })
 
-  const styleCo = computed(() => {
+  const getStyle = () => {
     const style = {} as Indexable
     const w = props.width ?? !formCompact.value ? '100%' : option?.width
     if (w && w !== 'auto') {
@@ -56,6 +56,14 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
       }
     }
     return style
+  }
+
+  const itemStyle = computed(() => {
+    return getStyle()
+  })
+
+  const comStyle = computed(() => {
+    return getStyle()
   })
 
   const visibleCo = computed(() => {
@@ -81,7 +89,8 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
     placeholderCo,
     visibleCo,
     disabledCo,
-    styleCo,
+    itemStyle,
+    comStyle,
     submit,
     onAfterGetData,
     onBeforeOpen,

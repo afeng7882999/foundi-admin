@@ -1,13 +1,13 @@
 <template>
   <template v-if="visibleCo">
-    <el-form-item v-bind="$attrs" :label="label" :prop="prop">
+    <el-form-item v-bind="$attrs" :label="label" :style="itemStyle" :prop="prop">
       <el-select
         v-model="model()[prop]"
         :multiple="multi"
         clearable
         :placeholder="placeholderCo"
         :disabled="disabledCo"
-        :style="styleCo"
+        :style="comStyle"
         @change="submit"
       >
         <el-option v-for="item in list" :key="item[fields.id]" :label="item[fields.label]" :value="item[fields.id]"></el-option>
@@ -45,5 +45,7 @@ const props = defineProps({
   }
 })
 
-const { model, visibleCo, placeholderCo, disabledCo, styleCo, submit } = useFormItem(props, { placeholder: `请选择${props.label}` })
+const { model, visibleCo, placeholderCo, disabledCo, itemStyle, comStyle, submit } = useFormItem(props, {
+  placeholder: `请选择${props.label}`
+})
 </script>
