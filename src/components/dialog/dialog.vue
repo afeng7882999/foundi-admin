@@ -44,11 +44,11 @@ export default {
 </script>
 
 <script setup lang="ts">
-import {computed, reactive, ref, useSlots, watch} from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import FdIconButton from '@/components/icon-button/icon-button.vue'
 import { ElDialog } from 'element-plus'
 import usePage from '@/extend/page/use-page'
-import useBreakpoint from "@/hooks/use-breakpoint";
+import useBreakpoint from '@/hooks/use-breakpoint'
 
 const props = defineProps({
   title: String,
@@ -63,6 +63,10 @@ const props = defineProps({
   fullscreen: {
     type: Boolean,
     default: false
+  },
+  mobileCompact: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -83,7 +87,7 @@ watch(
 const { isMobile } = useBreakpoint()
 const objClass = computed(() => {
   const clazz = ['fd-dialog']
-  if (isMobile.value) {
+  if (props.mobileCompact && isMobile.value) {
     clazz.push('is-mobile')
   }
   return clazz.join(' ')

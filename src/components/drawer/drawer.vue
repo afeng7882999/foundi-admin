@@ -63,6 +63,10 @@ const props = defineProps({
   modal: {
     type: Boolean,
     default: true
+  },
+  mobileCompact: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -77,7 +81,7 @@ const objClass = computed(() => {
   if (useSlots().footer) {
     clazz.push('has-footer')
   }
-  if (isMobile.value) {
+  if (props.mobileCompact && isMobile.value) {
     clazz.push('is-mobile')
   }
   return clazz.join(' ')
