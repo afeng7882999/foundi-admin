@@ -8,6 +8,7 @@ import FdItemSort from './components/item-sort.vue'
 import FdItemJson from './components/item-json.vue'
 import FdItemMultiline from './components/item-mutiline.vue'
 import FdItemBoolean from './components/item-boolean.vue'
+import FdItemCustom from './components/item-custom.vue'
 
 export default function install(app: App) {
   app.component(FdItemDateRange.name, FdItemDateRange)
@@ -19,4 +20,5 @@ export default function install(app: App) {
   app.component(FdItemJson.name, FdItemJson)
   app.component(FdItemMultiline.name, FdItemMultiline)
   app.component(FdItemBoolean.name, FdItemBoolean)
+  app.component(FdItemCustom.name, FdItemCustom)
 }
