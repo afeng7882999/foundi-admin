@@ -15,6 +15,7 @@ import FdCol from './column/col.vue'
 import FdColDict from './column/col-dict.vue'
 import FdColIcon from './column/col-icon.vue'
 import FdColList from './column/col-list.vue'
+import FdColBoolean from './column/col-boolean.vue'
 import FdColSelection from './column/col-selection.vue'
 
 export default function install(app: App) {
@@ -34,5 +35,6 @@ export default function install(app: App) {
   app.component(FdColDict.name, FdColDict)
   app.component(FdColIcon.name, FdColIcon)
   app.component(FdColList.name, FdColList)
+  app.component(FdColBoolean.name, FdColBoolean)
   app.component(FdColSelection.name, FdColSelection)
 }
