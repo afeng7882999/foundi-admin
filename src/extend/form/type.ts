@@ -1,13 +1,5 @@
 import { PropType } from 'vue'
 
-const FORM_ITEM_INLINE_PROPS = {
-  width: String as PropType<'auto' | string>,
-  trigger: {
-    type: [Boolean, String],
-    default: 'submit'
-  }
-}
-
 export const FORM_ITEM_DEFAULT_PROPS = {
   prop: {
     type: String,
@@ -27,8 +19,11 @@ export const FORM_ITEM_DEFAULT_PROPS = {
     type: Boolean,
     default: false
   },
-  // 仅在 inline form 使用
-  ...FORM_ITEM_INLINE_PROPS
+  width: String as PropType<'auto' | string>,
+  trigger: {
+    type: [Boolean, String],
+    default: 'submit'
+  }
 }
 
 export interface ItemDataFields {
