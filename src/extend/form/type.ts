@@ -1,10 +1,7 @@
 import { PropType } from 'vue'
 
 export const FORM_ITEM_DEFAULT_PROPS = {
-  prop: {
-    type: String,
-    required: true
-  },
+  prop: String,
   label: String,
   noLabel: {
     type: Boolean,
