@@ -58,11 +58,11 @@ const props = defineProps({
   },
   closeOnClickModal: {
     type: Boolean,
-    default: true
+    default: false
   },
   modal: {
     type: Boolean,
-    default: true
+    default: false
   },
   mobileCompact: {
     type: Boolean,

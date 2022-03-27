@@ -1,5 +1,5 @@
 <template>
-  <fd-drawer ref="drawer" v-model="state.visible" custom-class="fd-setting" title="定制FOUNDi" size="320px">
+  <fd-drawer ref="drawer" v-model="state.visible" modal close-on-click-modal custom-class="fd-setting" title="定制FOUNDi" size="320px">
     <el-scrollbar class="fd-setting__scrollbar">
       <div class="fd-setting__inner">
         <div class="fd-setting__item">
