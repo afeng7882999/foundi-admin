@@ -642,6 +642,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       queryFn: queryList,
       queryVisible: mixState.queryFormShow,
       'onUpdate:queryVisible': (val: boolean) => (mixState.queryFormShow = val),
+      onCreate: showEdit,
       onDel: del,
       onExport: exportData,
       onExportAll: exportDataAll,
