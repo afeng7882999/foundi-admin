@@ -21,6 +21,7 @@ import FdDrawer from '@/components/drawer'
 import FdPageAll from '@/extend/page'
 import FdTableAll from '@/extend/table'
 import FdFormAll from '@/extend/form'
+import FdDescriptionsAll from '@/extend/descriptions'
 
 const app = createApp(App)
 app.use(store)
@@ -39,5 +40,6 @@ app
   .use(FdPageAll)
   .use(FdTableAll)
   .use(FdFormAll)
+  .use(FdDescriptionsAll)
 
 app.mount('#app')
