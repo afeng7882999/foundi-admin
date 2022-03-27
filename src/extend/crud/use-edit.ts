@@ -117,8 +117,8 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
 
   const mixHandlers = {
     // 处理获取的数据
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     afterGetData: [
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       async (data: T) => {
         return
       }

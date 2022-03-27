@@ -176,8 +176,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       }
     ],
     // 获取数据列表之后
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     afterGetList: [
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       async (resData: Indexable) => {
         return
       }
