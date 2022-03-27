@@ -1,7 +1,15 @@
 <template>
   <div :style="docMinHeight" :class="objClass">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <template v-if="isMobile">
+    <template v-if="!hasQuery">
+      <div class="fd-page__form">
+        <slot name="act" />
+      </div>
+      <div ref="tableWrapper" class="fd-page__table is-bordered">
+        <slot name="table" />
+      </div>
+    </template>
+    <template v-else-if="isMobile">
       <fd-drawer
         v-if="isMobile"
         ref="drawer"
@@ -83,7 +91,7 @@ export default {
 <script setup lang="ts">
 import usePage from '@/extend/page/use-page'
 import FdSplitPane from '@/components/split-pane/index.vue'
-import { computed, PropType, reactive, ref, toRaw, watch } from 'vue'
+import { computed, PropType, reactive, ref, toRaw, useSlots, watch } from 'vue'
 import useBreakpoint from '@/hooks/use-breakpoint'
 import { cloneDeep } from 'lodash-es'
 import { ApiQuery } from '@/api'
@@ -126,6 +134,10 @@ const objClass = computed(() => {
     clazz.push('is-mobile')
   }
   return clazz
+})
+
+const hasQuery = computed(() => {
+  return !!useSlots().query
 })
 
 const emit = defineEmits(['update:queryData', 'update:queryVisible'])
