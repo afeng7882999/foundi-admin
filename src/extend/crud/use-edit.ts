@@ -10,7 +10,7 @@ import { MaybeRef } from '@vueuse/core'
 import { Ref } from '@vue/reactivity'
 
 export type EditDialog = {
-  open: (id: string) => void
+  open: (id?: string) => void
 }
 
 export type ListEditStateOption<T extends ApiObj> = Partial<{
@@ -181,14 +181,14 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
   const { getDictData } = useDict(mixState.dicts)
 
   // 添加、编辑对话框
-  const open = async (id: string) => {
+  const open = async (id?: string) => {
     mixState.isCreate = !id || id === '-1'
     if (mixState.treeTable) {
       mixState.parentList = (await getParentList()) as T[]
     }
     resetForm()
     await getDictData()
-    if (!mixState.isCreate) {
+    if (id) {
       await getFormData(id)
     }
     for (const fn of mixHandlers.beforeOpen) {

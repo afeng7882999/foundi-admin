@@ -525,7 +525,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   //===============================================================================
 
   // 显示添加、修改对话框
-  const showEdit = async (current: T | string) => {
+  const showEdit = async (current?: T | string) => {
     const id = isString(current) ? current : current?.[mixState.idField]
     mixState.editShow = true
     await nextTick(() => {
