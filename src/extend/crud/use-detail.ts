@@ -1,7 +1,5 @@
 import { cloneDeep, merge } from 'lodash-es'
-import { computed, onBeforeUnmount, onMounted, reactive, watch } from 'vue'
-import useDict from '@/extend/crud/use-dict'
-import { off, on } from '@/utils/dom'
+import { computed, reactive, watch } from 'vue'
 import { AnyFunction, Indexable } from '@/common/types'
 import { DictList } from '@/api/system/dict-item'
 import { ApiObj } from '@/api'
@@ -33,6 +31,10 @@ export const OPEN_EDIT_EVENT = 'open-edit-dialog'
 export const NAVIGATE_EVENT = 'navigate'
 
 export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, emit: AnyFunction) {
+  //===============================================================================
+  // state
+  //===============================================================================
+
   const defaultState = {
     // 主键
     idField: 'id',
@@ -56,42 +58,26 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
 
   const mixState = reactive(merge({}, defaultState, stateOption) as typeof defaultState & DetailStateOption<T>)
 
+  //===============================================================================
+  // handler
+  //===============================================================================
+
   const mixHandlers = {
     // 显示之前
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     beforeOpen: [
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       async (data: T[], idx: number, extra?: Indexable) => {
         return
       }
     ],
     // 改变当前项之后
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     currentChanged: [
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       async (idx: number) => {
         return
       }
     ]
   }
-
-  // 上一条按钮是否可用
-  const prevDisabled = computed(() => {
-    return mixState.idx <= 0
-  })
-
-  // 下一条按钮是否可用
-  const nextDisabled = computed(() => {
-    return mixState.idx >= mixState.data.length - 1
-  })
-
-  // idx改变时
-  watch(
-    () => mixState.idx,
-    async (val: number) => {
-      for (const fn of mixHandlers.currentChanged) {
-        await fn?.(val)
-      }
-    }
-  )
 
   // 显示之前
   const onBeforeOpen = (fn: (data: T[], idx: number, extra?: Indexable) => Promise<void>) => {
@@ -102,6 +88,10 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
   const onCurrentChanged = async (fn: (idx: number) => Promise<void>) => {
     mixHandlers.currentChanged.push(fn)
   }
+
+  //===============================================================================
+  // open
+  //===============================================================================
 
   // 显示
   const open = async (data: T[], idx: number, extra?: Indexable) => {
@@ -131,11 +121,29 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
     mixState.idx = 0
   }
 
-  // 编辑当前项
-  const onEdit = () => {
-    mixState.visible = false
-    emit(OPEN_EDIT_EVENT, mixState.data[mixState.idx][mixState.idField])
-  }
+  //===============================================================================
+  // navigate
+  //===============================================================================
+
+  // 上一条按钮是否可用
+  const prevEnabled = computed(() => {
+    return mixState.idx > 0
+  })
+
+  // 下一条按钮是否可用
+  const nextEnabled = computed(() => {
+    return mixState.idx < mixState.data.length - 1
+  })
+
+  // idx改变时
+  watch(
+    () => mixState.idx,
+    async (val: number) => {
+      for (const fn of mixHandlers.currentChanged) {
+        await fn?.(val)
+      }
+    }
+  )
 
   // 上一条数据
   const onPrev = () => {
@@ -153,44 +161,48 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
     }
   }
 
-  onMounted(() => {
-    on(document, 'keyup', onKeyEvent)
-  })
+  //===============================================================================
+  // open edit
+  //===============================================================================
 
-  onBeforeUnmount(() => {
-    off(document, 'keyup', onKeyEvent)
-  })
-
-  const onKeyEvent = (evt: Event) => {
-    const kEvt = evt as KeyboardEvent
-    if (kEvt.code === 'ArrowLeft') {
-      onPrev()
-    } else if (kEvt.code === 'ArrowRight') {
-      onNext()
-    }
+  // 编辑当前项
+  const onEdit = () => {
+    mixState.visible = false
+    emit(OPEN_EDIT_EVENT, mixState.data[mixState.idx][mixState.idField])
   }
 
-  // 字典 utils
-  const { getDictData, dictVal } = useDict(mixState.dicts)
+  //===============================================================================
+  // attrs
+  //===============================================================================
+
+  const actAttrs = computed(() => {
+    return {
+      navPrev: prevEnabled.value,
+      navNext: nextEnabled.value,
+      onEdit: onEdit,
+      onPrev: onPrev,
+      onNext: onNext
+    }
+  })
 
   return {
     mixState,
     mixComputed: {
-      prevDisabled,
-      nextDisabled
+      prevEnabled,
+      nextEnabled
     },
     mixMethods: {
       onBeforeOpen,
       onCurrentChanged,
       open,
       resetForm,
-      getDictData,
-      dictVal,
       onEdit,
       onPrev,
       onNext,
-      onKeyEvent,
       close
+    },
+    mixAttrs: {
+      actAttrs
     }
   }
 }
