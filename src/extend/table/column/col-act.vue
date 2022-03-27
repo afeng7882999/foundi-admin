@@ -4,17 +4,17 @@
       <template #default="scope">
         <slot name="prefix" :row="scope.row" :idx="scope.$index"></slot>
         <el-tooltip v-if="detailVisible" :show-after="500" content="详细" placement="top">
-          <el-button class="tb-act-btn" plain type="primary" @click="actionEmit('detail', scope.row, scope.$index)">
+          <el-button class="tb-act-btn" plain type="primary" @click="emitDetail(scope.$index)">
             <fd-icon icon="view-grid-detail"></fd-icon>
           </el-button>
         </el-tooltip>
         <el-tooltip v-if="editVisible" :show-after="500" content="编辑" placement="top">
-          <el-button class="tb-act-btn" plain type="success" @click="actionEmit('edit', scope.row, scope.$index)">
+          <el-button class="tb-act-btn" plain type="success" @click="emitEdit(scope.row)">
             <fd-icon icon="write"></fd-icon>
           </el-button>
         </el-tooltip>
         <el-tooltip v-if="delVisible" :show-after="500" content="删除" placement="top">
-          <el-button class="tb-act-btn" plain type="danger" @click="actionEmit('del', scope.row, scope.$index)">
+          <el-button class="tb-act-btn" plain type="danger" @click="emitDel(scope.row)">
             <fd-icon icon="close"></fd-icon>
           </el-button>
         </el-tooltip>
@@ -76,7 +76,15 @@ const delVisible = computed(() => {
   return booleanOrAuth(props.del)
 })
 
-const actionEmit = (event: 'detail' | 'edit' | 'del', row: Indexable, idx: number) => {
-  emit(event, row, idx)
+const emitDetail = (idx: number) => {
+  emit('detail', idx)
+}
+
+const emitEdit = (row: Indexable) => {
+  emit('edit', row)
+}
+
+const emitDel = (row: Indexable) => {
+  emit('del', row)
 }
 </script>

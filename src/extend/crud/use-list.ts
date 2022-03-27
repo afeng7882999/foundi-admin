@@ -1,5 +1,5 @@
 import { computed, nextTick, onMounted, reactive, ref, unref } from 'vue'
-import { merge } from 'lodash-es'
+import { isString, merge } from 'lodash-es'
 import { ElForm, ElMessage, ElMessageBox } from 'element-plus'
 import useDict from './use-dict'
 import { scrollDocToTop } from '@/utils/smooth-scroll'
@@ -435,7 +435,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       }
     }
     const rows = row ? [row] : mixState.selectedNodes
-    const promptStr = prompt ? prompt : '选择的项目'
+    const promptStr = prompt ? ' ' + prompt : '选择的项目'
     if (rows.length === 0) {
       ElMessage({
         message: '请选择要操作的数据项',
@@ -445,7 +445,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       return
     }
     try {
-      await ElMessageBox.confirm(`是否删除 ${promptStr} ?`, '提示', {
+      await ElMessageBox.confirm(`是否删除${promptStr} ?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -525,7 +525,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   //===============================================================================
 
   // 显示添加、修改对话框
-  const showEdit = async (id: string) => {
+  const showEdit = async (current: T | string) => {
+    const id = isString(current) ? current : current?.[mixState.idField]
     mixState.editShow = true
     await nextTick(() => {
       editDialog.value.open(id)
