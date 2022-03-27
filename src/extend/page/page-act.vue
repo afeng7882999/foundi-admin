@@ -13,12 +13,12 @@
           </el-badge>
         </el-tooltip>
         <el-divider class="fd-page-act__divider" direction="vertical" style="margin-left: 16px"></el-divider>
-        <div class="query-compact">
-          <el-form :model="queryData" inline compact @submit="queryFn">
-            <slot name="query" />
-          </el-form>
-        </div>
       </template>
+      <div class="query-compact">
+        <el-form :model="queryData" inline compact @submit="queryFn">
+          <slot name="query" />
+        </el-form>
+      </div>
       <div class="fd-page-act__right">
         <el-button v-show="delVisible" v-waves plain type="danger" @click="emit('del')">
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
