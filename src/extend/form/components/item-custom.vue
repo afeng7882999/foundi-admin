@@ -1,6 +1,6 @@
 <template>
   <template v-if="visibleCo">
-    <el-form-item v-bind="$attrs" :label="label" :style="itemStyle" :prop="prop">
+    <el-form-item v-bind="$attrs" :class="itemClass" :label="label" :style="itemStyle" :prop="prop">
       <slot />
     </el-form-item>
   </template>
@@ -21,5 +21,5 @@ const props = defineProps({
   ...FORM_ITEM_DEFAULT_PROPS
 })
 
-const { visibleCo, itemStyle } = useFormItem(props)
+const { visibleCo, itemClass, itemStyle } = useFormItem(props)
 </script>

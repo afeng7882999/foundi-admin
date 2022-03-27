@@ -1,6 +1,6 @@
 <template>
   <template v-if="visibleCo">
-    <el-form-item v-bind="$attrs" :label="label" :style="itemStyle" :prop="prop">
+    <el-form-item v-bind="$attrs" :class="itemClass" :label="label" :style="itemStyle" :prop="prop">
       <el-input
         v-model="model()[prop]"
         clearable
@@ -29,7 +29,7 @@ const props = defineProps({
   ...FORM_ITEM_DEFAULT_PROPS
 })
 
-const { model, placeholderCo, visibleCo, disabledCo, itemStyle, comStyle, submit } = useFormItem(props, {
+const { model, placeholderCo, visibleCo, disabledCo, itemClass, itemStyle, comStyle, submit } = useFormItem(props, {
   width: '150',
   placeholder: `请输入${props.label}`
 })

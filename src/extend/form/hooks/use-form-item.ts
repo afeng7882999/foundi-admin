@@ -45,9 +45,17 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
     return ''
   })
 
+  const itemClass = computed(() => {
+    const clazz = ['fd-item']
+    if (props.noLabel) {
+      clazz.push('is-no-label')
+    }
+    return clazz
+  })
+
   const getStyle = () => {
     const style = {} as Indexable
-    const w = props.width ?? !formCompact.value ? '100%' : option?.width
+    const w = props.width ?? (formCompact.value ? option?.width : '100%')
     if (w && w !== 'auto') {
       if (w.endsWith('px') || w.endsWith('%')) {
         style.width = w
@@ -59,7 +67,7 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
   }
 
   const itemStyle = computed(() => {
-    return getStyle()
+    return formCompact.value ? {} : { width: '100%' }
   })
 
   const comStyle = computed(() => {
@@ -89,6 +97,7 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
     placeholderCo,
     visibleCo,
     disabledCo,
+    itemClass,
     itemStyle,
     comStyle,
     submit,

@@ -1,6 +1,6 @@
 <template>
   <template v-if="visibleCo">
-    <el-form-item v-bind="$attrs" :label="label" :style="itemStyle" :prop="prop">
+    <el-form-item v-bind="$attrs" :class="itemClass" :label="label" :style="itemStyle" :prop="prop">
       <template v-if="type === 'switch'">
         <el-switch
           v-model="model()[prop]"
@@ -55,5 +55,5 @@ const labelsCo = computed(() => {
   return ['是', '否']
 })
 
-const { model, placeholderCo, visibleCo, disabledCo, itemStyle, comStyle, submit } = useFormItem(props)
+const { model, placeholderCo, visibleCo, disabledCo, itemClass, itemStyle, comStyle, submit } = useFormItem(props)
 </script>

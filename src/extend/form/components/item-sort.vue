@@ -1,6 +1,6 @@
 <template>
   <template v-if="visibleCo">
-    <el-form-item v-bind="$attrs" :label="label" class="fd-item-sort">
+    <el-form-item v-bind="$attrs" :class="itemClass" :label="label" class="fd-item-sort">
       <template #label>
         <div class="fd-item-sort__label">
           <span>{{ label }}</span>
@@ -166,7 +166,8 @@ watch(
   { immediate: true }
 )
 
-const { model } = useFormItem(props)
+const { model, itemClass } = useFormItem(props)
+
 watch(
   () => model()?.[props.prop],
   (val) => {

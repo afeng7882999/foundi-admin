@@ -1,6 +1,6 @@
 <template>
   <template v-if="visibleCo">
-    <el-form-item v-bind="$attrs" :label="noLabel ? '' : label" :style="itemStyle" :prop="prop">
+    <el-form-item v-bind="$attrs" :class="itemClass" :label="label" :style="itemStyle" :prop="prop">
       <el-date-picker
         v-model="model()[prop]"
         :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
@@ -33,7 +33,7 @@ const props = defineProps({
   ...FORM_ITEM_DEFAULT_PROPS
 })
 
-const { model, placeholderCo, visibleCo, disabledCo, itemStyle, comStyle, submit } = useFormItem(props, {
+const { model, placeholderCo, visibleCo, disabledCo, itemClass, itemStyle, comStyle, submit } = useFormItem(props, {
   width: '250',
   placeholder: '开始日期,结束日期'
 })

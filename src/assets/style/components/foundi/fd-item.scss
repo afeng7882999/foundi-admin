@@ -1,3 +1,12 @@
+// fd-item
+.fd-item {
+  &.is-no-label {
+    .el-form-item__label {
+      display: none;
+    }
+  }
+}
+
 // fd-item-sort
 .fd-item-sort {
   &__label {

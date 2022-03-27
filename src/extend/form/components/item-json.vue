@@ -1,6 +1,6 @@
 <template>
   <template v-if="visibleCo">
-    <el-form-item class="fd-code-editor-form-item" v-bind="$attrs" :label="label" :style="itemStyle" :prop="prop">
+    <el-form-item class="fd-code-editor-form-item" v-bind="$attrs" :class="itemClass" :label="label" :style="itemStyle" :prop="prop">
       <fd-code-editor
         ref="jsonEditor"
         v-model="model()[prop]"
@@ -35,7 +35,7 @@ const props = defineProps({
 
 const jsonEditor = ref()
 
-const { model, visibleCo, disabledCo, comStyle, itemStyle, onBeforeOpen, onBeforeSubmitData } = useFormItem(props)
+const { model, visibleCo, disabledCo, comStyle, itemClass, itemStyle, onBeforeOpen, onBeforeSubmitData } = useFormItem(props)
 
 const initData = () => {
   const m = model?.()
