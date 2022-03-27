@@ -1,4 +1,4 @@
-import Api, { ApiObj, ApiQuery } from '@/api'
+import Api, { ApiObj, ApiQuery, ExportRange } from '@/api'
 import { DictItem } from '@/api/system/dict-item'
 
 export interface Menu extends ApiObj {
@@ -73,4 +73,5 @@ export const menuPutOne = async (data: Partial<Menu>) => Api.putOne(url, data)
 export const menuDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统菜单列表
-export const menuExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)
+export const menuExport = async (filename?: string, params?: ApiQuery, range: ExportRange = 'page') =>
+  Api.exportRange(url, filename, params, range)

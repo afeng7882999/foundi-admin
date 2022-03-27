@@ -1,4 +1,4 @@
-import Api, { ApiObj, ApiQuery } from '@/api'
+import Api, { ApiObj, ApiQuery, ExportRange } from '@/api'
 import request from '@/app/request'
 import { DictItem } from '@/api/system/dict-item'
 
@@ -96,7 +96,8 @@ export const messagePutOne = async (data: Partial<Message>) => Api.putOne(url, d
 export const messageDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统消息列表
-export const messageExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)
+export const messageExport = async (filename?: string, params?: ApiQuery, range: ExportRange = 'page') =>
+  Api.exportRange(url, filename, params, range)
 
 // 获取当前用户系统消息列表
 export const listMessageOfCurrent = async (query?: ApiQuery) => Api.getList<UserMessage>(userMessageUrl, query)

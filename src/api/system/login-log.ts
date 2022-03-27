@@ -69,10 +69,5 @@ export const loginLogPutOne = async (data: Partial<LoginLog>) => Api.putOne(url,
 export const loginLogDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统访问日志列表
-export const loginLogExport = async (filename?: string, params?: ApiQuery, range: ExportRange = 'page') => {
-  if (range === 'page') {
-    await Api.exportData(url + '/exportPage', filename, params)
-  } else if (range === 'all') {
-    await Api.exportData(url + '/exportAll', filename, params)
-  }
-}
+export const loginLogExport = async (filename?: string, params?: ApiQuery, range: ExportRange = 'page') =>
+  Api.exportRange(url, filename, params, range)

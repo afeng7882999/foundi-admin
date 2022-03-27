@@ -1,4 +1,4 @@
-import Api, { ApiObj, ApiQuery } from '@/api'
+import Api, { ApiObj, ApiQuery, ExportRange } from '@/api'
 import request from '@/app/request'
 import { DictItem } from '@/api/system/dict-item'
 
@@ -66,7 +66,8 @@ export const taskPutOne = async (data: Partial<Task>) => Api.putOne(url, data)
 export const taskDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统任务列表
-export const taskExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)
+export const taskExport = async (filename?: string, params?: ApiQuery, range: ExportRange = 'page') =>
+  Api.exportRange(url, filename, params, range)
 
 // 启动/停止任务
 const changeTaskStatus = async (id: string, cmd: string) => {

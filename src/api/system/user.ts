@@ -1,4 +1,4 @@
-import Api, { ApiObj, ApiQuery, Response } from '@/api'
+import Api, { ApiObj, ApiQuery, ExportRange, Response } from '@/api'
 import request from '@/app/request'
 import { OAuthUser } from '@/api/system/oauth-user'
 import { DictItem } from '@/api/system/dict-item'
@@ -94,7 +94,8 @@ export const userPutOne = async (data: Partial<User>) => Api.putOne(url, data)
 export const userDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统用户列表
-export const userExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)
+export const userExport = async (filename?: string, params?: ApiQuery, range: ExportRange = 'page') =>
+  Api.exportRange(url, filename, params, range)
 
 // 检查系统用户的用户名
 export const checkUsername = async (username: string, id?: string): Promise<boolean> => {

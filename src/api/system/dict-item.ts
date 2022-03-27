@@ -1,4 +1,4 @@
-import Api, { ApiObj, ApiQuery } from '@/api'
+import Api, {ApiObj, ApiQuery, ExportRange} from '@/api'
 import request from '@/app/request'
 import { Indexable } from '@/common/types'
 
@@ -61,7 +61,8 @@ export const dictItemPutOne = async (data: Partial<DictItem>) => Api.putOne(url,
 export const dictItemDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出字典条目列表
-export const dictItemExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)
+export const dictItemExport = async (filename?: string, params?: ApiQuery, range: ExportRange = 'page') =>
+  Api.exportRange(url, filename, params, range)
 
 // 由字典名获取字典条目列表
 export const getDictListByName = async (names: string[]): Promise<DictList> => {

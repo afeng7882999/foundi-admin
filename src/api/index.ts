@@ -5,6 +5,7 @@ import { getToken } from '@/app/account'
 import axios, { AxiosResponse } from 'axios'
 import { addOrRemoveSlash } from '@/utils/query'
 import { Indexable } from '@/common/types'
+import {url} from "@/api/system/login-log";
 
 // axios response
 export type Response<T = ResData> = AxiosResponse<T>
@@ -134,6 +135,15 @@ const exportData = async (exportUrl: string, filename?: string, params?: ApiQuer
   downloadFile(data, filename ? filename : '数据', 'xlsx')
 }
 
+// 按范围导出
+export const exportRange = async (baseUrl: string, filename?: string, params?: ApiQuery, range: ExportRange = 'page') => {
+  if (range === 'page') {
+    await exportData(baseUrl + '/exportPage', filename, params)
+  } else if (range === 'all') {
+    await exportData(baseUrl + '/exportAll', filename, params)
+  }
+}
+
 // 下载文件
 const download = async (downloadUrl: string, params?: ApiQuery): Promise<any> => {
   downloadUrl = addOrRemoveSlash(downloadUrl, false)
@@ -162,4 +172,4 @@ const dateSerialize = (date: Date) => {
   return date.toString()
 }
 
-export default { getOne, getList, postOne, putOne, del, exportData, download, upload }
+export default { getOne, getList, postOne, putOne, del, exportData, exportRange, download, upload }

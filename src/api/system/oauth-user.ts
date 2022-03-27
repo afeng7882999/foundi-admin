@@ -1,4 +1,4 @@
-import Api, { ApiObj, ApiQuery } from '@/api'
+import Api, {ApiObj, ApiQuery, ExportRange} from '@/api'
 import { DictItem } from '@/api/system/dict-item'
 
 export interface OAuthUser extends ApiObj {
@@ -59,4 +59,5 @@ export const oauthUserPutOne = async (data: Partial<OAuthUser>) => Api.putOne(ur
 export const oauthUserDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出OAuth用户列表
-export const oauthUserExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)
+export const oauthUserExport = async (filename?: string, params?: ApiQuery, range: ExportRange = 'page') =>
+  Api.exportRange(url, filename, params, range)

@@ -1,4 +1,4 @@
-import Api, { ApiObj, ApiQuery } from '@/api'
+import Api, { ApiObj, ApiQuery, ExportRange } from '@/api'
 
 export interface Group extends ApiObj {
   // 主键
@@ -53,4 +53,5 @@ export const groupPutOne = async (data: Partial<Group>) => Api.putOne(url, data)
 export const groupDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统用户组列表
-export const groupExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)
+export const groupExport = async (filename?: string, params?: ApiQuery, range: ExportRange = 'page') =>
+  Api.exportRange(url, filename, params, range)

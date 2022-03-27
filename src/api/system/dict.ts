@@ -1,4 +1,4 @@
-import Api, { ApiObj, ApiQuery } from '@/api'
+import Api, { ApiObj, ApiQuery, ExportRange } from '@/api'
 
 export interface Dict extends ApiObj {
   // 主键
@@ -49,4 +49,5 @@ export const dictPutOne = async (data: Partial<Dict>) => Api.putOne(url, data)
 export const dictDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出字典列表
-export const dictExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)
+export const dictExport = async (filename?: string, params?: ApiQuery, range: ExportRange = 'page') =>
+  Api.exportRange(url, filename, params, range)

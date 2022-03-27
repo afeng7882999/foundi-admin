@@ -1,4 +1,4 @@
-import Api, { ApiObj, ApiQuery } from '@/api'
+import Api, { ApiObj, ApiQuery, ExportRange } from '@/api'
 import { DictItem } from '@/api/system/dict-item'
 
 export interface Config extends ApiObj {
@@ -51,7 +51,8 @@ export const configPutOne = async (data: Partial<Config>) => Api.putOne(url, dat
 export const configDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统配置列表
-export const configExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)
+export const configExport = async (filename?: string, params?: ApiQuery, range: ExportRange = 'page') =>
+  Api.exportRange(url, filename, params, range)
 
 // 获取OSS配置列表
 const OSS_CONFIG_DICT_KEYS = ['100', '101', '102', '103']

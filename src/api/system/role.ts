@@ -1,4 +1,4 @@
-import Api, { ApiObj, ApiQuery } from '@/api'
+import Api, { ApiObj, ApiQuery, ExportRange } from '@/api'
 import { DictItem } from '@/api/system/dict-item'
 
 export interface Role extends ApiObj {
@@ -61,4 +61,5 @@ export const rolePutOne = async (data: Partial<Role>) => Api.putOne(url, data)
 export const roleDel = async (ids: string[]) => Api.del(url, ids)
 
 // 导出系统角色列表
-export const roleExport = async (filename?: string, params?: ApiQuery) => Api.exportData(url + '/export', filename, params)
+export const roleExport = async (filename?: string, params?: ApiQuery, range: ExportRange = 'page') =>
+  Api.exportRange(url, filename, params, range)
