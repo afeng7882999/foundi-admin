@@ -64,7 +64,6 @@ export type TreeStateOption<T extends ApiObj> = ListStateOption<T> &
   }>
 
 export type Refs<T extends ApiObj> = {
-  queryForm: Ref<InstanceType<typeof ElForm>>
   table: Ref<InstanceType<typeof ElTable>>
   editDialog: Ref<EditDialog>
   detailDialog: Ref<DetailDialog<T>>
@@ -75,7 +74,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   // ref
   //===============================================================================
 
-  const queryForm = refs?.queryForm ?? (ref() as Ref<InstanceType<typeof ElForm>>)
   const table = refs?.table ?? (ref() as Ref<InstanceType<typeof ElTable>>)
   const editDialog = refs?.editDialog ?? (ref() as Ref<EditDialog>)
   const detailDialog = refs?.detailDialog ?? (ref() as Ref<DetailDialog<T>>)
@@ -306,7 +304,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 重置查询
   const resetQuery = async () => {
-    mixState.query.sort = []
     await queryList()
   }
 
@@ -694,7 +691,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   return {
     mixRefs: {
-      queryForm,
       table,
       editDialog,
       detailDialog
@@ -723,7 +719,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       onAfterGetList,
       onBeforeDel,
       onAfterDel,
-      colEmptyFormatter
+      colEmptyFormatter,
+      onSelectionChange
     },
     mixAttrs: {
       pageMainAttrs,
