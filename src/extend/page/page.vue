@@ -152,6 +152,7 @@ const onQuery = () => {
 }
 const reset = () => {
   queryForm.value.resetFields()
+  state.data && (state.data.sort = [])
   drawer.value?.hide()
   emit('update:queryData', state.data)
   props.resetFn?.()
