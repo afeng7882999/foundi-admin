@@ -99,11 +99,17 @@ const currentIcon = computed(() => {
   return props.icon ? props.icon : pageState.icon
 })
 
+const emit = defineEmits(['fullscreen'])
 const toggleFullscreen = () => {
   state.fullscreen = !state.fullscreen
+  emit('fullscreen', state.fullscreen)
 }
 
 const hide = () => {
   dialog.value?.close()
 }
+
+defineExpose({
+  hide
+})
 </script>
