@@ -1,6 +1,14 @@
 <template>
   <template v-if="visible">
-    <el-table-column v-bind="$attrs" :align="align" fixed="right" :header-align="headerAlign" label="操作" :width="widthCo">
+    <el-table-column
+      v-bind="$attrs"
+      :align="align"
+      fixed="right"
+      :header-align="headerAlign"
+      label="操作"
+      :width="widthCo"
+      :min-width="minWidth"
+    >
       <template #default="scope">
         <slot name="prefix" :row="scope.row" :idx="scope.$index"></slot>
         <el-tooltip v-if="detailVisible" :show-after="500" content="详细" placement="top">

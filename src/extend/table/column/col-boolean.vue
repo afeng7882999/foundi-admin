@@ -4,7 +4,8 @@
       v-bind="$attrs"
       :align="align"
       :header-align="headerAlign"
-      :width="widthCo"
+      :width="width"
+      :min-width="minWidthCo"
       :label-class-name="sortable ? 'is-custom' : ''"
     >
       <template #default="scope">
@@ -46,9 +47,9 @@ const attrs = useAttrs()
 
 const { visible, sortable } = useColumn(props)
 
-const widthCo = computed(() => {
-  if (props.width) {
-    return props.width
+const minWidthCo = computed(() => {
+  if (props.minWidth) {
+    return props.minWidth
   }
   return '80'
 })

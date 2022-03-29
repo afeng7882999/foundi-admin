@@ -6,6 +6,7 @@
       :align="align"
       :header-align="headerAlign"
       :width="width"
+      :min-width="minWidth"
       :label-class-name="sortable ? 'is-custom' : ''"
     >
       <template #default="scope">

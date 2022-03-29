@@ -6,6 +6,7 @@
       :align="align"
       :header-align="headerAlign"
       :width="width"
+      :min-width="minWidthCo"
       :label-class-name="sortable ? 'is-custom' : ''"
     >
       <template v-if="sortable" #header="scope">
@@ -25,8 +26,16 @@ export default {
 <script setup lang="ts">
 import { COL_DEFAULT_PROPS } from '@/extend/table/types'
 import useColumn from '@/extend/table/hooks/use-column'
+import { computed } from 'vue'
 
 const props = defineProps({ ...COL_DEFAULT_PROPS })
+
+const minWidthCo = computed(() => {
+  if (props.minWidth) {
+    return props.minWidth
+  }
+  return '150'
+})
 
 const { visible, sortable } = useColumn(props)
 </script>

@@ -54,6 +54,10 @@ export const COL_DEFAULT_PROPS = {
     type: String,
     default: ''
   },
+  minWidth: {
+    type: String,
+    default: ''
+  },
   auth: String,
   sort: {
     type: Array as PropType<SortField[]>,
