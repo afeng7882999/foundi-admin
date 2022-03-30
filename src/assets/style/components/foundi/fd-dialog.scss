@@ -4,6 +4,10 @@
 // el-dialog
 .el-dialog {
   box-shadow: $real-shadow-base;
+  
+  &.is-fullscreen {
+    border-radius: 0;
+  }
 }
 
 // v-modal
@@ -65,4 +69,6 @@
     width: 100%;
     flex: 0 0 100%;
   }
+  
+  border-radius: 0;
 }
