@@ -58,7 +58,8 @@
 .fd-page-act {
   display: flex;
   align-items: center;
-  height: 32px;
+  // height: 32px;
+  overflow: hidden;
   
   .query-compact {
     .el-form--inline .el-form-item {
