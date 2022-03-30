@@ -2,7 +2,7 @@ import { computed, ExtractPropTypes, getCurrentInstance, inject } from 'vue'
 import { FORM_ITEM_DEFAULT_PROPS } from '@/extend/form/type'
 import { Indexable } from '@/common/types'
 import { ElFormContext, elFormKey } from 'element-plus'
-import { isString, upperFirst } from 'lodash-es'
+import { isString } from 'lodash-es'
 import { editContextKey, EditContext } from '@/extend/crud/use-edit'
 
 export interface UseQueryItemDefaultOpt {
@@ -27,11 +27,10 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
     return attrs && (attrs.compact === true || attrs.compact === '')
   })
 
-  const formSubmit = computed(() => {
+  const formSubmitFn = computed(() => {
     const attrs = formInstance.value?.attrs as Indexable
     if (attrs && props.trigger && isString(props.trigger)) {
-      const fun = 'on' + upperFirst(props.trigger)
-      return attrs[fun]
+      return attrs[props.trigger]
     }
     return null
   })
@@ -83,8 +82,8 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
   })
 
   const submit = () => {
-    if (formSubmit.value) {
-      formSubmit.value()
+    if (formSubmitFn.value) {
+      formSubmitFn.value()
     }
   }
 

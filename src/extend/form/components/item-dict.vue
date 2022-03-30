@@ -1,19 +1,17 @@
 <template>
-  <template v-if="visibleCo">
-    <el-form-item v-bind="$attrs" :class="itemClass" :label="label" :style="itemStyle" :prop="prop">
-      <el-select
-        v-model="model()[prop]"
-        clearable
-        :multiple="multi"
-        :disabled="disabledCo"
-        :placeholder="placeholderCo"
-        :style="comStyle"
-        @change="submit"
-      >
-        <el-option v-for="item in dict" :key="item.itemKey" :label="item.itemValue" :value="item.itemKey"></el-option>
-      </el-select>
-    </el-form-item>
-  </template>
+  <el-form-item v-show="visibleCo" v-bind="$attrs" :class="itemClass" :label="label" :style="itemStyle" :prop="prop">
+    <el-select
+      v-model="model()[prop]"
+      clearable
+      :multiple="multi"
+      :disabled="disabledCo"
+      :placeholder="placeholderCo"
+      :style="comStyle"
+      @change="submit"
+    >
+      <el-option v-for="item in dict" :key="item.itemKey" :label="item.itemValue" :value="item.itemKey"></el-option>
+    </el-select>
+  </el-form-item>
 </template>
 
 <script lang="ts">

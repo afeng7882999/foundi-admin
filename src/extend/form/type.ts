@@ -19,7 +19,7 @@ export const FORM_ITEM_DEFAULT_PROPS = {
   width: String as PropType<'auto' | string>,
   trigger: {
     type: [Boolean, String],
-    default: 'submit'
+    default: 'submit-fn'
   }
 }
 

@@ -111,8 +111,7 @@ const props = defineProps({
     default: true
   },
   queryData: Object as PropType<ApiQuery>,
-  queryFn: Function,
-  resetFn: Function
+  queryFn: Function
 })
 
 const state = reactive({
@@ -155,7 +154,7 @@ const reset = () => {
   state.data && (state.data.sort = [])
   drawer.value?.hide()
   emit('update:queryData', state.data)
-  props.resetFn?.()
+  props.queryFn?.()
 }
 
 const queryVisibleCo = computed({

@@ -1,17 +1,23 @@
 <template>
-  <template v-if="visibleCo">
-    <el-form-item class="fd-code-editor-form-item" v-bind="$attrs" :class="itemClass" :label="label" :style="itemStyle" :prop="prop">
-      <fd-code-editor
-        ref="jsonEditor"
-        v-model="model()[prop]"
-        border
-        language="application/json"
-        :disabled="disabledCo"
-        :style="comStyle"
-        line-numbers
-      />
-    </el-form-item>
-  </template>
+  <el-form-item
+    v-show="visibleCo"
+    class="fd-code-editor-form-item"
+    v-bind="$attrs"
+    :class="itemClass"
+    :label="label"
+    :style="itemStyle"
+    :prop="prop"
+  >
+    <fd-code-editor
+      ref="jsonEditor"
+      v-model="model()[prop]"
+      border
+      language="application/json"
+      :disabled="disabledCo"
+      :style="comStyle"
+      line-numbers
+    />
+  </el-form-item>
 </template>
 
 <script lang="ts">

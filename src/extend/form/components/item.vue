@@ -1,17 +1,15 @@
 <template>
-  <template v-if="visibleCo">
-    <el-form-item v-bind="$attrs" :class="itemClass" :label="label" :style="itemStyle" :prop="prop">
-      <el-input
-        v-model="model()[prop]"
-        clearable
-        :placeholder="placeholderCo"
-        :style="comStyle"
-        :disabled="disabledCo"
-        @keyup.enter="submit"
-        @clear="submit"
-      />
-    </el-form-item>
-  </template>
+  <el-form-item v-show="visibleCo" v-bind="$attrs" :class="itemClass" :label="label" :style="itemStyle" :prop="prop">
+    <el-input
+      v-model="model()[prop]"
+      clearable
+      :placeholder="placeholderCo"
+      :style="comStyle"
+      :disabled="disabledCo"
+      @keyup.enter="submit"
+      @clear="submit"
+    />
+  </el-form-item>
 </template>
 
 <script lang="ts">

@@ -1,44 +1,42 @@
 <template>
-  <template v-if="visibleCo">
-    <el-form-item v-bind="$attrs" :class="itemClass" :label="label" class="fd-item-sort">
-      <template #label>
-        <div class="fd-item-sort__label">
-          <span>{{ label }}</span>
-          <el-tooltip content="添加排序字段" :disabled="disabled" :show-after="500" placement="top">
-            <el-button type="text" :disabled="addDisabled" @click="addField">
-              <fd-icon icon="plus" class="is-in-btn"></fd-icon>
-              添加
-            </el-button>
-          </el-tooltip>
-        </div>
-      </template>
-      <div ref="itemWrapper" class="fd-item-sort__wrapper">
-        <div v-for="item in state.data" :key="item.prop" class="fd-item-sort__item">
-          <el-tooltip content="拖动排序字段" :disabled="disabled" :show-after="500" placement="left">
-            <div class="fd-item-sort__drag sortable-drag">
-              <fd-icon icon="drag"></fd-icon>
-            </div>
-          </el-tooltip>
-          <el-select v-model="item.prop" clearable :disabled="disabled" @change="changeField" @clear="removeField(item)">
-            <el-option v-for="field in getFields(item)" :key="field.prop" :label="field.comment" :value="field.prop"></el-option>
-          </el-select>
-          <el-tooltip
-            :content="item.order === 'asc' ? '点击切换升序' : '点击切换降序'"
-            :disabled="disabled"
-            :show-after="500"
-            placement="top"
-          >
-            <fd-icon-button
-              class="fd-item-sort__toggle"
-              :icon="item.order === 'asc' ? 'up-small' : 'down-small'"
-              :disabled="disabled"
-              @click="toggleOrder(item)"
-            ></fd-icon-button>
-          </el-tooltip>
-        </div>
+  <el-form-item v-show="visibleCo" v-bind="$attrs" :class="itemClass" :label="label" class="fd-item-sort">
+    <template #label>
+      <div class="fd-item-sort__label">
+        <span>{{ label }}</span>
+        <el-tooltip content="添加排序字段" :disabled="disabled" :show-after="500" placement="top">
+          <el-button type="text" :disabled="addDisabled" @click="addField">
+            <fd-icon icon="plus" class="is-in-btn"></fd-icon>
+            添加
+          </el-button>
+        </el-tooltip>
       </div>
-    </el-form-item>
-  </template>
+    </template>
+    <div ref="itemWrapper" class="fd-item-sort__wrapper">
+      <div v-for="item in state.data" :key="item.prop" class="fd-item-sort__item">
+        <el-tooltip content="拖动排序字段" :disabled="disabled" :show-after="500" placement="left">
+          <div class="fd-item-sort__drag sortable-drag">
+            <fd-icon icon="drag"></fd-icon>
+          </div>
+        </el-tooltip>
+        <el-select v-model="item.prop" clearable :disabled="disabled" @change="changeField" @clear="removeField(item)">
+          <el-option v-for="field in getFields(item)" :key="field.prop" :label="field.comment" :value="field.prop"></el-option>
+        </el-select>
+        <el-tooltip
+          :content="item.order === 'asc' ? '点击切换升序' : '点击切换降序'"
+          :disabled="disabled"
+          :show-after="500"
+          placement="top"
+        >
+          <fd-icon-button
+            class="fd-item-sort__toggle"
+            :icon="item.order === 'asc' ? 'up-small' : 'down-small'"
+            :disabled="disabled"
+            @click="toggleOrder(item)"
+          ></fd-icon-button>
+        </el-tooltip>
+      </div>
+    </div>
+  </el-form-item>
 </template>
 
 <script lang="ts">

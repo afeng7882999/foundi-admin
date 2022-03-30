@@ -15,7 +15,7 @@
         <el-divider class="fd-page-act__divider" direction="vertical" style="margin-left: 16px"></el-divider>
       </template>
       <div class="query-compact">
-        <el-form :model="queryData" inline compact @submit="queryFn">
+        <el-form :model="queryData" inline compact :submit-fn="queryFn">
           <slot name="query" />
         </el-form>
       </div>
