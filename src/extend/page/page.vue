@@ -2,9 +2,7 @@
   <div :style="docMinHeight" :class="objClass">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <template v-if="!hasQuery">
-      <div class="fd-page__form">
-        <slot name="act" />
-      </div>
+      <slot name="act" />
       <div ref="tableWrapper" class="fd-page__table is-bordered">
         <slot name="table" />
       </div>
@@ -33,9 +31,7 @@
           </el-button>
         </template>
       </fd-drawer>
-      <div class="fd-page__form">
-        <slot name="act" />
-      </div>
+      <slot name="act" />
       <div ref="tableWrapper" class="fd-page__table is-bordered">
         <slot name="table" />
       </div>
@@ -69,9 +65,7 @@
         </div>
       </template>
       <template #right>
-        <div class="fd-page__form">
-          <slot name="act" />
-        </div>
+        <slot name="act" />
         <div ref="tableWrapper" class="fd-page__table is-bordered">
           <slot name="table" />
         </div>

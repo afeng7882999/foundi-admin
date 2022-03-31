@@ -1,23 +1,25 @@
 <template>
   <template v-if="visibleCo">
     <div class="fd-page-act">
-      <template v-if="query">
-        <el-tooltip :content="queryVisible ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
-          <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="fd-page-act__badge">
-            <fd-icon-button
-              :class="queryVisible ? 'expanded' : ''"
-              class="fd-page-act__icon-btn"
-              icon="search-more"
-              @click="toggleQueryVisible"
-            ></fd-icon-button>
-          </el-badge>
-        </el-tooltip>
-        <el-divider class="fd-page-act__divider" direction="vertical" style="margin-left: 16px"></el-divider>
-      </template>
-      <div class="query-compact">
-        <el-form :model="queryData" inline compact :submit-fn="queryFn">
-          <slot name="query" />
-        </el-form>
+      <div class="fd-page-act__left">
+        <template v-if="query">
+          <el-tooltip :content="queryVisible ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
+            <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="fd-page-act__badge">
+              <fd-icon-button
+                :class="queryVisible ? 'expanded' : ''"
+                class="fd-page-act__icon-btn"
+                icon="search-more"
+                @click="toggleQueryVisible"
+              ></fd-icon-button>
+            </el-badge>
+          </el-tooltip>
+          <el-divider class="fd-page-act__divider" direction="vertical" style="margin-left: 16px"></el-divider>
+        </template>
+        <div class="query-compact">
+          <el-form :model="queryData" inline compact :submit-fn="queryFn">
+            <slot name="query" />
+          </el-form>
+        </div>
       </div>
       <div class="fd-page-act__right">
         <el-button v-show="delVisible" v-waves plain type="danger" @click="emit('del')">

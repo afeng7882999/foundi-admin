@@ -56,14 +56,30 @@
 
 // fd-page-act
 .fd-page-act {
+  padding: 16px 16px 0 16px;
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: var(--el-border-radius-base);
+  background-color: var(--el-fill-base);
+  margin-bottom: 8px;
   display: flex;
-  align-items: center;
-  // height: 32px;
+  flex-wrap: wrap;
+  align-items: flex-start;
   overflow: hidden;
   
-  .query-compact {
-    .el-form--inline .el-form-item {
-      margin-right: 16px;
+  &__left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 16px;
+    
+    .query-compact {
+      .el-form-item {
+        margin-bottom: 0;
+      }
+      
+      .el-form--inline .el-form-item {
+        margin-right: 16px;
+      }
     }
   }
   
@@ -71,6 +87,8 @@
     margin-left: auto;
     display: flex;
     align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
   }
   
   &__icon-btn {
@@ -93,10 +111,6 @@
   &__divider {
     margin: 0 8px;
     height: 32px;
-  }
-  
-  .el-form-item {
-    margin-bottom: 0;
   }
 }
 
