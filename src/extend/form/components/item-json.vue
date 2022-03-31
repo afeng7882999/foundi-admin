@@ -8,6 +8,14 @@
     :style="itemStyle"
     :prop="prop"
   >
+    <template #label>
+      <span>
+        {{ label }}
+        <span v-if="tipIcon" class="tip-icon" @mouseenter="tipShow" @mouseleave="tipHide">
+          <fd-icon icon="help" class="is-tip" />
+        </span>
+      </span>
+    </template>
     <fd-code-editor
       ref="jsonEditor"
       v-model="model()[prop]"
@@ -16,8 +24,15 @@
       :disabled="disabledCo"
       :style="comStyle"
       line-numbers
+      @mouseenter="tipShow"
+      @mouseleave="tipHide"
     />
   </el-form-item>
+  <el-tooltip v-if="tip" v-model:visible="tipVisible" placement="top" :virtual-ref="tipTriggerRef" virtual-triggering>
+    <template #content>
+      <span>{{ tip }}</span>
+    </template>
+  </el-tooltip>
 </template>
 
 <script lang="ts">
@@ -41,7 +56,20 @@ const props = defineProps({
 
 const jsonEditor = ref()
 
-const { model, visibleCo, disabledCo, comStyle, itemClass, itemStyle, onBeforeOpen, onBeforeSubmitData } = useFormItem(props)
+const {
+  model,
+  visibleCo,
+  disabledCo,
+  comStyle,
+  itemClass,
+  itemStyle,
+  onBeforeOpen,
+  onBeforeSubmitData,
+  tipTriggerRef,
+  tipVisible,
+  tipShow,
+  tipHide
+} = useFormItem(props)
 
 const initData = () => {
   const m = model?.()

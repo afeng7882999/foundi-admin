@@ -20,6 +20,18 @@ export const FORM_ITEM_DEFAULT_PROPS = {
   trigger: {
     type: [Boolean, String],
     default: 'submit-fn'
+  },
+  tip: {
+    type: String,
+    default: ''
+  },
+  tipDelay: {
+    type: Number,
+    default: 500
+  },
+  tipIcon: {
+    type: Boolean,
+    default: false
   }
 }
 

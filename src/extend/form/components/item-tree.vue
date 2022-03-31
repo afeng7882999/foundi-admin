@@ -1,5 +1,13 @@
 <template>
   <el-form-item v-show="visibleCo" v-bind="$attrs" :class="itemClass" :label="label" :style="itemStyle" :prop="prop">
+    <template #label>
+      <span>
+        {{ label }}
+        <span v-if="tipIcon" class="tip-icon" @mouseenter="tipShow" @mouseleave="tipHide">
+          <fd-icon icon="help" class="is-tip" />
+        </span>
+      </span>
+    </template>
     <fd-tree-select
       v-model="model()[prop]"
       :data-list="list"
@@ -8,8 +16,15 @@
       :tree-params="{ 'default-expand-all': defaultExpandAll, 'check-strictly': checkStrictly }"
       :style="comStyle"
       @change="submit"
+      @mouseenter="tipShow"
+      @mouseleave="tipHide"
     ></fd-tree-select>
   </el-form-item>
+  <el-tooltip v-if="tip" v-model:visible="tipVisible" placement="top" :virtual-ref="tipTriggerRef" virtual-triggering>
+    <template #content>
+      <span>{{ tip }}</span>
+    </template>
+  </el-tooltip>
 </template>
 
 <script lang="ts">
@@ -49,7 +64,8 @@ const props = defineProps({
   }
 })
 
-const { model, visibleCo, placeholderCo, disabledCo, itemClass, itemStyle, comStyle, submit } = useFormItem(props, {
-  placeholder: `请选择${props.label}`
-})
+const { model, visibleCo, placeholderCo, disabledCo, itemClass, itemStyle, comStyle, submit, tipTriggerRef, tipVisible, tipShow, tipHide } =
+  useFormItem(props, {
+    placeholder: `请选择${props.label}`
+  })
 </script>

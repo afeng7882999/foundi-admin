@@ -1,23 +1,46 @@
 <template>
   <el-form-item v-show="visibleCo" v-bind="$attrs" :class="itemClass" :label="label" :style="itemStyle" :prop="prop">
+    <template #label>
+      <span>
+        {{ label }}
+        <span v-if="tipIcon" class="tip-icon" @mouseenter="tipShow" @mouseleave="tipHide">
+          <fd-icon icon="help" class="is-tip" />
+        </span>
+      </span>
+    </template>
     <template v-if="type === 'switch'">
       <el-switch
         v-model="model()[prop]"
         clearable
         :placeholder="placeholderCo"
-        :style="comStyle"
         :disabled="disabledCo"
         :active-text="labelsCo[0]"
         :inactive-text="labelsCo[1]"
+        @mouseenter="tipShow"
+        @mouseleave="tipHide"
       />
     </template>
     <template v-else>
-      <el-select v-model="model()[prop]" clearable :disabled="disabledCo" :placeholder="placeholderCo" :style="comStyle" @change="submit">
+      <el-select
+        v-model="model()[prop]"
+        clearable
+        :disabled="disabledCo"
+        :placeholder="placeholderCo"
+        :style="comStyle"
+        @change="submit"
+        @mouseenter="tipShow"
+        @mouseleave="tipHide"
+      >
         <el-option :label="labelsCo[0]" :value="true"></el-option>
         <el-option :label="labelsCo[1]" :value="false"></el-option>
       </el-select>
     </template>
   </el-form-item>
+  <el-tooltip v-if="tip" v-model:visible="tipVisible" placement="top" :virtual-ref="tipTriggerRef" virtual-triggering>
+    <template #content>
+      <span>{{ tip }}</span>
+    </template>
+  </el-tooltip>
 </template>
 
 <script lang="ts">
@@ -53,5 +76,6 @@ const labelsCo = computed(() => {
   return ['是', '否']
 })
 
-const { model, placeholderCo, visibleCo, disabledCo, itemClass, itemStyle, comStyle, submit } = useFormItem(props)
+const { model, placeholderCo, visibleCo, disabledCo, itemClass, itemStyle, comStyle, submit, tipTriggerRef, tipVisible, tipShow, tipHide } =
+  useFormItem(props)
 </script>

@@ -1,9 +1,11 @@
-import { computed, ExtractPropTypes, getCurrentInstance, inject } from 'vue'
+import {computed, ExtractPropTypes, getCurrentInstance, inject, ref} from 'vue'
 import { FORM_ITEM_DEFAULT_PROPS } from '@/extend/form/type'
 import { Indexable } from '@/common/types'
 import { ElFormContext, elFormKey } from 'element-plus'
 import { isString } from 'lodash-es'
 import { editContextKey, EditContext } from '@/extend/crud/use-edit'
+import {useTimeoutFn} from "@vueuse/core";
+import {hasClass} from "@/utils/dom";
 
 export interface UseQueryItemDefaultOpt {
   width: string
@@ -87,8 +89,32 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
     }
   }
 
-  const detailContext = inject(editContextKey, {} as Partial<EditContext>)
-  const { onAfterGetData, onBeforeOpen, onBeforeSubmitData, onBeforeSubmit, onAfterClose } = detailContext
+  const tipTriggerRef = ref()
+  const tipVisible = ref(false)
+
+  const { start: delayShow, stop: cancelShow } = useTimeoutFn(() => (tipVisible.value = true), props.tipDelay, { immediate: false })
+
+  const tipShow = (e: Event) => {
+    const target = e.currentTarget as HTMLElement
+    if (props.tipIcon && !hasClass(target, 'tip-icon')) {
+      return
+    }
+    if (props.tip) {
+      cancelShow()
+      tipTriggerRef.value = e.currentTarget
+      delayShow()
+    }
+  }
+
+  const tipHide = () => {
+    if (props.tip) {
+      cancelShow()
+      tipVisible.value = false
+    }
+  }
+
+  const editContext = inject(editContextKey, {} as Partial<EditContext>)
+  const { onAfterGetData, onBeforeOpen, onBeforeSubmitData, onBeforeSubmit, onAfterClose } = editContext
 
   return {
     model: () => formCtx.model,
@@ -100,6 +126,10 @@ const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_P
     itemStyle,
     comStyle,
     submit,
+    tipTriggerRef,
+    tipVisible,
+    tipShow,
+    tipHide,
     onAfterGetData,
     onBeforeOpen,
     onBeforeSubmitData,
