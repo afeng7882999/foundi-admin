@@ -3,12 +3,10 @@
 
 // fd-page
 .fd-page {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   padding: 8px 16px 0 16px;
-  
-  &.is-fix-height {
-    display: flex;
-    flex-direction: column;
-  }
   
   &__sub-title {
     display: flex;
@@ -147,12 +145,20 @@
   .fd-page__sub-title {
     margin: 0 16px 16px 16px;
   }
+  
   &__scrollbar {
     padding: 0 16px;
   }
+  
+  &__act {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+  
   .el-form-item {
     margin: 16px 0 8px 0;
   }
+  
   .el-form-item__content {
     display: flex;
     align-items: center;

@@ -52,14 +52,16 @@
               <slot name="query" />
             </el-scrollbar>
             <el-form-item>
-              <el-button plain type="primary" @click="onQuery">
-                <fd-icon icon="search" class="is-in-btn"></fd-icon>
-                查询
-              </el-button>
-              <el-button @click="reset">
-                <fd-icon icon="refresh" class="is-in-btn"></fd-icon>
-                重置
-              </el-button>
+              <div class="fd-page-query__act">
+                <el-button plain type="primary" @click="onQuery">
+                  <fd-icon icon="search" class="is-in-btn"></fd-icon>
+                  查询
+                </el-button>
+                <el-button @click="reset">
+                  <fd-icon icon="refresh" class="is-in-btn"></fd-icon>
+                  重置
+                </el-button>
+              </div>
             </el-form-item>
           </el-form>
         </div>
