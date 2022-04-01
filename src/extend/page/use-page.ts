@@ -151,8 +151,8 @@ export default function (stateOption?: PageStateOption) {
     router.back()
   }
 
-  // 4列响应式布局
-  const col4 = computed(() => {
+  // 2列响应式布局
+  const col2 = computed(() => {
     return {
       xs: 24,
       span: 12,
@@ -186,7 +186,7 @@ export default function (stateOption?: PageStateOption) {
     setViewTitle,
     getViewTitle,
     goBack,
-    col3,
-    col4
+    col2,
+    col3
   }
 }
