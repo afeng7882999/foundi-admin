@@ -151,6 +151,26 @@ export default function (stateOption?: PageStateOption) {
     router.back()
   }
 
+  // 4列响应式布局
+  const col4 = computed(() => {
+    return {
+      xs: 24,
+      span: 12,
+      lg: 8,
+      xl: 6
+    }
+  })
+
+  // 3列响应式布局
+  const col3 = computed(() => {
+    return {
+      xs: 24,
+      span: 8,
+      lg: 6,
+      xl: 6
+    }
+  })
+
   return {
     pageState,
     showPageHeader,
@@ -165,6 +185,8 @@ export default function (stateOption?: PageStateOption) {
     getPageMeta,
     setViewTitle,
     getViewTitle,
-    goBack
+    goBack,
+    col3,
+    col4
   }
 }
