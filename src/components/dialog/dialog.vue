@@ -48,9 +48,9 @@ export default {
 import { computed, reactive, ref, watch } from 'vue'
 import FdIconButton from '@/components/icon-button/icon-button.vue'
 import { ElDialog } from 'element-plus'
-import usePage from '@/extend/page/use-page'
 import useBreakpoint from '@/hooks/use-breakpoint'
 import { onBeforeRouteLeave } from 'vue-router'
+import useView from '@/extend/page/use-view'
 
 const props = defineProps({
   title: String,
@@ -95,10 +95,10 @@ const objClass = computed(() => {
   return clazz.join(' ')
 })
 
-const { pageState } = usePage()
+const { viewState } = useView()
 
 const currentIcon = computed(() => {
-  return props.icon ? props.icon : pageState.icon
+  return props.icon ? props.icon : viewState.icon
 })
 
 const emit = defineEmits(['fullscreen'])

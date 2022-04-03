@@ -23,7 +23,7 @@ export default {
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import usePage from '@/extend/page/use-page'
+import useView from '@/extend/page/use-view'
 
 const props = defineProps({
   icon: {
@@ -44,17 +44,17 @@ const props = defineProps({
   }
 })
 
-const { pageState: state, goBack } = usePage()
+const { viewState: s, goBack } = useView()
 
 const currentTitle = computed(() => {
-  return props.title ? props.title : state.title
+  return props.title ? props.title : s.title
 })
 
 const currentIcon = computed(() => {
-  return props.icon ? props.icon : state.icon
+  return props.icon ? props.icon : s.icon
 })
 
 const currentDesc = computed(() => {
-  return props.desc ? props.desc : state.desc
+  return props.desc ? props.desc : s.desc
 })
 </script>

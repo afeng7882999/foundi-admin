@@ -40,6 +40,7 @@ import usePage from '@/extend/page/use-page'
 import { ElDrawer } from 'element-plus'
 import useBreakpoint from '@/hooks/use-breakpoint'
 import { onBeforeRouteLeave } from 'vue-router'
+import useView from '@/extend/page/use-view'
 
 const props = defineProps({
   title: {
@@ -89,7 +90,9 @@ const objClass = computed(() => {
   return clazz.join(' ')
 })
 
-const { pageState, getBodyHeight } = usePage()
+const { getBodyHeight } = usePage()
+
+const { viewState } = useView()
 
 const scrollbarStyle = computed(() => {
   const remove = useSlots().footer ? 142 : 62
@@ -97,7 +100,7 @@ const scrollbarStyle = computed(() => {
 })
 
 const currentIcon = computed(() => {
-  return props.icon ? props.icon : pageState.icon
+  return props.icon ? props.icon : viewState.icon
 })
 
 const hide = () => {
