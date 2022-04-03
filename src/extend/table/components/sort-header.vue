@@ -19,6 +19,7 @@ export default {
 <script setup lang="ts">
 import { computed, PropType, reactive, watch } from 'vue'
 import { SortField } from '@/api'
+import { useTimeoutFn } from '@vueuse/core'
 
 const props = defineProps({
   value: {
@@ -48,6 +49,8 @@ const headerClass = computed(() => {
   }
 })
 
+const { start: setTipDelay } = useTimeoutFn(() => setTip(), props.tipShowAfter, { immediate: false })
+
 const onHeaderClick = () => {
   if (state.sortOrder === 'desc') {
     sortedEmit('asc')
@@ -56,7 +59,7 @@ const onHeaderClick = () => {
   } else {
     sortedEmit('desc')
   }
-  setTimeout(setTip, props.tipShowAfter)
+  setTipDelay()
 }
 
 const onAscClick = () => {
@@ -65,7 +68,7 @@ const onAscClick = () => {
   } else {
     sortedEmit('asc')
   }
-  setTimeout(setTip, props.tipShowAfter)
+  setTipDelay()
 }
 
 const onDescClick = () => {
@@ -74,7 +77,7 @@ const onDescClick = () => {
   } else {
     sortedEmit('desc')
   }
-  setTimeout(setTip, props.tipShowAfter)
+  setTipDelay()
 }
 
 const emit = defineEmits(['sort-changed'])
