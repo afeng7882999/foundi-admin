@@ -9,6 +9,7 @@
     :title="title"
     :show-close="false"
     :width="width"
+    @opened="onOpened"
   >
     <template #title>
       <div class="fd-dialog__title">
@@ -49,6 +50,7 @@ import FdIconButton from '@/components/icon-button/icon-button.vue'
 import { ElDialog } from 'element-plus'
 import usePage from '@/extend/page/use-page'
 import useBreakpoint from '@/hooks/use-breakpoint'
+import {onBeforeRouteLeave} from "vue-router";
 
 const props = defineProps({
   title: String,
@@ -107,7 +109,19 @@ const toggleFullscreen = () => {
 
 const hide = () => {
   dialog.value?.close()
+  goBackToHide.value = false
 }
+
+const goBackToHide = ref(true)
+const onOpened = () => {
+  goBackToHide.value = true
+}
+onBeforeRouteLeave((to) => {
+  if (props.mobileCompact && goBackToHide.value) {
+    hide()
+    return false
+  }
+})
 
 defineExpose({
   hide
