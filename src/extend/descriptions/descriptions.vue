@@ -1,6 +1,12 @@
 <template>
   <el-descriptions v-bind="$attrs" :column="columnCo" :direction="directionCo" :class="objClass">
     <slot />
+    <template #title>
+      <slot name="title" />
+    </template>
+    <template #extra>
+      <slot name="extra" />
+    </template>
   </el-descriptions>
 </template>
 
