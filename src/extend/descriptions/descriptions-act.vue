@@ -48,11 +48,11 @@ const props = defineProps({
   }
 })
 
-const { hasAuth } = usePage()
+const { auth } = usePage()
 
 const editShow = computed(() => {
   if (isString(props.edit)) {
-    return hasAuth(props.edit)
+    return auth(props.edit)
   }
   return props.edit
 })

@@ -22,7 +22,7 @@ export default function (stateOption?: PageStateOption) {
   const storeState = store.state as AllState
 
   // 判断权限
-  const hasAuth = (key: string) => {
+  const auth = (key: string) => {
     return isAuth(key)
   }
 
@@ -123,7 +123,7 @@ export default function (stateOption?: PageStateOption) {
     getDocWidth,
     getDocHeightNoHeaderFooter,
     getDocHeight,
-    hasAuth,
+    auth,
     col2,
     col3
   }

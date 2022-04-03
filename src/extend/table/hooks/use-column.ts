@@ -4,11 +4,11 @@ import usePage from '@/extend/page/use-page'
 import { isBoolean } from 'lodash-es'
 
 const useColumn = (props: Readonly<ExtractPropTypes<typeof COL_DEFAULT_PROPS>>) => {
-  const { hasAuth } = usePage()
+  const { auth } = usePage()
 
   const visible = computed(() => {
     if (props.auth) {
-      return hasAuth(props.auth)
+      return auth(props.auth)
     }
     return true
   })
@@ -18,7 +18,7 @@ const useColumn = (props: Readonly<ExtractPropTypes<typeof COL_DEFAULT_PROPS>>) 
       return val
     }
     if (val) {
-      return hasAuth(val)
+      return auth(val)
     }
     return true
   }
@@ -30,7 +30,7 @@ const useColumn = (props: Readonly<ExtractPropTypes<typeof COL_DEFAULT_PROPS>>) 
   return {
     visible,
     sortable,
-    hasAuth,
+    auth,
     booleanOrAuth
   }
 }

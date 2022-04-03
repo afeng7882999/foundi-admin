@@ -134,13 +134,13 @@ const visibleCo = computed(() => {
   return props.visible
 })
 
-const { hasAuth } = usePage()
+const { auth } = usePage()
 const booleanOrAuth = (val: boolean | string) => {
   if (isBoolean(val)) {
     return val
   }
   if (val) {
-    return hasAuth(val)
+    return auth(val)
   }
   return true
 }
