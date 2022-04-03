@@ -56,7 +56,7 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
     visible: false
   }
 
-  const mixState = reactive(merge({}, defaultState, stateOption) as typeof defaultState & DetailStateOption<T>)
+  const detailState = reactive(merge({}, defaultState, stateOption) as typeof defaultState & DetailStateOption<T>)
 
   //===============================================================================
   // handler
@@ -98,27 +98,27 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
     for (const fn of mixHandlers.beforeOpen) {
       await fn?.(data, idx, extra)
     }
-    mixState.idx = idx
-    mixState.data = data
+    detailState.idx = idx
+    detailState.data = data
     if (extra && extra.dicts) {
-      mixState.dicts = { ...mixState.dicts, ...extra.dicts }
+      detailState.dicts = { ...detailState.dicts, ...extra.dicts }
     }
     for (const fn of mixHandlers.currentChanged) {
       await fn?.(idx)
     }
-    mixState.visible = true
+    detailState.visible = true
   }
 
   // 隐藏
   const close = () => {
-    mixState.visible = false
+    detailState.visible = false
     resetForm()
   }
 
   // 清除表单数据
   const resetForm = () => {
-    mixState.data = [cloneDeep(mixState.resetFormData as T)]
-    mixState.idx = 0
+    detailState.data = [cloneDeep(detailState.resetFormData as T)]
+    detailState.idx = 0
   }
 
   //===============================================================================
@@ -127,17 +127,17 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
 
   // 上一条按钮是否可用
   const prevEnabled = computed(() => {
-    return mixState.idx > 0
+    return detailState.idx > 0
   })
 
   // 下一条按钮是否可用
   const nextEnabled = computed(() => {
-    return mixState.idx < mixState.data.length - 1
+    return detailState.idx < detailState.data.length - 1
   })
 
   // idx改变时
   watch(
-    () => mixState.idx,
+    () => detailState.idx,
     async (val: number) => {
       for (const fn of mixHandlers.currentChanged) {
         await fn?.(val)
@@ -147,17 +147,17 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
 
   // 上一条数据
   const onPrev = () => {
-    if (mixState.idx > 0) {
-      mixState.idx -= 1
-      emit(NAVIGATE_EVENT, mixState.data[mixState.idx].id)
+    if (detailState.idx > 0) {
+      detailState.idx -= 1
+      emit(NAVIGATE_EVENT, detailState.data[detailState.idx].id)
     }
   }
 
   // 下一条数据
   const onNext = () => {
-    if (mixState.idx < mixState.data.length - 1) {
-      mixState.idx += 1
-      emit(NAVIGATE_EVENT, mixState.data[mixState.idx].id)
+    if (detailState.idx < detailState.data.length - 1) {
+      detailState.idx += 1
+      emit(NAVIGATE_EVENT, detailState.data[detailState.idx].id)
     }
   }
 
@@ -167,8 +167,8 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
 
   // 编辑当前项
   const onEdit = () => {
-    mixState.visible = false
-    emit(OPEN_EDIT_EVENT, mixState.data[mixState.idx][mixState.idField])
+    detailState.visible = false
+    emit(OPEN_EDIT_EVENT, detailState.data[detailState.idx][detailState.idField])
   }
 
   //===============================================================================
@@ -186,12 +186,12 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
   })
 
   return {
-    mixState,
-    mixComputed: {
+    detailState,
+    detailComputed: {
       prevEnabled,
       nextEnabled
     },
-    mixMethods: {
+    detailMethods: {
       onBeforeOpen,
       onCurrentChanged,
       open,
@@ -201,7 +201,7 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
       onNext,
       close
     },
-    mixAttrs: {
+    detailAttrs: {
       actAttrs
     }
   }
