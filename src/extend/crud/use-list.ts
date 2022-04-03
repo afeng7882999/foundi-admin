@@ -160,7 +160,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     rootName: '根节点'
   }
 
-  const mixState = stateOption.treeTable
+  const listState = stateOption.treeTable
     ? reactive(merge({}, defaultTreeState, stateOption) as typeof defaultTreeState & TreeStateOption<T>)
     : reactive(merge({}, defaultState, stateOption) as typeof defaultState & ListStateOption<T>)
 
@@ -221,11 +221,11 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   //===============================================================================
 
   // 字典方法
-  const { getDictData, dictVal } = useDict(mixState.dicts)
+  const { getDictData, dictVal } = useDict(listState.dicts)
 
   // 获取数据列表
   const getList = async () => {
-    if (!mixState.listApi) {
+    if (!listState.listApi) {
       return
     }
     for (const fn of mixHandlers.beforeGetList) {
@@ -234,36 +234,36 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       }
     }
     try {
-      mixState.loading = true
+      listState.loading = true
       await getDictData()
       const query = getQueryParam()
-      const { data, total, count, resData } = await mixState.listApi(query)
+      const { data, total, count, resData } = await listState.listApi(query)
       if (stateOption.treeTable) {
         setTreeData(data)
       } else {
-        mixState.total = total
-        mixState.count = count
-        mixState.data = data
+        listState.total = total
+        listState.count = count
+        listState.data = data
       }
-      mixState.selectedNodes = []
+      listState.selectedNodes = []
       for (const fn of mixHandlers.afterGetList) {
         await fn?.(resData)
       }
-      if (mixState.tableRowSelectable && mixState.currentId) {
-        setCurrentData(mixState.currentId)
+      if (listState.tableRowSelectable && listState.currentId) {
+        setCurrentData(listState.currentId)
       }
       setTimeout(() => {
-        mixState.loading = false
-      }, mixState.waitAfterGet)
+        listState.loading = false
+      }, listState.waitAfterGet)
     } catch (e) {
-      mixState.loading = false
+      listState.loading = false
       console.log(e)
     }
   }
 
   // 显示页面即获取数据
   onMounted(async () => {
-    mixState.loading = true
+    listState.loading = true
     await nextFrame(async () => {
       await getList()
     })
@@ -277,37 +277,37 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const getQueryParam = () => {
     if (stateOption.treeTable) {
       return {
-        ...mixState.query,
-        ...mixState.params
+        ...listState.query,
+        ...listState.params
       }
     }
 
     const orderByList = [] as string[]
-    if (mixState.query.sort) {
-      mixState.query.sort.forEach((s) => {
+    if (listState.query.sort) {
+      listState.query.sort.forEach((s) => {
         orderByList.push(`${s.prop}:${s.order}`)
       })
     }
 
     return {
-      current: mixState.current,
-      size: mixState.siz,
-      ...mixState.params,
-      ...mixState.query,
+      current: listState.current,
+      size: listState.siz,
+      ...listState.params,
+      ...listState.query,
       orderByList
     }
   }
 
   // 查询方法
   const queryList = async () => {
-    mixState.current = 0
+    listState.current = 0
     await getList()
   }
 
   // 重置查询
   const resetQuery = async () => {
     queryForm.value?.resetFields()
-    mixState.query.sort = []
+    listState.query.sort = []
     await queryList()
   }
 
@@ -318,24 +318,24 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
 
     if (order === 'none') {
-      mixState.query.sort = mixState.query.sort?.filter((f) => f.prop !== prop)
+      listState.query.sort = listState.query.sort?.filter((f) => f.prop !== prop)
       await getList()
       return
     }
 
     const o = order as 'asc' | 'desc'
-    if (mixState.sortMulti) {
-      const field = mixState.query.sort?.find((s) => s.prop === prop)
+    if (listState.sortMulti) {
+      const field = listState.query.sort?.find((s) => s.prop === prop)
       if (field) {
         field.order = o
       } else {
-        mixState.query.sort?.push({ prop, order: o })
+        listState.query.sort?.push({ prop, order: o })
       }
       await getList()
       return
     }
 
-    mixState.query.sort = [{ prop, order: o }]
+    listState.query.sort = [{ prop, order: o }]
     await getList()
   }
 
@@ -345,15 +345,15 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 改变页码
   const pageChange = async (val: number) => {
-    mixState.current = val
+    listState.current = val
     await getList()
     scrollDocToTop()
   }
 
   // 改变每页显示数
   const sizeChange = async (val: number) => {
-    mixState.current = 0
-    mixState.siz = val
+    listState.current = 0
+    listState.siz = val
     await getList()
     scrollDocToTop()
   }
@@ -364,48 +364,48 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 处理树状数据
   const setTreeData = (data: any[]) => {
-    const treeData = arrayToTree(data, mixState.treeFields)
-    mixState.data = traverseTree(
+    const treeData = arrayToTree(data, listState.treeFields)
+    listState.data = traverseTree(
       treeData,
       (item) => {
         const node = getTreeNode(
           treeData,
-          (n) => n[mixState.treeFields.idField as string] === item[mixState.treeFields.parentIdField as string],
-          mixState.treeFields
+          (n) => n[listState.treeFields.idField as string] === item[listState.treeFields.parentIdField as string],
+          listState.treeFields
         )
-        item.parentName = node ? node.name : mixState.rootName
+        item.parentName = node ? node.name : listState.rootName
       },
-      mixState.treeFields
+      listState.treeFields
     )
   }
 
   // 树节点选中
   const onTreeSelect = (selection: T[]) => {
-    if (selection.length > mixState.selectedNodes.length) {
+    if (selection.length > listState.selectedNodes.length) {
       const selected = selection.filter(
-        (item) => !mixState.selectedNodes.some((item2) => item2[mixState.idField] === item[mixState.idField])
+        (item) => !listState.selectedNodes.some((item2) => item2[listState.idField] === item[listState.idField])
       )
       traverseTree(
         selected,
         (item) => {
           table.value.toggleRowSelection(item, true)
-          if (!mixState.selectedNodes.some((item2) => item2[mixState.idField] === item[mixState.idField])) {
-            ;(mixState.selectedNodes as T[]).push(item)
+          if (!listState.selectedNodes.some((item2) => item2[listState.idField] === item[listState.idField])) {
+            ;(listState.selectedNodes as T[]).push(item)
           }
         },
-        mixState.treeFields
+        listState.treeFields
       )
     } else {
-      const selected = mixState.selectedNodes.filter(
-        (item) => !selection.some((item2) => item2[mixState.idField] === item[mixState.idField])
+      const selected = listState.selectedNodes.filter(
+        (item) => !selection.some((item2) => item2[listState.idField] === item[listState.idField])
       )
       traverseTree(
         selected,
         (item) => {
           table.value.toggleRowSelection(item, false)
-          mixState.selectedNodes = mixState.selectedNodes.filter((item2) => item2[mixState.idField] !== item[mixState.idField])
+          listState.selectedNodes = listState.selectedNodes.filter((item2) => item2[listState.idField] !== item[listState.idField])
         },
-        mixState.treeFields
+        listState.treeFields
       )
     }
   }
@@ -417,7 +417,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 获取上级节点名称
   const getParentName = (parentId: string, nameField = 'name') => {
-    const parent = getTreeNode(mixState.data as T[], (n) => n[mixState.idField] === parentId)
+    const parent = getTreeNode(listState.data as T[], (n) => n[listState.idField] === parentId)
     return parent ? parent[nameField] : '无'
   }
 
@@ -427,7 +427,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 删除
   const del = async (row?: T, prompt?: string) => {
-    if (!mixState.delApi) {
+    if (!listState.delApi) {
       return
     }
     for (const fn of mixHandlers.beforeDel) {
@@ -435,7 +435,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         return
       }
     }
-    const rows = row ? [row] : mixState.selectedNodes
+    const rows = row ? [row] : listState.selectedNodes
     const promptStr = prompt ? ' ' + prompt : '选择的项目'
     if (rows.length === 0) {
       ElMessage({
@@ -452,31 +452,31 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         type: 'warning'
       })
       const ids = stateOption.treeTable
-        ? [...new Set(getTreeNodes(rows, () => true, mixState.treeFields))].map((item) => item[mixState.idField])
-        : rows.map((item) => item[mixState.idField])
-      mixState.delLoading = true
-      await mixState.delApi(ids)
+        ? [...new Set(getTreeNodes(rows, () => true, listState.treeFields))].map((item) => item[listState.idField])
+        : rows.map((item) => item[listState.idField])
+      listState.delLoading = true
+      await listState.delApi(ids)
       ElMessage({
         message: '操作成功',
         type: 'success',
         duration: 1500
       })
-      mixState.delLoading = false
+      listState.delLoading = false
       setPageAfterDel()
       for (const fn of mixHandlers.afterDel) {
         await fn?.()
       }
       await getList()
     } catch (e) {
-      mixState.delLoading = false
+      listState.delLoading = false
       console.log(e)
     }
   }
 
   // 预防删除第二页最后一条数据时，或者多选删除第二页的数据时，页码错误导致请求无数据
   const setPageAfterDel = (size = 1) => {
-    if (mixState.data.length === size && mixState.page !== 0) {
-      mixState.current = mixState.current - 1
+    if (listState.data.length === size && listState.page !== 0) {
+      listState.current = listState.current - 1
     }
   }
 
@@ -487,7 +487,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   // 通用导出
   const exportData = useThrottleFn(
     async (range: ExportRange = 'page') => {
-      if (!mixState.exportApi) {
+      if (!listState.exportApi) {
         return
       }
       for (const fn of mixHandlers.beforeGetList) {
@@ -495,7 +495,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
           return
         }
       }
-      mixState.exportLoading = true
+      listState.exportLoading = true
 
       try {
         if (range === 'all') {
@@ -505,11 +505,11 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
             type: 'warning'
           })
         }
-        await mixState.exportApi(mixState.exportTitle, getQueryParam(), range)
-        window.setTimeout(() => (mixState.exportLoading = false), 1500)
+        await listState.exportApi(listState.exportTitle, getQueryParam(), range)
+        window.setTimeout(() => (listState.exportLoading = false), 1500)
       } catch (e) {
         console.log(e)
-        mixState.exportLoading = false
+        listState.exportLoading = false
       }
     },
     1500,
@@ -527,8 +527,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 显示添加、修改对话框
   const showEdit = async (current?: T | string) => {
-    const id = isString(current) ? current : current?.[mixState.idField]
-    mixState.editShow = true
+    const id = isString(current) ? current : current?.[listState.idField]
+    listState.editShow = true
     await nextTick(() => {
       editDialog.value.open(id)
     })
@@ -540,15 +540,15 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 显示详细内容
   const showDetail = async (idx: number) => {
-    mixState.detailShow = true
+    listState.detailShow = true
     await nextTick(() => {
-      detailDialog.value.open(mixState.data, idx, { dicts: mixState.dicts })
+      detailDialog.value.open(listState.data, idx, { dicts: listState.dicts })
     })
   }
 
   // 详细对话框导航时
   const onDetailNavigate = (id: string) => {
-    const current = unref<T[]>(mixState.data).find((d) => d.id === id)
+    const current = unref<T[]>(listState.data).find((d) => d.id === id)
     table.value.setCurrentRow(current)
     setCurrentData(id)
   }
@@ -566,7 +566,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 显示、隐藏查询表单
   const toggleQueryForm = () => {
-    mixState.queryFormShow = !mixState.queryFormShow
+    listState.queryFormShow = !listState.queryFormShow
   }
 
   //===============================================================================
@@ -580,7 +580,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 表格选择
   const onSelectionChange = (val: T[]) => {
-    ;(mixState.selectedNodes as T[]) = val
+    ;(listState.selectedNodes as T[]) = val
   }
 
   // 表格行点击
@@ -590,11 +590,11 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 设置当前行
   const setCurrentData = (id: string) => {
-    if (mixState.tableRowSelectable) {
+    if (listState.tableRowSelectable) {
       if (!id) {
-        mixState.currentId = ''
+        listState.currentId = ''
       } else {
-        mixState.currentId = id
+        listState.currentId = id
       }
       nextTick(() => {
         focusCurrentRow()
@@ -612,13 +612,13 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     border,
     tableAttrs: _tableAttrs
   } = useTable(table, {
-    rowFocusable: mixState.tableRowSelectable,
-    rowDraggable: mixState.rowDraggable,
-    data: () => mixState.data,
-    treeTable: mixState.treeTable,
+    rowFocusable: listState.tableRowSelectable,
+    rowDraggable: listState.rowDraggable,
+    data: () => listState.data,
+    treeTable: listState.treeTable,
     configurable: true,
-    alias: mixState.alias,
-    defaultExpandAll: mixState.defaultExpandAll
+    alias: listState.alias,
+    defaultExpandAll: listState.defaultExpandAll
   })
 
   //===============================================================================
@@ -628,10 +628,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   // fd-page-main默认参数
   const pageMainAttrs = computed(() => {
     return {
-      queryData: mixState.query,
-      'onUpdate:queryData': (val: ApiQuery) => (mixState.query = val),
-      queryVisible: mixState.queryFormShow,
-      'onUpdate:queryVisible': (val: boolean) => (mixState.queryFormShow = val),
+      queryData: listState.query,
+      'onUpdate:queryData': (val: ApiQuery) => (listState.query = val),
+      queryVisible: listState.queryFormShow,
+      'onUpdate:queryVisible': (val: boolean) => (listState.queryFormShow = val),
       queryFn: queryList
     }
   })
@@ -639,10 +639,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   // fd-page-act默认参数
   const pageActAttrs = computed(() => {
     return {
-      queryData: mixState.query,
+      queryData: listState.query,
       queryFn: queryList,
-      queryVisible: mixState.queryFormShow,
-      'onUpdate:queryVisible': (val: boolean) => (mixState.queryFormShow = val),
+      queryVisible: listState.queryFormShow,
+      'onUpdate:queryVisible': (val: boolean) => (listState.queryFormShow = val),
       onCreate: showEdit,
       onDel: del,
       onExport: exportData,
@@ -661,8 +661,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const tableAttrs = computed(() => {
     const result = {
       highlightCurrentRow: _tableAttrs.value.highlightCurrentRow,
-      data: mixState.data,
-      rowKey: mixState.idField,
+      data: listState.data,
+      rowKey: listState.idField,
       border: _tableAttrs.value.border,
       stripe: _tableAttrs.value.stripe,
       onSelectionChange: onSelectionChange,
@@ -681,11 +681,11 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const paginationAttrs = computed(() => {
     return {
       background: 'background',
-      currentPage: mixState.current,
-      pageCount: mixState.count,
-      pageSize: mixState.siz,
+      currentPage: listState.current,
+      pageCount: listState.count,
+      pageSize: listState.siz,
       pageSizes: [10, 15, 20, 50, 100, 200],
-      total: mixState.total,
+      total: listState.total,
       layout: 'total, sizes, prev, pager, next, jumper',
       onCurrentChange: pageChange,
       onSizeChange: sizeChange
@@ -693,21 +693,21 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   })
 
   return {
-    mixRefs: {
+    listRefs: {
       queryForm,
       table,
       editDialog,
       detailDialog
     },
-    mixState,
-    mixComputed: {
+    listState,
+    listComputed: {
       columns,
       rowDensity,
       expandAll,
       stripe,
       border
     },
-    mixMethods: {
+    listMethods: {
       getList,
       queryList,
       resetQuery,
@@ -726,7 +726,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       colEmptyFormatter,
       onSelectionChange
     },
-    mixAttrs: {
+    listAttrs: {
       pageMainAttrs,
       tableAttrs,
       paginationAttrs,
