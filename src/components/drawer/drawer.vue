@@ -7,6 +7,7 @@
     :size="size"
     :close-on-click-modal="closeOnClickModal"
     :modal="modal"
+    @opened="onOpened"
   >
     <div class="fd-drawer__content">
       <div class="fd-drawer__title">
@@ -38,6 +39,7 @@ import { computed, ref, useSlots } from 'vue'
 import usePage from '@/extend/page/use-page'
 import { ElDrawer } from 'element-plus'
 import useBreakpoint from '@/hooks/use-breakpoint'
+import { onBeforeRouteLeave } from 'vue-router'
 
 const props = defineProps({
   title: {
@@ -99,8 +101,20 @@ const currentIcon = computed(() => {
 })
 
 const hide = () => {
+  goBackToHide.value = false
   drawer.value?.handleClose()
 }
+
+const goBackToHide = ref(true)
+const onOpened = () => {
+  goBackToHide.value = true
+}
+onBeforeRouteLeave((to) => {
+  if (props.mobileCompact && goBackToHide.value) {
+    hide()
+    return false
+  }
+})
 
 defineExpose({
   hide
