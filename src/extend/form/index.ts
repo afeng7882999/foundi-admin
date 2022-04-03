@@ -1,16 +1,18 @@
 import { App } from 'vue'
-import FdItemDateRange from './components/item-date-range.vue'
-import FdItemDict from './components/item-dict.vue'
-import FdItem from './components/item.vue'
-import FdItemList from './components/item-list.vue'
-import FdItemTree from './components/item-tree.vue'
-import FdItemSort from './components/item-sort.vue'
-import FdItemJson from './components/item-json.vue'
-import FdItemMultiline from './components/item-mutiline.vue'
-import FdItemBoolean from './components/item-boolean.vue'
-import FdItemCustom from './components/item-custom.vue'
+import FdForm from './components/form.vue'
+import FdItemDateRange from './item/item-date-range.vue'
+import FdItemDict from './item/item-dict.vue'
+import FdItem from './item/item.vue'
+import FdItemList from './item/item-list.vue'
+import FdItemTree from './item/item-tree.vue'
+import FdItemSort from './item/item-sort.vue'
+import FdItemJson from './item/item-json.vue'
+import FdItemMultiline from './item/item-mutiline.vue'
+import FdItemBoolean from './item/item-boolean.vue'
+import FdItemCustom from './item/item-custom.vue'
 
 export default function install(app: App) {
+  app.component(FdForm.name, FdForm)
   app.component(FdItemDateRange.name, FdItemDateRange)
   app.component(FdItemDict.name, FdItemDict)
   app.component(FdItem.name, FdItem)
