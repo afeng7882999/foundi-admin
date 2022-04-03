@@ -105,7 +105,7 @@ const hide = () => {
   drawer.value?.handleClose()
 }
 
-const goBackToHide = ref(true)
+const goBackToHide = ref(false)
 const onOpened = () => {
   goBackToHide.value = true
 }

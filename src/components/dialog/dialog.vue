@@ -50,7 +50,7 @@ import FdIconButton from '@/components/icon-button/icon-button.vue'
 import { ElDialog } from 'element-plus'
 import usePage from '@/extend/page/use-page'
 import useBreakpoint from '@/hooks/use-breakpoint'
-import {onBeforeRouteLeave} from "vue-router";
+import { onBeforeRouteLeave } from 'vue-router'
 
 const props = defineProps({
   title: String,
@@ -112,7 +112,7 @@ const hide = () => {
   goBackToHide.value = false
 }
 
-const goBackToHide = ref(true)
+const goBackToHide = ref(false)
 const onOpened = () => {
   goBackToHide.value = true
 }
