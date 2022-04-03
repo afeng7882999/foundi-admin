@@ -107,7 +107,7 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
     parentList: [] as T[]
   }
 
-  const mixState = stateOption.treeTable
+  const editState = stateOption.treeTable
     ? reactive(merge({}, defaultTreeState, stateOption) as typeof defaultTreeState & TreeEditStateOption<T>)
     : reactive(merge({}, defaultState, stateOption) as typeof defaultState & ListEditStateOption<T>)
 
@@ -178,13 +178,13 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
   // open
   //===============================================================================
 
-  const { getDictData } = useDict(mixState.dicts)
+  const { getDictData } = useDict(editState.dicts)
 
   // 添加、编辑对话框
   const open = async (id?: string) => {
-    mixState.isCreate = !id || id === '-1'
-    if (mixState.treeTable) {
-      mixState.parentList = (await getParentList()) as T[]
+    editState.isCreate = !id || id === '-1'
+    if (editState.treeTable) {
+      editState.parentList = (await getParentList()) as T[]
     }
     resetForm()
     await getDictData()
@@ -194,31 +194,31 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
     for (const fn of mixHandlers.beforeOpen) {
       await fn?.()
     }
-    mixState.visible = true
+    editState.visible = true
   }
 
   // 清除表单数据
   const resetForm = () => {
     form.value?.clearValidate()
-    mixState.formData = cloneDeep(mixState.resetFormData as T)
+    editState.formData = cloneDeep(editState.resetFormData as T)
   }
 
   // 根据id获取数据
   const getFormData = async (id: string) => {
-    if (!mixState.getApi) {
+    if (!editState.getApi) {
       return
     }
     try {
-      unref<ApiObj>(mixState.formData)[mixState.idField] = id
-      const data = await mixState.getApi(id)
-      if (mixState.treeTable) {
-        data[mixState.treeFields.treeParentIdField] =
-          data[mixState.treeFields.treeParentIdField] === '0' ? '' : data[mixState.treeFields.treeParentIdField]
+      unref<ApiObj>(editState.formData)[editState.idField] = id
+      const data = await editState.getApi(id)
+      if (editState.treeTable) {
+        data[editState.treeFields.treeParentIdField] =
+          data[editState.treeFields.treeParentIdField] === '0' ? '' : data[editState.treeFields.treeParentIdField]
       }
       for (const fn of mixHandlers.afterGetData) {
         await fn?.(data)
       }
-      mixState.formData = data
+      editState.formData = data
     } catch (e) {
       console.log(e)
     }
@@ -230,12 +230,12 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
 
   // 获取上级节点
   const getParentList = async () => {
-    if (!mixState.listApi) {
+    if (!editState.listApi) {
       return
     }
     try {
-      const { data: pl } = await mixState.listApi()
-      return arrayToTree(pl, mixState.treeFields)
+      const { data: pl } = await editState.listApi()
+      return arrayToTree(pl, editState.treeFields)
     } catch (e) {
       console.log(e)
     }
@@ -247,14 +247,14 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
 
   // 提交
   const submit = async () => {
-    if (mixState.isCreate && !mixState.postApi) {
+    if (editState.isCreate && !editState.postApi) {
       return
     }
-    if (!mixState.isCreate && !mixState.putApi) {
+    if (!editState.isCreate && !editState.putApi) {
       return
     }
-    if (mixState.treeTable && !mixState.formData[mixState.treeFields.treeParentIdField]) {
-      ;(mixState.formData as ApiObj)[mixState.treeFields.treeParentIdField] = '0'
+    if (editState.treeTable && !editState.formData[editState.treeFields.treeParentIdField]) {
+      ;(editState.formData as ApiObj)[editState.treeFields.treeParentIdField] = '0'
     }
     for (const fn of mixHandlers.beforeSubmit) {
       if (!(await fn?.())) {
@@ -266,10 +266,10 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
       for (const fn of mixHandlers.beforeSubmitData) {
         await fn?.()
       }
-      if (mixState.isCreate) {
-        mixState.postApi && (await mixState.postApi(mixState.formData))
+      if (editState.isCreate) {
+        editState.postApi && (await editState.postApi(editState.formData))
       } else {
-        mixState.putApi && (await mixState.putApi(mixState.formData))
+        editState.putApi && (await editState.putApi(editState.formData))
       }
       await hideDialog()
       emit(REFRESH_DATA_EVENT)
@@ -285,7 +285,7 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
 
   // 隐藏弹窗
   const hideDialog = async () => {
-    mixState.visible = false
+    editState.visible = false
     resetForm()
     for (const fn of mixHandlers.afterClose) {
       await fn?.()
@@ -298,7 +298,7 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
 
   // 获取弹窗的标题
   const getFormTitle = () => {
-    return mixState.isCreate ? `新增${mixState.title}` : `编辑${mixState.title}`
+    return editState.isCreate ? `新增${editState.title}` : `编辑${editState.title}`
   }
 
   //===============================================================================
@@ -314,11 +314,11 @@ export default function <T extends ApiObj>(stateOption: ListEditStateOption<T> |
   })
 
   return {
-    mixRefs: {
+    editRefs: {
       form
     },
-    mixState,
-    mixMethods: {
+    editState,
+    editMethods: {
       open,
       getDictData,
       getFormData,
