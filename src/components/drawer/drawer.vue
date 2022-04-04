@@ -75,7 +75,7 @@ const props = defineProps({
 
 const drawer = ref<InstanceType<typeof ElDrawer>>()
 
-const { isMobile } = useBreakpoint()
+const { isMobile } = useBreakpoint(props.mobileCompact)
 const objClass = computed(() => {
   const clazz = ['fd-drawer']
   if (props.customClass) {
@@ -84,7 +84,7 @@ const objClass = computed(() => {
   if (useSlots().footer) {
     clazz.push('has-footer')
   }
-  if (props.mobileCompact && isMobile.value) {
+  if (isMobile.value) {
     clazz.push('is-mobile')
   }
   return clazz.join(' ')

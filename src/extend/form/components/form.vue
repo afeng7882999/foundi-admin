@@ -26,11 +26,11 @@ const props = defineProps({
 
 const form = ref<InstanceType<typeof ElForm>>()
 
-const { isMobile } = useBreakpoint()
+const { isMobile } = useBreakpoint(props.mobileCompact)
 
 const objClass = computed(() => {
   const clazz = ['fd-form']
-  if (props.mobileCompact && isMobile.value) {
+  if (isMobile.value) {
     clazz.push('is-mobile')
   }
   return clazz.join(' ')

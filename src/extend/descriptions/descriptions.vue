@@ -37,11 +37,11 @@ const props = defineProps({
   }
 })
 
-const { isMobile } = useBreakpoint()
+const { isMobile } = useBreakpoint(props.mobileCompact)
 
 const objClass = computed(() => {
   const clazz = ['fd-descriptions']
-  if (props.mobileCompact && isMobile.value) {
+  if (isMobile.value) {
     clazz.push('is-mobile')
   }
   return clazz.join(' ')

@@ -1,4 +1,5 @@
 import { useBreakpoints } from '@vueuse/core'
+import { ref } from 'vue'
 
 export const breakpoints = {
   sm: 768,
@@ -9,8 +10,8 @@ export const breakpoints = {
 
 export const breakpoint = useBreakpoints(breakpoints)
 
-const useBreakpoint = () => {
-  const isMobile = breakpoint.smaller('sm')
+const useBreakpoint = (react: boolean | undefined = true) => {
+  const isMobile = react ? breakpoint.smaller('sm') : ref(false)
 
   return {
     isMobile

@@ -88,10 +88,10 @@ export default {
 import usePage from '@/extend/page/use-page'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { computed, PropType, reactive, ref, toRaw, useSlots, watch } from 'vue'
-import useBreakpoint from '@/hooks/use-breakpoint'
 import { cloneDeep } from 'lodash-es'
 import { ApiQuery } from '@/api'
 import { resizeConst } from '@/hooks/use-layout-resize'
+import useBreakpoint from '@/hooks/use-breakpoint'
 
 const props = defineProps({
   name: {
@@ -107,7 +107,11 @@ const props = defineProps({
     default: true
   },
   queryData: Object as PropType<ApiQuery>,
-  queryFn: Function
+  queryFn: Function,
+  mobileCompact: {
+    type: Boolean,
+    default: true
+  }
 })
 
 const state = reactive({
@@ -122,13 +126,12 @@ watch(
   { immediate: true, deep: true }
 )
 
-const { isMobile } = useBreakpoint()
+const { isMobile } = useBreakpoint(props.mobileCompact)
+
 const objClass = computed(() => {
-  const clazz = [`page-${props.name} fd-page`]
-  if (isMobile.value) {
-    clazz.push('is-mobile')
-  }
-  return clazz
+  const clazz = ['fd-page']
+  clazz.push(`page-${props.name}`)
+  return clazz.join(' ')
 })
 
 const hasQuery = computed(() => {
