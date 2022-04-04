@@ -13,7 +13,7 @@
               />
             </el-badge>
           </el-tooltip>
-          <el-divider class="fd-page-act__divider" direction="vertical" style="margin-left: 16px" />
+          <el-divider v-if="!isMobile" class="fd-page-act__divider" direction="vertical" style="margin-left: 16px" />
         </template>
         <div v-if="!isMobile" class="query-compact">
           <el-form :model="queryData" inline compact :submit-fn="queryFn">
