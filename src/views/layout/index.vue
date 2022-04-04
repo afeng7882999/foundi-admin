@@ -74,7 +74,7 @@ const classObj = computed(() => {
   return {
     'is-sidebar-minimized': mode.value.minimized,
     'is-sidebar-opened': mode.value.opened,
-    'is-mobile': device.value === DeviceType.Mobile,
+    'is-pad': device.value === DeviceType.Pad,
     'is-enable-tags': enableTags.value,
     'is-fixed-header': fixedHeader.value
   }
@@ -131,7 +131,7 @@ const showAppSetting = () => {
     }
   }
 
-  &.is-mobile {
+  &.is-pad {
     .fd-layout__main {
       margin-left: 0;
     }
@@ -158,7 +158,7 @@ const showAppSetting = () => {
     }
   }
 
-  &.is-mobile.is-fixed-header {
+  &.is-pad.is-fixed-header {
     .fd-layout__header {
       width: 100%;
     }

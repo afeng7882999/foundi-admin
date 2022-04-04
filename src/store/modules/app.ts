@@ -7,6 +7,7 @@ const DEFAULT_SIDEBAR_MODE = '{"minimized":false,"offScreen":false,"opened":fals
 
 export enum DeviceType {
   Mobile,
+  Pad,
   Desktop
 }
 
@@ -41,7 +42,7 @@ const state: AppState = {
   bodyWidth: 0,
   docHeight: 0,
   docWidth: 0,
-  device: DeviceType.Desktop, // mobile
+  device: DeviceType.Desktop,
   sidebarMode: JSON.parse(window.localStorage.getItem('app.sidebarMode') || DEFAULT_SIDEBAR_MODE),
   theme: JSON.parse(window.localStorage.getItem('app.theme') || '{}'),
   enableTags: window.localStorage.getItem('app.enableTags') ? window.localStorage.getItem('app.enableTags') === 'true' : true,

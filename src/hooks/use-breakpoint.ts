@@ -13,8 +13,11 @@ export const breakpoint = useBreakpoints(breakpoints)
 const useBreakpoint = (react: boolean | undefined = true) => {
   const isMobile = react ? breakpoint.smaller('sm') : ref(false)
 
+  const isPad = react ? breakpoint.between('sm', 'md') : ref(false)
+
   return {
-    isMobile
+    isMobile,
+    isPad
   }
 }
 

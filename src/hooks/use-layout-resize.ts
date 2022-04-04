@@ -41,8 +41,8 @@ export default function useLayoutResize() {
       await store.dispatch('app/setBodyWidth', bodyRect.width)
       await store.dispatch('app/setDocHeight', getDocHeight())
       await store.dispatch('app/setDocWidth', getDocWidth())
-      if (isMobile()) {
-        await store.dispatch('app/toggleDevice', DeviceType.Mobile)
+      if (isPad()) {
+        await store.dispatch('app/toggleDevice', DeviceType.Pad)
         await store.dispatch('app/setSidebarMode', { offScreen: true, opened: false })
       } else {
         await store.dispatch('app/toggleDevice', DeviceType.Desktop)
@@ -68,7 +68,7 @@ export default function useLayoutResize() {
     return bodyRect.width - resizeConst.sidebarNormalWidth
   }
 
-  const isMobile = () => {
+  const isPad = () => {
     return bodyRect.width - resizeConst.ratio < breakpoints.md
   }
 
