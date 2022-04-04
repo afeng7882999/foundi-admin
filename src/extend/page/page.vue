@@ -70,6 +70,7 @@
         <slot name="act" />
         <div ref="tableWrapper" class="fd-page__table is-bordered">
           <slot name="table" />
+          <el-pagination v-if="!isMobile" class="fd-pagination" v-bind="pagination"></el-pagination>
         </div>
       </template>
     </fd-split-pane>
@@ -108,6 +109,7 @@ const props = defineProps({
   },
   queryData: Object as PropType<ApiQuery>,
   queryFn: Function,
+  pagination: Object,
   mobileCompact: {
     type: Boolean,
     default: true

@@ -21,6 +21,9 @@
           </el-form>
         </div>
       </div>
+      <div v-if="isMobile && pagination" class="fd-page-act__center">
+        <el-pagination class="fd-page-act__pagination" v-bind="pagination" small :pager-count="5" layout="pager" />
+      </div>
       <div class="fd-page-act__right">
         <template v-if="!isMobile">
           <el-button v-if="delVisible" v-waves plain type="danger" @click="emit('del')">
@@ -43,6 +46,7 @@
             <slot name="menu" />
             <fd-contextmenu-item v-if="createVisible" color="primary" icon="plus" label="新增" @click="emit('create')" />
           </template>
+          <fd-contextmenu-item v-if="menuDividerVisible" divider />
           <fd-contextmenu-submenu v-if="exportVisible" icon="download" label="导出表数据">
             <fd-contextmenu-item label="导出当前页" @click="emit('export')" />
             <fd-contextmenu-item label="导出全部页" @click="emit('exportAll')" />
@@ -89,7 +93,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, PropType, ref } from 'vue'
+import { computed, PropType, ref, useSlots } from 'vue'
 import usePage from '@/extend/page/use-page'
 import { isBoolean } from 'lodash-es'
 import { TableSettingProp } from '@/extend/table/types'
@@ -127,6 +131,7 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  pagination: Object,
   more: {
     type: Boolean,
     default: true
@@ -163,6 +168,10 @@ const createVisible = computed(() => {
 })
 const exportVisible = computed(() => {
   return booleanOrAuth(props.export)
+})
+
+const menuDividerVisible = computed(() => {
+  return !!(useSlots().menu || delVisible.value || createVisible.value)
 })
 
 const emit = defineEmits(['del', 'create', 'export', 'exportAll', 'update:queryVisible'])
