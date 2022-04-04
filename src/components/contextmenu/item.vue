@@ -50,6 +50,10 @@ const props = defineProps({
   autoHide: {
     type: Boolean,
     default: true
+  },
+  color: {
+    type: String as PropType<'primary' | 'success' | 'warning' | 'danger' | 'info'>,
+    validator: (val: string) => ['primary', 'success', 'warning', 'danger', 'info'].includes(val)
   }
 })
 
@@ -62,7 +66,12 @@ const state = reactive({
 const classname = computed(() => {
   return {
     'is-hover': state.hover,
-    'is-disabled': props.disabled
+    'is-disabled': props.disabled,
+    'is-primary': props.color && props.color === 'primary',
+    'is-success': props.color && props.color === 'success',
+    'is-warning': props.color && props.color === 'warning',
+    'is-danger': props.color && props.color === 'danger',
+    'is-info': props.color && props.color === 'info'
   }
 })
 
