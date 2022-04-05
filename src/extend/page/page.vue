@@ -133,6 +133,9 @@ const { isMobile } = useLayoutSize(props.mobileCompact)
 const objClass = computed(() => {
   const clazz = ['fd-page']
   clazz.push(`page-${props.name}`)
+  if (isMobile.value) {
+    clazz.push('is-mobile')
+  }
   return clazz.join(' ')
 })
 

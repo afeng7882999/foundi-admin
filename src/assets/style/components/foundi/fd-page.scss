@@ -8,6 +8,10 @@
   align-items: stretch;
   padding: 8px 16px 0 16px;
   
+  &.is-mobile {
+    padding: 8px 8px 0 8px;
+  }
+  
   &__sub-title {
     display: flex;
     align-items: center;
