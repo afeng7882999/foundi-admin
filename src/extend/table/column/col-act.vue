@@ -1,7 +1,6 @@
 <template>
   <template v-if="visible && !isMobile">
     <el-table-column
-      v-if="visible && !isMobile"
       v-bind="$attrs"
       :align="align"
       fixed="right"
