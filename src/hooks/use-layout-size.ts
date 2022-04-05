@@ -72,6 +72,10 @@ export default function useLayoutSize(react: boolean | undefined = true) {
     window.addEventListener('resize', resizeLayout)
   }
 
+  const removeResizeListener = () => {
+    window.removeEventListener('resize', resizeLayout)
+  }
+
   const doLayout = async () => {
     await resizeLayout()
   }
@@ -90,6 +94,7 @@ export default function useLayoutSize(react: boolean | undefined = true) {
 
   return {
     addResizeListener,
+    removeResizeListener,
     device,
     isMobile,
     isMobileOrPad,
