@@ -102,7 +102,7 @@ import FdSortColumnDialog from '@/extend/table/components/sort-column-dialog.vue
 import FdContextmenuItem from '@/components/contextmenu/item.vue'
 import FdContextmenuSubmenu from '@/components/contextmenu/submenu.vue'
 import { ApiQuery } from '@/api'
-import useBreakpoint from '@/hooks/use-breakpoint'
+import useLayoutSize from '@/hooks/use-layout-size'
 
 const props = defineProps({
   visible: {
@@ -217,7 +217,7 @@ const {
   setTableColumns
 } = useTableSetting(props.tableOption)
 
-const { isMobile } = useBreakpoint(props.mobileCompact)
+const { isMobile } = useLayoutSize(props.mobileCompact)
 const objClass = computed(() => {
   const clazz = []
   if (isMobile.value) {

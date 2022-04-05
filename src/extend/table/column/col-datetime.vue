@@ -43,6 +43,6 @@ const minWidthCo = computed(() => {
   if (props.minWidth) {
     return props.minWidth
   }
-  return '200'
+  return '220'
 })
 </script>

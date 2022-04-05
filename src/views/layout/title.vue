@@ -36,6 +36,7 @@ import SystemMessageButton from '@/views/modules/message/message-button.vue'
 import { AllState } from '@/store'
 import { useStore } from 'vuex'
 import { SidebarMode } from '@/store/modules/app'
+import useLayoutSize from '@/hooks/use-layout-size'
 
 const emit = defineEmits(['appSettingShow'])
 
@@ -55,6 +56,8 @@ const toggleBtnActive = computed(() => {
   return (!modeVal.offScreen && modeVal.minimized) || (modeVal.offScreen && !modeVal.opened)
 })
 
+const { doLayout } = useLayoutSize()
+
 const toggleSideBar = async () => {
   const modeVal = mode.value
   if (modeVal.offScreen) {
@@ -62,6 +65,7 @@ const toggleSideBar = async () => {
   } else {
     await store.dispatch('app/setSidebarMode', { minimized: !modeVal.minimized })
   }
+  doLayout()
 }
 
 const toggleSetting = () => {

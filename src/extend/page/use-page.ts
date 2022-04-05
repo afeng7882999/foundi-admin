@@ -2,7 +2,7 @@ import { isAuth } from '@/app/account'
 import { computed, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
-import { resizeConst } from '@/hooks/use-layout-resize'
+import { sizeConst } from '@/hooks/use-layout-size'
 import { merge } from 'lodash-es'
 
 export type PageStateOption = Partial<{
@@ -28,14 +28,14 @@ export default function (stateOption?: PageStateOption) {
 
   // Doc最小高度
   const docMinHeight = computed(() => {
-    const footer = pageState.footerVisible ? resizeConst.footerHeight : 0
+    const footer = pageState.footerVisible ? sizeConst.footerHeight : 0
     const height = storeState.app.docHeight - footer
     return { minHeight: height + 'px' }
   })
 
   // Doc高度
   const docHeight = computed(() => {
-    const footer = pageState.footerVisible ? resizeConst.footerHeight : 0
+    const footer = pageState.footerVisible ? sizeConst.footerHeight : 0
     const height = storeState.app.docHeight - footer
     return { height: height + 'px' }
   })
@@ -69,7 +69,7 @@ export default function (stateOption?: PageStateOption) {
 
   // 获取Doc高度
   const getDocHeight = (remove: number, unit?: string): number | string => {
-    const footer = pageState.footerVisible ? resizeConst.footerHeight : 0
+    const footer = pageState.footerVisible ? sizeConst.footerHeight : 0
     if (unit) {
       return (storeState.app.docHeight - remove - footer + unit) as string
     } else {
@@ -79,8 +79,8 @@ export default function (stateOption?: PageStateOption) {
 
   // 获取Doc高度，去除 PageHeader, PageFooter 高度
   const getDocHeightNoHeaderFooter = (remove: number, unit?: string): number | string => {
-    const header = storeState.app.enableTags ? 0 : resizeConst.pageHeaderHeight
-    const footer = pageState.footerVisible ? resizeConst.footerHeight : 0
+    const header = storeState.app.enableTags ? 0 : sizeConst.pageHeaderHeight
+    const footer = pageState.footerVisible ? sizeConst.footerHeight : 0
     if (unit) {
       return (storeState.app.docHeight - remove - header - footer + unit) as string
     } else {

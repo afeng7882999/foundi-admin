@@ -91,8 +91,8 @@ import FdSplitPane from '@/components/split-pane/index.vue'
 import { computed, PropType, reactive, ref, toRaw, useSlots, watch } from 'vue'
 import { cloneDeep } from 'lodash-es'
 import { ApiQuery } from '@/api'
-import { resizeConst } from '@/hooks/use-layout-resize'
-import useBreakpoint from '@/hooks/use-breakpoint'
+import { sizeConst } from '@/hooks/use-layout-size'
+import useLayoutSize from '@/hooks/use-layout-size'
 
 const props = defineProps({
   name: {
@@ -128,7 +128,7 @@ watch(
   { immediate: true, deep: true }
 )
 
-const { isMobile } = useBreakpoint(props.mobileCompact)
+const { isMobile } = useLayoutSize(props.mobileCompact)
 
 const objClass = computed(() => {
   const clazz = ['fd-page']
@@ -170,7 +170,7 @@ const queryVisibleCo = computed({
 const { docMinHeight, showPageHeader, getDocHeightNoHeaderFooter } = usePage()
 
 const scrollbarStyle = computed(() => {
-  const remove = props.footerVisible ? 86 + resizeConst.footerHeight : 86
+  const remove = props.footerVisible ? 86 + sizeConst.footerHeight : 86
   return {
     height: getDocHeightNoHeaderFooter(remove, 'px')
   }

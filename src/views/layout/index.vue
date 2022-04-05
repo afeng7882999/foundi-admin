@@ -25,17 +25,17 @@ import FdMain from './main.vue'
 import FdTitle from './title.vue'
 import FdRouterTags from '@/components/router-tags/index.vue'
 import { DEFAULT_AVATAR } from '@/store/modules/user'
-import { computed, onBeforeMount, onMounted, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
 import { AllState } from '@/store'
 import { useStore } from 'vuex'
-import useLayoutResize from '@/hooks/use-layout-resize'
-import { DeviceType, SidebarMode } from '@/store/modules/app'
+import { SidebarMode } from '@/store/modules/app'
 import { setDocumentTheme } from '@/components/theme/theme'
+import useLayoutSize from '@/hooks/use-layout-size'
 
 const store = useStore<AllState>()
 const storeState = store.state as AllState
 
-const { device, addResizeListener, resizeLayout } = useLayoutResize()
+const { addResizeListener, doLayout } = useLayoutSize()
 
 const appSetting = ref()
 
@@ -70,11 +70,25 @@ const fixedHeader = computed(() => {
   return storeState.app.fixedHeader
 })
 
+const { isMobileOrPad } = useLayoutSize()
+
+watch(
+  () => isMobileOrPad.value,
+  async (val) => {
+    if (val) {
+      await store.dispatch('app/setSidebarMode', { offScreen: true, opened: false })
+    } else {
+      await store.dispatch('app/setSidebarMode', { offScreen: false, opened: false })
+    }
+  },
+  { immediate: true }
+)
+
 const classObj = computed(() => {
   return {
     'is-sidebar-minimized': mode.value.minimized,
     'is-sidebar-opened': mode.value.opened,
-    'is-pad': device.value === DeviceType.Pad,
+    'is-pad': isMobileOrPad.value,
     'is-enable-tags': enableTags.value,
     'is-fixed-header': fixedHeader.value
   }
@@ -89,7 +103,7 @@ onBeforeMount(() => {
 
 onMounted(() => {
   addResizeListener()
-  resizeLayout()
+  doLayout()
 })
 
 const closeOffScreenSidebar = async () => {

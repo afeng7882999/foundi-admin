@@ -1,6 +1,7 @@
 <template>
-  <template v-if="visible">
+  <template v-if="visible && !isMobile">
     <el-table-column
+      v-if="visible && !isMobile"
       v-bind="$attrs"
       :align="align"
       fixed="right"
@@ -44,6 +45,7 @@ import { computed, PropType } from 'vue'
 import { Indexable } from '@/common/types'
 import { COL_DEFAULT_PROPS } from '@/extend/table/types'
 import useColumn from '@/extend/table/hooks/use-column'
+import useLayoutSize from '@/hooks/use-layout-size'
 
 const props = defineProps({
   ...COL_DEFAULT_PROPS,
@@ -58,12 +60,26 @@ const props = defineProps({
   del: {
     type: [String, Boolean] as PropType<string | boolean>,
     default: false
+  },
+  align: {
+    type: String,
+    default: 'center'
+  },
+  headerAlign: {
+    type: String,
+    default: 'center'
+  },
+  mobileCompact: {
+    type: Boolean,
+    default: true
   }
 })
 
 const emit = defineEmits(['detail', 'edit', 'del'])
 
 const { visible, booleanOrAuth } = useColumn(props)
+
+const { isMobile } = useLayoutSize(props.mobileCompact)
 
 const widthCo = computed(() => {
   if (props.width) {

@@ -13,7 +13,7 @@ export default {
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import useBreakpoint from '@/hooks/use-breakpoint'
+import useLayoutSize from '@/hooks/use-layout-size'
 import { ElForm } from 'element-plus'
 import { ValidateFieldsError } from 'async-validator'
 
@@ -26,7 +26,7 @@ const props = defineProps({
 
 const form = ref<InstanceType<typeof ElForm>>()
 
-const { isMobile } = useBreakpoint(props.mobileCompact)
+const { isMobile } = useLayoutSize(props.mobileCompact)
 
 const objClass = computed(() => {
   const clazz = ['fd-form']

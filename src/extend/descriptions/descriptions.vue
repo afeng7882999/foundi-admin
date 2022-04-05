@@ -18,7 +18,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useBreakpoint from '@/hooks/use-breakpoint'
+import useLayoutSize from '@/hooks/use-layout-size'
 import { computed, PropType } from 'vue'
 
 const props = defineProps({
@@ -37,7 +37,7 @@ const props = defineProps({
   }
 })
 
-const { isMobile } = useBreakpoint(props.mobileCompact)
+const { isMobile } = useLayoutSize(props.mobileCompact)
 
 const objClass = computed(() => {
   const clazz = ['fd-descriptions']

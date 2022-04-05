@@ -38,7 +38,7 @@ export default {
 import { computed, ref, useSlots } from 'vue'
 import usePage from '@/extend/page/use-page'
 import { ElDrawer } from 'element-plus'
-import useBreakpoint from '@/hooks/use-breakpoint'
+import useLayoutSize from '@/hooks/use-layout-size'
 import { onBeforeRouteLeave } from 'vue-router'
 import useView from '@/extend/page/use-view'
 
@@ -75,7 +75,7 @@ const props = defineProps({
 
 const drawer = ref<InstanceType<typeof ElDrawer>>()
 
-const { isMobile } = useBreakpoint(props.mobileCompact)
+const { isMobile } = useLayoutSize(props.mobileCompact)
 const objClass = computed(() => {
   const clazz = ['fd-drawer']
   if (props.customClass) {

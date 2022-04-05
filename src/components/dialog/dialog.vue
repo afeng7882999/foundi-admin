@@ -48,7 +48,7 @@ export default {
 import { computed, reactive, ref, watch } from 'vue'
 import FdIconButton from '@/components/icon-button/icon-button.vue'
 import { ElDialog } from 'element-plus'
-import useBreakpoint from '@/hooks/use-breakpoint'
+import useLayoutSize from '@/hooks/use-layout-size'
 import { onBeforeRouteLeave } from 'vue-router'
 import useView from '@/extend/page/use-view'
 
@@ -86,7 +86,7 @@ watch(
   { immediate: true }
 )
 
-const { isMobile } = useBreakpoint(props.mobileCompact)
+const { isMobile } = useLayoutSize(props.mobileCompact)
 const objClass = computed(() => {
   const clazz = ['fd-dialog']
   if (isMobile.value) {
