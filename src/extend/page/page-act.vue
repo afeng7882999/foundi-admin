@@ -45,8 +45,8 @@
             <fd-contextmenu-item v-if="delVisible" color="danger" icon="delete" label="删除" @click="emit('del')" />
             <slot name="menu" />
             <fd-contextmenu-item v-if="createVisible" color="primary" icon="plus" label="新增" @click="emit('create')" />
+            <fd-contextmenu-item v-if="menuDividerVisible" divider />
           </template>
-          <fd-contextmenu-item v-if="menuDividerVisible" divider />
           <fd-contextmenu-submenu v-if="exportVisible" icon="download" label="导出表数据">
             <fd-contextmenu-item label="导出当前页" @click="emit('export')" />
             <fd-contextmenu-item label="导出全部页" @click="emit('exportAll')" />
