@@ -579,12 +579,12 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   }
 
   // 表格选择
-  const onSelectionChange = (val: T[]) => {
+  const tableSelectionChange = (val: T[]) => {
     ;(listState.selectedNodes as T[]) = val
   }
 
   // 表格行点击
-  const onTableRowClick = (row: T) => {
+  const tableRowClick = (row: T) => {
     setCurrentData(row?.id)
   }
 
@@ -632,7 +632,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       'onUpdate:queryData': (val: ApiQuery) => (listState.query = val),
       queryVisible: listState.queryFormShow,
       'onUpdate:queryVisible': (val: boolean) => (listState.queryFormShow = val),
-      queryFn: queryList
+      queryFn: queryList,
+      pagination: paginationAttrs.value
     }
   })
 
@@ -653,7 +654,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         columns: () => columns,
         stripe: () => stripe,
         border: () => border
-      }
+      },
+      pagination: paginationAttrs.value
     }
   })
 
@@ -665,8 +667,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       rowKey: listState.idField,
       border: _tableAttrs.value.border,
       stripe: _tableAttrs.value.stripe,
-      onSelectionChange: onSelectionChange,
-      onRowClick: onTableRowClick
+      onSelectionChange: tableSelectionChange,
+      onRowClick: tableRowClick
     } as Indexable
     if (stateOption.treeTable) {
       result.defaultExpandAll = _tableAttrs.value.defaultExpandAll
@@ -724,7 +726,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       onBeforeDel,
       onAfterDel,
       colEmptyFormatter,
-      onSelectionChange
+      tableSelectionChange,
+      tableRowClick,
+      pageChange,
+      sizeChange
     },
     listAttrs: {
       pageMainAttrs,
