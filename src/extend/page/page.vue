@@ -79,12 +79,6 @@
   <fd-page-footer :visible="footerVisible"></fd-page-footer>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdPage'
-}
-</script>
-
 <script setup lang="ts">
 import usePage from '@/extend/page/use-page'
 import FdSplitPane from '@/components/split-pane/index.vue'
@@ -93,6 +87,10 @@ import { cloneDeep } from 'lodash-es'
 import { ApiQuery } from '@/api'
 import { sizeConst } from '@/hooks/use-layout-size'
 import useLayoutSize from '@/hooks/use-layout-size'
+
+defineOptions({
+  name: 'FdPage'
+})
 
 const props = defineProps({
   name: {

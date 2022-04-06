@@ -48,12 +48,6 @@
   </fd-drawer>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdSetting'
-}
-</script>
-
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from 'vue'
 import FdThemeSelect from '@/components/theme/theme-select.vue'
@@ -61,6 +55,10 @@ import { DEFAULT_THEMES, themeProcess } from '@/components/theme/theme'
 import useLayoutSize from '@/hooks/use-layout-size'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
+
+defineOptions({
+  name: 'FdSetting'
+})
 
 const state = reactive({
   visible: false,

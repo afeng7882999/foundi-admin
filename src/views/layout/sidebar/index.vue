@@ -20,12 +20,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdSidebar'
-}
-</script>
-
 <script setup lang="ts">
 import FdUserProfile from './user-profile.vue'
 import AppLogo from './logo.vue'
@@ -37,6 +31,10 @@ import { TreeNodeDefault } from '@/utils/data-tree'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { setSidebarTheme } from '@/components/theme/theme'
+
+defineOptions({
+  name: 'FdSidebar'
+})
 
 const DEFAULT_LEVEL_PADDING = 10
 

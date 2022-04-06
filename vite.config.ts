@@ -3,6 +3,7 @@ import path from 'path'
 import vue from '@vitejs/plugin-vue'
 import legacy from '@vitejs/plugin-legacy'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import DefineOptions from 'unplugin-vue-define-options/vite'
 import compressPlugin from 'vite-plugin-compression'
 import viteSvgIcons from 'vite-plugin-svg-icons'
 import visualizer from 'rollup-plugin-visualizer'
@@ -18,6 +19,7 @@ export default defineConfig({
       targets: ['defaults', 'not IE 11']
     }),
     vueJsx(),
+    DefineOptions(),
     compressPlugin({
       ext: '.gz',
       algorithm: 'gzip',

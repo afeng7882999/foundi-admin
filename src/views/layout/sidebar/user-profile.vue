@@ -13,12 +13,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdUserProfile'
-}
-</script>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import { userLogout } from '@/app/account'
@@ -27,6 +21,10 @@ import { AllState } from '@/store'
 import { ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { localOrRemoteUrl } from '@/utils/query'
+
+defineOptions({
+  name: 'FdUserProfile'
+})
 
 const props = defineProps({
   minimized: {

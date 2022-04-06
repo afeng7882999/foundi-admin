@@ -15,15 +15,13 @@
   </template>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdFmtBoolean'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, PropType } from 'vue'
 import { isString } from 'lodash-es'
+
+defineOptions({
+  name: 'FdFmtBoolean'
+})
 
 const props = defineProps({
   data: Boolean as PropType<boolean | undefined | null>,

@@ -27,13 +27,6 @@
   </el-drawer>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdDrawer',
-  inheritAttrs: false
-}
-</script>
-
 <script setup lang="ts">
 import { computed, ref, useSlots } from 'vue'
 import usePage from '@/extend/page/use-page'
@@ -41,6 +34,11 @@ import { ElDrawer } from 'element-plus'
 import useLayoutSize from '@/hooks/use-layout-size'
 import { onBeforeRouteLeave } from 'vue-router'
 import useView from '@/extend/page/use-view'
+
+defineOptions({
+  name: 'FdDrawer',
+  inheritAttrs: false
+})
 
 const props = defineProps({
   title: {

@@ -15,15 +15,13 @@
   </li>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdContextmenuItem'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, inject, PropType, reactive, ref } from 'vue'
 import { AnyFunction } from '@/common/types'
+
+defineOptions({
+  name: 'FdContextmenuItem'
+})
 
 const props = defineProps({
   icon: String,

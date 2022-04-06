@@ -4,16 +4,14 @@
   </svg>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdIcon'
-}
-</script>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 
 const LOADING_ICON = '#svg-graphics-spinner'
+
+defineOptions({
+  name: 'FdIcon'
+})
 
 const props = defineProps({
   icon: {

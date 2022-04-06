@@ -19,14 +19,12 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdSplitPane'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, PropType, reactive, ref, watch } from 'vue'
+
+defineOptions({
+  name: 'FdSplitPane'
+})
 
 const props = defineProps({
   // min width of left or min height of top

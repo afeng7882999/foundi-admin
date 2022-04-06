@@ -39,12 +39,6 @@
   </el-form-item>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdItemSort'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, PropType, reactive, ref, watch } from 'vue'
 import { FORM_ITEM_DEFAULT_PROPS } from '@/extend/form/type'
@@ -52,6 +46,10 @@ import { SortField } from '@/api'
 import FdIconButton from '@/components/icon-button/icon-button.vue'
 import Sortable, { SortableEvent } from 'sortablejs'
 import useFormItem from '@/extend/form/hooks/use-form-item'
+
+defineOptions({
+  name: 'FdItemSort'
+})
 
 const props = defineProps({
   ...FORM_ITEM_DEFAULT_PROPS,

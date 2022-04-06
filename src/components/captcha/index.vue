@@ -35,15 +35,13 @@
   </el-dialog>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdCaptchaDialog'
-}
-</script>
-
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { getCaptcha as _getCaptcha, verifyCaptcha } from '@/api/system/login'
+
+defineOptions({
+  name: 'FdCaptchaDialog'
+})
 
 const captchaForm = ref()
 const state = reactive({

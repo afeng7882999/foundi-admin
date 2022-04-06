@@ -40,6 +40,7 @@ module.exports = defineConfig({
   globals: {
     defineProps: 'writable',
     defineEmits: 'writable',
-    defineExpose: 'writable'
+    defineExpose: 'writable',
+    defineOptions: 'writable'
   }
 })

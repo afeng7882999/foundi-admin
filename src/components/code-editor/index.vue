@@ -4,12 +4,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdCodeEditor'
-}
-</script>
-
 <script setup lang="ts">
 import { reactive, onMounted, watch, ref, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
@@ -30,6 +24,10 @@ import 'codemirror/mode/xml/xml.js'
 import 'codemirror/mode/sql/sql.js'
 import 'codemirror/mode/vue/vue.js'
 import { DARK_MODE_THEME } from '@/components/code-editor/code-editor'
+
+defineOptions({
+  name: 'FdCodeEditor'
+})
 
 const props = defineProps({
   modelValue: {

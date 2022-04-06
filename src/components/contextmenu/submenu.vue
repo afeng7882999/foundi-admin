@@ -15,14 +15,12 @@
   </li>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdContextmenuSubmenu'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, nextTick, reactive, ref } from 'vue'
+
+defineOptions({
+  name: 'FdContextmenuSubmenu'
+})
 
 const props = defineProps({
   icon: String,

@@ -11,18 +11,16 @@
   </el-breadcrumb>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdBreadcrumb'
-}
-</script>
-
 <script setup lang="ts">
 import { reactive, onBeforeMount } from 'vue'
 import { onBeforeRouteUpdate, RouteLocationNormalized, useRoute, useRouter } from 'vue-router'
 import { getTreeNode, getTreeNodes, TreeNodeDefault } from '@/utils/data-tree'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
+
+defineOptions({
+  name: 'FdBreadcrumb'
+})
 
 const state = reactive({
   breadcrumbs: [] as TreeNodeDefault[]

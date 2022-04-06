@@ -1,8 +1,8 @@
 <template>
   <div ref="pageRoot" :style="docMinHeight" class="page-generator-edit fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <div class="fd-page__form">
-      <div class="fd-page-act">
+    <div class="fd-page-act">
+      <div class="fd-page-act__left">
         <el-button @click="close()">
           <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
@@ -11,38 +11,28 @@
           <fd-icon class="is-in-btn" icon="refresh"></fd-icon>
           与数据库同步
         </el-button>
-        <div class="fd-page-act__right">
-          <el-button type="primary" @click="submitForm()">提交</el-button>
-          <el-button @click="close()">取消</el-button>
-        </div>
+      </div>
+      <div class="fd-page-act__right">
+        <el-button type="primary" @click="submitForm()">提交</el-button>
+        <el-button @click="close()">取消</el-button>
       </div>
     </div>
 
-    <el-form ref="form" v-loading="state.loading" :model="state.data.table" :rules="state.rules" label-width="150px">
+    <fd-form ref="form" v-loading="state.loading" :model="state.data.table" :rules="state.rules" label-width="130px">
       <div class="fd-page__form">
         <div class="fd-page__sub-title"><span class="title-text">基本信息</span></div>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="表名称" prop="tableName">
-              <el-input v-model="state.data.table.tableName" placeholder="请输入表名称" readonly />
-            </el-form-item>
+          <el-col v-bind="col2">
+            <fd-item label="表名称" prop="tableName" disabled />
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="表描述" prop="tableComment">
-              <el-input v-model="state.data.table.tableComment" placeholder="请输入" />
-            </el-form-item>
+          <el-col v-bind="col2">
+            <fd-item label="表描述" prop="tableComment" />
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="实体类名称" prop="entityName">
-              <el-input v-model="state.data.table.entityName" placeholder="请输入" />
-            </el-form-item>
+          <el-col v-bind="col2">
+            <fd-item label="实体类名称" prop="entityName" />
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="作者" prop="author">
-              <el-input v-model="state.data.table.author" placeholder="请输入" />
-            </el-form-item>
+          <el-col v-bind="col2">
+            <fd-item label="作者" prop="author" />
           </el-col>
         </el-row>
       </div>
@@ -51,139 +41,49 @@
         <div class="fd-page__sub-title"><span class="title-text">生成信息</span></div>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="表类型">
+            <fd-item-custom label="表类型">
               <el-checkbox v-model="state.data.table.isTree">树表（增删改查）</el-checkbox>
               <el-checkbox v-model="state.data.table.isSub">子表（仅生成DAO层）</el-checkbox>
-            </el-form-item>
+            </fd-item-custom>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
-            <el-form-item prop="pack">
-              <template #label>
-                <span>
-                  生成包路径
-                  <el-tooltip content="生成在哪个java包下，例如 net.foundi.admin" placement="top">
-                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
-                  </el-tooltip>
-                </span>
-              </template>
-              <el-input v-model="state.data.table.pack" />
-            </el-form-item>
+          <el-col v-bind="col2">
+            <fd-item prop="pack" label="生成包路径" tip="生成在哪个java包下，例如 net.foundi.admin" tip-icon />
           </el-col>
-          <el-col :span="12">
-            <el-form-item prop="module">
-              <template #label>
-                <span>
-                  生成模块名
-                  <el-tooltip content="可理解为子系统名，例如system" placement="top">
-                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
-                  </el-tooltip>
-                </span>
-              </template>
-              <el-input v-model="state.data.table.module" />
-            </el-form-item>
+          <el-col v-bind="col2">
+            <fd-item prop="module" label="生成模块名" tip="可理解为子系统名，例如system" tip-icon />
           </el-col>
         </el-row>
         <el-row v-show="!state.data.table.isSub">
-          <el-col :span="12">
-            <el-form-item prop="menuTitle">
-              <template #label>
-                <span>
-                  菜单名
-                  <el-tooltip content="前端菜单名称" placement="top">
-                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
-                  </el-tooltip>
-                </span>
-              </template>
-              <el-input v-model="state.data.table.menuTitle" />
-            </el-form-item>
+          <el-col v-bind="col2">
+            <fd-item prop="menuTitle" label="菜单名" tip="前端菜单名称" tip-icon />
           </el-col>
-          <el-col :span="12">
-            <el-form-item>
-              <template #label>
-                <span>
-                  上级菜单
-                  <el-tooltip content="分配到指定菜单下，例如系统管理" placement="top">
-                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
-                  </el-tooltip>
-                </span>
-              </template>
-              <fd-tree-select
-                v-model="state.data.table.menuParentId"
-                :data-list="parentMenuList"
-                :select-params="{ placeholder: '请选择上级菜单' }"
-                style="width: 100%"
-              ></fd-tree-select>
-            </el-form-item>
+          <el-col v-bind="col2">
+            <fd-item-tree prop="menuParentId" label="上级菜单" :list="parentMenuList" tip="分配到指定菜单下，例如系统管理" tip-icon />
           </el-col>
         </el-row>
         <el-row v-show="state.data.table.isTree">
-          <el-col :span="12">
-            <el-form-item>
-              <template #label>
-                <span>
-                  树编码字段
-                  <el-tooltip content="树显示的编码字段名，如：dept_id" placement="top">
-                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
-                  </el-tooltip>
-                </span>
-              </template>
-              <fd-tree-select
-                v-model="state.data.table.treeId"
-                :data-list="fieldNames"
-                :select-params="{ placeholder: '请选择' }"
-                style="width: 100%"
-              ></fd-tree-select>
-            </el-form-item>
+          <el-col v-bind="col2">
+            <fd-item-tree prop="treeId" label="树编码字段" :list="fieldNames" tip="树显示的编码字段名，如：dept_id" tip-icon />
           </el-col>
-          <el-col :span="12">
-            <el-form-item>
-              <template #label>
-                <span>
-                  树父编码字段
-                  <el-tooltip content="树显示的父编码字段名，如：parent_Id" placement="top">
-                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
-                  </el-tooltip>
-                </span>
-              </template>
-              <fd-tree-select
-                v-model="state.data.table.treeParentId"
-                :data-list="fieldNames"
-                :select-params="{ placeholder: '请选择' }"
-                style="width: 100%"
-              ></fd-tree-select>
-            </el-form-item>
+          <el-col v-bind="col2">
+            <fd-item-tree prop="treeParentId" label="树父编码字段" :list="fieldNames" tip="树显示的父编码字段名，如：parent_Id" tip-icon />
           </el-col>
-          <el-col :span="12">
-            <el-form-item>
-              <template #label>
-                <span>
-                  树名称字段
-                  <el-tooltip content="树节点的显示名称字段名，如：dept_name" placement="top">
-                    <span><fd-icon icon="help" class="is-tip"></fd-icon></span>
-                  </el-tooltip>
-                </span>
-              </template>
-              <fd-tree-select
-                v-model="state.data.table.treeName"
-                :data-list="fieldNames"
-                :select-params="{ placeholder: '请选择' }"
-                style="width: 100%"
-              ></fd-tree-select>
-            </el-form-item>
+          <el-col v-bind="col2">
+            <fd-item-tree prop="treeName" label="树名称字段" :list="fieldNames" tip="树节点的显示名称字段名，如：dept_name" tip-icon />
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="前端页面">
-              <el-checkbox v-model="state.data.table.isFrontEdit">前端生成编辑（新增）页面</el-checkbox>
-              <el-checkbox v-model="state.data.table.isFrontDetail">前端生成详细页面</el-checkbox>
+              <el-checkbox v-model="state.data.table.isFrontEdit">生成编辑（新增）页面</el-checkbox>
+              <el-checkbox v-model="state.data.table.isFrontDetail">生成详细页面</el-checkbox>
             </el-form-item>
           </el-col>
         </el-row>
       </div>
-    </el-form>
+    </fd-form>
 
     <div ref="tableWrapper" v-loading="state.loading" class="fd-page__table is-bordered">
       <div class="fd-page__sub-title"><span class="title-text">字段信息</span></div>
@@ -196,20 +96,20 @@
           </template>
         </el-table-column>
         <el-table-column label="序号" prop="sort" width="50" />
-        <el-table-column :show-overflow-tooltip="true" label="字段列名" min-width="10%" prop="columnName" />
-        <el-table-column label="字段描述" min-width="10%">
+        <el-table-column :show-overflow-tooltip="true" label="字段列名" min-width="150" prop="columnName" />
+        <el-table-column label="字段描述" min-width="150">
           <template #default="scope">
             <el-input v-model="scope.row.columnComment"></el-input>
           </template>
         </el-table-column>
-        <el-table-column :show-overflow-tooltip="true" label="SQL类型" min-width="10%" prop="columnType" />
-        <el-table-column :show-overflow-tooltip="true" label="Java类型" min-width="11%" prop="fieldType" />
-        <el-table-column label="字段名称" min-width="10%">
+        <el-table-column :show-overflow-tooltip="true" label="SQL类型" min-width="100" prop="columnType" />
+        <el-table-column :show-overflow-tooltip="true" label="Java类型" min-width="100" prop="fieldType" />
+        <el-table-column label="字段名称" min-width="150">
           <template #default="scope">
             <el-input v-model="scope.row.fieldName"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="字典类型" min-width="12%">
+        <el-table-column label="字典类型" min-width="150">
           <template #default="scope">
             <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择">
               <el-option
@@ -221,37 +121,37 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column label="插入" min-width="5%">
+        <el-table-column label="插入" min-width="50">
           <template #default="scope">
             <el-checkbox v-model="scope.row.isInsert"></el-checkbox>
           </template>
         </el-table-column>
-        <el-table-column label="编辑" min-width="5%">
+        <el-table-column label="编辑" min-width="50">
           <template #default="scope">
             <el-checkbox v-model="scope.row.isEdit"></el-checkbox>
           </template>
         </el-table-column>
-        <el-table-column label="列表" min-width="5%">
+        <el-table-column label="列表" min-width="50">
           <template #default="scope">
             <el-checkbox v-model="scope.row.isList"></el-checkbox>
           </template>
         </el-table-column>
-        <el-table-column label="查询" min-width="5%">
+        <el-table-column label="查询" min-width="50">
           <template #default="scope">
             <el-checkbox v-model="scope.row.isQuery"></el-checkbox>
           </template>
         </el-table-column>
-        <el-table-column label="排序" min-width="5%">
+        <el-table-column label="排序" min-width="50">
           <template #default="scope">
             <el-checkbox v-model="scope.row.isOrder"></el-checkbox>
           </template>
         </el-table-column>
-        <el-table-column label="必填" min-width="5%">
+        <el-table-column label="必填" min-width="50">
           <template #default="scope">
             <el-checkbox v-model="scope.row.isRequired"></el-checkbox>
           </template>
         </el-table-column>
-        <el-table-column label="查询方式" min-width="10%">
+        <el-table-column label="查询方式" min-width="100">
           <template #default="scope">
             <el-select v-model="scope.row.queryType">
               <el-option
@@ -263,7 +163,7 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column label="显示类型" min-width="12%">
+        <el-table-column label="显示类型" min-width="120">
           <template #default="scope">
             <el-select v-model="scope.row.htmlType">
               <el-option
@@ -278,21 +178,16 @@
       </el-table>
     </div>
 
+    <fd-page-footer />
     <el-backtop></el-backtop>
   </div>
 </template>
-
-<script lang="ts">
-export default {
-  name: 'GeneratorEdit'
-}
-</script>
 
 <script setup lang="ts">
 import { computed, onBeforeMount, reactive, ref } from 'vue'
 import usePage from '@/extend/page/use-page'
 import { filterTree, TreeNodeDefault } from '@/utils/data-tree'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { ElForm, ElMessage, ElMessageBox, ElTable } from 'element-plus'
@@ -300,6 +195,12 @@ import { genTableGetOne, genTablePutOne, genTableSyncDb, GenTableColumn, GenTabl
 import { dictList, Dict } from '@/api/system/dict'
 import { DEFAULT_HTML_TYPES, DEFAULT_QUERY_TYPES } from '@/views/modules/generator/types'
 import useSortableRow from '@/extend/table/hooks/use-sortable-row'
+import FdItemCustom from '@/extend/form/item/item-custom.vue'
+import useView from '@/extend/page/use-view'
+
+defineOptions({
+  name: 'GeneratorEdit'
+})
 
 const form = ref<InstanceType<typeof ElForm>>()
 const tableWrapper = ref<HTMLElement>()
@@ -326,11 +227,10 @@ const state = reactive({
 })
 
 const route = useRoute()
-const router = useRouter()
 const store = useStore<AllState>()
 const storeState = store.state as AllState
 
-const { docMinHeight, showPageHeader } = usePage()
+const { docMinHeight, showPageHeader, col2 } = usePage()
 
 const parentMenuList = computed(() => {
   return filterTree(storeState.user.menu as TreeNodeDefault[], (item) => item.typeDict === '0')
@@ -376,9 +276,9 @@ const submitForm = async () => {
 }
 
 // 关闭按钮
+const { goBackToView } = useView()
 const close = () => {
-  store.dispatch('view/delView', route)
-  router.push({ path: '/generator', query: { t: Date.now() } })
+  goBackToView('/generator')
 }
 
 // 同步数据库操作

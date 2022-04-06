@@ -37,13 +37,6 @@
   </el-dialog>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdDialog',
-  inheritAttrs: false
-}
-</script>
-
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue'
 import FdIconButton from '@/components/icon-button/icon-button.vue'
@@ -51,6 +44,11 @@ import { ElDialog } from 'element-plus'
 import useLayoutSize from '@/hooks/use-layout-size'
 import { onBeforeRouteLeave } from 'vue-router'
 import useView from '@/extend/page/use-view'
+
+defineOptions({
+  name: 'FdDialog',
+  inheritAttrs: false
+})
 
 const props = defineProps({
   title: String,

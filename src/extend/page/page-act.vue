@@ -86,12 +86,6 @@
   </template>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdPageAct'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, PropType, ref, useSlots } from 'vue'
 import usePage from '@/extend/page/use-page'
@@ -103,6 +97,10 @@ import FdContextmenuItem from '@/components/contextmenu/item.vue'
 import FdContextmenuSubmenu from '@/components/contextmenu/submenu.vue'
 import { ApiQuery } from '@/api'
 import useLayoutSize from '@/hooks/use-layout-size'
+
+defineOptions({
+  name: 'FdPageAct'
+})
 
 const props = defineProps({
   visible: {

@@ -20,19 +20,17 @@
   </template>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdColList',
-  inheritAttrs: false
-}
-</script>
-
 <script setup lang="ts">
 import { computed, PropType, useAttrs } from 'vue'
 import { COL_DEFAULT_PROPS, FormatMapping } from '@/extend/table/types'
 import useColumn from '@/extend/table/hooks/use-column'
 import { Indexable } from '@/common/types'
 import { DEFAULT_TREE_FIELDS, TreeFields } from '@/utils/data-tree'
+
+defineOptions({
+  name: 'FdColList',
+  inheritAttrs: false
+})
 
 const props = defineProps({
   ...COL_DEFAULT_PROPS,

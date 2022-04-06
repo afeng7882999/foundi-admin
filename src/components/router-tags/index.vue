@@ -45,12 +45,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdRouterTags'
-}
-</script>
-
 <script setup lang="ts">
 import FdScrollPanel from '@/components/scroll-panel/index.vue'
 import { computed, nextTick, onMounted, reactive, ref } from 'vue'
@@ -59,6 +53,10 @@ import { useStore } from 'vuex'
 import { _RouteLocationBase, onBeforeRouteUpdate, RouteMeta, RouteRecordRaw, useRoute, useRouter } from 'vue-router'
 import { DEFAULT_ROUTE } from '@/components/router-tags/types'
 import { Indexable } from '@/common/types'
+
+defineOptions({
+  name: 'FdRouterTags'
+})
 
 const scrollPanel = ref()
 const contextMenu = ref()

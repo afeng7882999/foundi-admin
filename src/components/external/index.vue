@@ -2,15 +2,13 @@
   <iframe id="external-iframe" :src="externalUrl" :style="iframeStyle" class="fd-external-iframe"></iframe>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'External'
-}
-</script>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import usePage from '@/extend/page/use-page'
+
+defineOptions({
+  name: 'FdExternal'
+})
 
 const props = defineProps({
   theUrl: String

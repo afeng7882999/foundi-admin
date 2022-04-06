@@ -50,16 +50,14 @@
   </el-dialog>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdSortColumnDialog'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
 import useSortableRow from '@/extend/table/hooks/use-sortable-row'
 import { TableColumn } from '@/extend/table/types'
+
+defineOptions({
+  name: 'FdSortColumnDialog'
+})
 
 const tableWrapper = ref()
 const table = ref()

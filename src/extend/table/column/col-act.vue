@@ -32,19 +32,17 @@
   </template>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdColAct',
-  inheritAttrs: false
-}
-</script>
-
 <script setup lang="ts">
 import { computed, PropType } from 'vue'
 import { Indexable } from '@/common/types'
 import { COL_DEFAULT_PROPS } from '@/extend/table/types'
 import useColumn from '@/extend/table/hooks/use-column'
 import useLayoutSize from '@/hooks/use-layout-size'
+
+defineOptions({
+  name: 'FdColAct',
+  inheritAttrs: false
+})
 
 const props = defineProps({
   ...COL_DEFAULT_PROPS,

@@ -27,16 +27,14 @@
   </el-tooltip>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdItemMultiline',
-  inheritAttrs: false
-}
-</script>
-
 <script setup lang="ts">
 import { FORM_ITEM_DEFAULT_PROPS } from '@/extend/form/type'
 import useFormItem from '@/extend/form/hooks/use-form-item'
+
+defineOptions({
+  name: 'FdItemMultiline',
+  inheritAttrs: false
+})
 
 const props = defineProps({
   ...FORM_ITEM_DEFAULT_PROPS

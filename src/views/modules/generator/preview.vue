@@ -1,18 +1,16 @@
 <template>
   <div :style="docHeight" class="page-generator-preview fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <div class="fd-page__form">
-      <div class="fd-page-act">
-        <el-button @click="close()">
-          <fd-icon class="is-in-btn" icon="left"></fd-icon>
-          返回列表
+    <div class="fd-page-act">
+      <el-button @click="close()">
+        <fd-icon class="is-in-btn" icon="left"></fd-icon>
+        返回列表
+      </el-button>
+      <div class="fd-page-act__right">
+        <el-button v-show="auth('generator:genTable:edit')" v-waves plain type="primary" @click="handleGenerate">
+          <fd-icon class="is-in-btn" icon="download" :loading="state.genLoading"></fd-icon>
+          生成
         </el-button>
-        <div class="fd-page-act__right">
-          <el-button v-show="hasAuth('generator:genTable:edit')" v-waves plain type="primary" @click="handleGenerate">
-            <fd-icon class="is-in-btn" icon="download" :loading="state.genLoading"></fd-icon>
-            生成
-          </el-button>
-        </div>
       </div>
     </div>
     <fd-split-pane :default-pos="300" shrink="right" :style="previewStyle">
@@ -58,12 +56,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'GeneratorPreview'
-}
-</script>
-
 <script setup lang="ts">
 import usePage from '@/extend/page/use-page'
 import { downloadFile, getFileExt } from '@/utils/file'
@@ -71,8 +63,6 @@ import { computed, nextTick, onBeforeMount, reactive, ref, Ref } from 'vue'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { CodePreview, preview } from '@/api/generator/gen-table'
 import { useRoute, useRouter } from 'vue-router'
-import { useStore } from 'vuex'
-import { AllState } from '@/store'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { CodePreviewNode, LANG_OF_FILENAME } from '@/views/modules/generator/types'
 import * as fflate from 'fflate'
@@ -80,7 +70,12 @@ import { strToU8 } from 'fflate'
 import { Indexable } from '@/common/types'
 import { ElTree } from 'element-plus'
 import { FdCodeEditorInst } from '@/components/code-editor/code-editor'
-import { useThrottleFn } from '@vueuse/core'
+import { useThrottleFn, useTimeoutFn } from '@vueuse/core'
+import useView from '@/extend/page/use-view'
+
+defineOptions({
+  name: 'GeneratorPreview'
+})
 
 const codeEditor = ref() as Ref<FdCodeEditorInst>
 const codeTree = ref() as Ref<InstanceType<typeof ElTree>>
@@ -106,6 +101,8 @@ const previewStyle = computed(() => {
 
 const route = useRoute()
 const router = useRouter()
+
+const { auth } = usePage()
 
 const getCodeTree = (idx: number) => {
   let id = 0
@@ -185,30 +182,32 @@ const onTreeNodeClick = async (node: CodePreviewNode) => {
   }
 }
 
-const store = useStore<AllState>()
-
+const { goBackToView } = useView()
 const close = () => {
-  store.dispatch('view/delView', route)
-  router.push({ path: '/generator', query: { t: Date.now() } })
+  goBackToView('/generator')
 }
 
-const { hasAuth } = usePage()
-
-const handleGenerate = useThrottleFn(() => {
-  state.genLoading = true
-  const files = {} as Indexable
-  try {
-    state.data.forEach((item) => {
-      files[item.path] = strToU8(item.content)
-    })
-    const zipped = fflate.zipSync(files)
-    downloadFile(zipped, 'code_generated', 'zip')
-    window.setTimeout(() => state.genLoading = false, 1500)
-  } catch (e) {
-    console.log(e)
-    state.genLoading = false
-  }
-}, 1500, false, true)
+const { start: loadingFalseDelay } = useTimeoutFn(() => (state.genLoading = false), 1500, { immediate: false })
+const handleGenerate = useThrottleFn(
+  () => {
+    state.genLoading = true
+    const files = {} as Indexable
+    try {
+      state.data.forEach((item) => {
+        files[item.path] = strToU8(item.content)
+      })
+      const zipped = fflate.zipSync(files)
+      downloadFile(zipped, 'code_generated', 'zip')
+      loadingFalseDelay()
+    } catch (e) {
+      console.log(e)
+      state.genLoading = false
+    }
+  },
+  1500,
+  false,
+  true
+)
 </script>
 
 <style lang="scss">

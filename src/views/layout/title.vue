@@ -22,12 +22,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdTitle'
-}
-</script>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import FdBreadcrumb from '@/components/breadcrumb/index.vue'
@@ -37,6 +31,10 @@ import { AllState } from '@/store'
 import { useStore } from 'vuex'
 import { SidebarMode } from '@/store/modules/app'
 import useLayoutSize from '@/hooks/use-layout-size'
+
+defineOptions({
+  name: 'FdTitle'
+})
 
 const emit = defineEmits(['appSettingShow'])
 

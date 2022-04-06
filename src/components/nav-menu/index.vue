@@ -7,12 +7,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdNavMenu'
-}
-</script>
-
 <script setup lang="ts">
 import { filterTree, getTreeNode, TreeNodeDefault } from '@/utils/data-tree'
 import FdNavMenuItem from './nav-menu-item.vue'
@@ -21,6 +15,10 @@ import { computed, PropType, provide, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import FdNavMenuGroup from './nav-menu-group.vue'
 import { RootMenuProvided } from './types'
+
+defineOptions({
+  name: 'FdNavMenu'
+})
 
 const props = defineProps({
   menu: {

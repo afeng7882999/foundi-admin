@@ -20,18 +20,17 @@
   </template>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdColDict',
-  inheritAttrs: false
-}
-</script>
 
 <script setup lang="ts">
 import { computed, PropType, useAttrs } from 'vue'
 import { DictItem } from '@/api/system/dict-item'
 import { COL_DEFAULT_PROPS, FormatMapping } from '@/extend/table/types'
 import useColumn from '@/extend/table/hooks/use-column'
+
+defineOptions({
+  name: 'FdColDict',
+  inheritAttrs: false
+})
 
 const props = defineProps({
   ...COL_DEFAULT_PROPS,

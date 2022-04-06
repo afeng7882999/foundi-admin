@@ -20,16 +20,14 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdThemeDiagram'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, PropType } from 'vue'
 import { Theme } from 'element-plus-dynamic-theme/theme'
 import { CUSTOM_THEME } from './theme'
+
+defineOptions({
+  name: 'FdThemeDiagram'
+})
 
 const props = defineProps({
   theme: {

@@ -58,12 +58,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdTreeSelect'
-}
-</script>
-
 <script setup lang="ts">
 import { TreeFields, TreeNode, traverseTree, DEFAULT_TREE_FIELDS } from '@/utils/data-tree'
 import { nextFrame } from '@/utils/next-frame'
@@ -73,6 +67,10 @@ import { merge } from 'lodash-es'
 import { computed, nextTick, onBeforeMount, onBeforeUnmount, onMounted, PropType, reactive, ref, watch } from 'vue'
 import { DEFAULT_SELECT_PARAMS, DEFAULT_TREE_PARAMS } from '@/components/tree-select/types'
 import { isString } from 'lodash-es'
+
+defineOptions({
+  name: 'FdTreeSelect'
+})
 
 const props = defineProps({
   dataList: {

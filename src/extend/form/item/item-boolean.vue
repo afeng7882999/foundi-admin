@@ -43,17 +43,15 @@
   </el-tooltip>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdItemBoolean',
-  inheritAttrs: false
-}
-</script>
-
 <script setup lang="ts">
 import { FORM_ITEM_DEFAULT_PROPS } from '@/extend/form/type'
 import useFormItem from '@/extend/form/hooks/use-form-item'
 import { computed, PropType } from 'vue'
+
+defineOptions({
+  name: 'FdItemBoolean',
+  inheritAttrs: false
+})
 
 const props = defineProps({
   ...FORM_ITEM_DEFAULT_PROPS,

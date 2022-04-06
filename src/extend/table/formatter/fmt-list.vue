@@ -7,18 +7,16 @@
   </template>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdFmtList'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, PropType } from 'vue'
 import { FormatMapping, FormatMappingItem } from '@/extend/table/types'
 import { isArray, isString } from 'lodash-es'
 import { DEFAULT_TREE_FIELDS, getTreeNode, isTreeData, TreeFields } from '@/utils/data-tree'
 import { Indexable } from '@/common/types'
+
+defineOptions({
+  name: 'FdFmtList'
+})
 
 const props = defineProps({
   data: [String, Array] as PropType<string | string[]>,

@@ -21,17 +21,15 @@
   </template>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdColDatetime',
-  inheritAttrs: false
-}
-</script>
-
 <script setup lang="ts">
 import { computed, useAttrs } from 'vue'
 import { COL_DEFAULT_PROPS } from '@/extend/table/types'
 import useColumn from '@/extend/table/hooks/use-column'
+
+defineOptions({
+  name: 'FdColDatetime',
+  inheritAttrs: false
+})
 
 const props = defineProps({ ...COL_DEFAULT_PROPS })
 

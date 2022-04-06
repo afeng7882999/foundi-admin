@@ -4,14 +4,12 @@
   </svg>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdSvgImage'
-}
-</script>
-
 <script setup lang="ts">
 import { computed } from 'vue'
+
+defineOptions({
+  name: 'FdSvgImage'
+})
 
 const props = defineProps({
   img: {

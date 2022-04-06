@@ -4,18 +4,16 @@
   </el-form>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdForm',
-  inheritAttrs: false
-}
-</script>
-
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import useLayoutSize from '@/hooks/use-layout-size'
 import { ElForm } from 'element-plus'
 import { ValidateFieldsError } from 'async-validator'
+
+defineOptions({
+  name: 'FdForm',
+  inheritAttrs: false
+})
 
 const props = defineProps({
   mobileCompact: {

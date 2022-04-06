@@ -4,16 +4,14 @@
   </ul>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdContextmenu'
-}
-</script>
-
 <script setup lang="ts">
 import { generateId } from '@/utils/lang'
 import { ref, nextTick, onBeforeUnmount, onMounted, provide, reactive, watch } from 'vue'
 import bus from './bus'
+
+defineOptions({
+  name: 'FdContextmenu'
+})
 
 const props = defineProps({
   disabled: {

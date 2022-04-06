@@ -18,17 +18,15 @@
   </template>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdColBoolean',
-  inheritAttrs: false
-}
-</script>
-
 <script setup lang="ts">
 import { computed, PropType, useAttrs } from 'vue'
 import { COL_DEFAULT_PROPS } from '@/extend/table/types'
 import useColumn from '@/extend/table/hooks/use-column'
+
+defineOptions({
+  name: 'FdColBoolean',
+  inheritAttrs: false
+})
 
 const props = defineProps({
   ...COL_DEFAULT_PROPS,

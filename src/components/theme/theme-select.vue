@@ -15,17 +15,15 @@
   </el-popover>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdThemeSelect'
-}
-</script>
-
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { ClickOutside as vClickOutside } from 'element-plus'
 import FdThemeDiagram from './theme-diagram.vue'
 import { CUSTOM_THEME, DEFAULT_THEMES } from './theme'
+
+defineOptions({
+  name: 'FdThemeSelect'
+})
 
 const props = defineProps({
   modelValue: {

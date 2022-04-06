@@ -12,12 +12,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdLayout'
-}
-</script>
-
 <script setup lang="ts">
 import FdSidebar from './sidebar/index.vue'
 import FdSetting from './setting.vue'
@@ -31,6 +25,10 @@ import { useStore } from 'vuex'
 import { SidebarMode } from '@/store/modules/app'
 import { setDocumentTheme } from '@/components/theme/theme'
 import useLayoutSize from '@/hooks/use-layout-size'
+
+defineOptions({
+  name: 'FdLayout'
+})
 
 const store = useStore<AllState>()
 const storeState = store.state as AllState

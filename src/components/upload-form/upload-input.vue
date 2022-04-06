@@ -25,17 +25,15 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdUploadInput'
-}
-</script>
-
 <script setup lang="ts">
 import { PropType } from 'vue'
 import useUpload from './use-upload'
 import { DEFAULT_OSS } from '@/api/system/file'
 import { localOrRemoteUrl } from '@/utils/query'
+
+defineOptions({
+  name: 'FdUploadInput'
+})
 
 const props = defineProps({
   modelValue: {

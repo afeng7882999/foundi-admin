@@ -1,138 +1,83 @@
 <template>
-  <div :style="docMinHeight" class="page-generator fd-page">
-    <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <div class="fd-page__form">
-      <el-form ref="queryForm" :inline="true" :model="state.query" @keyup.enter="queryList">
-        <transition name="expand" @enter="expandEnter" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave">
-          <div v-show="state.queryFormShow" class="fd-page__query">
-            <el-form-item label="表名称" prop="tableName">
-              <el-input v-model="state.query.tableName" clearable placeholder="请输入表名称" />
-            </el-form-item>
-            <el-form-item label="表描述" prop="tableComment">
-              <el-input v-model="state.query.tableComment" clearable placeholder="请输入表描述" />
-            </el-form-item>
-            <el-form-item label="创建时间" prop="tableCreateTime">
-              <el-date-picker
-                v-model="state.query.tableCreateTime"
-                :default-time="[new Date('0 0:0:0'), new Date('0 23:59:59')]"
-                end-placeholder="结束日期"
-                format="YYYY-MM-DD"
-                value-format="x"
-                range-separator="-"
-                start-placeholder="开始日期"
-                type="daterange"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item>
-              <el-button plain type="primary" @click="queryList">
-                <fd-icon class="is-in-btn" icon="search"></fd-icon>
-                查询
-              </el-button>
-              <el-button @click="resetQuery">重置</el-button>
-            </el-form-item>
-          </div>
-        </transition>
-        <div class="fd-page-act">
-          <el-button
-            v-show="hasAuth('generator:genTable:delete')"
-            v-waves
-            :disabled="state.selectedNodes.length <= 0"
-            plain
-            type="danger"
-            @click="del()"
-          >
-            <fd-icon class="is-in-btn" icon="delete"></fd-icon>
-            删除
+  <fd-page v-bind="pageMainAttrs" name="generator">
+    <template #query>
+      <fd-item label="表名称" prop="tableName" />
+      <fd-item label="表描述" prop="tableComment" />
+      <fd-item-date-range label="创建时间" prop="tableCreateTime" />
+    </template>
+    <template #act>
+      <fd-page-act del="generator:genTable:delete" v-bind="pageActAttrs">
+        <template #query>
+          <fd-item label="表名称" prop="tableName" no-label />
+          <fd-item :visible="false" />
+        </template>
+        <template v-if="!isMobile" #buttons>
+          <el-button v-show="auth('generator:genTable:edit')" v-waves plain type="primary" @click="handleGenerate(null)">
+            <fd-icon class="is-in-btn" icon="download" :loading="s.generating['batch']"></fd-icon>
+            生成
           </el-button>
-          <div class="fd-page-act__right">
-            <el-button v-show="hasAuth('generator:genTable:edit')" v-waves plain type="primary" @click="handleGenerate(null)">
-              <fd-icon class="is-in-btn" icon="download" :loading="state.generating['batch']"></fd-icon>
-              生成
-            </el-button>
-            <el-button v-show="hasAuth('generator:genTable:edit')" v-waves plain type="warning" @click="handlePreview">
-              <fd-icon class="is-in-btn" icon="preview-open"></fd-icon>
-              预览
-            </el-button>
-            <el-button v-show="hasAuth('generator:genTable:edit')" v-waves plain type="info" @click="openImport">
-              <fd-icon class="is-in-btn" icon="upload-one"></fd-icon>
-              导入
-            </el-button>
-            <el-divider class="action-divider" direction="vertical"></el-divider>
-            <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
-              <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
-                <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
-              </el-badge>
-            </el-tooltip>
-          </div>
-        </div>
-      </el-form>
-    </div>
-    <div class="fd-page__table is-bordered">
-      <el-table v-loading="state.loading" v-bind="tableAttrs">
-        <el-table-column align="center" header-align="center" type="selection" width="40"></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="表名"
-          prop="tableName"
-          width="250"
-        ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="表描述"
-          prop="tableComment"
-          width="250"
-        ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="实体名"
-          prop="entityName"
-          width="200"
-        ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="包名"
-          prop="pack"
-          width="250"
-        ></el-table-column>
-        <el-table-column
-          :show-overflow-tooltip="true"
-          align="left"
-          header-align="left"
-          label="模块名"
-          prop="module"
-          width="100"
-        ></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" align="left" header-align="left" label="创建时间" prop="tableCreateTime" width="200">
-          <template #default="scope">
-            {{ formatTimestamp(scope.row.tableCreateTime) }}
-          </template>
-        </el-table-column>
-        <el-table-column align="center" fixed="right" header-align="center" label="操作" width="250">
-          <template #default="scope">
+          <el-button v-show="auth('generator:genTable:edit')" v-waves plain type="warning" @click="handlePreview">
+            <fd-icon class="is-in-btn" icon="preview-open"></fd-icon>
+            预览
+          </el-button>
+          <el-button v-show="auth('generator:genTable:edit')" v-waves plain type="info" @click="openImport">
+            <fd-icon class="is-in-btn" icon="upload-one"></fd-icon>
+            导入
+          </el-button>
+        </template>
+        <template v-else #menu>
+          <fd-contextmenu-item
+            v-show="auth('generator:genTable:edit')"
+            color="primary"
+            icon="download"
+            label="生成"
+            @click="handleGenerate(null)"
+          />
+          <fd-contextmenu-item
+            v-show="auth('generator:genTable:edit')"
+            color="warning"
+            icon="preview-open"
+            label="预览"
+            @click="handlePreview"
+          />
+          <fd-contextmenu-item v-show="auth('generator:genTable:edit')" color="info" icon="upload-one" label="导入" @click="openImport" />
+        </template>
+      </fd-page-act>
+    </template>
+    <template #table>
+      <el-table ref="table" v-loading="s.loading" v-bind="tableAttrs">
+        <fd-col-selection />
+        <fd-col label="表名" prop="tableName" min-width="200" />
+        <fd-col label="表描述" prop="tableComment" min-width="200" />
+        <fd-col label="实体名" prop="entityName" min-width="200" />
+        <fd-col label="包名" prop="pack" min-width="250" />
+        <fd-col label="模块名" prop="module" min-width="100" />
+        <fd-col-datetime label="创建时间" prop="tableCreateTime" />
+        <fd-col-act
+          edit="generator:genTable:edit"
+          del="generator:genTable:delete"
+          header-align="center"
+          width="220"
+          @edit="handleEdit"
+          @del="m.del"
+        >
+          <template #prefix="scope">
             <el-tooltip :show-after="500" content="生成并下载代码" placement="top">
               <el-button
-                v-show="hasAuth('generator:genTable:edit')"
+                v-show="auth('generator:genTable:edit')"
                 class="tb-act-btn"
                 plain
                 size="small"
                 type="primary"
                 @click="handleGenerate(scope.row)"
               >
-                <fd-icon icon="download" :loading="state.generating[scope.row.id]"></fd-icon>
+                <fd-icon icon="download" :loading="s.generating[scope.row.id]"></fd-icon>
                 生成
               </el-button>
             </el-tooltip>
             <el-tooltip :show-after="500" content="生成并预览代码" placement="top">
               <el-button
-                v-show="hasAuth('generator:genTable:edit')"
+                v-show="auth('generator:genTable:edit')"
                 class="tb-act-btn"
                 plain
                 size="small"
@@ -143,56 +88,32 @@
                 预览
               </el-button>
             </el-tooltip>
-            <el-tooltip :show-after="500" content="编辑" placement="top">
-              <el-button
-                v-show="hasAuth('generator:genTable:edit')"
-                class="tb-act-btn"
-                plain
-                size="small"
-                type="success"
-                @click="handleEdit(scope.row)"
-              >
-                <fd-icon icon="write"></fd-icon>
-              </el-button>
-            </el-tooltip>
-            <el-tooltip :show-after="500" content="删除" placement="top">
-              <el-button
-                v-show="hasAuth('generator:genTable:delete')"
-                class="tb-act-btn"
-                plain
-                size="small"
-                type="danger"
-                @click="del(scope.row, scope.row.tableName)"
-              >
-                <fd-icon icon="close"></fd-icon>
-              </el-button>
-            </el-tooltip>
           </template>
-        </el-table-column>
+        </fd-col-act>
       </el-table>
-      <el-pagination v-bind="paginationAttrs"></el-pagination>
-    </div>
-    <generator-import ref="generatorImport" @generator-imported="getList"></generator-import>
-    <el-backtop></el-backtop>
-  </div>
+    </template>
+  </fd-page>
+  <generator-import ref="generatorImport" @generator-imported="m.getList"></generator-import>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'Generator'
-}
-</script>
-
 <script setup lang="ts">
-import { onActivated, ref } from 'vue'
+import { ref } from 'vue'
 import useList from '@/extend/crud/use-list'
-import useExpandTransition from '@/hooks/use-expand-transition'
 import { download, GenTable, genTableDel, genTableList, genTableQuery } from '@/api/generator/gen-table'
 import GeneratorImport from './import.vue'
-import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { formatTimestamp } from '@/utils/time'
 import usePage from '@/extend/page/use-page'
+import FdItemDateRange from '@/extend/form/item/item-date-range.vue'
+import FdColSelection from '@/extend/table/column/col-selection.vue'
+import FdColDatetime from '@/extend/table/column/col-datetime.vue'
+import { Indexable } from '@/common/types'
+import useView from '@/extend/page/use-view'
+import useLayoutSize from '@/hooks/use-layout-size'
+import FdContextmenuItem from '@/components/contextmenu/item.vue'
+
+defineOptions({
+  name: 'Generator'
+})
 
 const generatorImport = ref()
 
@@ -202,32 +123,24 @@ const stateOption = {
   downloadApi: download,
   query: genTableQuery,
   uniqueId: '',
-  generating: {} as Record<string, boolean>
+  generating: {} as Indexable<boolean>
 }
 
-const router = useRouter()
-const route = useRoute()
+const { listRefs, listState: s, listMethods: m, listAttrs } = useList<GenTable>(stateOption)
+const { table } = listRefs
+const { pageMainAttrs, pageActAttrs, tableAttrs, paginationAttrs } = listAttrs
 
-const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<GenTable>(stateOption)
-const { queryForm } = mixRefs
-const { getList, queryList, resetQuery, del, toggleQueryForm } = mixMethods
-const { tableAttrs, paginationAttrs } = mixAttrs
+const { auth } = usePage()
 
-const { docMinHeight, showPageHeader, hasAuth, setViewTitle } = usePage()
+const { gotoView, onRefresh } = useView()
 
-const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
-
-onActivated(() => {
-  const time = route.query.t as string
-  if (time && time !== state.uniqueId) {
-    state.uniqueId = time
-    getList()
-  }
+onRefresh(async () => {
+  await m.getList()
 })
 
 // 生成
 const handleGenerate = async (row: GenTable) => {
-  const ids = row ? [row.id] : state.selectedNodes.map((n) => n.id)
+  const ids = row ? [row.id] : s.selectedNodes.map((n) => n.id)
   const load = row ? row.id : 'batch'
   if (ids.length === 0) {
     ElMessage({
@@ -238,11 +151,11 @@ const handleGenerate = async (row: GenTable) => {
     return
   }
   try {
-    state.generating[load] = true
-    await state.downloadApi(ids, ids.length === 1 ? row.tableName : 'code_generated')
-    state.generating[load] = false
+    s.generating[load] = true
+    await s.downloadApi(ids, row ? row.tableName : 'code_generated')
+    s.generating[load] = false
   } catch (e) {
-    state.generating[load] = false
+    s.generating[load] = false
     console.log(e)
   }
 }
@@ -254,7 +167,7 @@ const openImport = () => {
 
 // 预览
 const handlePreview = async (row: GenTable) => {
-  const ids = row && row.id ? row.id : state.selectedNodes.map((n) => n.id).join(',')
+  const ids = row && row.id ? row.id : s.selectedNodes.map((n) => n.id).join(',')
   const tableName = row && row.id ? row.tableName + ' ' : ''
   if (ids.length === 0) {
     ElMessage({
@@ -262,10 +175,10 @@ const handlePreview = async (row: GenTable) => {
       type: 'error',
       duration: 2500
     })
+    return
   }
   // path: tools/generator/preview/:ids
-  await setViewTitle(`/generator/preview/${ids}`, `${tableName}代码预览`)
-  await router.push({ name: 'GeneratorPreview', params: { ids: ids } })
+  await gotoView('GeneratorPreview', { ids: ids }, `/generator/preview/${ids}`, `${tableName}代码预览`)
 }
 
 // 修改
@@ -274,8 +187,9 @@ const handleEdit = async (row: GenTable) => {
     const tableId = row.id
     const tableName = row.tableName
     // path: tools/generator/edit/:id
-    await setViewTitle(`/generator/edit/${tableId}`, `${tableName} 修改`)
-    await router.push({ name: 'GeneratorEdit', params: { id: tableId } })
+    await gotoView('GeneratorEdit', { id: tableId }, `/generator/edit/${tableId}`, `${tableName} 修改`)
   }
 }
+
+const { isMobile } = useLayoutSize()
 </script>

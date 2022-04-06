@@ -7,14 +7,12 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdLogo'
-}
-</script>
-
 <script setup lang="ts">
 import FdSvgImage from '@/components/svg-image/svg-image.vue'
+
+defineOptions({
+  name: 'FdLogo'
+})
 
 const props = defineProps({
   minimized: {

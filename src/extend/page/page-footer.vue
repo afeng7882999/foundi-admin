@@ -7,15 +7,13 @@
   </template>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdPageFooter'
-}
-</script>
-
 <script setup lang="ts">
 import settings from '@/app/settings'
 import FdSvgImage from '@/components/svg-image/svg-image.vue'
+
+defineOptions({
+  name: 'FdPageFooter'
+})
 
 const props = defineProps({
   visible: {

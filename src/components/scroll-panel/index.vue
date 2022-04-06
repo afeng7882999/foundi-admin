@@ -6,15 +6,13 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdScrollPanel'
-}
-</script>
-
 <script setup lang="ts">
 import { scrollElementH } from '@/utils/smooth-scroll'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
+
+defineOptions({
+  name: 'FdScrollPanel'
+})
 
 const props = defineProps({
   horizontal: {

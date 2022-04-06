@@ -7,18 +7,16 @@
   </template>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdFmtDict'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, PropType } from 'vue'
 import { DictItem } from '@/api/system/dict-item'
 import useDict from '@/extend/crud/use-dict'
 import { FormatMapping, FormatMappingItem } from '@/extend/table/types'
 import { isArray, isString } from 'lodash-es'
+
+defineOptions({
+  name: 'FdFmtDict'
+})
 
 const props = defineProps({
   data: [String, Array] as PropType<string | string[]>,

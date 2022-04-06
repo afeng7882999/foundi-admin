@@ -10,16 +10,14 @@
   </el-descriptions>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdDescriptions',
-  inheritAttrs: false
-}
-</script>
-
 <script setup lang="ts">
 import useLayoutSize from '@/hooks/use-layout-size'
 import { computed, PropType } from 'vue'
+
+defineOptions({
+  name: 'FdDescriptions',
+  inheritAttrs: false
+})
 
 const props = defineProps({
   column: {

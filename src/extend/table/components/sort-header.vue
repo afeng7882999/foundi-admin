@@ -10,16 +10,14 @@
   </el-tooltip>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdTableSortHeader'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, PropType, reactive, watch } from 'vue'
 import { SortField } from '@/api'
 import { useTimeoutFn } from '@vueuse/core'
+
+defineOptions({
+  name: 'FdTableSortHeader'
+})
 
 const props = defineProps({
   value: {

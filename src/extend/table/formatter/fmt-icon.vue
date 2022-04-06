@@ -2,16 +2,14 @@
   <fd-icon :icon="iconName" class="tb-icon" :style="iconStyle"></fd-icon>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdFmtIcon'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, PropType } from 'vue'
 import { FormatMapping, FormatMappingItem } from '@/extend/table/types'
 import { isString } from 'lodash-es'
+
+defineOptions({
+  name: 'FdFmtIcon'
+})
 
 const props = defineProps({
   data: String,

@@ -4,14 +4,12 @@
   </el-button>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdCountDownButton'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
+
+defineOptions({
+  name: 'FdCountDownButton'
+})
 
 const props = defineProps({
   disableTime: {

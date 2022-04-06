@@ -15,15 +15,13 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdPageHeader'
-}
-</script>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import useView from '@/extend/page/use-view'
+
+defineOptions({
+  name: 'FdPageHeader'
+})
 
 const props = defineProps({
   icon: {

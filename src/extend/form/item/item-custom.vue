@@ -4,16 +4,14 @@
   </el-form-item>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdItemCustom',
-  inheritAttrs: false
-}
-</script>
-
 <script setup lang="ts">
 import { FORM_ITEM_DEFAULT_PROPS } from '@/extend/form/type'
 import useFormItem from '@/extend/form/hooks/use-form-item'
+
+defineOptions({
+  name: 'FdItemCustom',
+  inheritAttrs: false
+})
 
 const props = defineProps({
   ...FORM_ITEM_DEFAULT_PROPS

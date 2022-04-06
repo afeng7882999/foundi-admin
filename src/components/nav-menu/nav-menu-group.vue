@@ -19,17 +19,15 @@
   </ul>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdNavMenuGroup'
-}
-</script>
-
 <script setup lang="ts">
 import { inject } from 'vue'
 import { TreeNodeDefault } from '@/utils/data-tree'
 import FdNavMenuItem from './nav-menu-item.vue'
 import { RootMenuProvided } from '@/components/nav-menu/types'
+
+defineOptions({
+  name: 'FdNavMenuGroup'
+})
 
 const rootMenu = inject('rootMenu') as RootMenuProvided
 const { handleActive, rootState } = rootMenu

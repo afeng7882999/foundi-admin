@@ -20,15 +20,13 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdTagInput'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, PropType, reactive, ref } from 'vue'
 import { addResizeListener, removeResizeListener } from '@/utils/resize-event'
+
+defineOptions({
+  name: 'FdTagInput'
+})
 
 const props = defineProps({
   // value of tag input

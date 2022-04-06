@@ -9,15 +9,13 @@
   </el-dialog>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdIconSelector'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
 import FdIconList from './icon-list.vue'
+
+defineOptions({
+  name: 'FdIconSelector'
+})
 
 const props = defineProps({
   modelValue: {

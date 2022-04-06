@@ -18,14 +18,12 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: '404'
-}
-</script>
-
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+
+defineOptions({
+  name: '404'
+})
 
 const router = useRouter()
 

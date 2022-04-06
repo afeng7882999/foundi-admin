@@ -5,14 +5,12 @@
   </el-button>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdIconButton'
-}
-</script>
-
 <script setup lang="ts">
 import { computed } from 'vue'
+
+defineOptions({
+  name: 'FdIconButton'
+})
 
 const props = defineProps({
   icon: {

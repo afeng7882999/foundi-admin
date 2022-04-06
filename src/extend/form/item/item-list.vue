@@ -29,18 +29,16 @@
   </el-tooltip>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdItemList',
-  inheritAttrs: false
-}
-</script>
-
 <script setup lang="ts">
 import { DEFAULT_ITEM_DATA_FIELDS, FORM_ITEM_DEFAULT_PROPS, ItemDataFields } from '@/extend/form/type'
 import { PropType } from 'vue'
 import { Indexable } from '@/common/types'
 import useFormItem from '@/extend/form/hooks/use-form-item'
+
+defineOptions({
+  name: 'FdItemList',
+  inheritAttrs: false
+})
 
 const props = defineProps({
   ...FORM_ITEM_DEFAULT_PROPS,

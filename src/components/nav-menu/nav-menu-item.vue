@@ -27,12 +27,6 @@
   </li>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdNavMenuItem'
-}
-</script>
-
 <script setup lang="ts">
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { computed, inject, PropType, ref } from 'vue'
@@ -40,6 +34,10 @@ import { TreeNodeDefault } from '@/utils/data-tree'
 import { RootMenuProvided } from '@/components/nav-menu/types'
 
 const MENU_TYPE = '0'
+
+defineOptions({
+  name: 'FdNavMenuItem'
+})
 
 const props = defineProps({
   menuItem: {

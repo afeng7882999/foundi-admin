@@ -14,7 +14,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["node"],
+    "types": ["unplugin-vue-define-options"],
     "typeRoots": ["src/types"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

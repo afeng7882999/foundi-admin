@@ -2,15 +2,13 @@
   {{ formatted }}
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdFmtDatetime'
-}
-</script>
-
 <script setup lang="ts">
 import { formatTimestamp } from '@/utils/time'
 import { computed } from 'vue'
+
+defineOptions({
+  name: 'FdFmtDatetime'
+})
 
 const props = defineProps({
   data: String

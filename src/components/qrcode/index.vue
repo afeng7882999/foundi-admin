@@ -7,15 +7,13 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdQrcode'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, onMounted, reactive, watch } from 'vue'
 import QrcodeVue from 'qrcode.vue'
+
+defineOptions({
+  name: 'FdQrcode'
+})
 
 const props = defineProps({
   // 二维码内容
