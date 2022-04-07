@@ -194,8 +194,7 @@ import { ElForm, ElMessage, ElMessageBox, ElTable } from 'element-plus'
 import { genTableGetOne, genTablePutOne, genTableSyncDb, GenTableColumn, GenTable } from '@/api/generator/gen-table'
 import { dictList, Dict } from '@/api/system/dict'
 import { DEFAULT_HTML_TYPES, DEFAULT_QUERY_TYPES } from '@/views/modules/generator/types'
-import useSortableRow from '@/extend/table/hooks/use-sortable-row'
-import FdItemCustom from '@/extend/form/item/item-custom.vue'
+import useSortableRow from '@/components/table/hooks/use-sortable-row'
 import useView from '@/extend/page/use-view'
 
 defineOptions({

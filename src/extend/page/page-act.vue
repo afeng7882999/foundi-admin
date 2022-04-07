@@ -87,12 +87,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref, useSlots } from 'vue'
+import { computed, onMounted, PropType, ref, useSlots } from 'vue'
 import usePage from '@/extend/page/use-page'
 import { isBoolean } from 'lodash-es'
-import { TableSettingProp } from '@/extend/table/types'
-import useTableSetting from '@/extend/table/hooks/use-table-setting'
-import FdSortColumnDialog from '@/extend/table/components/sort-column-dialog.vue'
+import { TableSettingProp } from '@/components/table/types'
+import useTableSetting from '@/components/table/hooks/use-table-setting'
+import FdSortColumnDialog from '@/components/table/components/sort-column-dialog.vue'
 import FdContextmenuItem from '@/components/contextmenu/item.vue'
 import FdContextmenuSubmenu from '@/components/contextmenu/submenu.vue'
 import { ApiQuery } from '@/api'
@@ -222,5 +222,13 @@ const objClass = computed(() => {
     clazz.push('is-mobile')
   }
   return clazz.join(' ')
+})
+
+onMounted(() => {
+  const buttons = useSlots()?.buttons
+  if (buttons) {
+    const d = buttons()
+    console.log(d[0].children.default())
+  }
 })
 </script>

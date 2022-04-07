@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { ActionContext } from 'vuex'
-import { RowDensity, TABLE_ID_PREFIX, TableColumn } from '@/extend/table/types'
+import { RowDensity, TABLE_ID_PREFIX, TableColumn } from '@/components/table/types'
 
 export interface TableSetting {
   rowDensity?: RowDensity

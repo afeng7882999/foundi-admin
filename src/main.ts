@@ -19,9 +19,9 @@ import FdTreeSelect from '@/components/tree-select'
 import FdDialog from '@/components/dialog'
 import FdDrawer from '@/components/drawer'
 import FdPageAll from '@/extend/page'
-import FdTableAll from '@/extend/table'
-import FdFormAll from '@/extend/form'
-import FdDescriptionsAll from '@/extend/descriptions'
+import FdTableAll from '@/components/table'
+import FdFormAll from '@/components/form'
+import FdDescriptionsAll from '@/components/descriptions'
 
 const app = createApp(App)
 app.use(store)
