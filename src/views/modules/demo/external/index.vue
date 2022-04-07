@@ -1,11 +1,11 @@
 <template>
-  <external the-url="https://element-plus.gitee.io/zh-CN/"></external>
+  <fd-external the-url="https://element-plus.gitee.io/zh-CN/"></fd-external>
 </template>
-<script lang="ts">
-export default {
-  name: 'DemoExternal'
-}
-</script>
+
 <script setup lang="ts">
-import External from '@/components/external/index.vue'
+import FdExternal from '@/components/external/index.vue'
+
+defineOptions({
+  name: 'DemoExternal'
+})
 </script>

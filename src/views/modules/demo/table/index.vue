@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasAuth('demo:table:list')" :style="docMinHeight" class="page-demo-table fd-page">
+  <div v-if="auth('demo:table:list')" :style="docMinHeight" class="page-demo-table fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <el-tabs>
       <el-tab-pane label="基础表格">
@@ -13,17 +13,15 @@
   <fd-page-footer></fd-page-footer>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'DemoTable'
-}
-</script>
-
 <script setup lang="ts">
 import BaseTableDemo from './base.vue'
 import TreeTableDemo from './tree.vue'
 import usePage from '@/extend/page/use-page'
 import FdPageFooter from '@/extend/page/page-footer.vue'
 
-const { docMinHeight, showPageHeader, hasAuth } = usePage()
+defineOptions({
+  name: 'DemoTable'
+})
+
+const { docMinHeight, showPageHeader, auth } = usePage()
 </script>

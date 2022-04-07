@@ -1,7 +1,5 @@
 <template>
-  <div class="fd-page__form">
-    <fd-page-act :table-option="tableSettingOpt" />
-  </div>
+  <fd-page-act :table-option="tableSettingOpt" />
   <div ref="menuTbWrapper" class="fd-page__table is-bordered">
     <el-table ref="menuTb" v-bind="tableAttrs" :data="state.menus" row-key="id">
       <fd-col-selection typ="selection"></fd-col-selection>
@@ -20,18 +18,16 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'TreeTableDemo'
-}
-</script>
-
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { menuData, sysMenuType } from './data'
-import useTable from '@/extend/table/hooks/use-table'
+import useTable from '@/components/table/hooks/use-table'
 import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus'
+
+defineOptions({
+  name: 'TreeTableDemo'
+})
 
 const state = reactive({
   menus: menuData,

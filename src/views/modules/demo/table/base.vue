@@ -1,17 +1,15 @@
 <template>
-  <div class="fd-page__form">
-    <fd-page-act :table-option="tableSettingOpt" :export="true" :query="false">
-      <template #buttons>
-        <el-button v-waves plain class="hidden-sm-and-down" @click.stop="onPrev">上一项</el-button>
-        <el-button v-waves plain class="hidden-sm-and-down" @click.stop="onNext">下一项</el-button>
-      </template>
-      <template #menu>
-        <fd-contextmenu-item label="上一项" class="hidden-md-and-up" @click="onPrev"></fd-contextmenu-item>
-        <fd-contextmenu-item label="下一项" class="hidden-md-and-up" @click="onNext"></fd-contextmenu-item>
-        <fd-contextmenu-item class="hidden-md-and-up" divider></fd-contextmenu-item>
-      </template>
-    </fd-page-act>
-  </div>
+  <fd-page-act :table-option="tableSettingOpt" :export="true" :query="false">
+    <template #buttons>
+      <el-button v-waves plain class="hidden-sm-and-down" @click.stop="onPrev">上一项</el-button>
+      <el-button v-waves plain class="hidden-sm-and-down" @click.stop="onNext">下一项</el-button>
+    </template>
+    <template #menu>
+      <fd-contextmenu-item label="上一项" class="hidden-md-and-up" @click="onPrev"></fd-contextmenu-item>
+      <fd-contextmenu-item label="下一项" class="hidden-md-and-up" @click="onNext"></fd-contextmenu-item>
+      <fd-contextmenu-item class="hidden-md-and-up" divider></fd-contextmenu-item>
+    </template>
+  </fd-page-act>
   <div ref="operLogTbWrapper" class="fd-page__table is-bordered">
     <el-table ref="operLogTb" v-bind="tableAttrs" :data="state.operLogs" @row-click="onRowClick">
       <fd-col-selection></fd-col-selection>
@@ -37,19 +35,17 @@
   <el-backtop></el-backtop>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'BaseTableDemo'
-}
-</script>
-
 <script setup lang="ts">
 import { nextTick, reactive, ref } from 'vue'
 import { operLogData, sysOperLogStatus } from './data'
-import useTable from '@/extend/table/hooks/use-table'
+import useTable from '@/components/table/hooks/use-table'
 import { Indexable } from '@/common/types'
 import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus'
+
+defineOptions({
+  name: 'BaseTableDemo'
+})
 
 const state = reactive({
   operLogs: operLogData,

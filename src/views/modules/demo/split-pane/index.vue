@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasAuth('demo:splitPane:list')" :style="docMinHeight" class="page-demo-split-pane fd-page">
+  <div v-if="auth('demo:splitPane:list')" :style="docMinHeight" class="page-demo-split-pane fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="fd-page-act">
@@ -38,17 +38,15 @@
   <fd-page-footer></fd-page-footer>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'DemoSplitPane'
-}
-</script>
-
 <script setup lang="ts">
 import usePage from '@/extend/page/use-page'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { reactive } from 'vue'
 import FdPageFooter from '@/extend/page/page-footer.vue'
+
+defineOptions({
+  name: 'DemoSplitPane'
+})
 
 const state = reactive({
   leftShrinkAll: false,
@@ -59,7 +57,7 @@ const onLeftShrinkClick = () => {
   state.leftShrinkAll = !state.leftShrinkAll
 }
 
-const { docMinHeight, showPageHeader, hasAuth } = usePage({ footerVisible: true })
+const { docMinHeight, showPageHeader, auth } = usePage({ footerVisible: true })
 </script>
 
 <style lang="scss">
