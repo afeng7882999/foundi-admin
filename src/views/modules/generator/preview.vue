@@ -7,10 +7,15 @@
         返回列表
       </el-button>
       <div class="fd-page-act__right">
-        <el-button v-show="auth('generator:genTable:edit')" v-waves plain type="primary" @click="handleGenerate">
-          <fd-icon class="is-in-btn" icon="download" :loading="state.genLoading"></fd-icon>
-          生成
-        </el-button>
+        <fd-button
+          v-show="auth('generator:genTable:edit')"
+          label="生成"
+          icon="download"
+          plain
+          color="primary"
+          :loading="state.genLoading"
+          @click="handleGenerate"
+        />
       </div>
     </div>
     <fd-split-pane :default-pos="300" shrink="right" :style="previewStyle">

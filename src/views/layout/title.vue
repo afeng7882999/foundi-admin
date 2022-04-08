@@ -2,21 +2,23 @@
   <div class="fd-title">
     <div class="fd-title__left">
       <el-tooltip :content="toggleBtnActive ? '展开菜单' : '收缩菜单'" :show-after="500" effect="dark" placement="bottom">
-        <fd-icon-button class="fd-title__toggle-button" @click="toggleSideBar">
-          <fd-icon :class="{ active: toggleBtnActive }" class="icon" icon="hamburger-button"></fd-icon>
-        </fd-icon-button>
+        <fd-button
+          type="icon"
+          icon="hamburger-button"
+          class="fd-title__toggle-button"
+          :class="{ active: toggleBtnActive }"
+          @click="toggleSideBar"
+        />
       </el-tooltip>
       <fd-breadcrumb v-show="showBreadcrumb"></fd-breadcrumb>
     </div>
     <div class="fd-title__right">
       <system-message-button :check-message-interval="100000"></system-message-button>
       <el-tooltip :show-after="500" content="全屏" effect="dark" placement="bottom">
-        <fd-icon-button class="fd-title__item">
-          <fd-full-screen></fd-full-screen>
-        </fd-icon-button>
+        <fd-full-screen></fd-full-screen>
       </el-tooltip>
       <el-tooltip :show-after="500" content="设置" effect="dark" placement="bottom">
-        <fd-icon-button class="fd-title__item" icon="setting-two" @click="toggleSetting"></fd-icon-button>
+        <fd-button type="icon" class="fd-title__item" icon="setting-two" @click="toggleSetting"></fd-button>
       </el-tooltip>
     </div>
   </div>
@@ -90,14 +92,12 @@ const toggleSetting = () => {
   }
 
   &__toggle-button {
-    .icon {
-      color: var(--el-color-primary);
-      transform: rotate(0deg);
-      transition: transform $sidebar-transition-time;
+    color: var(--el-color-primary);
+    transform: rotate(0deg);
+    transition: transform $sidebar-transition-time;
 
-      &.active {
-        transform: rotate(90deg);
-      }
+    &.active {
+      transform: rotate(90deg);
     }
   }
 

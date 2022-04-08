@@ -1,7 +1,7 @@
 <template>
   <div class="fd-page-header">
     <div v-show="showBack" class="fd-page-header__back">
-      <fd-icon-button icon="left" @click="goBack"></fd-icon-button>
+      <fd-button type="icon" icon="left" @click="goBack"></fd-button>
     </div>
     <el-divider v-show="showBack" class="fd-page-header__divider" direction="vertical"></el-divider>
     <div class="fd-page-header__title">

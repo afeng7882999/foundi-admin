@@ -36,46 +36,46 @@
           </div>
           <div class="actions">
             <el-tooltip content="向左旋转" effect="dark" placement="bottom" :show-after="500">
-              <fd-icon-button class="btn" icon="rotate" @click="rotateLeft"></fd-icon-button>
+              <fd-button type="icon" class="btn" icon="rotate" @click="rotateLeft"></fd-button>
             </el-tooltip>
             <el-tooltip content="向右旋转" effect="dark" placement="bottom" :show-after="500">
-              <fd-icon-button class="btn" icon="rotate-right" @click="rotateRight"></fd-icon-button>
+              <fd-button type="icon" class="btn" icon="rotate-right" @click="rotateRight"></fd-button>
             </el-tooltip>
             <el-divider direction="vertical"></el-divider>
             <el-tooltip content="放大" effect="dark" placement="bottom" :show-after="500">
-              <fd-icon-button class="btn" icon="zoom-in" @click="zoomIn"></fd-icon-button>
+              <fd-button type="icon" class="btn" icon="zoom-in" @click="zoomIn"></fd-button>
             </el-tooltip>
             <el-tooltip content="缩小" effect="dark" placement="bottom" :show-after="500">
-              <fd-icon-button class="btn" icon="zoom-out" @click="zoomOut"></fd-icon-button>
+              <fd-button type="icon" class="btn" icon="zoom-out" @click="zoomOut"></fd-button>
             </el-tooltip>
             <el-divider direction="vertical"></el-divider>
             <el-tooltip content="水平翻转" effect="dark" placement="bottom" :show-after="500">
-              <fd-icon-button class="btn" icon="flip-horizontally" @click="flip(true)"></fd-icon-button>
+              <fd-button type="icon" class="btn" icon="flip-horizontally" @click="flip(true)"></fd-button>
             </el-tooltip>
             <el-tooltip content="垂直翻转" effect="dark" placement="bottom" :show-after="500">
-              <fd-icon-button class="btn" icon="flip-vertically" @click="flip(false)"></fd-icon-button>
+              <fd-button type="icon" class="btn" icon="flip-vertically" @click="flip(false)"></fd-button>
             </el-tooltip>
             <el-divider direction="vertical"></el-divider>
             <el-tooltip content="覆盖（contain）" effect="dark" placement="bottom" :show-after="500">
-              <fd-icon-button class="btn" icon="extend" @click="zoomToCover"></fd-icon-button>
+              <fd-button type="icon" class="btn" icon="extend" @click="zoomToCover"></fd-button>
             </el-tooltip>
             <el-tooltip content="包含（cover）" effect="dark" placement="bottom" :show-after="500">
-              <fd-icon-button class="btn" icon="img-contain" @click="zoomToContain"></fd-icon-button>
+              <fd-button type="icon" class="btn" icon="img-contain" @click="zoomToContain"></fd-button>
             </el-tooltip>
             <el-tooltip content="实际大小" effect="dark" placement="bottom" :show-after="500">
-              <fd-icon-button class="btn" icon="equal-ratio" @click="zoomToOriginal"></fd-icon-button>
+              <fd-button type="icon" class="btn" icon="equal-ratio" @click="zoomToOriginal"></fd-button>
             </el-tooltip>
             <el-divider direction="vertical"></el-divider>
             <el-tooltip content="切换鼠标移动/旋转" effect="dark" placement="bottom" :show-after="500">
-              <fd-icon-button
+              <fd-button type="icon"
                 class="btn"
                 :icon="moveRotate === 'move' ? 'direction-adjustment-three' : 'rotating-forward'"
                 @click="toggleMoveRotate"
-              ></fd-icon-button>
+              ></fd-button>
             </el-tooltip>
             <el-divider direction="vertical"></el-divider>
             <el-tooltip content="重置图片" effect="dark" placement="bottom" :show-after="500">
-              <fd-icon-button class="btn" icon="undo" @click="reset"></fd-icon-button>
+              <fd-button type="icon" class="btn" icon="undo" @click="reset"></fd-button>
             </el-tooltip>
           </div>
         </el-col>

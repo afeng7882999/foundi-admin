@@ -2,7 +2,7 @@
   <div class="fd-router-tags">
     <div class="fd-router-tags__ops is-left">
       <el-tooltip :show-after="500" content="左翻页" effect="dark" placement="bottom">
-        <fd-icon-button icon="left-one" @click="pageLeft"></fd-icon-button>
+        <fd-button type="icon" icon="left-one" @click="pageLeft"></fd-button>
       </el-tooltip>
     </div>
     <fd-scroll-panel ref="scrollPanel" scroll-item-class-name="fd-router-tags__item">
@@ -25,10 +25,10 @@
     </fd-scroll-panel>
     <div class="fd-router-tags__ops">
       <el-tooltip :show-after="500" content="右翻页" effect="dark" placement="bottom">
-        <fd-icon-button icon="right-one" @click="pageRight"></fd-icon-button>
+        <fd-button type="icon" icon="right-one" @click="pageRight"></fd-button>
       </el-tooltip>
       <el-tooltip :show-after="500" content="刷新当前页面" effect="dark" placement="bottom">
-        <fd-icon-button icon="refresh" @click="refreshCurrentTag"></fd-icon-button>
+        <fd-button type="icon" icon="refresh" @click="refreshCurrentTag"></fd-button>
       </el-tooltip>
     </div>
     <fd-contextmenu ref="contextMenu" class="fd-router-tags__menu">

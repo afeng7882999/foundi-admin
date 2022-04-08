@@ -1,5 +1,5 @@
 <template>
-  <fd-icon class="fd-fullscreen-button" :icon="isFullscreen ? 'off-screen-one' : 'full-screen-one'" @click="toggle"></fd-icon>
+  <fd-button type="icon" :icon="isFullscreen ? 'off-screen-one' : 'full-screen-one'" @click="toggle"></fd-button>
 </template>
 
 <script setup lang="ts">
@@ -9,5 +9,9 @@ defineOptions({
   name: 'FdFullScreenButton'
 })
 
-const { isSupported, isFullscreen, toggle } = useFullscreen()
+const { isFullscreen, toggle: _toggle } = useFullscreen()
+
+const toggle = () => {
+  _toggle()
+}
 </script>

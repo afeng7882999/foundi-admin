@@ -5,7 +5,7 @@
         <template v-if="query">
           <el-tooltip :content="queryVisible ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="fd-page-act__badge">
-              <fd-icon-button
+              <fd-button type="icon"
                 :class="queryVisible ? 'expanded' : ''"
                 class="fd-page-act__icon-btn"
                 icon="search-more"
@@ -38,7 +38,7 @@
           <el-divider v-if="more" class="fd-page-act__divider" direction="vertical" />
         </template>
         <el-tooltip content="更多" :show-after="500" effect="dark" placement="top">
-          <fd-icon-button class="fd-page-act__icon-btn" icon="more" @click.stop="openMoreMenu" />
+          <fd-button type="icon" class="fd-page-act__icon-btn" icon="more" @click.stop="openMoreMenu" />
         </el-tooltip>
         <fd-contextmenu ref="contextMenu">
           <template v-if="isMobile">

@@ -1,18 +1,12 @@
 <template>
   <template v-if="editShow">
-    <el-button plain type="primary" @click="emitAct('edit')">编辑</el-button>
+    <fd-button label="编辑" plain color="primary" @click="emitAct('edit')" />
     <el-divider direction="vertical"></el-divider>
   </template>
   <template v-if="nav">
     <el-button-group>
-      <el-button :disabled="!navPrev" @click="emitAct('prev')">
-        <fd-icon icon="left-small" class="is-in-btn"></fd-icon>
-        上一个
-      </el-button>
-      <el-button :disabled="!navNext" @click="emitAct('next')">
-        下一个
-        <fd-icon icon="right-small" class="is-in-btn is-right"></fd-icon>
-      </el-button>
+      <fd-button icon="left-small" :disabled="!navPrev" @click="emitAct('prev')" />
+      <fd-button icon="right-small" :disabled="!navNext" @click="emitAct('next')" />
     </el-button-group>
   </template>
 </template>

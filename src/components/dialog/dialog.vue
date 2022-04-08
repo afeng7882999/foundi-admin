@@ -19,13 +19,14 @@
           <slot name="title" />
         </div>
         <el-tooltip :show-after="500" :content="state.fullscreen ? '还原' : '最大化'" effect="dark" placement="bottom">
-          <fd-icon-button
+          <fd-button
+            type="icon"
             class="title-button"
             :icon="state.fullscreen ? 'off-screen-one' : 'full-screen-one'"
             @click="toggleFullscreen"
-          ></fd-icon-button>
+          ></fd-button>
         </el-tooltip>
-        <fd-icon-button class="title-button" icon="close-small" @click="hide"></fd-icon-button>
+        <fd-button type="icon" class="title-button" icon="close-small" @click="hide"></fd-button>
       </div>
     </template>
     <slot />
@@ -39,7 +40,6 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue'
-import FdIconButton from '@/components/icon-button/icon-button.vue'
 import { ElDialog } from 'element-plus'
 import useLayoutSize from '@/hooks/use-layout-size'
 import { onBeforeRouteLeave } from 'vue-router'

@@ -12,19 +12,13 @@
       <template #default="scope">
         <slot name="prefix" :row="scope.row" :idx="scope.$index"></slot>
         <el-tooltip v-if="detailVisible" :show-after="500" content="详细" placement="top">
-          <el-button class="tb-act-btn" plain type="primary" @click="emitDetail(scope.$index)">
-            <fd-icon icon="view-grid-detail"></fd-icon>
-          </el-button>
+          <fd-button class="tb-act-btn" icon="view-grid-detail" plain color="primary" @click="emitDetail(scope.$index)" />
         </el-tooltip>
         <el-tooltip v-if="editVisible" :show-after="500" content="编辑" placement="top">
-          <el-button class="tb-act-btn" plain type="success" @click="emitEdit(scope.row)">
-            <fd-icon icon="write"></fd-icon>
-          </el-button>
+          <fd-button class="tb-act-btn" icon="write" plain color="success" @click="emitEdit(scope.row)" />
         </el-tooltip>
         <el-tooltip v-if="delVisible" :show-after="500" content="删除" placement="top">
-          <el-button class="tb-act-btn" plain type="danger" @click="emitDel(scope.row)">
-            <fd-icon icon="close"></fd-icon>
-          </el-button>
+          <fd-button class="tb-act-btn" icon="close" plain color="danger" @click="emitDel(scope.row)" />
         </el-tooltip>
         <slot name="append" :row="scope.row" :idx="scope.$index"></slot>
       </template>

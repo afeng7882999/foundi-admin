@@ -4,10 +4,7 @@
       <div class="fd-item-sort__label">
         <span>{{ label }}</span>
         <el-tooltip content="添加排序字段" :disabled="disabled" :show-after="500" placement="top">
-          <el-button type="text" :disabled="addDisabled" @click="addField">
-            <fd-icon icon="plus" class="is-in-btn"></fd-icon>
-            添加
-          </el-button>
+          <fd-button type="text" label="添加" icon="plus" :disabled="addDisabled" @click="addField" />
         </el-tooltip>
       </div>
     </template>
@@ -27,12 +24,13 @@
           :show-after="500"
           placement="top"
         >
-          <fd-icon-button
+          <fd-button
+            type="icon"
             class="fd-item-sort__toggle"
             :icon="item.order === 'asc' ? 'up-small' : 'down-small'"
             :disabled="disabled"
             @click="toggleOrder(item)"
-          ></fd-icon-button>
+          ></fd-button>
         </el-tooltip>
       </div>
     </div>
@@ -43,7 +41,6 @@
 import { computed, onMounted, onUnmounted, PropType, reactive, ref, watch } from 'vue'
 import { FORM_ITEM_DEFAULT_PROPS } from '../type'
 import { SortField } from '@/api'
-import FdIconButton from '@/components/icon-button/icon-button.vue'
 import Sortable, { SortableEvent } from 'sortablejs'
 import useFormItem from '../hooks/use-form-item'
 
