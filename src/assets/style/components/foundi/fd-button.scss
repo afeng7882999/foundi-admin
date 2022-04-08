@@ -94,11 +94,7 @@
   
   &.is-no-label {
     .fd-button__icon {
-      margin: -1px 0 0 0;
-  
-      &.is-right {
-        margin: -1px 0 -1px 0;
-      }
+      margin: 0;
     }
   }
   

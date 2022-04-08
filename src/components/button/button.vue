@@ -55,11 +55,11 @@ const classObj = computed(() => {
 })
 
 const typeCo = computed(() => {
-  if (buttonColors.includes(props.color) && props.color !== 'default') {
-    return props.color
-  }
   if (props.type === 'text') {
     return 'text'
+  }
+  if (buttonColors.includes(props.color)) {
+    return props.color
   }
   return 'default'
 })
