@@ -1,5 +1,5 @@
 <template>
-  <div :style="docMinHeight" :class="objClass">
+  <div class="fd-page" :style="docMinHeight" :class="objClass">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <template v-if="!hasQuery">
       <slot name="act" />
@@ -13,7 +13,8 @@
         ref="drawer"
         v-model="queryVisibleCo"
         :close-on-click-modal="false"
-        direction="ltr"
+        direction="btt"
+        size="90%"
         :modal="false"
         title="查询"
       >
@@ -75,8 +76,8 @@
       </template>
     </fd-split-pane>
     <el-backtop></el-backtop>
+    <fd-page-footer :visible="footerVisible"></fd-page-footer>
   </div>
-  <fd-page-footer :visible="footerVisible"></fd-page-footer>
 </template>
 
 <script setup lang="ts">
@@ -129,7 +130,7 @@ watch(
 const { isMobile } = useLayoutSize(props.mobileCompact)
 
 const objClass = computed(() => {
-  const clazz = ['fd-page']
+  const clazz = []
   clazz.push(`page-${props.name}`)
   if (isMobile.value) {
     clazz.push('is-mobile')

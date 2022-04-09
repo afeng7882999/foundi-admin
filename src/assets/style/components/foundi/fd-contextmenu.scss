@@ -13,7 +13,7 @@
   border-radius: $border-radius-base;
   background-color: var(--el-fill-base);
   box-shadow: var(--el-box-shadow-base);
-  z-index: 100;
+  z-index: $index-popper;
   
   &__item {
     display: flex;

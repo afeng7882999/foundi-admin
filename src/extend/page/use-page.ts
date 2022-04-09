@@ -28,15 +28,13 @@ export default function (stateOption?: PageStateOption) {
 
   // Doc最小高度
   const docMinHeight = computed(() => {
-    const footer = pageState.footerVisible ? sizeConst.footerHeight : 0
-    const height = storeState.app.docHeight - footer
+    const height = storeState.app.docHeight
     return { minHeight: height + 'px' }
   })
 
   // Doc高度
   const docHeight = computed(() => {
-    const footer = pageState.footerVisible ? sizeConst.footerHeight : 0
-    const height = storeState.app.docHeight - footer
+    const height = storeState.app.docHeight
     return { height: height + 'px' }
   })
 

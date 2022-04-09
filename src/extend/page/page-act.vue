@@ -1,93 +1,118 @@
 <template>
   <template v-if="visibleCo">
     <div class="fd-page-act" :class="objClass">
-      <div class="fd-page-act__left">
-        <template v-if="query">
-          <el-tooltip :content="queryVisible ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
+      <template v-if="!isMobile">
+        <div class="fd-page-act__left">
+          <template v-if="query">
+            <el-tooltip :content="queryVisible ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
+              <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="fd-page-act__badge">
+                <fd-button
+                  type="icon"
+                  :class="queryVisible ? 'expanded' : ''"
+                  class="fd-page-act__icon-btn"
+                  icon="search-more"
+                  @click="toggleQueryVisible"
+                />
+              </el-badge>
+            </el-tooltip>
+            <el-divider class="fd-page-act__divider" direction="vertical" style="margin-left: 16px" />
+          </template>
+          <div class="query-compact">
+            <el-form :model="queryData" inline compact :submit-fn="queryFn">
+              <slot name="query" />
+            </el-form>
+          </div>
+        </div>
+        <div class="fd-page-act__right">
+          <fd-button v-if="delVisible" label="删除" icon="delete" plain color="danger" @click="emit('del')" />
+          <fd-button v-if="createVisible" label="新增" icon="plus" plain color="primary" @click="emit('create')" />
+          <slot name="buttons" />
+          <el-divider v-if="more" class="fd-page-act__divider" direction="vertical" />
+          <el-tooltip content="更多" :show-after="500" effect="dark" placement="top">
+            <fd-button type="icon" class="fd-page-act__icon-btn" icon="more" @click.stop="openMoreMenu" />
+          </el-tooltip>
+        </div>
+      </template>
+      <template v-else>
+        <div class="fd-page-act__center">
+          <template v-if="query">
             <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="fd-page-act__badge">
-              <fd-button type="icon"
+              <fd-button
+                type="toolbar"
                 :class="queryVisible ? 'expanded' : ''"
-                class="fd-page-act__icon-btn"
+                label="查询"
                 icon="search-more"
                 @click="toggleQueryVisible"
               />
             </el-badge>
-          </el-tooltip>
-          <el-divider v-if="!isMobile" class="fd-page-act__divider" direction="vertical" style="margin-left: 16px" />
-        </template>
-        <div v-if="!isMobile" class="query-compact">
-          <el-form :model="queryData" inline compact :submit-fn="queryFn">
-            <slot name="query" />
-          </el-form>
-        </div>
-      </div>
-      <div v-if="isMobile && pagination" class="fd-page-act__center">
-        <el-pagination class="fd-page-act__pagination" v-bind="pagination" small :pager-count="5" layout="pager" />
-      </div>
-      <div class="fd-page-act__right">
-        <template v-if="!isMobile">
-          <el-button v-if="delVisible" v-waves plain type="danger" @click="emit('del')">
-            <fd-icon class="is-in-btn" icon="delete" />
-            删除
-          </el-button>
-          <slot name="buttons" />
-          <el-button v-if="createVisible" v-waves plain type="primary" @click="emit('create')">
-            <fd-icon class="is-in-btn" icon="plus" />
-            新增
-          </el-button>
-          <el-divider v-if="more" class="fd-page-act__divider" direction="vertical" />
-        </template>
-        <el-tooltip content="更多" :show-after="500" effect="dark" placement="top">
-          <fd-button type="icon" class="fd-page-act__icon-btn" icon="more" @click.stop="openMoreMenu" />
-        </el-tooltip>
-        <fd-contextmenu ref="contextMenu">
-          <template v-if="isMobile">
-            <fd-contextmenu-item v-if="delVisible" color="danger" icon="delete" label="删除" @click="emit('del')" />
-            <slot name="menu" />
-            <fd-contextmenu-item v-if="createVisible" color="primary" icon="plus" label="新增" @click="emit('create')" />
-            <fd-contextmenu-item v-if="menuDividerVisible" divider />
           </template>
-          <fd-contextmenu-submenu v-if="exportVisible" icon="download" label="导出表数据">
-            <fd-contextmenu-item label="导出当前页" @click="emit('export')" />
-            <fd-contextmenu-item label="导出全部页" @click="emit('exportAll')" />
-          </fd-contextmenu-submenu>
-          <fd-contextmenu-item v-if="exportVisible" divider />
-          <fd-contextmenu-submenu icon="table-row" label="表格设置">
-            <fd-contextmenu-item
-              v-if="tableOption.treeTable"
-              icon="row-height"
-              :label="expandAll ? '收缩所有行' : '展开所有行'"
-              @click="toggleExpandAll"
-            />
-            <fd-contextmenu-item
-              v-if="!tableOption.treeTable"
-              icon="table-stripe"
-              :label="stripe ? '隐藏斑马纹' : '显示斑马纹'"
-              @click="toggleStripe"
-            />
-            <fd-contextmenu-item icon="table" :label="border ? '隐藏边框' : '显示边框'" @click="toggleBorder" />
-            <fd-contextmenu-submenu icon="table-row" label="表格行密度">
-              <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="high" @click="setRowDensity('high')">
-                高
-              </fd-contextmenu-item>
-              <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="low" @click="setRowDensity('low')">
-                低
-              </fd-contextmenu-item>
-              <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="default" @click="setRowDensity('default')">
-                默认
-              </fd-contextmenu-item>
-            </fd-contextmenu-submenu>
-            <fd-contextmenu-item icon="table-col" label="表格列设置" @click="showSortColumnDialog" />
-          </fd-contextmenu-submenu>
-        </fd-contextmenu>
-        <fd-sort-column-dialog ref="sortColumnDialog" @submit="setTableColumns" />
-      </div>
+          <fd-button v-if="delVisible" type="toolbar" label="删除" icon="delete" @click="emit('del')" />
+          <fd-button v-if="createVisible" type="toolbar" label="新增" icon="plus" @click="emit('create')" />
+          <fd-button v-if="editVisible" type="toolbar" label="编辑" icon="write" @click="emit('edit')" />
+          <div v-show="false">
+            <slot name="buttons" />
+          </div>
+          <fd-button
+            v-for="item in state.showedButtons"
+            :key="item.label"
+            type="toolbar"
+            :label="item.label"
+            :icon="item.icon"
+            @click="item.onClick"
+          />
+          <fd-button type="toolbar" label="更多" icon="more" @click.stop="openMoreMenu" />
+        </div>
+      </template>
     </div>
+    <fd-contextmenu ref="contextMenu">
+      <fd-contextmenu-item
+        v-for="item in state.compactButtons"
+        :key="item.label"
+        :icon="item.icon"
+        :label="item.label"
+        @click="item.onClick"
+      />
+      <slot name="menu" />
+      <fd-contextmenu-item v-if="menuDividerVisible" divider />
+      <fd-contextmenu-submenu v-if="exportVisible" icon="download" label="导出表数据">
+        <fd-contextmenu-item label="导出当前页" @click="emit('export')" />
+        <fd-contextmenu-item label="导出全部页" @click="emit('exportAll')" />
+      </fd-contextmenu-submenu>
+      <fd-contextmenu-item v-if="exportVisible" divider />
+      <fd-contextmenu-submenu icon="table-row" label="表格设置">
+        <fd-contextmenu-item
+          v-if="tableOption.treeTable"
+          icon="row-height"
+          :label="expandAll ? '收缩所有行' : '展开所有行'"
+          @click="toggleExpandAll"
+        />
+        <fd-contextmenu-item
+          v-if="!tableOption.treeTable"
+          icon="table-stripe"
+          :label="stripe ? '隐藏斑马纹' : '显示斑马纹'"
+          @click="toggleStripe"
+        />
+        <fd-contextmenu-item icon="table" :label="border ? '隐藏边框' : '显示边框'" @click="toggleBorder" />
+        <fd-contextmenu-submenu icon="table-row" label="表格行密度">
+          <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="high" @click="setRowDensity('high')">
+            高
+          </fd-contextmenu-item>
+          <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="low" @click="setRowDensity('low')">
+            低
+          </fd-contextmenu-item>
+          <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="default" @click="setRowDensity('default')">
+            默认
+          </fd-contextmenu-item>
+        </fd-contextmenu-submenu>
+        <fd-contextmenu-item icon="table-col" label="表格列设置" @click="showSortColumnDialog" />
+      </fd-contextmenu-submenu>
+    </fd-contextmenu>
+    <fd-sort-column-dialog ref="sortColumnDialog" @submit="setTableColumns" />
   </template>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, PropType, ref, useSlots } from 'vue'
+import { computed, onMounted, PropType, reactive, ref, useSlots, VNode } from 'vue'
 import usePage from '@/extend/page/use-page'
 import { isBoolean } from 'lodash-es'
 import { TableSettingProp } from '@/components/table/types'
@@ -97,6 +122,8 @@ import FdContextmenuItem from '@/components/contextmenu/item.vue'
 import FdContextmenuSubmenu from '@/components/contextmenu/submenu.vue'
 import { ApiQuery } from '@/api'
 import useLayoutSize from '@/hooks/use-layout-size'
+import { CompactButton } from '@/extend/page/types'
+import { Indexable } from '@/common/types'
 
 defineOptions({
   name: 'FdPageAct'
@@ -112,6 +139,10 @@ const props = defineProps({
     default: false
   },
   create: {
+    type: [String, Boolean] as PropType<string | boolean>,
+    default: false
+  },
+  edit: {
     type: [String, Boolean] as PropType<string | boolean>,
     default: false
   },
@@ -144,6 +175,11 @@ const props = defineProps({
   }
 })
 
+const state = reactive({
+  showedButtons: [] as CompactButton[],
+  compactButtons: [] as CompactButton[]
+})
+
 const visibleCo = computed(() => {
   return props.visible
 })
@@ -164,12 +200,15 @@ const delVisible = computed(() => {
 const createVisible = computed(() => {
   return booleanOrAuth(props.create)
 })
+const editVisible = computed(() => {
+  return booleanOrAuth(props.edit)
+})
 const exportVisible = computed(() => {
   return booleanOrAuth(props.export)
 })
 
 const menuDividerVisible = computed(() => {
-  return !!(useSlots().menu || delVisible.value || createVisible.value)
+  return !!(useSlots().menu || state.compactButtons.length != 0)
 })
 
 const emit = defineEmits(['del', 'create', 'export', 'exportAll', 'update:queryVisible'])
@@ -224,11 +263,34 @@ const objClass = computed(() => {
   return clazz.join(' ')
 })
 
+const compactButtons = () => {
+  let empty = 4
+  delVisible.value && empty--
+  editVisible.value && empty--
+  createVisible.value && empty--
+
+  const buttons = (useSlots()?.buttons?.() as VNode[]) ?? []
+
+  for (const btn of buttons) {
+    if ((btn.type as Indexable)?.name === 'FdButton') {
+      const addBtn = {
+        label: btn.props?.label,
+        icon: btn.props?.icon,
+        disabled: btn.props?.disabled,
+        onClick: btn.props?.onClick
+      }
+      if (state.showedButtons.length < empty) {
+        state.showedButtons.push(addBtn)
+      } else {
+        state.compactButtons.push(addBtn)
+      }
+    }
+  }
+}
+
 onMounted(() => {
-  const buttons = useSlots()?.buttons
-  if (buttons) {
-    const d = buttons()
-    console.log(d[0].children.default())
+  if (isMobile.value) {
+    compactButtons()
   }
 })
 </script>

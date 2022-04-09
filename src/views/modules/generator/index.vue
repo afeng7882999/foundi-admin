@@ -11,36 +11,25 @@
           <fd-item label="表名称" prop="tableName" no-label />
           <fd-item :visible="false" />
         </template>
-        <template v-if="!isMobile" #buttons>
-          <el-button v-show="auth('generator:genTable:edit')" v-waves plain type="primary" @click="handleGenerate(null)">
-            <fd-icon class="is-in-btn" icon="download" :loading="s.generating['batch']"></fd-icon>
-            生成
-          </el-button>
-          <el-button v-show="auth('generator:genTable:edit')" v-waves plain type="warning" @click="handlePreview">
-            <fd-icon class="is-in-btn" icon="preview-open"></fd-icon>
-            预览
-          </el-button>
-          <el-button v-show="auth('generator:genTable:edit')" v-waves plain type="info" @click="openImport">
-            <fd-icon class="is-in-btn" icon="upload-one"></fd-icon>
-            导入
-          </el-button>
-        </template>
-        <template v-else #menu>
-          <fd-contextmenu-item
+        <template #buttons>
+          <fd-button
             v-show="auth('generator:genTable:edit')"
-            color="primary"
-            icon="download"
             label="生成"
+            icon="download"
+            :loading="s.generating['batch']"
+            plain
+            color="primary"
             @click="handleGenerate(null)"
           />
-          <fd-contextmenu-item
+          <fd-button
             v-show="auth('generator:genTable:edit')"
-            color="warning"
-            icon="preview-open"
             label="预览"
+            icon="preview-open"
+            plain
+            color="warning"
             @click="handlePreview"
           />
-          <fd-contextmenu-item v-show="auth('generator:genTable:edit')" color="info" icon="upload-one" label="导入" @click="openImport" />
+          <fd-button v-show="auth('generator:genTable:edit')" label="导入" icon="upload-one" plain color="info" @click="openImport" />
         </template>
       </fd-page-act>
     </template>
@@ -57,43 +46,40 @@
           edit="generator:genTable:edit"
           del="generator:genTable:delete"
           header-align="center"
-          width="220"
+          width="230"
           @edit="handleEdit"
           @del="m.del"
         >
           <template #prefix="scope">
             <el-tooltip :show-after="500" content="生成并下载代码" placement="top">
-              <el-button
+              <fd-button
                 v-show="auth('generator:genTable:edit')"
                 class="tb-act-btn"
+                label="生成"
+                icon="download"
+                :loading="s.generating[scope.row.id]"
                 plain
-                size="small"
-                type="primary"
+                color="primary"
                 @click="handleGenerate(scope.row)"
-              >
-                <fd-icon icon="download" :loading="s.generating[scope.row.id]"></fd-icon>
-                生成
-              </el-button>
+              />
             </el-tooltip>
             <el-tooltip :show-after="500" content="生成并预览代码" placement="top">
-              <el-button
+              <fd-button
                 v-show="auth('generator:genTable:edit')"
                 class="tb-act-btn"
+                label="预览"
+                icon="preview-open"
                 plain
-                size="small"
-                type="warning"
+                color="warning"
                 @click="handlePreview(scope.row)"
-              >
-                <fd-icon icon="preview-open"></fd-icon>
-                预览
-              </el-button>
+              />
             </el-tooltip>
           </template>
         </fd-col-act>
       </el-table>
     </template>
   </fd-page>
-  <generator-import ref="generatorImport" @generator-imported="m.getList"></generator-import>
+  <generator-import ref="generatorImport" @generator-imported="m.getList" />
 </template>
 
 <script setup lang="ts">
@@ -125,7 +111,7 @@ const stateOption = {
 
 const { listRefs, listState: s, listMethods: m, listAttrs } = useList<GenTable>(stateOption)
 const { table } = listRefs
-const { pageMainAttrs, pageActAttrs, tableAttrs, paginationAttrs } = listAttrs
+const { pageMainAttrs, pageActAttrs, tableAttrs } = listAttrs
 
 const { auth } = usePage()
 
