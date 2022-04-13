@@ -21,8 +21,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, PropType, reactive, ref } from 'vue'
-import { addResizeListener, removeResizeListener } from '@/utils/resize-event'
+import { computed, onMounted, PropType, reactive, ref } from 'vue'
+import { useResizeObserver } from '@vueuse/core'
 
 defineOptions({
   name: 'FdTagInput'
@@ -63,11 +63,9 @@ const inputStyle = computed(() => {
 })
 
 onMounted(() => {
-  addResizeListener(wrapper.value as any, resizeHandle)
-})
-
-onBeforeUnmount(() => {
-  removeResizeListener(wrapper.value as any, resizeHandle)
+  useResizeObserver(wrapper.value as HTMLElement, (entries) => {
+    state.size = entries[0].contentRect.width
+  })
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -104,9 +102,5 @@ const delTag = (index?: number) => {
 
 const focus = (ifFocused: boolean) => {
   state.focused = ifFocused
-}
-
-const resizeHandle = () => {
-  state.size = (wrapper.value as HTMLElement).getBoundingClientRect().width
 }
 </script>
