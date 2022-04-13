@@ -2,6 +2,7 @@ import { useStore } from 'vuex'
 import { AllState } from '@/store'
 import { DeviceType } from '@/store/modules/app'
 import { computed } from 'vue'
+import { useResizeObserver } from '@vueuse/core'
 
 export const sizeConst = {
   ratio: 3,
@@ -22,62 +23,56 @@ export const breakpoints = {
 }
 
 export default function useLayoutSize(react: boolean | undefined = true) {
-  let bodyRect = {
-    height: 0,
-    width: 0,
-    x: 0,
-    y: 0
-  } as DOMRect
-
   const store = useStore<AllState>()
   const storeState = store.state as AllState
 
-  const getDocH = () => {
+  const getDocH = (rect: DOMRectReadOnly) => {
     const height = storeState.app.enableTags
       ? sizeConst.tabHeight + sizeConst.titleHeight + sizeConst.titlePadding
       : sizeConst.titleHeight + sizeConst.titlePadding
-    return bodyRect.height - height
+    return rect.height - height
   }
 
-  const getDocW = () => {
+  const getDocW = (rect: DOMRectReadOnly) => {
     if (storeState.app.sidebarMode?.offScreen) {
-      return bodyRect.width
+      return rect.width
     }
     if (storeState.app.sidebarMode?.minimized) {
-      return bodyRect.width - sizeConst.sidebarMiniWidth
+      return rect.width - sizeConst.sidebarMiniWidth
     }
-    return bodyRect.width - sizeConst.sidebarNormalWidth
+    return rect.width - sizeConst.sidebarNormalWidth
   }
 
-  const resizeLayout = async () => {
-    if (!document.hidden) {
-      bodyRect = document.body.getBoundingClientRect()
-      await store.dispatch('app/setBodyHeight', bodyRect.height)
-      await store.dispatch('app/setBodyWidth', bodyRect.width)
-      await store.dispatch('app/setDocHeight', getDocH())
-      await store.dispatch('app/setDocWidth', getDocW())
-      if (bodyRect.width - sizeConst.ratio < breakpoints.sm) {
-        await store.dispatch('app/toggleDevice', DeviceType.Mobile)
-        return
-      }
-      if (bodyRect.width - sizeConst.ratio > breakpoints.md) {
-        await store.dispatch('app/toggleDevice', DeviceType.Desktop)
-        return
-      }
-      await store.dispatch('app/toggleDevice', DeviceType.Pad)
+  const resizeLayout = async (rect: DOMRectReadOnly) => {
+    await store.dispatch('app/setBodyHeight', rect.height)
+    await store.dispatch('app/setBodyWidth', rect.width)
+    await store.dispatch('app/setDocHeight', getDocH(rect))
+    await store.dispatch('app/setDocWidth', getDocW(rect))
+    if (rect.width - sizeConst.ratio < breakpoints.sm) {
+      await store.dispatch('app/toggleDevice', DeviceType.Mobile)
+      return
     }
+    if (rect.width - sizeConst.ratio > breakpoints.md) {
+      await store.dispatch('app/toggleDevice', DeviceType.Desktop)
+      return
+    }
+    await store.dispatch('app/toggleDevice', DeviceType.Pad)
   }
 
   const addResizeListener = () => {
-    window.addEventListener('resize', resizeLayout)
-  }
-
-  const removeResizeListener = () => {
-    window.removeEventListener('resize', resizeLayout)
+    useResizeObserver(document.body, async (entries) => {
+      if (document.hidden) {
+        return
+      }
+      await resizeLayout(entries[0].contentRect)
+    })
   }
 
   const doLayout = async () => {
-    await resizeLayout()
+    if (document.hidden) {
+      return
+    }
+    await resizeLayout(document.body.getBoundingClientRect())
   }
 
   const device = computed(() => {
@@ -94,7 +89,6 @@ export default function useLayoutSize(react: boolean | undefined = true) {
 
   return {
     addResizeListener,
-    removeResizeListener,
     device,
     isMobile,
     isMobileOrPad,

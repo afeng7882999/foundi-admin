@@ -103,7 +103,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  removeResizeListener()
+  // removeResizeListener()
 })
 
 const closeOffScreenSidebar = async () => {
