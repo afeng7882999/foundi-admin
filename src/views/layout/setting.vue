@@ -83,13 +83,13 @@ watch(
   }
 )
 
-const { doLayout } = useLayoutSize()
+const { doLayoutResize } = useLayoutSize()
 
 watch(
   () => state.enableTags,
   (val) => {
     store.dispatch('app/setEnableTags', val)
-    doLayout()
+    doLayoutResize()
   }
 )
 

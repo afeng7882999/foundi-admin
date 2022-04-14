@@ -56,7 +56,7 @@ const toggleBtnActive = computed(() => {
   return (!modeVal.offScreen && modeVal.minimized) || (modeVal.offScreen && !modeVal.opened)
 })
 
-const { doLayout } = useLayoutSize()
+const { doLayoutResize } = useLayoutSize()
 
 const toggleSideBar = async () => {
   const modeVal = mode.value
@@ -65,7 +65,7 @@ const toggleSideBar = async () => {
   } else {
     await store.dispatch('app/setSidebarMode', { minimized: !modeVal.minimized })
   }
-  doLayout()
+  await doLayoutResize()
 }
 
 const toggleSetting = () => {

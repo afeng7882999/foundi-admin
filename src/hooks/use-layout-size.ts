@@ -59,7 +59,7 @@ export default function useLayoutSize(react: boolean | undefined = true) {
     await store.dispatch('app/toggleDevice', DeviceType.Pad)
   }
 
-  const addResizeListener = () => {
+  const addResizeObserver = () => {
     useResizeObserver(document.body, async (entries) => {
       if (document.hidden) {
         return
@@ -68,7 +68,7 @@ export default function useLayoutSize(react: boolean | undefined = true) {
     })
   }
 
-  const doLayout = async () => {
+  const doLayoutResize = async () => {
     if (document.hidden) {
       return
     }
@@ -88,10 +88,10 @@ export default function useLayoutSize(react: boolean | undefined = true) {
   })
 
   return {
-    addResizeListener,
+    addResizeObserver,
     device,
     isMobile,
     isMobileOrPad,
-    doLayout
+    doLayoutResize
   }
 }

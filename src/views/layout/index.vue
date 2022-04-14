@@ -33,7 +33,7 @@ defineOptions({
 const store = useStore<AllState>()
 const storeState = store.state as AllState
 
-const { addResizeListener, removeResizeListener, doLayout, isMobileOrPad } = useLayoutSize()
+const { addResizeObserver, doLayoutResize, isMobileOrPad } = useLayoutSize()
 
 const appSetting = ref()
 
@@ -98,8 +98,8 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-  addResizeListener()
-  doLayout()
+  addResizeObserver()
+  doLayoutResize()
 })
 
 onUnmounted(() => {
