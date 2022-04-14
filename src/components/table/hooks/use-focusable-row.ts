@@ -1,11 +1,10 @@
 import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus'
-import { addResizeListener, removeResizeListener, ResizableElement } from '@/utils/resize-event'
-import { computed, onMounted, onUnmounted, onUpdated } from 'vue'
+import { computed, onMounted, onUpdated } from 'vue'
 import { getDocumentTop, scrollDocH } from '@/utils/smooth-scroll'
 import usePage from '@/extend/page/use-page'
 import { merge } from 'lodash-es'
-import { unrefElement, VueInstance } from '@vueuse/core'
+import { unrefElement, useResizeObserver, VueInstance } from '@vueuse/core'
 
 export type FocusRowOption = {
   // 行是否可选
@@ -61,13 +60,12 @@ const useFocusableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, f
   }
 
   // 设置focus边框的位置和大小
-  const resizeHighlightBox = () => {
-    if (!bodyWrapperElCo.value || !boxEl) {
+  const resizeHighlightBox = (wrapperRect: DOMRectReadOnly) => {
+    if (!boxEl) {
       return
     }
     colEl = bodyWrapperElCo.value.querySelector('tr.current-row') as HTMLElement
     if (colEl) {
-      const wrapperRect = bodyWrapperElCo.value.getBoundingClientRect()
       colRect = colEl.getBoundingClientRect()
       boxEl.style.top = colEl.offsetTop + bodyWrapperElCo.value.offsetTop - 1 + 'px'
       boxEl.style.left = bodyWrapperElCo.value.offsetLeft + 'px'
@@ -99,7 +97,11 @@ const useFocusableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, f
 
   // 高亮当前选中表格行
   const focusCurrentRow = () => {
-    resizeHighlightBox()
+    if (!bodyWrapperElCo.value) {
+      return
+    }
+    const wrapperRect = bodyWrapperElCo.value.getBoundingClientRect()
+    resizeHighlightBox(wrapperRect)
     scrollToHighlightBox()
   }
 
@@ -110,9 +112,11 @@ const useFocusableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, f
   let rowFocusableInitialized = false
 
   const tryInit = () => {
-    if (option.rowFocusable && tableElCo.value && !rowFocusableInitialized) {
+    if (option.rowFocusable && bodyWrapperElCo.value && !rowFocusableInitialized) {
       createHighlightBox()
-      addResizeListener(tableElCo.value as ResizableElement, resizeHighlightBox)
+      useResizeObserver(bodyWrapperElCo.value as HTMLElement, (entries) => {
+        resizeHighlightBox(entries[0].contentRect)
+      })
       rowFocusableInitialized = true
     }
   }
@@ -123,12 +127,6 @@ const useFocusableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, f
 
   onUpdated(() => {
     tryInit()
-  })
-
-  onUnmounted(() => {
-    if (option.rowFocusable && tableElCo.value) {
-      removeResizeListener(tableElCo.value as ResizableElement, resizeHighlightBox)
-    }
   })
 
   return {
