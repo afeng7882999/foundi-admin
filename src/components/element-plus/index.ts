@@ -1,5 +1,6 @@
 import { App } from 'vue'
 import {
+  ElAffix,
   ElAlert,
   ElAside,
   ElAutocomplete,
@@ -78,8 +79,8 @@ import {
   ElTree,
   ElUpload,
   ElSpace,
-  // ElSkeleton,
-  // ElSkeletonItem,
+  ElSkeleton,
+  ElSkeletonItem,
   // ElCheckTag,
   // ElResult,
   ElInfiniteScroll,
@@ -92,6 +93,7 @@ import {
 } from 'element-plus'
 
 const components = [
+  ElAffix,
   ElAlert,
   ElAside,
   ElAutocomplete,
@@ -169,8 +171,8 @@ const components = [
   ElTree,
   ElUpload,
   ElSpace,
-  // ElSkeleton,
-  // ElSkeletonItem,
+  ElSkeleton,
+  ElSkeletonItem,
   // ElCheckTag,
   // ElResult,
   ElDescriptions,
