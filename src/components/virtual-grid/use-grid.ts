@@ -1,5 +1,5 @@
 import { concat, differenceWith, isEqual, range, slice, without, zip } from 'lodash-es'
-import { ExtractPropTypes, onMounted, reactive, ref, toRefs, watch } from 'vue'
+import {ExtractPropTypes, nextTick, onMounted, reactive, ref, toRefs, watch} from 'vue'
 import {
   BufferMeta,
   GRID_PROPS,
@@ -11,6 +11,7 @@ import {
 } from '@/components/virtual-grid/types'
 import { useEventListener, useResizeObserver, useThrottleFn, VueInstance } from '@vueuse/core'
 import { Ref } from '@vue/reactivity'
+import {nextFrame} from "@/utils/next-frame";
 
 const computeHeightAboveWindowOf = (el: Element): number => {
   const top = el.getBoundingClientRect().top
@@ -61,6 +62,7 @@ const getVisiblePageNumbers = ({ bufferedOffset, bufferedLength }: BufferMeta, l
 }
 
 const callPageProvider = async (pageNumbers: number[], pageSize: number, pageProvider: PageProvider): Promise<ItemsByPage[]> => {
+  console.warn('provider')
   const itemsByPages = [] as ItemsByPage[]
   for (const pageNumber of pageNumbers) {
     const items = await pageProvider(pageNumber, pageSize)
@@ -102,7 +104,7 @@ const getVisibleItems = (
   })
 }
 
-const accumulateBuffer = (buffer: InternalItem[], visibleItems: InternalItem[]): InternalItem[] => {
+const accumulateBuffer = (buffer: InternalItem[], visibleItems: InternalItem[], { bufferedLength }: BufferMeta): InternalItem[] => {
   const itemsToAdd = differenceWith(visibleItems, buffer, isEqual)
   const itemsFreeToUse = differenceWith(buffer, visibleItems, isEqual)
 
@@ -115,8 +117,9 @@ const accumulateBuffer = (buffer: InternalItem[], visibleItems: InternalItem[]):
     const itemsToAppend = differenceWith(itemsToAdd, itemsToReplaceWith, isEqual)
 
     const itemsLeft = without(buffer, ...itemsToDelete).map((item) => replaceMap.get(item) ?? item)
-    return concat(itemsLeft, itemsToAppend)
+    return concat(itemsLeft, itemsToAppend).slice(0, bufferedLength)
   }
+
   return visibleItems
 }
 
@@ -128,21 +131,16 @@ const getVerticalScrollParent = (element: Element, includeHidden = false): Eleme
   const style = getComputedStyle(element)
   const excludeStaticParent = style.position === 'absolute'
   const overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/
-
   if (style.position === 'fixed') {
     return document.body
   }
-
   for (let parent: Element | null = element; (parent = parent.parentElement); ) {
     const parentStyle = getComputedStyle(parent)
-
     if (excludeStaticParent && parentStyle.position === 'static') {
       continue
     }
-
     if (overflowRegex.test(parentStyle.overflow + parentStyle.overflowY)) return parent
   }
-
   return document.scrollingElement || document.documentElement
 }
 
@@ -155,7 +153,7 @@ export default function useGrid(
   let resizeMeasurement = {} as ResizeMeasurement
   let itemRect = {} as DOMRect
   let bufferMeta = {} as BufferMeta
-  let visiblePageNumbers = [0] as number[]
+  let visiblePageNumbers = [] as number[]
   let allItems = [] as unknown[]
   const contentHeight = ref(0)
   const state = reactive({
@@ -163,12 +161,15 @@ export default function useGrid(
   })
 
   useResizeObserver(rootRef, async (entries) => {
+    console.log('root')
     heightAboveWindow = computeHeightAboveWindowOf(entries[0].target)
     resizeMeasurement = getResizeMeasurement(rootRef.value as HTMLElement, itemRect)
+    contentHeight.value = getContentHeight(resizeMeasurement, props.length as number)
     await getBufferThrottle()
   })
 
   useResizeObserver(probeRef, async (entries) => {
+    console.log('probe')
     itemRect = entries[0].contentRect
     resizeMeasurement = getResizeMeasurement(rootRef.value as HTMLElement, itemRect)
     contentHeight.value = getContentHeight(resizeMeasurement, props.length as number)
@@ -186,10 +187,6 @@ export default function useGrid(
       passive: true
     }
   )
-
-  onMounted(async () => {
-    await getBuffer()
-  })
 
   watch(
     () => props.length,
@@ -228,6 +225,7 @@ export default function useGrid(
   )
 
   const getBuffer = async (): Promise<void> => {
+    console.log('buffer>>>>>>>>>>>>>>>>>>')
     if (!props.pageProvider) {
       return
     }
@@ -241,7 +239,7 @@ export default function useGrid(
       }
     }
     const visibleItems = getVisibleItems(bufferMeta, resizeMeasurement, allItems)
-    state.buffer = accumulateBuffer(state.buffer, visibleItems)
+    state.buffer = accumulateBuffer(state.buffer, visibleItems, bufferMeta)
   }
 
   const getBufferThrottle = useThrottleFn(getBuffer, props.pageProviderThrottleTime as number)

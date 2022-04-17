@@ -56,18 +56,17 @@ const { docMinHeight, showPageHeader, auth } = usePage()
 
 <style lang="scss" module>
 .grid {
+  box-sizing: border-box;
   display: grid;
-  padding: 0 1rem;
-  grid-gap: 2rem;
-  grid-template-columns: repeat(2, 1fr);
-  place-items: start stretch;
-  background-color: var(--el-bg-color);
+  place-content: center;
+  grid-gap: 8px;
+  grid-template-columns: repeat(auto-fit, 300px);
+  margin: 0;
+  padding: 8px;
 }
 
 @media (min-width: 760px) {
   .grid {
-    padding: 1.5rem;
-    grid-gap: 3rem;
     grid-template-columns: repeat(3, 1fr);
   }
 }

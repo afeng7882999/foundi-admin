@@ -1,9 +1,8 @@
 <template>
-  <div v-if="src" class="file-card">
-    <img :src="src" class="el-image" style="object-fit: cover" />
+  <a href="#">
+    <img :src="src" alt="" />
     <span class="file-card__label">{{ filename }}</span>
-  </div>
-  <div v-else class="file-card" style="background-color: #00acc1"></div>
+  </a>
 </template>
 
 <script setup lang="ts">
@@ -18,37 +17,18 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
-.file-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+a {
+  display: block;
   width: 100%;
-  height: 400px;
-  overflow: hidden;
-}
-.el-image {
-  padding: 0 5px;
-  width: 100%;
-  height: 300px;
-}
-.file-card__label {
-  padding: 8px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.image-slot {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background: var(--el-fill-color-light);
-  color: var(--el-text-color-secondary);
-  font-size: 14px;
+  height: 240px;
+  padding: 16px 16px 48px 16px;
 }
 
-.dot {
-  animation: dot 2s infinite steps(3, start);
-  overflow: hidden;
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 2px 2px 5px rgba(#000, 0.2);
 }
 </style>
