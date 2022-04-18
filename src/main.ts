@@ -22,7 +22,6 @@ import FdTableAll from '@/components/table'
 import FdFormAll from '@/components/form'
 import FdDescriptionsAll from '@/components/descriptions'
 import FdButtonAll from '@/components/button'
-import FdVirtualGrid from '@/components/virtual-grid'
 
 const app = createApp(App)
 app.use(store)
@@ -42,6 +41,5 @@ app
   .use(FdFormAll)
   .use(FdDescriptionsAll)
   .use(FdButtonAll)
-  .use(FdVirtualGrid)
 
 app.mount('#app')
