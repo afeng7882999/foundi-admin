@@ -33,7 +33,7 @@
         </template>
       </fd-drawer>
       <slot name="act" />
-      <div ref="tableWrapper" class="fd-page__table is-bordered">
+      <div ref="tableWrapper" class="fd-page__table is-bordered is-mobile">
         <slot name="table" />
       </div>
     </template>
