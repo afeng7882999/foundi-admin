@@ -352,7 +352,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 改变每页显示数
   const sizeChange = async (val: number) => {
-    listState.current = 0
+    listState.current = 1
     listState.siz = val
     await getList()
     scrollDocToTop()
