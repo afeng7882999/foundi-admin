@@ -2,7 +2,7 @@ import { BufferMeta, GRID_PROPS, GridMeasurement, InternalItem, ItemsByPage, Pag
 import { concat, isEqual, parseInt, range, slice } from 'lodash-es'
 import { ExtractPropTypes, reactive, toRefs, watch } from 'vue'
 import { Ref } from '@vue/reactivity'
-import { useEventListener, useResizeObserver, VueInstance } from '@vueuse/core'
+import { useDebounceFn, useEventListener, useResizeObserver, VueInstance } from '@vueuse/core'
 
 const getHeightAboveWindowOf = (el: Element): number => {
   const top = el.getBoundingClientRect().top
@@ -81,32 +81,28 @@ const callPageProvider = async (pageNumbers: number[], pageSize: number, pagePro
   return itemsByPages
 }
 
-const getPageItems = (itemsByPages: ItemsByPage[], pageSize: number): unknown[] => {
-  const pageNumberLen = itemsByPages.length
-  const items = itemsByPages.map((i) => i.items).reduce((total: unknown[], its: unknown[]) => concat(total, its), [])
-  return slice(items, 0, pageSize * pageNumberLen)
-}
-
 const getBufferItems = (
   itemsByPages: ItemsByPage[],
   { bufferedOffset, bufferedLength }: BufferMeta,
   length: number,
   pageSize: number
 ): InternalItem[] => {
-  const pageItems = getPageItems(itemsByPages, pageSize)
+  const pageItems = itemsByPages.map((i) => i.items).reduce((total: unknown[], its: unknown[]) => concat(total, its), [])
   if (pageItems.length === 0) {
     return []
   }
-  const front = new Array(Math.max(itemsByPages[0].pageNumber * pageSize - bufferedOffset, 0)).fill(undefined)
-  const end = new Array(
-    Math.max(Math.min(bufferedOffset + bufferedLength, length) - itemsByPages[itemsByPages.length - 1].pageNumber, 0)
-  ).fill(undefined)
+
   const visibleItems = slice(
     pageItems,
     Math.max(bufferedOffset - itemsByPages[0].pageNumber * pageSize, 0),
     bufferedOffset + bufferedLength - itemsByPages[0].pageNumber * pageSize
   )
-  const buffer = concat(front, visibleItems, end)
+
+  const itemsTail = itemsByPages[itemsByPages.length - 1].pageNumber * pageSize + pageSize
+  const emptyPrepend = new Array(Math.max(itemsByPages[0].pageNumber * pageSize - bufferedOffset, 0)).fill(undefined)
+  const emptyAppend = new Array(Math.max(Math.min(bufferedOffset + bufferedLength, length) - itemsTail, 0)).fill(undefined)
+  const buffer = concat(emptyPrepend, visibleItems, emptyAppend)
+
   return buffer.map((value, localIndex) => {
     const index = bufferedOffset + localIndex
     return {
@@ -147,20 +143,13 @@ export default function useGrid(
   })
 
   const getBuffer = async (): Promise<void> => {
-    console.log('buffer')
     bufferMeta = getBufferMeta()(heightAboveWindow, resizeMeasurement)
     const visiblePn = getVisiblePageNumbers(bufferMeta, props.length as number, props.pageSize as number)
     const pageChanged = !isEqual(visiblePageNumbers, visiblePn)
     const needRefresh = reachRefreshSpan(bufferMeta, bufferOffset)
     if (pageChanged) {
       visiblePageNumbers = visiblePn
-      callPageProvider(visiblePageNumbers, props.pageSize as number, props.pageProvider as PageProvider).then((items) => {
-        const itemPn = items.map((i) => i.pageNumber)
-        if (isEqual(visiblePageNumbers, itemPn)) {
-          itemByPages = items
-          state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
-        }
-      })
+      await getBufferRemoteDebounce()
     }
     if (pageChanged || needRefresh) {
       bufferOffset = bufferMeta.bufferedOffset
@@ -168,6 +157,18 @@ export default function useGrid(
       state.contentTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
     }
   }
+
+  const getBufferRemote = async () => {
+    callPageProvider(visiblePageNumbers, props.pageSize as number, props.pageProvider as PageProvider).then((items) => {
+      const itemPn = items.map((i) => i.pageNumber)
+      if (isEqual(visiblePageNumbers, itemPn)) {
+        itemByPages = items
+        state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
+      }
+    })
+  }
+
+  const getBufferRemoteDebounce = useDebounceFn(getBufferRemote, props.pageProviderDebounceTime as number)
 
   useResizeObserver(rootRef, async (entries) => {
     heightAboveWindow = getHeightAboveWindowOf(entries[0].target)

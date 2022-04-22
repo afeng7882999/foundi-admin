@@ -56,6 +56,13 @@ export const GRID_PROPS = {
     type: Function as PropType<PageProvider>,
     required: true
   },
+  // Debounce window in milliseconds on the calls to `pageProvider`,
+  // which is useful for avoiding network requests of skimmed pages.
+  pageProviderDebounceTime: {
+    type: Number as PropType<number>,
+    default: 300,
+    validator: (value: number) => Number.isInteger(value) && value >= 0
+  },
   // The number of items in a page from the item provider
   pageSize: {
     type: Number as PropType<number>,
