@@ -87,17 +87,27 @@ const getPageItems = (itemsByPages: ItemsByPage[], pageSize: number): unknown[] 
   return slice(items, 0, pageSize * pageNumberLen)
 }
 
-const getVisibleItems = (itemsByPages: ItemsByPage[], { bufferedOffset, bufferedLength }: BufferMeta, pageSize: number): InternalItem[] => {
+const getBufferItems = (
+  itemsByPages: ItemsByPage[],
+  { bufferedOffset, bufferedLength }: BufferMeta,
+  length: number,
+  pageSize: number
+): InternalItem[] => {
   const pageItems = getPageItems(itemsByPages, pageSize)
   if (pageItems.length === 0) {
     return []
   }
+  const front = new Array(Math.max(itemsByPages[0].pageNumber * pageSize - bufferedOffset, 0)).fill(undefined)
+  const end = new Array(
+    Math.max(Math.min(bufferedOffset + bufferedLength, length) - itemsByPages[itemsByPages.length - 1].pageNumber, 0)
+  ).fill(undefined)
   const visibleItems = slice(
     pageItems,
-    bufferedOffset - itemsByPages[0].pageNumber * pageSize,
+    Math.max(bufferedOffset - itemsByPages[0].pageNumber * pageSize, 0),
     bufferedOffset + bufferedLength - itemsByPages[0].pageNumber * pageSize
   )
-  return visibleItems.map((value, localIndex) => {
+  const buffer = concat(front, visibleItems, end)
+  return buffer.map((value, localIndex) => {
     const index = bufferedOffset + localIndex
     return {
       index,
@@ -128,6 +138,7 @@ export default function useGrid(
   let resizeMeasurement = {} as ResizeMeasurement
   let itemByPages = [] as ItemsByPage[]
   let bufferOffset = 0
+  let bufferMeta = {} as BufferMeta
 
   const state = reactive({
     buffer: [] as InternalItem[],
@@ -136,17 +147,24 @@ export default function useGrid(
   })
 
   const getBuffer = async (): Promise<void> => {
-    const bufferMeta = getBufferMeta()(heightAboveWindow, resizeMeasurement)
+    console.log('buffer')
+    bufferMeta = getBufferMeta()(heightAboveWindow, resizeMeasurement)
     const visiblePn = getVisiblePageNumbers(bufferMeta, props.length as number, props.pageSize as number)
     const pageChanged = !isEqual(visiblePageNumbers, visiblePn)
     const needRefresh = reachRefreshSpan(bufferMeta, bufferOffset)
     if (pageChanged) {
       visiblePageNumbers = visiblePn
-      itemByPages = await callPageProvider(visiblePageNumbers, props.pageSize as number, props.pageProvider as PageProvider)
+      callPageProvider(visiblePageNumbers, props.pageSize as number, props.pageProvider as PageProvider).then((items) => {
+        const itemPn = items.map((i) => i.pageNumber)
+        if (isEqual(visiblePageNumbers, itemPn)) {
+          itemByPages = items
+          state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
+        }
+      })
     }
     if (pageChanged || needRefresh) {
       bufferOffset = bufferMeta.bufferedOffset
-      state.buffer = getVisibleItems(itemByPages, bufferMeta, props.pageSize as number)
+      state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
       state.contentTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
     }
   }

@@ -38,7 +38,7 @@ defineOptions({
 })
 
 const length = ref<number>(200)
-const pageSize = ref<number>(40)
+const pageSize = ref<number>(10)
 const scrollTo = ref<number>(0)
 
 const provider = async (pageNumber: number, pageSize: number) => {
