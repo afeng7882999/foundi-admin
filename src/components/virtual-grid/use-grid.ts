@@ -1,12 +1,13 @@
 import { BufferMeta, GRID_PROPS, GridMeasurement, InternalItem, ItemsByPage, PageProvider, ResizeMeasurement } from './types'
-import { concat, isEqual, parseInt, range, slice } from 'lodash-es'
+import { clamp, concat, isEqual, parseInt, range, slice } from 'lodash-es'
 import { ExtractPropTypes, reactive, toRefs, watch } from 'vue'
 import { Ref } from '@vue/reactivity'
 import { useDebounceFn, useEventListener, useResizeObserver, VueInstance } from '@vueuse/core'
 
-const getHeightAboveWindowOf = (el: Element): number => {
+const getHeightAboveWindowOf = (el: Element, containerEl?: Element): number => {
   const top = el.getBoundingClientRect().top
-  return Math.abs(Math.min(top, 0))
+  const containerTop = containerEl ? containerEl.getBoundingClientRect().top : 0
+  return Math.abs(Math.min(top, containerTop))
 }
 
 const getVerticalScrollParent = (el: Element, includeHidden = false): Element => {
@@ -53,7 +54,7 @@ const getBufferMeta =
 
     const rowsBeforeView = itemHeightWithGap && Math.floor((heightAboveWindow + rowGap) / itemHeightWithGap)
     const offset = rowsBeforeView * columns
-    const bufferedOffset = Math.max(offset - Math.floor(length / 2), 0)
+    const bufferedOffset = Math.max(offset - Math.floor(rowsInView / 2) * columns, 0)
     const bufferedLength = length * 2
 
     return {
@@ -70,6 +71,7 @@ const getVisiblePageNumbers = ({ bufferedOffset, bufferedLength }: BufferMeta, l
 }
 
 const callPageProvider = async (pageNumbers: number[], pageSize: number, pageProvider: PageProvider): Promise<ItemsByPage[]> => {
+  console.log('provider')
   const itemsByPages = [] as ItemsByPage[]
   for (const pageNumber of pageNumbers) {
     const items = await pageProvider(pageNumber + 1, pageSize)
@@ -98,9 +100,12 @@ const getBufferItems = (
     bufferedOffset + bufferedLength - itemsByPages[0].pageNumber * pageSize
   )
 
+  const prependLen = clamp(itemsByPages[0].pageNumber * pageSize - bufferedOffset, 0, bufferedLength)
+  const emptyPrepend = new Array(prependLen).fill(undefined)
   const itemsTail = itemsByPages[itemsByPages.length - 1].pageNumber * pageSize + pageSize
-  const emptyPrepend = new Array(Math.max(itemsByPages[0].pageNumber * pageSize - bufferedOffset, 0)).fill(undefined)
-  const emptyAppend = new Array(Math.max(Math.min(bufferedOffset + bufferedLength, length) - itemsTail, 0)).fill(undefined)
+  const appendMaxLen = bufferedLength - Math.max(bufferedOffset + bufferedLength - length, 0)
+  const appendLen = clamp(Math.min(bufferedOffset + bufferedLength, length) - itemsTail, 0, appendMaxLen)
+  const emptyAppend = new Array(appendLen).fill(undefined)
   const buffer = concat(emptyPrepend, visibleItems, emptyAppend)
 
   return buffer.map((value, localIndex) => {
@@ -117,10 +122,7 @@ const getContentHeight = ({ columns, rowGap, itemHeightWithGap }: ResizeMeasurem
 }
 
 const reachRefreshSpan = (bufferMeta: BufferMeta, oldBufferOffset: number, refreshSpan?: number): boolean => {
-  if (bufferMeta.bufferedOffset === 0) {
-    return true
-  }
-  refreshSpan = refreshSpan === undefined ? Math.floor(bufferMeta.bufferedLength / 8) : refreshSpan
+  refreshSpan = refreshSpan === undefined ? Math.floor(bufferMeta.bufferedLength / 8.0) : refreshSpan
   return Math.abs(bufferMeta.bufferedOffset - oldBufferOffset) > refreshSpan
 }
 
@@ -164,6 +166,7 @@ export default function useGrid(
       if (isEqual(visiblePageNumbers, itemPn)) {
         itemByPages = items
         state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
+        state.contentTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
       }
     })
   }
