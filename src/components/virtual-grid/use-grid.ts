@@ -1,5 +1,5 @@
 import { BufferMeta, GRID_PROPS, GridMeasurement, InternalItem, ItemsByPage, PageProvider, ResizeMeasurement } from './types'
-import { clamp, concat, isEqual, parseInt, range, slice } from 'lodash-es'
+import { clamp, concat, difference, isEqual, parseInt, range, slice } from 'lodash-es'
 import { ExtractPropTypes, reactive, toRefs, watch } from 'vue'
 import { Ref } from '@vue/reactivity'
 import { useDebounceFn, useEventListener, useResizeObserver, VueInstance } from '@vueuse/core'
@@ -122,7 +122,7 @@ const getContentHeight = ({ columns, rowGap, itemHeightWithGap }: ResizeMeasurem
 }
 
 const reachRefreshSpan = (bufferMeta: BufferMeta, oldBufferOffset: number, refreshSpan?: number): boolean => {
-  refreshSpan = refreshSpan === undefined ? Math.floor(bufferMeta.bufferedLength / 8.0) : refreshSpan
+  refreshSpan = refreshSpan === undefined ? Math.floor(bufferMeta.bufferedLength / 8) : refreshSpan
   return Math.abs(bufferMeta.bufferedOffset - oldBufferOffset) > refreshSpan
 }
 
@@ -147,7 +147,7 @@ export default function useGrid(
   const getBuffer = async (): Promise<void> => {
     bufferMeta = getBufferMeta()(heightAboveWindow, resizeMeasurement)
     const visiblePn = getVisiblePageNumbers(bufferMeta, props.length as number, props.pageSize as number)
-    const pageChanged = !isEqual(visiblePageNumbers, visiblePn)
+    const pageChanged = difference(visiblePn, visiblePageNumbers).length > 0
     const needRefresh = reachRefreshSpan(bufferMeta, bufferOffset)
     if (pageChanged) {
       visiblePageNumbers = visiblePn
