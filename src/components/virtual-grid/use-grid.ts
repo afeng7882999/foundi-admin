@@ -121,7 +121,14 @@ const getContentHeight = ({ columns, rowGap, itemHeightWithGap }: ResizeMeasurem
   return itemHeightWithGap * Math.ceil(length / columns) - rowGap
 }
 
-const reachRefreshSpan = (bufferMeta: BufferMeta, oldBufferOffset: number, refreshSpan?: number): boolean => {
+const reachRefreshSpan = (bufferMeta: BufferMeta, oldBufferOffset: number, length: number, refreshSpan?: number): boolean => {
+  if (oldBufferOffset !== 0 && bufferMeta.bufferedOffset === 0) {
+    return true
+  }
+  const bottomHead = length - bufferMeta.bufferedLength
+  if (oldBufferOffset < bottomHead && bufferMeta.bufferedOffset >= bottomHead) {
+    return true
+  }
   refreshSpan = refreshSpan === undefined ? Math.floor(bufferMeta.bufferedLength / 8) : refreshSpan
   return Math.abs(bufferMeta.bufferedOffset - oldBufferOffset) > refreshSpan
 }
@@ -148,7 +155,8 @@ export default function useGrid(
     bufferMeta = getBufferMeta()(heightAboveWindow, resizeMeasurement)
     const visiblePn = getVisiblePageNumbers(bufferMeta, props.length as number, props.pageSize as number)
     const pageChanged = difference(visiblePn, visiblePageNumbers).length > 0
-    const needRefresh = reachRefreshSpan(bufferMeta, bufferOffset)
+    const needRefresh = reachRefreshSpan(bufferMeta, bufferOffset, props.length as number)
+    console.log(pageChanged, needRefresh)
     if (pageChanged) {
       visiblePageNumbers = visiblePn
       await getBufferRemoteDebounce()
