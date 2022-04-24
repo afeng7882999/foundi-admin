@@ -71,7 +71,6 @@ const getVisiblePageNumbers = ({ bufferedOffset, bufferedLength }: BufferMeta, l
 }
 
 const callPageProvider = async (pageNumbers: number[], pageSize: number, pageProvider: PageProvider): Promise<ItemsByPage[]> => {
-  console.log('provider')
   const itemsByPages = [] as ItemsByPage[]
   for (const pageNumber of pageNumbers) {
     const items = await pageProvider(pageNumber + 1, pageSize)
@@ -94,10 +93,9 @@ const getBufferItems = (
     return []
   }
 
-  const visibleItems = slice(
-    pageItems,
+  const visibleItems = pageItems.slice(
     Math.max(bufferedOffset - itemsByPages[0].pageNumber * pageSize, 0),
-    bufferedOffset + bufferedLength - itemsByPages[0].pageNumber * pageSize
+    Math.max(bufferedOffset + bufferedLength - itemsByPages[0].pageNumber * pageSize, 0)
   )
 
   const prependLen = clamp(itemsByPages[0].pageNumber * pageSize - bufferedOffset, 0, bufferedLength)
@@ -107,6 +105,8 @@ const getBufferItems = (
   const appendLen = clamp(Math.min(bufferedOffset + bufferedLength, length) - itemsTail, 0, appendMaxLen)
   const emptyAppend = new Array(appendLen).fill(undefined)
   const buffer = concat(emptyPrepend, visibleItems, emptyAppend)
+
+  console.log(visibleItems.length)
 
   return buffer.map((value, localIndex) => {
     const index = bufferedOffset + localIndex
@@ -156,7 +156,6 @@ export default function useGrid(
     const visiblePn = getVisiblePageNumbers(bufferMeta, props.length as number, props.pageSize as number)
     const pageChanged = difference(visiblePn, visiblePageNumbers).length > 0
     const needRefresh = reachRefreshSpan(bufferMeta, bufferOffset, props.length as number)
-    console.log(pageChanged, needRefresh)
     if (pageChanged) {
       visiblePageNumbers = visiblePn
       await getBufferRemoteDebounce()
