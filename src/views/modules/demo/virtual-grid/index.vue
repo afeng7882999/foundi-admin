@@ -4,16 +4,21 @@
     <el-affix :offset="58">
       <div class="fd-page__form">
         <el-input v-model="scrollTo" placeholder="转到..." />
+        <fd-button label="切换宽度" @click="toggleWidth" />
+        <fd-button label="切换高度" @click="toggleHeight" />
       </div>
     </el-affix>
     <fd-virtual-grid
       :length="length"
+      :wrapper-width="wrapperW"
+      :wrapper-height="wrapperH"
       :item-width="300"
       :item-height="240"
       :page-size="pageSize"
       :page-provider="pageProvider"
-      :wrapper-class="$style.grid"
+      :inner-class="$style.grid"
       :scroll-to="Number(scrollTo)"
+      style="align-self: center"
     >
       <template #placeholder="{ style }">
         <demo-img-card :style="style"></demo-img-card>
@@ -49,6 +54,33 @@ const provider = async (pageNumber: number, pageSize: number) => {
 const pageProvider = computed(() => {
   return provider
 })
+
+const wrapperW = ref<number | undefined>(undefined)
+const wrapperH = ref<number | undefined>(undefined)
+
+const toggleWidth = () => {
+  if (wrapperW.value === 800) {
+    wrapperW.value = 500
+    return
+  }
+  if (wrapperW.value === 500) {
+    wrapperW.value = undefined
+    return
+  }
+  wrapperW.value = 800
+}
+
+const toggleHeight = () => {
+  if (wrapperH.value === 500) {
+    wrapperH.value = 300
+    return
+  }
+  if (wrapperH.value === 300) {
+    wrapperH.value = undefined
+    return
+  }
+  wrapperH.value = 500
+}
 
 const { docMinHeight, showPageHeader, auth } = usePage()
 </script>

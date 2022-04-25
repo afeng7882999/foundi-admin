@@ -39,6 +39,16 @@ export const GRID_PROPS = {
     required: true,
     validator: (value: number) => Number.isInteger(value) && value >= 0
   },
+  // wrapper width
+  wrapperWidth: {
+    type: Number as PropType<number>,
+    validator: (value: number) => Number.isInteger(value) && value >= 0
+  },
+  // wrapper height
+  wrapperHeight: {
+    type: Number as PropType<number>,
+    validator: (value: number) => Number.isInteger(value) && value >= 0
+  },
   // Item width
   itemWidth: {
     type: Number as PropType<number>,
@@ -75,8 +85,8 @@ export const GRID_PROPS = {
     required: false,
     validator: (value: number) => Number.isInteger(value) && value >= 0
   },
-  // The css class of wrapper container
-  wrapperClass: {
+  // The css class of inner container
+  innerClass: {
     type: String
   }
 }

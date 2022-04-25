@@ -1,14 +1,8 @@
 import { BufferMeta, GRID_PROPS, GridMeasurement, InternalItem, ItemsByPage, PageProvider, ResizeMeasurement } from './types'
-import { clamp, concat, difference, isEqual, parseInt, range, slice } from 'lodash-es'
-import { ExtractPropTypes, reactive, toRefs, watch } from 'vue'
+import { clamp, concat, difference, isEqual, parseInt, range } from 'lodash-es'
+import { computed, ExtractPropTypes, reactive, toRefs, watch } from 'vue'
 import { Ref } from '@vue/reactivity'
-import { useDebounceFn, useEventListener, useResizeObserver, VueInstance } from '@vueuse/core'
-
-const getHeightAboveWindowOf = (el: Element, containerEl?: Element): number => {
-  const top = el.getBoundingClientRect().top
-  const containerTop = containerEl ? containerEl.getBoundingClientRect().top : 0
-  return Math.abs(Math.min(top, containerTop))
-}
+import { useDebounceFn, useEventListener, useResizeObserver } from '@vueuse/core'
 
 const getVerticalScrollParent = (el: Element, includeHidden = false): Element => {
   const style = getComputedStyle(el)
@@ -46,23 +40,25 @@ const getResizeMeasurement = (rootEl: Element, itemW: number, itemH: number): Re
   }
 }
 
-const getBufferMeta =
-  (windowInnerHeight: number = window.innerHeight) =>
-  (heightAboveWindow: number, { columns, rowGap, itemHeightWithGap }: ResizeMeasurement): BufferMeta => {
-    const rowsInView = itemHeightWithGap && Math.ceil((windowInnerHeight + rowGap) / itemHeightWithGap) + 1
-    const length = rowsInView * columns
+const getBufferMeta = (
+  wrapperHeight: number,
+  heightAboveWrapper: number,
+  { columns, rowGap, itemHeightWithGap }: ResizeMeasurement
+): BufferMeta => {
+  const rowsInView = itemHeightWithGap && Math.ceil((wrapperHeight + rowGap) / itemHeightWithGap) + 1
+  const length = rowsInView * columns
 
-    const rowsBeforeView = itemHeightWithGap && Math.floor((heightAboveWindow + rowGap) / itemHeightWithGap)
-    const offset = rowsBeforeView * columns
-    const bufferedOffset = Math.max(offset - Math.floor(rowsInView / 2) * columns, 0)
-    const bufferedLength = length * 2
+  const rowsBeforeView = itemHeightWithGap && Math.floor((heightAboveWrapper + rowGap) / itemHeightWithGap)
+  const offset = rowsBeforeView * columns
+  const bufferedOffset = Math.max(offset - Math.floor(rowsInView / 2) * columns, 0)
+  const bufferedLength = length * 2
 
-    return {
-      columns,
-      bufferedOffset,
-      bufferedLength
-    }
+  return {
+    columns,
+    bufferedOffset,
+    bufferedLength
   }
+}
 
 const getVisiblePageNumbers = ({ bufferedOffset, bufferedLength }: BufferMeta, length: number, pageSize: number): number[] => {
   const startPage = Math.floor(bufferedOffset / pageSize)
@@ -106,8 +102,6 @@ const getBufferItems = (
   const emptyAppend = new Array(appendLen).fill(undefined)
   const buffer = concat(emptyPrepend, visibleItems, emptyAppend)
 
-  console.log(visibleItems.length)
-
   return buffer.map((value, localIndex) => {
     const index = bufferedOffset + localIndex
     return {
@@ -135,10 +129,11 @@ const reachRefreshSpan = (bufferMeta: BufferMeta, oldBufferOffset: number, lengt
 
 export default function useGrid(
   props: Readonly<ExtractPropTypes<typeof GRID_PROPS>>,
-  rootRef: Ref<HTMLElement | SVGElement | VueInstance | undefined>,
-  wrapperRef: Ref<HTMLElement | SVGElement | VueInstance | undefined>
+  wrapperRef: Ref<HTMLElement | undefined>,
+  viewRef: Ref<HTMLElement | undefined>,
+  innerRef: Ref<HTMLElement | undefined>
 ) {
-  let heightAboveWindow = 0
+  let heightAboveWrapper = 0
   let visiblePageNumbers = [] as number[]
   let resizeMeasurement = {} as ResizeMeasurement
   let itemByPages = [] as ItemsByPage[]
@@ -151,8 +146,13 @@ export default function useGrid(
     contentTranslate: 0
   })
 
+  const pageMode = computed(() => {
+    return !props.wrapperHeight
+  })
+
   const getBuffer = async (): Promise<void> => {
-    bufferMeta = getBufferMeta()(heightAboveWindow, resizeMeasurement)
+    const wrapperHeight = pageMode.value ? window.innerHeight : (wrapperRef.value as HTMLElement).clientHeight
+    bufferMeta = getBufferMeta(wrapperHeight, heightAboveWrapper, resizeMeasurement)
     const visiblePn = getVisiblePageNumbers(bufferMeta, props.length as number, props.pageSize as number)
     const pageChanged = difference(visiblePn, visiblePageNumbers).length > 0
     const needRefresh = reachRefreshSpan(bufferMeta, bufferOffset, props.length as number)
@@ -180,9 +180,19 @@ export default function useGrid(
 
   const getBufferRemoteDebounce = useDebounceFn(getBufferRemote, props.pageProviderDebounceTime as number)
 
-  useResizeObserver(rootRef, async (entries) => {
-    heightAboveWindow = getHeightAboveWindowOf(entries[0].target)
-    resizeMeasurement = getResizeMeasurement(wrapperRef.value as HTMLElement, props.itemWidth as number, props.itemHeight as number)
+  const getHeightAboveWrapper = (el: Element): number => {
+    if (pageMode.value) {
+      const top = el.getBoundingClientRect().top
+      return Math.abs(Math.min(top, 0))
+    }
+    const wrapperEl = wrapperRef.value as HTMLElement
+    const top = el.getBoundingClientRect().top - wrapperEl.getBoundingClientRect().top
+    return Math.abs(Math.min(top, 0))
+  }
+
+  useResizeObserver(viewRef, async (entries) => {
+    heightAboveWrapper = getHeightAboveWrapper(entries[0].target)
+    resizeMeasurement = getResizeMeasurement(innerRef.value as HTMLElement, props.itemWidth as number, props.itemHeight as number)
     state.contentHeight = getContentHeight(resizeMeasurement, props.length as number)
     await getBuffer()
   })
@@ -190,7 +200,7 @@ export default function useGrid(
   useEventListener(
     'scroll',
     async () => {
-      heightAboveWindow = getHeightAboveWindowOf(rootRef.value as HTMLElement)
+      heightAboveWrapper = getHeightAboveWrapper(viewRef.value as HTMLElement)
       await getBuffer()
     },
     {
@@ -211,12 +221,12 @@ export default function useGrid(
 
   const scrollToIdx = (idx: number): void => {
     idx = Math.max(idx, 0)
-    const rootEl = rootRef.value as HTMLElement
-    const verticalScrollEl = getVerticalScrollParent(rootEl)
-    const computedStyle = window.getComputedStyle(rootEl)
+    const viewEl = viewRef.value as HTMLElement
+    const verticalScrollEl = getVerticalScrollParent(viewEl)
+    const computedStyle = window.getComputedStyle(viewEl)
     const rootPaddingTop = parseInt(computedStyle.getPropertyValue('padding-top'))
     const rootBorderTop = parseInt(computedStyle.getPropertyValue('border-top'))
-    const topToRoot = verticalScrollEl instanceof HTMLElement ? rootEl.offsetTop - verticalScrollEl.offsetTop : 0
+    const topToRoot = verticalScrollEl instanceof HTMLElement ? viewEl.offsetTop - verticalScrollEl.offsetTop : 0
     const scrollTop =
       Math.floor(idx / resizeMeasurement.columns) * resizeMeasurement.itemHeightWithGap + topToRoot + rootPaddingTop + rootBorderTop
     verticalScrollEl.scrollTo({ top: scrollTop, behavior: 'smooth' })
@@ -237,6 +247,7 @@ export default function useGrid(
     contentHeight,
     contentTranslate,
     buffer,
+    pageMode,
     scrollToIdx
   }
 }
