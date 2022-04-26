@@ -29,7 +29,6 @@ export type PageProvider = (pageNumber: number, pageSize: number) => Promise<unk
 export interface InternalItem {
   index: number
   value: unknown | undefined
-  style?: { transform: string; gridArea: string }
 }
 
 export const GRID_PROPS = {
@@ -52,13 +51,11 @@ export const GRID_PROPS = {
   // Item width
   itemWidth: {
     type: Number as PropType<number>,
-    required: true,
     validator: (value: number) => Number.isInteger(value) && value >= 0
   },
   // Item height
   itemHeight: {
     type: Number as PropType<number>,
-    required: true,
     validator: (value: number) => Number.isInteger(value) && value >= 0
   },
   // The callback that returns a page of items as a promise.

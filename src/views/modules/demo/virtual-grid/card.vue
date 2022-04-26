@@ -1,11 +1,14 @@
 <template>
-  <a href="#">
+  <a ref="aRef" :style="aStyle" href="#">
     <img :src="src" alt="" />
     <span class="file-card__label">{{ filename }}</span>
   </a>
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from 'vue'
+import { useResizeObserver } from '@vueuse/core'
+
 defineOptions({
   name: 'DemoImgCard'
 })
@@ -13,6 +16,20 @@ defineOptions({
 const props = defineProps({
   src: String,
   filename: String
+})
+
+const aRef = ref<HTMLElement>()
+const aWidth = ref<number>(300)
+
+const aStyle = computed(() => {
+  const aHeight = Math.floor(aWidth.value / (300 / 240))
+  return {
+    height: `${aHeight}px`
+  }
+})
+
+useResizeObserver(aRef, (entries) => {
+  aWidth.value = entries[0].contentRect.width
 })
 </script>
 

@@ -12,8 +12,6 @@
       :length="length"
       :wrapper-width="wrapperW"
       :wrapper-height="wrapperH"
-      :item-width="300"
-      :item-height="240"
       :page-size="pageSize"
       :page-provider="pageProvider"
       :inner-class="$style.grid"
@@ -91,7 +89,7 @@ const { docMinHeight, showPageHeader, auth } = usePage()
   display: grid;
   place-content: center;
   grid-gap: 8px;
-  grid-template-columns: repeat(auto-fit, 300px);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   margin: 0;
   padding: 8px;
 }

@@ -15,8 +15,8 @@
         <div v-show="length > 0" ref="viewRef" class="fd-virtual-grid__view" :style="viewStyle">
           <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyle" :class="innerClass">
             <template v-for="(item, idx) in buffer" :key="idx">
-              <slot v-if="item.value === undefined" name="placeholder" :index="item.index" :style="item.style" />
-              <slot v-else name="default" :item="item.value" :index="item.index" :style="item.style" />
+              <slot v-if="item.value === undefined" name="placeholder" :index="item.index" />
+              <slot v-else name="default" :item="item.value" :index="item.index" />
             </template>
           </div>
         </div>
@@ -97,8 +97,5 @@ onMounted(() => {
 <style lang="scss">
 .fd-virtual-grid {
   overflow: hidden;
-
-  &.is-page {
-  }
 }
 </style>
