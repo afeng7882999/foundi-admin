@@ -34,28 +34,39 @@ export interface InternalItem {
 export const GRID_PROPS = {
   // The number of items in the list.
   length: {
-    type: Number as PropType<number>,
-    required: true,
+    type: Number,
+    default: 0,
     validator: (value: number) => Number.isInteger(value) && value >= 0
   },
   // wrapper width
   wrapperWidth: {
-    type: Number as PropType<number>,
+    type: Number,
     validator: (value: number) => Number.isInteger(value) && value >= 0
   },
   // wrapper height
   wrapperHeight: {
-    type: Number as PropType<number>,
+    type: Number,
     validator: (value: number) => Number.isInteger(value) && value >= 0
   },
   // Item width
   itemWidth: {
-    type: Number as PropType<number>,
+    type: Number,
+    validator: (value: number) => Number.isInteger(value) && value >= 0
+  },
+  // Item min-width, ignored when itemWidth is set
+  itemMinWidth: {
+    type: Number,
     validator: (value: number) => Number.isInteger(value) && value >= 0
   },
   // Item height
   itemHeight: {
-    type: Number as PropType<number>,
+    type: Number,
+    validator: (value: number) => Number.isInteger(value) && value >= 0
+  },
+  // Grid gap
+  gridGap: {
+    type: Number,
+    default: 8,
     validator: (value: number) => Number.isInteger(value) && value >= 0
   },
   // The callback that returns a page of items as a promise.
@@ -66,24 +77,19 @@ export const GRID_PROPS = {
   // Debounce window in milliseconds on the calls to `pageProvider`,
   // which is useful for avoiding network requests of skimmed pages.
   pageProviderDebounceTime: {
-    type: Number as PropType<number>,
+    type: Number,
     default: 300,
     validator: (value: number) => Number.isInteger(value) && value >= 0
   },
   // The number of items in a page from the item provider
   pageSize: {
-    type: Number as PropType<number>,
-    required: true,
+    type: Number,
+    default: 40,
     validator: (value: number) => Number.isInteger(value) && value >= 1
   },
   // Scroll to a specific item by index, must be less than the length prop
   scrollTo: {
-    type: Number as PropType<number>,
-    required: false,
+    type: Number,
     validator: (value: number) => Number.isInteger(value) && value >= 0
-  },
-  // The css class of inner container
-  innerClass: {
-    type: String
   }
 }

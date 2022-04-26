@@ -12,9 +12,9 @@
       :length="length"
       :wrapper-width="wrapperW"
       :wrapper-height="wrapperH"
+      :item-min-width="300"
       :page-size="pageSize"
       :page-provider="pageProvider"
-      :inner-class="$style.grid"
       :scroll-to="Number(scrollTo)"
       style="align-self: center"
     >
@@ -82,63 +82,3 @@ const toggleHeight = () => {
 
 const { docMinHeight, showPageHeader, auth } = usePage()
 </script>
-
-<style lang="scss" module>
-.grid {
-  box-sizing: border-box;
-  display: grid;
-  place-content: center;
-  grid-gap: 8px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  margin: 0;
-  padding: 8px;
-}
-
-//@media (min-width: 760px) {
-//  .grid {
-//    grid-template-columns: repeat(3, 1fr);
-//  }
-//}
-//
-//@media (min-width: 1140px) {
-//  .grid {
-//    grid-template-columns: repeat(4, 1fr);
-//  }
-//}
-//
-//@media (min-width: 1520px) {
-//  .grid {
-//    grid-template-columns: repeat(5, 1fr);
-//  }
-//}
-//
-//@media (min-width: 1900px) {
-//  .grid {
-//    grid-template-columns: repeat(6, 1fr);
-//  }
-//}
-//
-//@media (min-width: 2280px) {
-//  .grid {
-//    grid-template-columns: repeat(7, 1fr);
-//  }
-//}
-//
-//@media (min-width: 2660px) {
-//  .grid {
-//    grid-template-columns: repeat(8, 1fr);
-//  }
-//}
-//
-//@media (min-width: 3040px) {
-//  .grid {
-//    grid-template-columns: repeat(9, 1fr);
-//  }
-//}
-//
-//@media (min-width: 3420px) {
-//  .grid {
-//    grid-template-columns: repeat(10, 1fr);
-//  }
-//}
-</style>
