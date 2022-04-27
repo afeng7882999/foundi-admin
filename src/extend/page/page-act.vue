@@ -78,36 +78,11 @@
         <fd-contextmenu-item label="导出当前页" @click="emit('export')" />
         <fd-contextmenu-item label="导出全部页" @click="emit('exportAll')" />
       </fd-contextmenu-submenu>
-      <fd-contextmenu-item v-if="exportVisible" divider />
-      <fd-contextmenu-submenu icon="table-row" label="表格设置">
-        <fd-contextmenu-item
-          v-if="tableOption.treeTable"
-          icon="row-height"
-          :label="expandAll ? '收缩所有行' : '展开所有行'"
-          @click="toggleExpandAll"
-        />
-        <fd-contextmenu-item
-          v-if="!tableOption.treeTable"
-          icon="table-stripe"
-          :label="stripe ? '隐藏斑马纹' : '显示斑马纹'"
-          @click="toggleStripe"
-        />
-        <fd-contextmenu-item icon="table" :label="border ? '隐藏边框' : '显示边框'" @click="toggleBorder" />
-        <fd-contextmenu-submenu icon="table-row" label="表格行密度">
-          <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="high" @click="setRowDensity('high')">
-            高
-          </fd-contextmenu-item>
-          <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="low" @click="setRowDensity('low')">
-            低
-          </fd-contextmenu-item>
-          <fd-contextmenu-item :radio-value="rowDensity" act-as="radioGroup" radio-label="default" @click="setRowDensity('default')">
-            默认
-          </fd-contextmenu-item>
-        </fd-contextmenu-submenu>
-        <fd-contextmenu-item icon="table-col" label="表格列设置" @click="showSortColumnDialog" />
-      </fd-contextmenu-submenu>
+      <template v-if="tableOption">
+        <fd-contextmenu-item v-if="exportVisible" divider />
+        <fd-table-option-submenu :table-option="tableOption" />
+      </template>
     </fd-contextmenu>
-    <fd-sort-column-dialog ref="sortColumnDialog" @submit="setTableColumns" />
   </template>
 </template>
 
@@ -116,14 +91,13 @@ import { computed, onMounted, PropType, reactive, ref, useSlots, VNode } from 'v
 import usePage from '@/extend/page/use-page'
 import { isBoolean } from 'lodash-es'
 import { TableSettingProp } from '@/components/table/types'
-import useTableSetting from '@/components/table/hooks/use-table-setting'
-import FdSortColumnDialog from '@/components/table/components/sort-column-dialog.vue'
 import FdContextmenuItem from '@/components/contextmenu/item.vue'
 import FdContextmenuSubmenu from '@/components/contextmenu/submenu.vue'
 import { ApiQuery } from '@/api'
 import useLayoutSize from '@/hooks/use-layout-size'
 import { CompactButton } from '@/extend/page/types'
 import { Indexable } from '@/common/types'
+import FdTableOptionSubmenu from './table-option-submenu.vue'
 
 defineOptions({
   name: 'FdPageAct'
@@ -166,8 +140,7 @@ const props = defineProps({
     default: true
   },
   tableOption: {
-    type: Object as PropType<TableSettingProp>,
-    required: true
+    type: Object as PropType<TableSettingProp>
   },
   mobileCompact: {
     type: Boolean,
@@ -239,20 +212,6 @@ const queryLenCo = computed(() => {
   }
   return len
 })
-
-const {
-  sortColumnDialog,
-  expandAll,
-  rowDensity,
-  stripe,
-  border,
-  setRowDensity,
-  toggleExpandAll,
-  toggleStripe,
-  toggleBorder,
-  showSortColumnDialog,
-  setTableColumns
-} = useTableSetting(props.tableOption)
 
 const { isMobile } = useLayoutSize(props.mobileCompact)
 const objClass = computed(() => {
