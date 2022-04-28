@@ -39,6 +39,7 @@ a {
   width: 100%;
   height: 240px;
   padding: 16px 16px 48px 16px;
+  overflow: hidden;
 }
 
 img {

@@ -31,21 +31,13 @@ export interface InternalItem {
   value: unknown | undefined
 }
 
+export const CURRENT_CHANGED_EVENT = 'current-changed'
+
 export const GRID_PROPS = {
   // The number of items in the list.
   length: {
     type: Number,
     default: 0,
-    validator: (value: number) => Number.isInteger(value) && value >= 0
-  },
-  // wrapper width
-  wrapperWidth: {
-    type: Number,
-    validator: (value: number) => Number.isInteger(value) && value >= 0
-  },
-  // wrapper height
-  wrapperHeight: {
-    type: Number,
     validator: (value: number) => Number.isInteger(value) && value >= 0
   },
   // Item width
@@ -87,9 +79,10 @@ export const GRID_PROPS = {
     default: 40,
     validator: (value: number) => Number.isInteger(value) && value >= 1
   },
-  // Scroll to a specific item by index, must be less than the length prop
-  scrollTo: {
-    type: Number,
-    validator: (value: number) => Number.isInteger(value) && value >= 0
+  // if not limit the height of component, set pageMode true and
+  // component is scrolled by window scroller
+  pageMode: {
+    type: Boolean,
+    default: false
   }
 }

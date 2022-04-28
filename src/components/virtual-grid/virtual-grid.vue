@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapperRef" class="fd-virtual-grid" :class="wrapperClass" :style="wrapperStyle">
+  <div ref="wrapperRef" class="fd-virtual-grid" :class="wrapperClass">
     <template v-if="pageMode">
       <div v-show="length > 0" ref="viewRef" class="fd-virtual-grid__view" :style="viewStyle">
         <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyle">
@@ -11,7 +11,7 @@
       </div>
     </template>
     <template v-else>
-      <el-scrollbar ref="scrollbarRef">
+      <el-scrollbar ref="scrollbarRef" :style="scrollbarStyle">
         <div v-show="length > 0" ref="viewRef" class="fd-virtual-grid__view" :style="viewStyle">
           <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyle">
             <template v-for="(item, idx) in buffer" :key="idx">
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { GRID_PROPS } from './types'
+import { CURRENT_CHANGED_EVENT, GRID_PROPS } from './types'
 import { computed, onMounted, ref, watch } from 'vue'
 import useGrid from './use-grid'
 import { Indexable } from '@/common/types'
@@ -45,26 +45,22 @@ const viewRef = ref<HTMLElement>()
 const innerRef = ref<HTMLElement>()
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 
-const { buffer, contentHeight, contentTranslate, pageMode, scrollToIdx } = useGrid(props, wrapperRef, viewRef, innerRef)
+const emit = defineEmits([CURRENT_CHANGED_EVENT])
+
+const { wrapperRect, buffer, contentHeight, contentTranslate, scrollToIdx } = useGrid(props, emit, wrapperRef, viewRef, innerRef)
 
 const wrapperClass = computed(() => {
   const clazz = []
-  if (pageMode.value) {
+  if (props.pageMode) {
     clazz.push('is-page')
   }
   return clazz.join(' ')
 })
 
-const wrapperStyle = computed(() => {
+const scrollbarStyle = computed(() => {
   const style = {} as Indexable
-  if (props.wrapperWidth) {
-    style.width = `${props.wrapperWidth}px`
-  } else {
-    style.width = '100%'
-  }
-  if (props.wrapperHeight) {
-    style.height = `${props.wrapperHeight}px`
-  }
+  style.width = wrapperRect.value.width ? `${wrapperRect.value.width}px` : null
+  style.height = wrapperRect.value.height ? `${wrapperRect.value.height}px` : null
   return style
 })
 
@@ -90,7 +86,7 @@ const innerStyle = computed(() => {
 })
 
 watch(
-  [() => props.wrapperWidth, () => props.wrapperHeight],
+  [() => wrapperRect.value.width, () => wrapperRect.value.height],
   () => {
     scrollbarRef.value?.update()
   },
@@ -99,5 +95,9 @@ watch(
 
 onMounted(() => {
   scrollToIdx(0)
+})
+
+defineExpose({
+  scrollToIdx
 })
 </script>
