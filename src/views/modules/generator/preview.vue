@@ -1,12 +1,12 @@
 <template>
   <div :style="docHeight" class="page-generator-preview fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <div class="fd-page-act">
+    <div class="fd-page-toolbar">
       <el-button @click="close()">
         <fd-icon class="is-in-btn" icon="left"></fd-icon>
         返回列表
       </el-button>
-      <div class="fd-page-act__right">
+      <div class="fd-page-toolbar__right">
         <fd-button
           v-show="auth('generator:genTable:edit')"
           label="生成"

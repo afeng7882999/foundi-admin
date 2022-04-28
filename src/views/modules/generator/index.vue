@@ -6,7 +6,7 @@
       <fd-item-date-range label="创建时间" prop="tableCreateTime" />
     </template>
     <template #act>
-      <fd-page-act del="generator:genTable:delete" v-bind="pageActAttrs">
+      <fd-page-toolbar del="generator:genTable:delete" v-bind="pageToolbarAttrs">
         <template #query>
           <fd-item label="表名称" prop="tableName" no-label />
           <fd-item :visible="false" />
@@ -31,7 +31,7 @@
           />
           <fd-button v-show="auth('generator:genTable:edit')" label="导入" icon="upload-one" plain color="info" @click="openImport" />
         </template>
-      </fd-page-act>
+      </fd-page-toolbar>
     </template>
     <template #table>
       <el-table ref="table" v-loading="s.loading" v-bind="tableAttrs">
@@ -92,7 +92,6 @@ import usePage from '@/extend/page/use-page'
 import { Indexable } from '@/common/types'
 import useView from '@/extend/page/use-view'
 import useLayoutSize from '@/hooks/use-layout-size'
-import FdContextmenuItem from '@/components/contextmenu/item.vue'
 
 defineOptions({
   name: 'Generator'
@@ -111,7 +110,7 @@ const stateOption = {
 
 const { listRefs, listState: s, listMethods: m, listAttrs } = useList<GenTable>(stateOption)
 const { table } = listRefs
-const { pageMainAttrs, pageActAttrs, tableAttrs } = listAttrs
+const { pageMainAttrs, pageToolbarAttrs, tableAttrs } = listAttrs
 
 const { auth } = usePage()
 

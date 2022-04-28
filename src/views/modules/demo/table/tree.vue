@@ -1,5 +1,5 @@
 <template>
-  <fd-page-act :table-option="tableSettingOpt" />
+  <fd-page-toolbar :table-option="tableSettingOpt" />
   <div ref="menuTbWrapper" class="fd-page__table is-bordered">
     <el-table ref="menuTb" v-bind="tableAttrs" :data="state.menus" row-key="id">
       <fd-col-selection typ="selection"></fd-col-selection>

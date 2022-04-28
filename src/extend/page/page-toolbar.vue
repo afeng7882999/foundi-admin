@@ -1,21 +1,21 @@
 <template>
   <template v-if="visibleCo">
-    <div class="fd-page-act" :class="objClass">
+    <div class="fd-page-toolbar" :class="objClass">
       <template v-if="!isMobile">
-        <div class="fd-page-act__left">
+        <div class="fd-page-toolbar__left">
           <template v-if="query">
             <el-tooltip :content="queryVisible ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
-              <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="fd-page-act__badge">
+              <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="fd-page-toolbar__badge">
                 <fd-button
                   type="icon"
                   :class="queryVisible ? 'expanded' : ''"
-                  class="fd-page-act__icon-btn"
+                  class="fd-page-toolbar__icon-btn"
                   icon="search-more"
                   @click="toggleQueryVisible"
                 />
               </el-badge>
             </el-tooltip>
-            <el-divider class="fd-page-act__divider" direction="vertical" style="margin-left: 16px" />
+            <el-divider class="fd-page-toolbar__divider" direction="vertical" style="margin-left: 16px" />
           </template>
           <div class="query-compact">
             <el-form :model="queryData" inline compact :submit-fn="queryFn">
@@ -23,20 +23,20 @@
             </el-form>
           </div>
         </div>
-        <div class="fd-page-act__right">
+        <div class="fd-page-toolbar__right">
           <fd-button v-if="delVisible" label="删除" icon="delete" plain color="danger" @click="emit('del')" />
           <fd-button v-if="createVisible" label="新增" icon="plus" plain color="primary" @click="emit('create')" />
           <slot name="buttons" />
-          <el-divider v-if="more" class="fd-page-act__divider" direction="vertical" />
+          <el-divider v-if="more" class="fd-page-toolbar__divider" direction="vertical" />
           <el-tooltip content="更多" :show-after="500" effect="dark" placement="top">
-            <fd-button type="icon" class="fd-page-act__icon-btn" icon="more" @click.stop="openMoreMenu" />
+            <fd-button type="icon" class="fd-page-toolbar__icon-btn" icon="more" @click.stop="openMoreMenu" />
           </el-tooltip>
         </div>
       </template>
       <template v-else>
-        <div class="fd-page-act__center">
+        <div class="fd-page-toolbar__center">
           <template v-if="query">
-            <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="fd-page-act__badge">
+            <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="fd-page-toolbar__badge">
               <fd-button
                 type="toolbar"
                 :class="queryVisible ? 'expanded' : ''"
@@ -100,7 +100,7 @@ import { Indexable } from '@/common/types'
 import FdTableOptionSubmenu from './table-option-submenu.vue'
 
 defineOptions({
-  name: 'FdPageAct'
+  name: 'FdPageToolbar'
 })
 
 const props = defineProps({

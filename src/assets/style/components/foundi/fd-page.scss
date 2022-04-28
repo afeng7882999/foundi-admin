@@ -56,8 +56,8 @@
   }
 }
 
-// fd-page-act
-.fd-page-act {
+// fd-page-toolbar
+.fd-page-toolbar {
   padding: 16px 16px 0 16px;
   border: 1px solid var(--el-border-color-lighter);
   border-radius: var(--el-border-radius-base);
@@ -83,7 +83,7 @@
     z-index: $index-top;
     // transform: translateZ(0);
     
-    .fd-page-act__center {
+    .fd-page-toolbar__center {
       margin-bottom: 0;
     }
     

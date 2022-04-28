@@ -637,8 +637,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
   })
 
-  // fd-page-act默认参数
-  const pageActAttrs = computed(() => {
+  // fd-page-toolbar默认参数
+  const pageToolbarAttrs = computed(() => {
     return {
       queryData: listState.query,
       queryFn: queryList,
@@ -736,7 +736,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       tableAttrs,
       paginationAttrs,
       detailAttrs,
-      pageActAttrs
+      pageToolbarAttrs
     }
   }
 }

@@ -1,13 +1,13 @@
 <template>
   <fd-dialog v-model="s.visible" title="导入表" top="5vh" width="900px" @close="hideDialog">
-    <div class="fd-page-act">
+    <div class="fd-page-toolbar">
       <div class="query-compact">
         <el-form ref="queryForm" compact inline :model="s.query" :submit-fn="m.queryList">
           <fd-item label="表名称" prop="tableName" />
           <fd-item label="表描述" prop="tableComment" />
         </el-form>
       </div>
-      <div class="fd-page-act__right">
+      <div class="fd-page-toolbar__right">
         <el-button v-waves type="primary" @click="m.queryList">
           <fd-icon icon="search" class="is-in-btn"></fd-icon>
           搜索

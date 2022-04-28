@@ -2,7 +2,7 @@
   <div v-if="auth('demo:splitPane:list')" :style="docMinHeight" class="page-demo-split-pane fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <div class="fd-page-act">
+      <div class="fd-page-toolbar">
         <el-button @click="onLeftShrinkClick">{{ state.leftShrinkAll ? '展开左侧' : '收缩左侧' }}</el-button>
         <el-checkbox v-model="state.leftShrinkToHide" style="margin-left: 16px">收缩时隐藏手柄</el-checkbox>
       </div>

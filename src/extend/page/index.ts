@@ -1,10 +1,10 @@
 import { App } from 'vue'
 import FdPage from '@/extend/page/page.vue'
-import FdPageAct from '@/extend/page/page-act.vue'
+import FdPageToolbar from '@/extend/page/page-toolbar.vue'
 import FdPageFooter from '@/extend/page/page-footer.vue'
 
 export default function install(app: App) {
   app.component(FdPage.name, FdPage)
-  app.component(FdPageAct.name, FdPageAct)
+  app.component(FdPageToolbar.name, FdPageToolbar)
   app.component(FdPageFooter.name, FdPageFooter)
 }
