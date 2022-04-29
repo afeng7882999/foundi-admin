@@ -155,7 +155,6 @@ export default function useGrid(
   innerRef: Ref<HTMLElement | undefined>
 ) {
   let initialized = false
-  let itemHeight = props.itemHeight ?? 100
   let heightAboveWrapper = 0
   let visiblePageNumbers = [] as number[]
   let resizeMeasurement = {} as ResizeMeasurement
@@ -166,6 +165,7 @@ export default function useGrid(
 
   const state = reactive({
     wrapperRect: {} as DOMRectReadOnly,
+    itemHeight: props.itemHeight ?? 100,
     buffer: [] as InternalItem[],
     contentHeight: 0,
     contentTranslate: 0
@@ -224,8 +224,8 @@ export default function useGrid(
   const resizeObserverCb = async (wrapperRect: DOMRectReadOnly) => {
     const viewEl = viewRef.value as Element
     heightAboveWrapper = getHeightAbove(viewEl, wrapperRect)
-    itemHeight = getItemHeight(innerRef.value as Element, props.itemHeight)
-    resizeMeasurement = getResizeMeasurement(innerRef.value as Element, props.itemWidth as number, itemHeight)
+    state.itemHeight = getItemHeight(innerRef.value as Element, props.itemHeight)
+    resizeMeasurement = getResizeMeasurement(innerRef.value as Element, props.itemWidth as number, state.itemHeight)
     emitCurrentItem()
     state.contentHeight = getContentHeight(resizeMeasurement, props.length as number)
     await getBuffer()
@@ -251,15 +251,15 @@ export default function useGrid(
       wrapperHeight = state.wrapperRect.height
     }
 
-    resizeMeasurement = getResizeMeasurement(innerRef.value as Element, props.itemWidth as number, itemHeight)
+    resizeMeasurement = getResizeMeasurement(innerRef.value as Element, props.itemWidth as number, state.itemHeight)
     bufferMeta = getBufferMeta(wrapperHeight, heightAboveWrapper, resizeMeasurement)
 
     itemByPages = await callPageProvider([0], props.pageSize as number, props.pageProvider as PageProvider)
     state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
 
     await nextFrame(() => {
-      itemHeight = getItemHeight(innerRef.value as Element, props.itemHeight)
-      resizeMeasurement = getResizeMeasurement(innerRef.value as Element, props.itemWidth as number, itemHeight)
+      state.itemHeight = getItemHeight(innerRef.value as Element, props.itemHeight)
+      resizeMeasurement = getResizeMeasurement(innerRef.value as Element, props.itemWidth as number, state.itemHeight)
       state.contentHeight = getContentHeight(resizeMeasurement, props.length as number)
       getBuffer()
     })
@@ -303,9 +303,10 @@ export default function useGrid(
     verticalScrollEl.scrollTo({ top: scrollTop, behavior: 'smooth' })
   }
 
-  const { wrapperRect, buffer, contentHeight, contentTranslate } = toRefs(state)
+  const { wrapperRect, itemHeight, buffer, contentHeight, contentTranslate } = toRefs(state)
   return {
     wrapperRect,
+    itemHeight,
     contentHeight,
     contentTranslate,
     buffer,
