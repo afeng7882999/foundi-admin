@@ -1,9 +1,11 @@
 <template>
   <template v-if="tag">
-    <el-tag v-for="item in formatted" :key="item" size="small" type="primary" v-bind="getColorAttr(item)">{{ item }}</el-tag>
+    <el-tag v-for="item in formatted" :key="item" :class="$attrs.class" size="small" v-bind="getColorAttr(item)">{{ item }}</el-tag>
   </template>
   <template v-else>
-    <slot :values="formatted">{{ formattedStr }}</slot>
+    <div :class="$attrs.class">
+      <slot :values="formatted">{{ formattedStr }}</slot>
+    </div>
   </template>
 </template>
 
@@ -66,7 +68,7 @@ const formatMap = computed(() => {
 
 const getColorAttr = (key: string) => {
   const m = formatMap.value.find((f) => f.key === key)
-  if (m?.color && ['primary', 'success', 'danger', 'warning', 'info'].includes(m.color)) {
+  if (m?.color && ['success', 'danger', 'warning', 'info'].includes(m.color)) {
     return {
       type: m.color
     }
