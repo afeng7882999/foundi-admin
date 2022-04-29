@@ -19,19 +19,18 @@
     <fd-virtual-grid
       ref="virtualGrid"
       :length="length"
-      :item-min-width="300"
+      :item-min-width="310"
       :page-size="pageState.siz"
       :page-provider="pageProvider"
       :page-mode="pageMode"
-      style="align-self: center"
       :style="gridStyle"
       @current-changed="currentChanged"
     >
-      <template #placeholder="{ style }">
-        <demo-img-card :style="style"></demo-img-card>
+      <template #placeholder>
+        <demo-grid-card />
       </template>
-      <template #default="{ index, item, style }">
-        <demo-img-card :src="localOrRemoteUrl(item.url, 'upload')" :filename="index + ': ' + item.name" :style="style"></demo-img-card>
+      <template #default="{ index, item }">
+        <demo-grid-card :index="index" :item="item" :dicts="state.dicts"></demo-grid-card>
       </template>
     </fd-virtual-grid>
     <el-backtop />
@@ -40,13 +39,13 @@
 
 <script setup lang="ts">
 import usePage from '@/extend/page/use-page'
-import DemoImgCard from './card.vue'
-import { fileList } from '@/api/system/file'
-import { computed, reactive, ref } from 'vue'
-import { localOrRemoteUrl } from '@/utils/query'
+import DemoGridCard from './card.vue'
+import { computed, onBeforeMount, reactive, ref } from 'vue'
 import useLayoutSize from '@/hooks/use-layout-size'
 import FdVirtualGrid from '@/components/virtual-grid/virtual-grid.vue'
 import { Indexable } from '@/common/types'
+import { loginLogDicts, loginLogList } from '@/api/system/login-log'
+import useDict from '@/extend/crud/use-dict'
 
 defineOptions({
   name: 'DemoVirtualGrid'
@@ -104,8 +103,17 @@ const pageState = reactive({
   total: 0
 })
 
+const state = reactive({
+  dicts: loginLogDicts
+})
+const { getDictData } = useDict(state.dicts)
+
+onBeforeMount(async () => {
+  await getDictData()
+})
+
 const provider = async (pageNumber: number, pageSize: number) => {
-  const { data, total, count } = await fileList({ current: pageNumber, size: pageSize })
+  const { data, total, count } = await loginLogList({ current: pageNumber, size: pageSize })
   if (total && count) {
     pageState.total = total as number
     pageState.count = count
@@ -152,6 +160,7 @@ const paginationAttrs = computed(() => {
 <style lang="scss" scoped>
 .fd-virtual-grid {
   flex: 1;
+  align-self: center;
 }
 
 .fd-page-toolbar__left {
