@@ -3,7 +3,7 @@
     <el-tag v-for="item in formatted" :key="item" size="small" type="primary" v-bind="getColorAttr(item)">{{ item }}</el-tag>
   </template>
   <template v-else>
-    {{ formattedStr }}
+    <slot :values="formatted">{{ formattedStr }}</slot>
   </template>
 </template>
 
