@@ -49,13 +49,7 @@ const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 
 const emit = defineEmits([CURRENT_CHANGED_EVENT])
 
-const { wrapperRect, itemHeight, buffer, contentHeight, contentTranslate, scrollToIdx } = useGrid(
-  props,
-  emit,
-  wrapperRef,
-  viewRef,
-  innerRef
-)
+const { wrapperRect, itemHeight, buffer, viewHeight, innerTranslate, scrollToIdx } = useGrid(props, emit, wrapperRef, viewRef, innerRef)
 
 const wrapperClass = computed(() => {
   const clazz = []
@@ -74,14 +68,14 @@ const scrollbarStyle = computed(() => {
 
 const viewStyle = computed(() => {
   return {
-    height: `${contentHeight.value}px`
+    height: `${viewHeight.value}px`
   }
 })
 
 const innerStyle = computed(() => {
   const style = {
     width: '100%',
-    transform: `translate3d(0px, ${contentTranslate.value}px, 0px)`,
+    transform: `translate3d(0px, ${innerTranslate.value}px, 0px)`,
     gap: `${props.gridGap}px`
   } as Indexable
   if (props.itemWidth) {

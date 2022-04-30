@@ -150,6 +150,7 @@ const paginationAttrs = computed(() => {
     pageSize: pageState.siz,
     pageSizes: [10, 15, 20, 50, 100, 200],
     total: pageState.total,
+    pagerCount: 5,
     layout: isMobile.value ? 'prev, pager, next' : 'total, sizes, prev, pager, next',
     onCurrentChange: pageChange,
     onSizeChange: sizeChange

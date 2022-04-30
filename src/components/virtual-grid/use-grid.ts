@@ -15,6 +15,9 @@ import { useDebounceFn, useEventListener, useResizeObserver } from '@vueuse/core
 import { nextFrame } from '@/utils/next-frame'
 import { AnyFunction } from '@/common/types'
 
+/**
+ * Get scrollable parent
+ */
 const getVerticalScrollParent = (el: Element, includeHidden = false): Element => {
   const style = getComputedStyle(el)
   const excludeStaticParent = style.position === 'absolute'
@@ -32,8 +35,24 @@ const getVerticalScrollParent = (el: Element, includeHidden = false): Element =>
   return document.scrollingElement || document.documentElement
 }
 
-const getGridMeasurement = (rootEl: Element): GridMeasurement => {
-  const style = window.getComputedStyle(rootEl)
+/**
+ * Get height above window/wrapper
+ */
+const getHeightAbove = (viewEl: Element, wrapperEl?: Element): number => {
+  if (wrapperEl) {
+    const top = viewEl.getBoundingClientRect().top - wrapperEl.getBoundingClientRect().top
+    return Math.abs(Math.min(top, 0))
+  }
+  // page mode
+  const top = viewEl.getBoundingClientRect().top
+  return Math.abs(Math.min(top, 0))
+}
+
+/**
+ * Get measurement of grid layout
+ */
+const getGridMeasurement = (innerEl: Element): GridMeasurement => {
+  const style = window.getComputedStyle(innerEl)
   return {
     rowGap: parseInt(style.getPropertyValue('row-gap')) || 0,
     colGap: parseInt(style.getPropertyValue('column-gap')) || 0,
@@ -41,6 +60,9 @@ const getGridMeasurement = (rootEl: Element): GridMeasurement => {
   }
 }
 
+/**
+ * Get Resize measurement of grid and item
+ */
 const getResizeMeasurement = (rootEl: Element, itemW: number, itemH: number): ResizeMeasurement => {
   const { rowGap, colGap, columns } = getGridMeasurement(rootEl)
   return {
@@ -51,11 +73,17 @@ const getResizeMeasurement = (rootEl: Element, itemW: number, itemH: number): Re
   }
 }
 
+/**
+ * Get first item index of last row above window/wrapper
+ */
 const getOffsetBeforeView = (heightAboveWrapper: number, rm: ResizeMeasurement): number => {
   const rowsBeforeView = rm.itemHeightWithGap && Math.floor((heightAboveWrapper + rm.rowGap) / rm.itemHeightWithGap)
   return rowsBeforeView * rm.columns
 }
 
+/**
+ * Get buffer measurement
+ */
 const getBufferMeta = (wrapperHeight: number, heightAboveWrapper: number, rm: ResizeMeasurement): BufferMeta => {
   const rowsInView = rm.itemHeightWithGap && Math.ceil((wrapperHeight + rm.rowGap) / rm.itemHeightWithGap) + 1
   const length = rowsInView * rm.columns
@@ -71,12 +99,18 @@ const getBufferMeta = (wrapperHeight: number, heightAboveWrapper: number, rm: Re
   }
 }
 
+/**
+ * Get numbers of pages overlapped with buffer
+ */
 const getVisiblePageNumbers = ({ bufferedOffset, bufferedLength }: BufferMeta, length: number, pageSize: number): number[] => {
   const startPage = Math.floor(bufferedOffset / pageSize)
   const endPage = Math.ceil(Math.min(bufferedOffset + bufferedLength, length) / pageSize)
   return range(startPage, endPage)
 }
 
+/**
+ * Call provider and request data from backend
+ */
 const callPageProvider = async (pageNumbers: number[], pageSize: number, pageProvider: PageProvider): Promise<ItemsByPage[]> => {
   const itemsByPages = [] as ItemsByPage[]
   for (const pageNumber of pageNumbers) {
@@ -89,6 +123,9 @@ const callPageProvider = async (pageNumbers: number[], pageSize: number, pagePro
   return itemsByPages
 }
 
+/**
+ * Calculate buffer, set item not fetched undefined
+ */
 const getBufferItems = (
   itemsByPages: ItemsByPage[],
   { bufferedOffset, bufferedLength }: BufferMeta,
@@ -99,12 +136,10 @@ const getBufferItems = (
   if (pageItems.length === 0) {
     return []
   }
-
   const visibleItems = pageItems.slice(
     Math.max(bufferedOffset - itemsByPages[0].pageNumber * pageSize, 0),
     Math.max(bufferedOffset + bufferedLength - itemsByPages[0].pageNumber * pageSize, 0)
   )
-
   const prependLen = clamp(itemsByPages[0].pageNumber * pageSize - bufferedOffset, 0, bufferedLength)
   const emptyPrepend = new Array(prependLen).fill(undefined)
   const itemsTail = itemsByPages[itemsByPages.length - 1].pageNumber * pageSize + pageSize
@@ -122,10 +157,16 @@ const getBufferItems = (
   })
 }
 
-const getContentHeight = ({ columns, rowGap, itemHeightWithGap }: ResizeMeasurement, length: number): number => {
+/**
+ * Get height of view wrapper div
+ */
+const getViewHeight = ({ columns, rowGap, itemHeightWithGap }: ResizeMeasurement, length: number): number => {
   return itemHeightWithGap * Math.ceil(length / columns) - rowGap
 }
 
+/**
+ * Check if scrolling reaches the refresh margin, refresh inner wrapper div if true
+ */
 const reachRefreshSpan = (bufferMeta: BufferMeta, oldBufferOffset: number, length: number, refreshSpan?: number): boolean => {
   if (oldBufferOffset !== 0 && bufferMeta.bufferedOffset === 0) {
     return true
@@ -138,6 +179,9 @@ const reachRefreshSpan = (bufferMeta: BufferMeta, oldBufferOffset: number, lengt
   return Math.abs(bufferMeta.bufferedOffset - oldBufferOffset) > refreshSpan
 }
 
+/**
+ * Get grid item height
+ */
 const getItemHeight = (innerEl: Element, height?: number): number => {
   if (height !== undefined) {
     return height
@@ -167,10 +211,13 @@ export default function useGrid(
     wrapperRect: {} as DOMRectReadOnly,
     itemHeight: props.itemHeight ?? 100,
     buffer: [] as InternalItem[],
-    contentHeight: 0,
-    contentTranslate: 0
+    viewHeight: 0,
+    innerTranslate: 0
   })
 
+  /**
+   * calculate buffer
+   */
   const getBuffer = async (): Promise<void> => {
     const wrapperHeight = props.pageMode ? window.innerHeight : (wrapperRef.value as Element).clientHeight
     bufferMeta = getBufferMeta(wrapperHeight, heightAboveWrapper, resizeMeasurement)
@@ -184,94 +231,111 @@ export default function useGrid(
     if (pageChanged || needRefresh) {
       bufferOffset = bufferMeta.bufferedOffset
       state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
-      state.contentTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
+      state.innerTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
     }
   }
 
+  /**
+   * Request buffer data from backend
+   */
   const getBufferRemote = async () => {
     callPageProvider(visiblePageNumbers, props.pageSize as number, props.pageProvider as PageProvider).then((items) => {
       const itemPn = items.map((i) => i.pageNumber)
       if (isEqual(visiblePageNumbers, itemPn)) {
         itemByPages = items
         state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
-        state.contentTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
+        state.innerTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
       }
     })
   }
-
   const getBufferRemoteDebounce = useDebounceFn(getBufferRemote, props.pageProviderDebounceTime as number)
 
-  const getHeightAbove = (viewEl: Element, wrapperRect?: DOMRectReadOnly): number => {
-    if (props.pageMode || !wrapperRect) {
-      const top = viewEl.getBoundingClientRect().top
-      return Math.abs(Math.min(top, 0))
-    }
-    const top = viewEl.getBoundingClientRect().top - wrapperRect.top
-    return Math.abs(Math.min(top, 0))
-  }
-
+  /**
+   * Emit current item index and page
+   */
   const emitCurrentItem = () => {
-    const index = getOffsetBeforeView(heightAboveWrapper, resizeMeasurement) + resizeMeasurement.columns
+    const index = getOffsetBeforeView(heightAboveWrapper, resizeMeasurement)
     if (currentIdx !== index) {
       currentIdx = index
       const page = Math.ceil((index + resizeMeasurement.columns) / (props.pageSize as number))
-      console.log(index, page)
       emit(CURRENT_CHANGED_EVENT, index, page)
     }
   }
-
   const emitCurrentItemDebounce = useDebounceFn(emitCurrentItem, 300)
 
-  const resizeObserverCb = async (wrapperRect: DOMRectReadOnly) => {
+  /**
+   * Callback of ResizeObserver
+   */
+  const resizeObserverCb = async () => {
     const viewEl = viewRef.value as Element
-    heightAboveWrapper = getHeightAbove(viewEl, wrapperRect)
+    heightAboveWrapper = props.pageMode ? getHeightAbove(viewEl) : getHeightAbove(viewEl, wrapperRef.value as Element)
     state.itemHeight = getItemHeight(innerRef.value as Element, props.itemHeight)
     resizeMeasurement = getResizeMeasurement(innerRef.value as Element, props.itemWidth as number, state.itemHeight)
     emitCurrentItem()
-    state.contentHeight = getContentHeight(resizeMeasurement, props.length as number)
+    state.viewHeight = getViewHeight(resizeMeasurement, props.length as number)
     await getBuffer()
   }
-
   const resizeObserverCbDebounce = useDebounceFn(resizeObserverCb, 300)
 
-  useResizeObserver(wrapperRef, async (entries) => {
-    state.wrapperRect = entries[0].contentRect
-    initialized && (await resizeObserverCbDebounce(entries[0].contentRect))
-  })
-
-  onMounted(async () => {
-    await initItems()
-  })
-
+  /**
+   * Init grid after component is mounted
+   */
   const initItems = async () => {
     let wrapperHeight = 0
     if (props.pageMode) {
       wrapperHeight = window.innerHeight
     } else {
-      state.wrapperRect = (wrapperRef.value as Element).getBoundingClientRect()
-      wrapperHeight = state.wrapperRect.height
+      wrapperHeight = (wrapperRef.value as Element).getBoundingClientRect().height
     }
 
     resizeMeasurement = getResizeMeasurement(innerRef.value as Element, props.itemWidth as number, state.itemHeight)
     bufferMeta = getBufferMeta(wrapperHeight, heightAboveWrapper, resizeMeasurement)
-
     itemByPages = await callPageProvider([0], props.pageSize as number, props.pageProvider as PageProvider)
     state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
 
     await nextFrame(() => {
       state.itemHeight = getItemHeight(innerRef.value as Element, props.itemHeight)
       resizeMeasurement = getResizeMeasurement(innerRef.value as Element, props.itemWidth as number, state.itemHeight)
-      state.contentHeight = getContentHeight(resizeMeasurement, props.length as number)
+      state.viewHeight = getViewHeight(resizeMeasurement, props.length as number)
       getBuffer()
     })
 
     initialized = true
   }
 
+  /**
+   * Scroll to item with a specific index
+   */
+  const scrollToIdx = (idx: number): void => {
+    idx = Math.max(idx, 0)
+    const viewEl = viewRef.value as HTMLElement
+    const verticalScrollEl = getVerticalScrollParent(viewEl) as HTMLElement
+    const computedStyle = window.getComputedStyle(viewEl)
+    const viewPaddingTop = parseInt(computedStyle.getPropertyValue('padding-top'))
+    const viewBorderTop = parseInt(computedStyle.getPropertyValue('border-top'))
+    const topToView = verticalScrollEl instanceof Element ? viewEl.offsetTop - verticalScrollEl.offsetTop : 0
+    const scrollTop =
+      Math.floor(idx / resizeMeasurement.columns) * resizeMeasurement.itemHeightWithGap + topToView + viewPaddingTop + viewBorderTop
+    verticalScrollEl.scrollTo({ top: scrollTop, behavior: 'smooth' })
+  }
+
+  onMounted(async () => {
+    await initItems()
+  })
+
+  useResizeObserver(wrapperRef, async (entries) => {
+    if (initialized) {
+      state.wrapperRect = entries[0].contentRect
+      await resizeObserverCbDebounce()
+    }
+  })
+
   useEventListener(
     'scroll',
     async () => {
-      heightAboveWrapper = getHeightAbove(viewRef.value as Element)
+      heightAboveWrapper = props.pageMode
+        ? getHeightAbove(viewRef.value as Element)
+        : getHeightAbove(viewRef.value as Element, wrapperRef.value as Element)
       emitCurrentItemDebounce()
       await getBuffer()
     },
@@ -287,29 +351,16 @@ export default function useGrid(
       if (val === undefined) {
         return
       }
-      state.contentHeight = getContentHeight(resizeMeasurement, val)
+      state.viewHeight = getViewHeight(resizeMeasurement, val)
     }
   )
 
-  const scrollToIdx = (idx: number): void => {
-    idx = Math.max(idx, 0)
-    const viewEl = viewRef.value as HTMLElement
-    const verticalScrollEl = getVerticalScrollParent(viewEl) as HTMLElement
-    const computedStyle = window.getComputedStyle(viewEl)
-    const viewPaddingTop = parseInt(computedStyle.getPropertyValue('padding-top'))
-    const viewBorderTop = parseInt(computedStyle.getPropertyValue('border-top'))
-    const topToView = verticalScrollEl instanceof Element ? viewEl.offsetTop - verticalScrollEl.offsetTop : 0
-    const scrollTop =
-      Math.floor(idx / resizeMeasurement.columns) * resizeMeasurement.itemHeightWithGap + topToView + viewPaddingTop + viewBorderTop
-    verticalScrollEl.scrollTo({ top: scrollTop, behavior: 'smooth' })
-  }
-
-  const { wrapperRect, itemHeight, buffer, contentHeight, contentTranslate } = toRefs(state)
+  const { wrapperRect, itemHeight, buffer, viewHeight, innerTranslate } = toRefs(state)
   return {
     wrapperRect,
     itemHeight,
-    contentHeight,
-    contentTranslate,
+    viewHeight,
+    innerTranslate,
     buffer,
     scrollToIdx
   }

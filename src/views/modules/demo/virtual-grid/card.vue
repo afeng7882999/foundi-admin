@@ -54,7 +54,7 @@ const props = defineProps({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use 'src/assets/style/variable' as *;
 @use 'src/assets/style/mixin' as *;
 
@@ -83,7 +83,7 @@ const props = defineProps({
       font-size: var(--el-font-size-base);
       margin: 0 4px 0 8px;
     }
-    .title-tag {
+    ::v-deep(.title-tag) {
       margin-left: 8px;
     }
     .title-btn {
