@@ -211,10 +211,11 @@ export default function useGrid(
   }
 
   const emitCurrentItem = () => {
-    const index = getOffsetBeforeView(heightAboveWrapper, resizeMeasurement)
+    const index = getOffsetBeforeView(heightAboveWrapper, resizeMeasurement) + resizeMeasurement.columns
     if (currentIdx !== index) {
       currentIdx = index
-      const page = Math.ceil((index + resizeMeasurement.columns * 2 - 1) / (props.pageSize as number))
+      const page = Math.ceil((index + resizeMeasurement.columns) / (props.pageSize as number))
+      console.log(index, page)
       emit(CURRENT_CHANGED_EVENT, index, page)
     }
   }
