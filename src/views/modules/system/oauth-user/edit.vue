@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/crud/hooks/use-edit'
 import { OAuthUser, oauthUserDicts, oauthUserFields, oauthUserGetOne, oauthUserPostOne, oauthUserPutOne } from '@/api/system/oauth-user'
 
 export default defineComponent({
@@ -63,12 +63,12 @@ export default defineComponent({
       }
     }
 
-    const { mixRefs, mixState, mixMethods } = useEdit<OAuthUser>(stateOption, emit)
+    const { editRefs, editState, editMethods } = useEdit<OAuthUser>(stateOption, emit)
 
     return {
-      ...mixRefs,
-      ...toRefs(mixState),
-      ...mixMethods
+      ...editRefs,
+      ...toRefs(editState),
+      ...editMethods
     }
   }
 })

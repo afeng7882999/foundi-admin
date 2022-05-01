@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import useList from '@/extend/crud/use-list'
+import useList from '@/crud/hooks/use-list'
 import { GenTable, genTableImportDb, genTableListDb } from '@/api/generator/gen-table'
 import { ElForm, ElMessage } from 'element-plus'
 import { debugWarn } from '@/common/exception'

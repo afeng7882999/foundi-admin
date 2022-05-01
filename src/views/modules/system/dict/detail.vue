@@ -33,7 +33,7 @@ export default {
 
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
-import useDetail, { OPEN_EDIT_EVENT } from '@/extend/crud/use-detail'
+import useDetail, { OPEN_EDIT_EVENT } from '@/crud/hooks/use-detail'
 import { dictFields, Dict } from '@/api/system/dict'
 import { getDictListByName, DictItem, DictList } from '@/api/system/dict-item'
 
@@ -51,8 +51,8 @@ const stateOption = {
 
 const emit = defineEmits([OPEN_EDIT_EVENT])
 
-const { mixState: state, mixMethods } = useDetail<Dict>(stateOption, emit)
-const { onBeforeOpen, open, resetForm, close } = mixMethods
+const { detailState: state, detailMethods } = useDetail<Dict>(stateOption, emit)
+const { onBeforeOpen, open, resetForm, close } = detailMethods
 
 onBeforeMount(async () => {
   resetForm()

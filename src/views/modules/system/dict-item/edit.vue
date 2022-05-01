@@ -33,7 +33,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/crud/hooks/use-edit'
 import { dictItemFields, dictItemGetOne, dictItemPostOne, dictItemPutOne } from '@/api/system/dict-item'
 
 const emit = defineEmits([REFRESH_DATA_EVENT])
@@ -58,9 +58,9 @@ const stateOption = {
   }
 }
 
-const { mixRefs, mixState: state, mixMethods } = useEdit(stateOption, emit)
-const { form } = mixRefs
-const { open, resetForm, submit } = mixMethods
+const { editRefs, editState: state, editMethods } = useEdit(stateOption, emit)
+const { form } = editRefs
+const { open, resetForm, submit } = editMethods
 
 // create/edit dialog
 const openDictItemEdit = async (dictId: string, id: string) => {

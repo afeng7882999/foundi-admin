@@ -68,17 +68,18 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useList from '@/extend/crud/use-list'
+import useList from '@/crud/hooks/use-list'
 import SystemMessageContentDialog from './message-content.vue'
 import { ElMessage } from 'element-plus'
 import {
   DelMessageOfCurrent,
-  listMessageOfCurrent, Message,
+  listMessageOfCurrent,
+  Message,
   SetMessageReadOfCurrent,
   userMessageDicts,
   userMessageQuery
 } from '@/api/system/message'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 
 export default defineComponent({
   name: 'SystemMessage',
@@ -94,20 +95,20 @@ export default defineComponent({
       query: userMessageQuery
     }
 
-    const { mixRefs, mixState, mixMethods } = useList<Message>(stateOption)
+    const { listRefs, listState, listMethods } = useList<Message>(stateOption)
 
     const { docMinHeight } = usePage()
 
     const setAllReadHandle = async () => {
-      let ids = mixState.data.filter((m) => unread(m)).map((m) => m.id)
+      let ids = listState.data.filter((m) => unread(m)).map((m) => m.id)
       try {
-        await mixState.statApi(ids)
+        await listState.statApi(ids)
         ElMessage({
           message: '操作成功',
           type: 'success',
           duration: 1500,
           onClose: async () => {
-            await mixMethods.getList()
+            await listMethods.getList()
           }
         })
       } catch (e) {
@@ -126,9 +127,9 @@ export default defineComponent({
     }
 
     return {
-      ...mixRefs,
-      ...toRefs(mixState),
-      ...mixMethods,
+      ...listRefs,
+      ...toRefs(listState),
+      ...listMethods,
       docMinHeight,
       setAllReadHandle,
       rowClass,

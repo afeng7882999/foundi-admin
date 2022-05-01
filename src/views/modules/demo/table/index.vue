@@ -16,8 +16,8 @@
 <script setup lang="ts">
 import BaseTableDemo from './base.vue'
 import TreeTableDemo from './tree.vue'
-import usePage from '@/extend/page/use-page'
-import FdPageFooter from '@/extend/page/page-footer.vue'
+import usePage from '@/crud/hooks/use-page'
+import FdPageFooter from '@/crud/page/page-footer.vue'
 
 defineOptions({
   name: 'DemoTable'

@@ -3,7 +3,7 @@ import { FORM_ITEM_DEFAULT_PROPS } from '../type'
 import { Indexable } from '@/common/types'
 import { ElFormContext, elFormKey } from 'element-plus'
 import { isString } from 'lodash-es'
-import { editContextKey, EditContext } from '@/extend/crud/use-edit'
+import { editContextKey, EditContext } from '@/crud/hooks/use-edit'
 import { useTimeoutFn } from '@vueuse/core'
 import { hasClass } from '@/utils/dom'
 

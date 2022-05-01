@@ -47,7 +47,7 @@ export default {
 
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
-import useDetail, { DetailStateOption, OPEN_EDIT_EVENT } from '@/extend/crud/use-detail'
+import useDetail, { DetailStateOption, OPEN_EDIT_EVENT } from '@/crud/hooks/use-detail'
 import { Role, roleFields } from '@/api/system/role'
 import { Menu } from '@/api/system/menu'
 import { Group } from '@/api/system/group'
@@ -71,8 +71,8 @@ const stateOption: DetailStateOption<Role> = {
 
 const emit = defineEmits([OPEN_EDIT_EVENT])
 
-const { mixState: state, mixMethods } = useDetail<Role>(stateOption, emit)
-const { onBeforeOpen, resetForm, open, dictVal, close } = mixMethods
+const { detailState: state, detailMethods } = useDetail<Role>(stateOption, emit)
+const { onBeforeOpen, resetForm, open, dictVal, close } = detailMethods
 
 onBeforeMount(async () => {
   resetForm()

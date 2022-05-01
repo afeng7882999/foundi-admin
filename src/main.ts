@@ -15,13 +15,17 @@ import FdSvgImage from '@/components/svg-image'
 import FdPageHeader from '@/components/page-header'
 import FdContextmenu from '@/components/contextmenu'
 import FdTreeSelect from '@/components/tree-select'
-import FdDialog from '@/components/dialog'
-import FdDrawer from '@/components/drawer'
-import FdPageAll from '@/extend/page'
 import FdTableAll from '@/components/table'
 import FdFormAll from '@/components/form'
-import FdDescriptionsAll from '@/components/descriptions'
 import FdButtonAll from '@/components/button'
+import FdVirtualGrid from '@/components/virtual-grid'
+
+import FdForm from '@/extend/form'
+import FdDialog from '@/extend/dialog'
+import FdDrawer from '@/extend/drawer'
+import FdDescriptionsAll from '@/extend/descriptions'
+
+import FdPageAll from '@/crud/page'
 
 const app = createApp(App)
 app.use(store)
@@ -34,12 +38,14 @@ app
   .use(FdPageHeader)
   .use(FdContextmenu)
   .use(FdTreeSelect)
-  .use(FdDialog)
-  .use(FdDrawer)
-  .use(FdPageAll)
   .use(FdTableAll)
   .use(FdFormAll)
-  .use(FdDescriptionsAll)
   .use(FdButtonAll)
+  .use(FdVirtualGrid)
+  .use(FdForm)
+  .use(FdDialog)
+  .use(FdDrawer)
+  .use(FdDescriptionsAll)
+  .use(FdPageAll)
 
 app.mount('#app')

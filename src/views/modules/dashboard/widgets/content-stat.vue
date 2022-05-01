@@ -23,18 +23,16 @@
   </fd-widget-panel>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'WidgetContentStat'
-}
-</script>
-
 <script setup lang="ts">
 import { onMounted, onUnmounted, reactive } from 'vue'
 import FdWidgetPanel from './panel.vue'
 import * as echarts from 'echarts/core'
 import { getContentStat } from '@/api/mock/dashboard'
 import useECharts from '@/views/modules/dashboard/widgets/useECharts'
+
+defineOptions({
+  name: 'WidgetContentStat'
+})
 
 const option = {
   tooltip: {

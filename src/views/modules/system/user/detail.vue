@@ -1,5 +1,11 @@
 <template>
-  <div class="fd-page__form">
+  <fd-drawer
+    v-model="visible"
+    :close-on-click-modal="false"
+    :modal="false"
+    :title="`系统用户详细 (${idx + 1} / ${data.length})`"
+    size="600px"
+  >
     <el-descriptions :column="2" :title="`系统用户 - ${data[idx].username}`" border direction="horizontal">
       <el-descriptions-item :span="2" label="用户ID">{{ data[idx].id }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="用户名">{{ data[idx].username }}</el-descriptions-item>
@@ -38,12 +44,12 @@
       <el-descriptions-item :span="2" label="所在地市">{{ getDistricts(data[idx]) }}</el-descriptions-item>
       <el-descriptions-item :span="2" label="住址">{{ data[idx].address }}</el-descriptions-item>
     </el-descriptions>
-  </div>
+  </fd-drawer>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, toRefs } from 'vue'
-import useDetail from '@/extend/crud/use-detail'
+import useDetail from '@/crud/hooks/use-detail'
 import { User } from '@/api/system/user'
 import { Group } from '@/api/system/group'
 import { Role } from '@/api/system/role'
@@ -82,32 +88,32 @@ export default defineComponent({
       }
     }
 
-    const { mixState, mixComputed, mixMethods } = useDetail<User>(stateOption, emit)
+    const { detailState, detailComputed, detailMethods } = useDetail<User>(stateOption, emit)
 
     onBeforeMount(async () => {
-      mixMethods.resetForm()
-      await mixMethods.getDictData()
+      detailMethods.resetForm()
+      await detailMethods.getDictData()
     })
 
-    mixMethods.onBeforeOpen(async (data: User[], idx: number, extra?: Indexable) => {
-      mixState.groupList = extra?.groupList
-      mixState.roleList = extra?.roleList
+    detailMethods.onBeforeOpen(async (data: User[], idx: number, extra?: Indexable) => {
+      detailState.groupList = extra?.groupList
+      detailState.roleList = extra?.roleList
 
       const user = data[idx]
       const { data: oAuthUserList } = await oauthUserList({ userId: user.id })
       ;(oAuthUserList as OAuthUser[]).sort((a, b) => a.oAuthTypeDict.localeCompare(b.oAuthTypeDict))
       user.oAuthUserList = oAuthUserList
-      mixState.data[idx] = { ...user }
+      detailState.data[idx] = { ...user }
     })
 
     const getGroupName = (id: string) => {
-      const group = mixState.groupList.find((g: Group) => g.id === id)
+      const group = detailState.groupList.find((g: Group) => g.id === id)
       return group ? (group as Group).name : '无'
     }
 
     const getRoleNameList = (ids: string[]) => {
       if (ids) {
-        const roles = mixState.roleList.filter((r: Role) => ids.some((i) => i === r.id))
+        const roles = detailState.roleList.filter((r: Role) => ids.some((i) => i === r.id))
         return roles.map((r: Role) => r.name)
       }
       return []
@@ -128,9 +134,9 @@ export default defineComponent({
     }
 
     return {
-      ...toRefs(mixState),
-      ...mixComputed,
-      ...mixMethods,
+      ...toRefs(detailState),
+      ...detailComputed,
+      ...detailMethods,
       getGroupName,
       getRoleNameList,
       getDistricts

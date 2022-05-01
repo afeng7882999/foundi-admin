@@ -81,7 +81,7 @@
 </template>
 
 <script setup lang="ts">
-import usePage from '@/extend/page/use-page'
+import usePage from '../hooks/use-page'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { computed, PropType, reactive, ref, toRaw, useSlots, watch } from 'vue'
 import { cloneDeep } from 'lodash-es'

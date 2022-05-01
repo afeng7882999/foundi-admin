@@ -23,9 +23,9 @@
               </div>
             </transition>
           </el-form>
-          <div class="fd-page-act">
+          <div class="fd-page-toolbar">
             <el-button
-              v-show="hasAuth('system:role:delete')"
+              v-show="auth('system:role:delete')"
               v-waves
               :disabled="state.selectedNodes.length <= 0"
               plain
@@ -35,13 +35,13 @@
               <fd-icon class="is-in-btn" icon="delete"></fd-icon>
               删除
             </el-button>
-            <div class="fd-page-act__right">
-              <el-button v-show="hasAuth('system:role:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
-              <el-button v-show="hasAuth('system:role:export')" v-waves @click="exportData()">导出数据</el-button>
+            <div class="fd-page-toolbar__right">
+              <el-button v-show="auth('system:role:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
+              <el-button v-show="auth('system:role:export')" v-waves @click="exportData()">导出数据</el-button>
               <el-divider class="action-divider" direction="vertical"></el-divider>
               <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
                 <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
-                  <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
+                  <fd-button type="icon" class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-button>
                 </el-badge>
               </el-tooltip>
             </div>
@@ -73,7 +73,7 @@
               <template #default="scope">
                 <el-tooltip :show-after="500" content="编辑" placement="top">
                   <el-button
-                    v-show="hasAuth('system:role:edit')"
+                    v-show="auth('system:role:edit')"
                     class="tb-act-btn"
                     plain
                     size="small"
@@ -85,7 +85,7 @@
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="删除" placement="top">
                   <el-button
-                    v-show="hasAuth('system:role:delete')"
+                    v-show="auth('system:role:delete')"
                     class="tb-act-btn"
                     plain
                     size="small"
@@ -117,7 +117,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useList from '@/extend/crud/use-list'
+import useList from '@/crud/hooks/use-list'
 import { Role, roleDel, roleDicts, roleExport, roleFields, roleList, roleQuery } from '@/api/system/role'
 import Edit from './edit.vue'
 import Detail from './detail.vue'
@@ -125,7 +125,7 @@ import useExpandTransition from '@/hooks/use-expand-transition'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { groupList, Group } from '@/api/system/group'
 import { Menu, menuList } from '@/api/system/menu'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 
 const stateOption = {
   idField: roleFields.idField,
@@ -140,12 +140,12 @@ const stateOption = {
   tableRowSelectable: true
 }
 
-const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<Role>(stateOption)
-const { queryForm, editDialog, detailDialog } = mixRefs
-const { getList, queryList, resetQuery, del, dictVal, exportData, showEdit, toggleQueryForm, onBeforeGetList, onAfterGetList } = mixMethods
-const { tableAttrs, paginationAttrs, detailAttrs } = mixAttrs
+const { listRefs, listState: state, listMethods, listAttrs } = useList<Role>(stateOption)
+const { queryForm, editDialog, detailDialog } = listRefs
+const { getList, queryList, resetQuery, del, dictVal, exportData, showEdit, toggleQueryForm, onBeforeGetList, onAfterGetList } = listMethods
+const { tableAttrs, paginationAttrs, detailAttrs } = listAttrs
 
-const { docMinHeight, showPageHeader, hasAuth } = usePage()
+const { docMinHeight, showPageHeader, auth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 
@@ -171,11 +171,11 @@ onAfterGetList(async () => {
 const setCurrentData = (role: Role) => {
   if (!role) {
     state.currentId = ''
-    ;(mixRefs.detailDialog.value as any).close()
+    ;(listRefs.detailDialog.value as any).close()
     return
   }
   state.currentId = role.id
-  ;(mixRefs.detailDialog.value as any).open([role], 0, {
+  ;(listRefs.detailDialog.value as any).open([role], 0, {
     dicts: state.dicts,
     menuList: state.menuList,
     groupList: state.groupList

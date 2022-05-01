@@ -54,11 +54,6 @@
     </el-row>
   </div>
 </template>
-<script lang="ts">
-export default {
-  name: 'Dashboard'
-}
-</script>
 
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
@@ -68,6 +63,10 @@ import FdWidgetCard from './widgets/card.vue'
 import WidgetContentStat from './widgets/content-stat.vue'
 import WidgetRegion from './widgets/region.vue'
 import WidgetWatch from './widgets/watch.vue'
+
+defineOptions({
+  name: 'Dashboard'
+})
 
 const state = reactive({
   app: ''

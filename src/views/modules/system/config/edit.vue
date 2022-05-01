@@ -1,39 +1,15 @@
 <template>
-  <fd-drawer
-    v-model="state.visible"
-    :close-on-click-modal="false"
-    :modal="false"
-    :title="state.isCreate ? '新增系统配置' : '修改系统配置'"
-    size="600px"
-    @closed="hideDialog"
-  >
-    <el-form ref="form" :model="state.formData" :rules="state.formRule" label-width="80px">
-      <el-form-item label="配置分类" prop="configTypeDict">
-        <el-select v-model="state.formData.configTypeDict" style="width: 100%">
-          <el-option
-            v-for="item in state.dicts.sysConfigType"
-            :key="item.itemKey"
-            :label="item.itemValue"
-            :value="item.itemKey"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="键" prop="configKey">
-        <el-input v-model="state.formData.configKey" placeholder="请输入键"></el-input>
-      </el-form-item>
-      <el-form-item class="fd-code-editor-form-item" label="值" prop="configValue">
-        <fd-code-editor ref="jsonEditor" v-model="state.formData.configValue" border language="application/json" line-numbers />
-      </el-form-item>
-      <el-form-item label="是否启用" prop="enabled">
-        <el-switch v-model="state.formData.enabled" active-text="是" inactive-text="否"></el-switch>
-      </el-form-item>
-      <el-form-item label="备注" prop="remark">
-        <el-input v-model="state.formData.remark" :autosize="{ minRows: 3 }" placeholder="请输入备注" type="textarea"></el-input>
-      </el-form-item>
-    </el-form>
+  <fd-drawer v-model="s.visible" :title="s.isCreate ? '新增系统配置' : '修改系统配置'" size="600px" @closed="m.hideDialog">
+    <fd-form ref="form" :model="s.formData" :rules="s.formRules" label-width="80px">
+      <fd-item-dict label="配置分类" prop="configTypeDict" :dict="s.dicts.sysConfigType" />
+      <fd-item label="键" prop="configKey" />
+      <fd-item-json label="值" prop="configValue" />
+      <fd-item-boolean label="是否启用" prop="enabled" />
+      <fd-item-multiline label="备注" prop="remark" />
+    </fd-form>
     <template #footer>
-      <el-button @click="state.visible = false">取消</el-button>
-      <el-button type="primary" @click="submit">确定</el-button>
+      <el-button @click="s.visible = false">取消</el-button>
+      <el-button type="primary" @click="m.submit">确定</el-button>
     </template>
   </fd-drawer>
 </template>
@@ -45,14 +21,8 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/crud/hooks/use-edit'
 import { Config, configDicts, configFields, configGetOne, configPostOne, configPutOne } from '@/api/system/config'
-import FdCodeEditor from '@/components/code-editor/index.vue'
-import { nextFrame } from '@/utils/next-frame'
-import { cleanStr, formatJson } from '@/utils/lang'
-
-const jsonEditor = ref()
 
 const stateOption = {
   idField: configFields.idField,
@@ -68,35 +38,18 @@ const stateOption = {
     enabled: undefined,
     remark: ''
   } as Partial<Config>,
-  formRule: {
+  formRules: {
     configKey: [{ required: true, message: '键不能为空', trigger: 'blur' }],
     configValue: [{ required: true, message: '值不能为空', trigger: 'blur' }]
-  },
-  json: ''
+  }
 }
 
 const emit = defineEmits([REFRESH_DATA_EVENT])
 
-const { mixRefs, mixState: state, mixMethods } = useEdit<Config>(stateOption, emit)
-const { form } = mixRefs
-const { open, submit, hideDialog, onBeforeOpen, onBeforeSubmitData } = mixMethods
-
-onBeforeOpen(async () => {
-  if (!state.isCreate) {
-    state.formData.configValue = formatJson(state.formData.configValue)
-  }
-  nextFrame(() => {
-    jsonEditor.value.refresh()
-  })
-})
-
-onBeforeSubmitData(async () => {
-  if (state.formData.configValue) {
-    state.formData.configValue = cleanStr(state.formData.configValue)
-  }
-})
+const { editRefs, editState: s, editMethods: m } = useEdit<Config>(stateOption, emit)
+const { form } = editRefs
 
 defineExpose({
-  open
+  open: m.open
 })
 </script>

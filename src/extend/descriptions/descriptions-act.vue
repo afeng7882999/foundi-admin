@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, PropType } from 'vue'
 import { isString } from 'lodash-es'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 import { off, on } from '@/utils/dom'
 
 defineOptions({

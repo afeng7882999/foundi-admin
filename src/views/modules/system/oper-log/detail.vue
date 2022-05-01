@@ -59,7 +59,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/extend/crud/use-detail'
+import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/crud/hooks/use-detail'
 import { OperLog, operLogFields } from '@/api/system/oper-log'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { formatJson } from '@/utils/lang'
@@ -93,9 +93,9 @@ const stateOption = {
   jsonResult: ''
 }
 
-const { mixState: state, mixComputed, mixMethods } = useDetail<OperLog>(stateOption, emit)
-const { prevDisabled, nextDisabled } = mixComputed
-const { open, dictVal, onEdit, onPrev, onNext, close, onCurrentChanged } = mixMethods
+const { detailState: state, detailComputed, detailMethods } = useDetail<OperLog>(stateOption, emit)
+const { prevDisabled, nextDisabled } = detailComputed
+const { open, dictVal, onEdit, onPrev, onNext, close, onCurrentChanged } = detailMethods
 
 onCurrentChanged(async (idx: number) => {
   state.operParam = formatJson(state.data[idx].operParam)

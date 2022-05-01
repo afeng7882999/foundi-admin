@@ -2,7 +2,7 @@ import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus'
 import { computed, onMounted, onUpdated } from 'vue'
 import { getDocumentTop, scrollDocH } from '@/utils/smooth-scroll'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 import { merge } from 'lodash-es'
 import { unrefElement, useResizeObserver, VueInstance } from '@vueuse/core'
 

@@ -1,7 +1,7 @@
 import { cloneDeep, merge } from 'lodash-es'
 import { InjectionKey, provide, reactive, ref, unref } from 'vue'
 import { ElForm, ElMessage } from 'element-plus'
-import useDict from '@/extend/crud/use-dict'
+import useDict from './use-dict'
 import { arrayToTree, TreeFields } from '@/utils/data-tree'
 import { ApiObj } from '@/api'
 import { AnyFunction, Indexable } from '@/common/types'

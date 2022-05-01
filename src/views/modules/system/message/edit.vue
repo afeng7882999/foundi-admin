@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/crud/hooks/use-edit'
 import { messageDicts, messageFields, messageGetOne, messagePostOne, messagePutOne } from '@/api/system/message'
 
 export default defineComponent({
@@ -58,12 +58,12 @@ export default defineComponent({
       }
     }
 
-    const { mixRefs, mixState, mixMethods } = useEdit(stateOption, emit)
+    const { editRefs, editState, editMethods } = useEdit(stateOption, emit)
 
     return {
-      ...mixRefs,
-      ...toRefs(mixState),
-      ...mixMethods
+      ...editRefs,
+      ...toRefs(editState),
+      ...editMethods
     }
   }
 })

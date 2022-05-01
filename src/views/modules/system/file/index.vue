@@ -37,9 +37,9 @@
           </div>
         </transition>
       </el-form>
-      <div class="fd-page-act">
+      <div class="fd-page-toolbar">
         <el-button
-          v-show="hasAuth('system:file:delete')"
+          v-show="auth('system:file:delete')"
           v-waves
           :disabled="state.selectedNodes.length <= 0"
           plain
@@ -49,12 +49,12 @@
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <div class="fd-page-act__right">
-          <el-button v-show="hasAuth('system:file:upload')" v-waves type="primary" @click="showEdit()">上传文件</el-button>
+        <div class="fd-page-toolbar__right">
+          <el-button v-show="auth('system:file:upload')" v-waves type="primary" @click="showEdit()">上传文件</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
           <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
-              <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
+              <fd-button type="icon" class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-button>
             </el-badge>
           </el-tooltip>
         </div>
@@ -91,7 +91,7 @@
           <template #default="scope">
             <el-tooltip :show-after="500" content="复制当前文件连接" placement="top">
               <el-button
-                v-show="hasAuth('system:file:list')"
+                v-show="auth('system:file:list')"
                 class="tb-act-btn"
                 plain
                 type="primary"
@@ -103,7 +103,7 @@
             </el-tooltip>
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
-                v-show="hasAuth('system:file:delete')"
+                v-show="auth('system:file:delete')"
                 class="tb-act-btn tb-act-delete"
                 plain
                 type="danger"
@@ -129,14 +129,14 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useList from '@/extend/crud/use-list'
+import useList from '@/crud/hooks/use-list'
 import { fileDel, fileDicts, fileFields, fileList, FileObj, fileQuery } from '@/api/system/file'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { configListOss, Config } from '@/api/system/config'
 import Upload from './upload.vue'
 import { localOrRemoteUrl } from '@/utils/query'
 import { formatTimestamp } from '@/utils/time'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
 
@@ -149,12 +149,12 @@ const stateOption = {
   configList: [] as Config[]
 }
 
-const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<FileObj>(stateOption)
-const { queryForm, editDialog } = mixRefs
-const { getList, queryList, resetQuery, toggleQueryForm, dictVal, del, showEdit, onBeforeGetList } = mixMethods
-const { tableAttrs, paginationAttrs } = mixAttrs
+const { listRefs, listState: state, listMethods, listAttrs } = useList<FileObj>(stateOption)
+const { queryForm, editDialog } = listRefs
+const { getList, queryList, resetQuery, toggleQueryForm, dictVal, del, showEdit, onBeforeGetList } = listMethods
+const { tableAttrs, paginationAttrs } = listAttrs
 
-const { docMinHeight, showPageHeader, hasAuth } = usePage()
+const { docMinHeight, showPageHeader, auth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 

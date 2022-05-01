@@ -1,26 +1,24 @@
 <template>
-  <fd-dialog v-model="visible" :title="isCreate ? '新增' : '修改'" width="720px" @closed="hideDialog">
+  <fd-drawer
+    v-model="visible"
+    :close-on-click-modal="false"
+    :modal="false"
+    :title="state.isCreate ? '新增系统用户' : '修改系统用户'"
+    size="600px"
+    @closed="hideDialog"
+  >
     <el-form ref="form" :model="formData" :rules="formRule" label-width="80px" @keyup.enter="submit">
       <el-row>
         <el-col :span="16">
           <el-row>
-            <el-form-item label="用户名" prop="username" style="width: 100%">
-              <el-input v-model="formData.username" placeholder="用户名"></el-input>
-            </el-form-item>
+            <fd-item label="用户名" prop="username" />
           </el-row>
           <el-row>
-            <el-form-item label="用户组" prop="groupId" style="width: 100%">
-              <fd-tree-select
-                v-model="formData.groupId"
-                :data-list="groupList"
-                :select-params="{ placeholder: '请选择用户组' }"
-                style="width: 100%"
-              ></fd-tree-select>
-            </el-form-item>
+            <fd-item-tree label="用户组" prop="groupId" :list="groupList" />
           </el-row>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="头像" prop="avatar">
+          <fd-item-custom label="头像" prop="avatar">
             <fd-image-cropper
               v-model="formData.avatar"
               :img-ratio="[1, 1]"
@@ -28,49 +26,29 @@
               :default-img="defaultAvatar"
               style="width: 95px; height: 95px"
             ></fd-image-cropper>
-          </el-form-item>
+          </fd-item-custom>
         </el-col>
       </el-row>
-      <el-form-item label="角色" prop="roleIdList">
-        <el-select v-model="formData.roleIdList" multiple clearable placeholder="角色" style="width: 100%">
-          <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item v-if="formData.hasPassword" label="密码">
+      <fd-item-list label="角色" prop="roleIdList" multi :list="roleList" />
+      <fd-item-custom v-if="formData.hasPassword" label="密码">
         <el-button @click="showChangePassword(formData.id)">修改密码</el-button>
-      </el-form-item>
-      <el-form-item v-if="!formData.hasPassword" label="密码" prop="password">
-        <el-input v-model="formData.password" placeholder="长度6-20,可包含字母,数字,下划线"></el-input>
-      </el-form-item>
-      <el-form-item v-if="!formData.hasPassword" label="确认密码" prop="checkPass">
-        <el-input v-model="formData.checkPass" placeholder="与密码一致"></el-input>
-      </el-form-item>
-      <el-form-item label="手机号" prop="mobile">
-        <el-input v-model="formData.mobile" placeholder="手机号"></el-input>
-      </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="formData.email" placeholder="邮箱"></el-input>
-      </el-form-item>
-      <el-form-item label="状态" prop="statusDict">
-        <el-select v-model="formData.statusDict" style="width: 100%">
-          <el-option v-for="item in dicts.sysUserStatus" :key="item.itemKey" :label="item.itemValue" :value="item.itemKey"></el-option>
-        </el-select>
-      </el-form-item>
+      </fd-item-custom>
+      <template v-else>
+        <fd-item label="密码" prop="password" placeholder="长度6-20,可包含字母,数字,下划线" />
+        <fd-item label="确认密码" prop="checkPass" placeholder="与密码一致" />
+      </template>
+      <fd-item label="手机号" prop="mobile" />
+      <fd-item label="邮箱" prop="email" />
+      <fd-item-dict label="状态" prop="statusDict" :dict="dicts.sysUserStatus" />
       <el-row>
         <el-col :span="12">
-          <el-form-item label="姓名" prop="name">
-            <el-input v-model="formData.name" placeholder="姓名"></el-input>
-          </el-form-item>
+          <fd-item label="姓名" prop="name" />
         </el-col>
         <el-col :span="12">
-          <el-form-item label="性别" prop="genderDict">
-            <el-select v-model="formData.genderDict" style="width: 100%">
-              <el-option v-for="item in dicts.gender" :key="item.itemKey" :label="item.itemValue" :value="item.itemKey"></el-option>
-            </el-select>
-          </el-form-item>
+          <fd-item-dict label="性别" prop="genderDict" :dict="dicts.gender" />
         </el-col>
       </el-row>
-      <el-form-item label="出生日期" prop="birthday">
+      <fd-item-custom label="出生日期" prop="birthday">
         <el-date-picker
           v-model="formData.birthday"
           placeholder="出生日期"
@@ -78,13 +56,11 @@
           type="date"
           value-format="YYYY-MM-DD"
         ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="城市地区" prop="province">
+      </fd-item-custom>
+      <fd-item-custom label="城市地区" prop="province">
         <fd-region-cascader v-model="formData.userRegion" placeholder="城市地区" style="width: 100%" />
-      </el-form-item>
-      <el-form-item label="住址" prop="address">
-        <el-input v-model="formData.address" :rows="2" placeholder="住址" type="textarea"></el-input>
-      </el-form-item>
+      </fd-item-custom>
+      <fd-item-multiline label="住址" prop="address" />
     </el-form>
     <template #footer>
       <span class="fd-dialog__footer">
@@ -92,13 +68,13 @@
         <el-button type="primary" @click="submit">确定</el-button>
       </span>
     </template>
-  </fd-dialog>
+  </fd-drawer>
   <ChangePassword ref="changePasswordDialog"></ChangePassword>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, ref, toRefs } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/crud/hooks/use-edit'
 import { checkEmail, checkMobile, checkUsername, User, userDicts, userGetOne, userPostOne, userPutOne } from '@/api/system/user'
 import FdImageCropper from '@/components/img-cropper/index.vue'
 import { validEmail, validMobile, validPassword, validUsername } from '@/utils/validate'
@@ -161,7 +137,7 @@ export default defineComponent({
           callback(new Error('请输入正确的邮件地址'))
         } else {
           try {
-            const data = await checkEmail(value, mixState.formData.id)
+            const data = await checkEmail(mixState.formData.id, value)
             if (!data) {
               callback(new Error('邮件地址已经被占用'))
             } else {
@@ -180,7 +156,7 @@ export default defineComponent({
           callback(new Error('请输入正确的手机号码'))
         } else {
           try {
-            const data = await checkMobile(value, mixState.formData.id)
+            const data = await checkMobile(mixState.formData.id, value)
             if (!data) {
               callback(new Error('手机号已经被占用'))
             } else {
@@ -217,7 +193,6 @@ export default defineComponent({
         province: '',
         city: '',
         district: '',
-
         userRegion: {
           province: '',
           city: '',
@@ -236,32 +211,32 @@ export default defineComponent({
 
     const defaultAvatar = computed(() => DEFAULT_AVATAR)
 
-    const { mixRefs, mixState, mixMethods } = useEdit<User>(stateOption, emit)
+    const { editRefs, editState, editMethods } = useEdit<User>(stateOption, emit)
 
-    mixMethods.onBeforeOpen(async () => {
+    editMethods.onBeforeOpen(async () => {
       const { data: groups } = await groupList()
       const { data: roles } = await roleList()
-      mixState.groupList = arrayToTree(groups)
-      mixState.roleList = arrayToTree(roles)
+      editState.groupList = arrayToTree(groups)
+      editState.roleList = arrayToTree(roles)
     })
 
-    mixMethods.onAfterGetData(async (data) => {
-      mixState.formData = data
-      mixState.formData.userRegion = {
+    editMethods.onAfterGetData(async (data) => {
+      editState.formData = data
+      editState.formData.userRegion = {
         province: data.province,
         city: data.city,
         district: data.district
       }
     })
 
-    mixMethods.onBeforeSubmitData(async () => {
-      mixState.formData.province = mixState.formData.userRegion.province
-      mixState.formData.city = mixState.formData.userRegion.city
-      mixState.formData.district = mixState.formData.userRegion.district
-      mixState.formData = omit(mixState.formData, ['userRegion', 'checkPass'])
+    editMethods.onBeforeSubmitData(async () => {
+      editState.formData.province = editState.formData.userRegion.province
+      editState.formData.city = editState.formData.userRegion.city
+      editState.formData.district = editState.formData.userRegion.district
+      editState.formData = omit(editState.formData, ['userRegion', 'checkPass'])
 
-      // mixState.formData.birthday = new Date(mixState.formData.birthday).getTime()
-      // console.log(mixState.formData.birthday)
+      // editState.formData.birthday = new Date(editState.formData.birthday).getTime()
+      // console.log(editState.formData.birthday)
     })
 
     const showChangePassword = (id: string) => {
@@ -270,9 +245,9 @@ export default defineComponent({
 
     return {
       changePasswordDialog,
-      ...mixRefs,
-      ...toRefs(mixState),
-      ...mixMethods,
+      ...editRefs,
+      ...toRefs(editState),
+      ...editMethods,
       defaultAvatar,
       validateUsername,
       validatePassword,

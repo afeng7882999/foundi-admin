@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { computed, PropType } from 'vue'
 import { DictItem } from '@/api/system/dict-item'
-import useDict from '@/extend/crud/use-dict'
+import useDict from '@/crud/hooks/use-dict'
 import { FormatMapping, FormatMappingItem } from '../types'
 import { isArray, isString } from 'lodash-es'
 

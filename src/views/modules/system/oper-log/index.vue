@@ -40,9 +40,9 @@
           </div>
         </transition>
       </el-form>
-      <div class="fd-page-act">
+      <div class="fd-page-toolbar">
         <el-button
-          v-show="hasAuth('system:operLog:delete')"
+          v-show="auth('system:operLog:delete')"
           v-waves
           :disabled="state.selectedNodes.length <= 0"
           plain
@@ -53,8 +53,8 @@
           删除
         </el-button>
         <el-divider class="action-divider" direction="vertical"></el-divider>
-        <el-button v-show="hasAuth('system:operLog:export')" v-waves @click="exportData()">导出数据</el-button>
-        <div class="fd-page-act__right">
+        <el-button v-show="auth('system:operLog:export')" v-waves @click="exportData()">导出数据</el-button>
+        <div class="fd-page-toolbar__right">
           <el-form v-show="!state.queryFormShow" ref="queryFormQuick" :inline="true" :model="state.query" @keyup.enter="queryList()">
             <el-form-item label="时间" prop="operTime" style="height: 36px">
               <el-date-picker
@@ -77,7 +77,7 @@
           <el-divider class="action-divider" direction="vertical"></el-divider>
           <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
-              <fd-icon-button class="action-icon-btn" icon="search-more" @click="toggleQueryForm()"></fd-icon-button>
+              <fd-button type="icon" class="action-icon-btn" icon="search-more" @click="toggleQueryForm()"></fd-button>
             </el-badge>
           </el-tooltip>
         </div>
@@ -179,7 +179,7 @@
           <template #default="scope">
             <el-tooltip :show-after="500" content="详细" placement="top">
               <el-button
-                v-show="hasAuth('system:operLog:list')"
+                v-show="auth('system:operLog:list')"
                 class="tb-act-btn tb-act-btn-detail"
                 plain
                 size="small"
@@ -191,7 +191,7 @@
             </el-tooltip>
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
-                v-show="hasAuth('system:operLog:delete')"
+                v-show="auth('system:operLog:delete')"
                 class="tb-act-btn"
                 plain
                 size="small"
@@ -218,12 +218,12 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useList, { ListStateOption } from '@/extend/crud/use-list'
+import useList, { ListStateOption } from '@/crud/hooks/use-list'
 import { OperLog, operLogDel, operLogDicts, operLogExport, operLogFields, operLogList, operLogQuery } from '@/api/system/oper-log'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import Detail from './detail.vue'
 import { formatTimestamp } from '@/utils/time'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 
 const stateOption: ListStateOption<OperLog> = {
   idField: operLogFields.idField,
@@ -236,12 +236,12 @@ const stateOption: ListStateOption<OperLog> = {
   tableRowSelectable: true
 }
 
-const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<OperLog>(stateOption)
-const { queryForm, table, detailDialog } = mixRefs
-const { queryList, resetQuery, del, exportData, toggleQueryForm, dictVal, showDetail } = mixMethods
-const { tableAttrs, paginationAttrs, detailAttrs } = mixAttrs
+const { listRefs, listState: state, listMethods, listAttrs } = useList<OperLog>(stateOption)
+const { queryForm, table, detailDialog } = listRefs
+const { queryList, resetQuery, del, exportData, toggleQueryForm, dictVal, showDetail } = listMethods
+const { tableAttrs, paginationAttrs, detailAttrs } = listAttrs
 
-const { docMinHeight, showPageHeader, hasAuth } = usePage()
+const { docMinHeight, showPageHeader, auth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 </script>

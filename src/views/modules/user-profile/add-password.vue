@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/crud/hooks/use-edit'
 import { currentAddPassword } from '@/api/system/user'
 import { validPassword } from '@/utils/validate'
 import { omit } from 'lodash-es'
@@ -39,7 +39,7 @@ export default defineComponent({
     }
 
     const validateCheckPass = (rule: any, value: string, callback: any) => {
-      if (!value || value !== mixState.formData.password) {
+      if (!value || value !== editState.formData.password) {
         callback(new Error('两次输入密码必须一致'))
       } else {
         callback()
@@ -58,22 +58,22 @@ export default defineComponent({
       }
     }
 
-    const { mixRefs, mixState, mixMethods } = useEdit(stateOption, emit)
+    const { editRefs, editState, editMethods } = useEdit(stateOption, emit)
 
-    mixMethods.open = async () => {
-      mixState.isCreate = true
-      mixMethods.resetForm()
-      mixState.visible = true
+    editMethods.open = async () => {
+      editState.isCreate = true
+      editMethods.resetForm()
+      editState.visible = true
     }
 
-    mixMethods.onBeforeSubmitData(async () => {
-      mixState.formData = omit(mixState.formData, ['checkPass'])
+    editMethods.onBeforeSubmitData(async () => {
+      editState.formData = omit(editState.formData, ['checkPass'])
     })
 
     return {
-      ...mixRefs,
-      ...toRefs(mixState),
-      ...mixMethods,
+      ...editRefs,
+      ...toRefs(editState),
+      ...editMethods,
       validatePassword,
       validateCheckPass
     }

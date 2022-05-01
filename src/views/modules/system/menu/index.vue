@@ -2,14 +2,14 @@
   <div ref="moduleRoot" :style="docMinHeight" class="page-menu fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <div class="fd-page-act">
-        <el-button v-show="hasAuth('system:menu:delete')" v-waves :disabled="selectedNodes.length <= 0" plain type="danger" @click="del()">
+      <div class="fd-page-toolbar">
+        <el-button v-show="auth('system:menu:delete')" v-waves :disabled="selectedNodes.length <= 0" plain type="danger" @click="del()">
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <div class="fd-page-act__right">
-          <el-button v-show="hasAuth('system:menu:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
-          <el-button v-show="hasAuth('system:menu:export')" v-waves @click="exportData()">导出数据</el-button>
+        <div class="fd-page-toolbar__right">
+          <el-button v-show="auth('system:menu:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
+          <el-button v-show="auth('system:menu:export')" v-waves @click="exportData()">导出数据</el-button>
         </div>
       </div>
     </div>
@@ -92,7 +92,7 @@
           <template #default="scope">
             <el-tooltip :show-after="500" content="编辑" placement="top">
               <el-button
-                v-show="hasAuth('system:menu:edit')"
+                v-show="auth('system:menu:edit')"
                 class="tb-act-btn"
                 plain
                 size="small"
@@ -104,7 +104,7 @@
             </el-tooltip>
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
-                v-show="hasAuth('system:menu:delete')"
+                v-show="auth('system:menu:delete')"
                 class="tb-act-btn"
                 plain
                 size="small"
@@ -129,8 +129,8 @@ import { Menu, menuDel, menuDicts, menuExport, menuFields, menuList, menuQuery, 
 import Edit from './edit.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { arrayToTree } from '@/utils/data-tree'
-import usePage from '@/extend/page/use-page'
-import useList from '@/extend/crud/use-list'
+import usePage from '@/crud/hooks/use-page'
+import useList from '@/crud/hooks/use-list'
 
 export default defineComponent({
   name: 'SystemMenu',
@@ -149,32 +149,32 @@ export default defineComponent({
       parentList: [] as Menu[]
     }
 
-    const { mixRefs, mixState, mixMethods, mixAttrs } = useList<Menu>(stateOption)
+    const { listRefs, listState, listMethods, listAttrs } = useList<Menu>(stateOption)
 
-    const { docMinHeight, showPageHeader, hasAuth } = usePage()
+    const { docMinHeight, showPageHeader, auth } = usePage()
 
     const getParentList = async () => {
       try {
-        const { data: pl } = await mixState.listApi()
-        mixState.parentList = arrayToTree(pl, mixState.treeFields)
+        const { data: pl } = await listState.listApi()
+        listState.parentList = arrayToTree(pl, listState.treeFields)
       } catch (e) {
         console.log(e)
       }
     }
 
-    mixMethods.onBeforeGetList(async () => {
+    listMethods.onBeforeGetList(async () => {
       await getParentList()
       return true
     })
 
     return {
-      ...mixRefs,
-      ...toRefs(mixState),
+      ...listRefs,
+      ...toRefs(listState),
       docMinHeight,
       showPageHeader,
-      hasAuth,
-      ...mixMethods,
-      ...mixAttrs,
+      auth,
+      ...listMethods,
+      ...listAttrs,
       ...useExpandTransition(),
       getParentList
     }

@@ -23,9 +23,9 @@
               </div>
             </transition>
           </el-form>
-          <div class="fd-page-act">
+          <div class="fd-page-toolbar">
             <el-button
-              v-show="hasAuth('system:dict:delete')"
+              v-show="auth('system:dict:delete')"
               v-waves
               :disabled="state.selectedNodes.length <= 0"
               plain
@@ -35,13 +35,13 @@
               <fd-icon class="is-in-btn" icon="delete"></fd-icon>
               删除
             </el-button>
-            <div class="fd-page-act__right">
-              <el-button v-show="hasAuth('system:dict:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
-              <el-button v-show="hasAuth('system:dict:export')" v-waves @click="exportData()">导出数据</el-button>
+            <div class="fd-page-toolbar__right">
+              <el-button v-show="auth('system:dict:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
+              <el-button v-show="auth('system:dict:export')" v-waves @click="exportData()">导出数据</el-button>
               <el-divider class="action-divider" direction="vertical"></el-divider>
               <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
                 <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
-                  <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
+                  <fd-button type="icon" class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-button>
                 </el-badge>
               </el-tooltip>
             </div>
@@ -69,7 +69,7 @@
               <template #default="scope">
                 <el-tooltip :content="`编辑字典&quot;${scope.row.name}&quot;的条目`" :show-after="500" placement="top">
                   <el-button
-                    v-show="hasAuth('system:dict:edit')"
+                    v-show="auth('system:dict:edit')"
                     class="tb-act-btn"
                     plain
                     size="small"
@@ -82,7 +82,7 @@
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="编辑" placement="top">
                   <el-button
-                    v-show="hasAuth('system:dict:edit')"
+                    v-show="auth('system:dict:edit')"
                     class="tb-act-btn"
                     plain
                     size="small"
@@ -94,7 +94,7 @@
                 </el-tooltip>
                 <el-tooltip :show-after="500" content="删除" placement="top">
                   <el-button
-                    v-show="hasAuth('system:dict:delete')"
+                    v-show="auth('system:dict:delete')"
                     class="tb-act-btn"
                     plain
                     size="small"
@@ -126,14 +126,14 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useList from '@/extend/crud/use-list'
+import useList from '@/crud/hooks/use-list'
 import { dictDel, dictExport, dictFields, dictList, dictQuery, Dict } from '@/api/system/dict'
 import Edit from './edit.vue'
 import Detail from './detail.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { useRouter } from 'vue-router'
 import FdSplitPane from '@/components/split-pane/index.vue'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 
 const stateOption = {
   idField: dictFields.idField,
@@ -147,12 +147,12 @@ const stateOption = {
 
 const router = useRouter()
 
-const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<Dict>(stateOption)
-const { queryForm, editDialog, detailDialog } = mixRefs
-const { getList, queryList, resetQuery, del, exportData, showEdit, toggleQueryForm } = mixMethods
-const { paginationAttrs, tableAttrs, detailAttrs } = mixAttrs
+const { listRefs, listState: state, listMethods, listAttrs } = useList<Dict>(stateOption)
+const { queryForm, editDialog, detailDialog } = listRefs
+const { getList, queryList, resetQuery, del, exportData, showEdit, toggleQueryForm } = listMethods
+const { paginationAttrs, tableAttrs, detailAttrs } = listAttrs
 
-const { docMinHeight, showPageHeader, hasAuth, setViewTitle } = usePage()
+const { docMinHeight, showPageHeader, auth, setViewTitle } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 
@@ -171,7 +171,7 @@ const onTableRowClick = (row: Dict) => {
   setCurrentData(row)
 }
 
-mixMethods.onAfterGetList(async () => {
+listMethods.onAfterGetList(async () => {
   if (state.currentId) {
     const current = state.data.find((d) => d.id === state.currentId) as Dict
     await setCurrentData(current)

@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import useView from '@/extend/page/use-view'
+import useView from '@/crud/hooks/use-view'
 
 defineOptions({
   name: 'FdPageHeader'

@@ -68,7 +68,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/crud/hooks/use-edit'
 import { Menu, menuDicts, menuFields, menuGetOne, menuList, menuPostOne, menuPutOne, menuTreeFields } from '@/api/system/menu'
 import FdTagInput from '@/components/tag-input/index.vue'
 import FdIconSelector from '@/components/icon/icon-selector.vue'
@@ -110,24 +110,24 @@ export default defineComponent({
       perms: [] as string[]
     }
 
-    const { mixRefs, mixState, mixMethods } = useEdit<Menu>(stateOption, emit)
+    const { editRefs, editState, editMethods } = useEdit<Menu>(stateOption, emit)
 
-    mixMethods.onBeforeOpen(async () => {
-      mixState.perms = mixState.formData.perms ? mixState.formData.perms.split(',') : []
+    editMethods.onBeforeOpen(async () => {
+      editState.perms = editState.formData.perms ? editState.formData.perms.split(',') : []
     })
 
-    mixMethods.onAfterGetData(async (data) => {
-      mixState.formData = data
+    editMethods.onAfterGetData(async (data) => {
+      editState.formData = data
     })
 
-    mixMethods.onBeforeSubmitData(async () => {
-      mixState.formData.perms = mixState.perms.join(',')
+    editMethods.onBeforeSubmitData(async () => {
+      editState.formData.perms = editState.perms.join(',')
     })
 
     return {
-      ...mixRefs,
-      ...toRefs(mixState),
-      ...mixMethods
+      ...editRefs,
+      ...toRefs(editState),
+      ...editMethods
     }
   }
 })

@@ -8,7 +8,7 @@
       <div class="fd-wg-panel__action">
         <slot name="action"></slot>
         <div class="fd-wg-panel__minimize">
-          <fd-icon-button icon="right" @click="onMinBtnClick"></fd-icon-button>
+          <fd-button type="icon" icon="right" @click="onMinBtnClick"></fd-button>
         </div>
       </div>
     </div>
@@ -20,15 +20,13 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdWidgetPanel'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
+
+defineOptions({
+  name: 'FdWidgetPanel'
+})
 
 const BG_TYPE = ['primary', 'success', 'warning', 'danger', 'info']
 

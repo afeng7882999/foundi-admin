@@ -3,7 +3,7 @@
     <el-popover :offset="-5" :show-after="500" :show-arrow="false" placement="bottom" trigger="hover" width="250">
       <template #reference>
         <el-badge :value="unreadCount" class="small-badge message-badge">
-          <fd-icon-button class="right-menu-item" icon="mail" style="margin-right: 15px"></fd-icon-button>
+          <fd-button type="icon" class="right-menu-item" icon="mail" style="margin-right: 15px"></fd-button>
         </el-badge>
       </template>
       <div class="message-list">

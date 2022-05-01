@@ -1,6 +1,6 @@
 import { COL_DEFAULT_PROPS } from '../types'
 import { computed, ExtractPropTypes } from 'vue'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 import { isBoolean } from 'lodash-es'
 
 const useColumn = (props: Readonly<ExtractPropTypes<typeof COL_DEFAULT_PROPS>>) => {

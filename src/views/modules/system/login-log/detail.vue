@@ -6,7 +6,7 @@
     :title="`系统访问日志详细 (${state.idx + 1} / ${state.data.length})`"
     size="600px"
   >
-    <el-descriptions :column="2" :direction="isXs ? 'vertical' : 'horizontal'" border>
+    <el-descriptions :column="2" :direction="isMobile ? 'vertical' : 'horizontal'" border>
       <el-descriptions-item :span="2" label="ID">
         {{ state.data[state.idx].id }}
       </el-descriptions-item>
@@ -52,10 +52,10 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/extend/crud/use-detail'
+import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/crud/hooks/use-detail'
 import { LoginLog, loginLogFields } from '@/api/system/login-log'
 import { formatTimestamp } from '@/utils/time'
-import breakpoint from "@/common/breakpoint";
+import useLayoutSize from '@/hooks/use-layout-size'
 
 const emit = defineEmits([OPEN_EDIT_EVENT, NAVIGATE_EVENT])
 
@@ -67,11 +67,11 @@ const stateOption = {
   }
 }
 
-const { mixState: state, mixComputed, mixMethods } = useDetail<LoginLog>(stateOption, emit)
-const { prevDisabled, nextDisabled } = mixComputed
-const { open, dictVal, onEdit, onPrev, onNext, close } = mixMethods
+const { detailState: state, detailComputed, detailMethods } = useDetail<LoginLog>(stateOption, emit)
+const { prevDisabled, nextDisabled } = detailComputed
+const { open, dictVal, onEdit, onPrev, onNext, close } = detailMethods
 
-const isXs = breakpoint.smaller('sm')
+const { isMobile } = useLayoutSize()
 
 defineExpose({
   open,

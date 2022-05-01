@@ -84,13 +84,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import useList from '@/extend/crud/use-list'
+import useList from '@/crud/hooks/use-list'
 import { download, GenTable, genTableDel, genTableList, genTableQuery } from '@/api/generator/gen-table'
 import GeneratorImport from './import.vue'
 import { ElMessage } from 'element-plus'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 import { Indexable } from '@/common/types'
-import useView from '@/extend/page/use-view'
+import useView from '@/crud/hooks/use-view'
 import useLayoutSize from '@/hooks/use-layout-size'
 
 defineOptions({

@@ -1,8 +1,8 @@
 <template>
   <div v-if="auth('demo:splitPane:list')" :style="docMinHeight" class="page-demo-split-pane fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
-    <div class="fd-page__form">
-      <div class="fd-page-toolbar">
+    <div class="fd-page-toolbar">
+      <div class="fd-page-toolbar__left">
         <el-button @click="onLeftShrinkClick">{{ state.leftShrinkAll ? '展开左侧' : '收缩左侧' }}</el-button>
         <el-checkbox v-model="state.leftShrinkToHide" style="margin-left: 16px">收缩时隐藏手柄</el-checkbox>
       </div>
@@ -39,10 +39,10 @@
 </template>
 
 <script setup lang="ts">
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 import FdSplitPane from '@/components/split-pane/index.vue'
 import { reactive } from 'vue'
-import FdPageFooter from '@/extend/page/page-footer.vue'
+import FdPageFooter from '@/crud/page/page-footer.vue'
 
 defineOptions({
   name: 'DemoSplitPane'

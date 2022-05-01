@@ -1,9 +1,16 @@
 .fd-virtual-grid {
+  width: 100%;
   overflow: hidden;
   
   &__inner {
     box-sizing: border-box;
     display: grid;
     place-content: center;
+  }
+  
+  &__placeholder {
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
   }
 }

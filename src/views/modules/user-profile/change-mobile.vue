@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/crud/hooks/use-edit'
 import { validMobile } from '@/utils/validate'
 import FdCountDownButton from '@/components/count-down-button/index.vue'
 import { currentChangeMobile, currentChangeMobileValid, currentCheckMobile } from '@/api/system/user'
@@ -72,24 +72,24 @@ export default defineComponent({
       }
     }
 
-    const { mixRefs, mixState, mixMethods } = useEdit(stateOption, emit)
+    const { editRefs, editState, editMethods } = useEdit(stateOption, emit)
 
-    mixMethods.open = async () => {
-      mixState.isCreate = true
-      mixMethods.resetForm()
-      mixState.visible = true
+    editMethods.open = async () => {
+      editState.isCreate = true
+      editMethods.resetForm()
+      editState.visible = true
     }
 
     const getResetValidCode = () => {
-      ;(mixRefs.form.value as any).validateField('mobile', async (isValid?: any) => {
+      ;(editRefs.form.value as any).validateField('mobile', async (isValid?: any) => {
         if (isValid) {
           // if isValid contains error message
           return
         }
         try {
-          await currentChangeMobileValid(mixState.formData.mobile)
+          await currentChangeMobileValid(editState.formData.mobile)
           ElMessage({
-            message: '验证码已发送至' + '手机' + mixState.formData.mobile,
+            message: '验证码已发送至' + '手机' + editState.formData.mobile,
             type: 'success',
             duration: 1500
           })
@@ -100,9 +100,9 @@ export default defineComponent({
     }
 
     return {
-      ...mixRefs,
-      ...toRefs(mixState),
-      ...mixMethods,
+      ...editRefs,
+      ...toRefs(editState),
+      ...editMethods,
       getResetValidCode
     }
   }

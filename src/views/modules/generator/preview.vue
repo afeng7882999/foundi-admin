@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 import { downloadFile, getFileExt } from '@/utils/file'
 import { computed, nextTick, onBeforeMount, reactive, ref, Ref } from 'vue'
 import FdCodeEditor from '@/components/code-editor/index.vue'
@@ -76,7 +76,7 @@ import { Indexable } from '@/common/types'
 import { ElTree } from 'element-plus'
 import { FdCodeEditorInst } from '@/components/code-editor/code-editor'
 import { useThrottleFn, useTimeoutFn } from '@vueuse/core'
-import useView from '@/extend/page/use-view'
+import useView from '@/crud/hooks/use-view'
 
 defineOptions({
   name: 'GeneratorPreview'

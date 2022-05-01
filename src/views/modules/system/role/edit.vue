@@ -132,7 +132,7 @@ export default {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import useEdit, { ListEditStateOption, REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
+import useEdit, { ListEditStateOption, REFRESH_DATA_EVENT } from '@/crud/hooks/use-edit'
 import { Role, roleDicts, roleFields, roleGetOne, rolePostOne, rolePutOne } from '@/api/system/role'
 import { groupList, Group } from '@/api/system/group'
 import { Menu, menuList } from '@/api/system/menu'
@@ -174,9 +174,9 @@ const stateOption: ListEditStateOption<Role> = {
   tabName: '1'
 }
 
-const { mixRefs, mixState: state, mixMethods } = useEdit<Role>(stateOption, emit)
-const { form } = mixRefs
-const { open, submit, onAfterGetData, onBeforeOpen, onBeforeSubmitData, onAfterClose } = mixMethods
+const { editRefs, editState: state, editMethods } = useEdit<Role>(stateOption, emit)
+const { form } = editRefs
+const { open, submit, onAfterGetData, onBeforeOpen, onBeforeSubmitData, onAfterClose } = editMethods
 
 onBeforeOpen(async () => {
   const { data: menus } = await menuList()

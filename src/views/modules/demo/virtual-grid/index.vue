@@ -38,14 +38,14 @@
 </template>
 
 <script setup lang="ts">
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 import DemoGridCard from './card.vue'
 import { computed, onBeforeMount, reactive, ref } from 'vue'
 import useLayoutSize from '@/hooks/use-layout-size'
 import FdVirtualGrid from '@/components/virtual-grid/virtual-grid.vue'
 import { Indexable } from '@/common/types'
 import { loginLogDicts, loginLogList } from '@/api/system/login-log'
-import useDict from '@/extend/crud/use-dict'
+import useDict from '@/crud/hooks/use-dict'
 
 defineOptions({
   name: 'DemoVirtualGrid'

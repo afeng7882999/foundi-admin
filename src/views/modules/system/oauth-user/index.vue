@@ -2,13 +2,13 @@
   <div ref="moduleRoot" :style="docMinHeight" class="page-oauthUser fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <div class="fd-page-act">
+      <div class="fd-page-toolbar">
         <el-button @click="close()">
           <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
         </el-button>
         <el-button
-          v-show="hasAuth('system:oauthUser:delete')"
+          v-show="auth('system:oauthUser:delete')"
           v-waves
           :disabled="selectedNodes.length <= 0"
           plain
@@ -18,8 +18,8 @@
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <div class="fd-page-act__right">
-          <el-button v-show="hasAuth('system:oauthUser:export')" v-waves @click="exportData()">导出数据</el-button>
+        <div class="fd-page-toolbar__right">
+          <el-button v-show="auth('system:oauthUser:export')" v-waves @click="exportData()">导出数据</el-button>
         </div>
       </div>
     </div>
@@ -80,7 +80,7 @@
           <template #default="scope">
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
-                v-show="hasAuth('system:oauthUser:delete')"
+                v-show="auth('system:oauthUser:delete')"
                 class="tb-act-btn"
                 plain
                 size="small"
@@ -112,12 +112,12 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, toRefs } from 'vue'
-import useList from '@/extend/crud/use-list'
+import useList from '@/crud/hooks/use-list'
 import { oauthUserDel, oauthUserDicts, oauthUserExport, oauthUserFields, oauthUserList, oauthUserQuery } from '@/api/system/oauth-user'
 import Edit from './edit.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 import { Message } from '@/api/system/message'
 
 export default defineComponent({
@@ -137,14 +137,14 @@ export default defineComponent({
     const router = useRouter()
     const store = useStore()
 
-    const { mixRefs, mixState, mixMethods } = useList<Message>(stateOption)
+    const { listRefs, listState, listMethods } = useList<Message>(stateOption)
 
-    const { docMinHeight, showPageHeader, hasAuth } = usePage()
+    const { docMinHeight, showPageHeader, auth } = usePage()
 
     onBeforeMount(() => {
       const { id } = route.params
       if (id) {
-        mixState.query.userId = id as string
+        listState.query.userId = id as string
       }
     })
 
@@ -154,12 +154,12 @@ export default defineComponent({
     }
 
     return {
-      ...mixRefs,
-      ...toRefs(mixState),
+      ...listRefs,
+      ...toRefs(listState),
       docMinHeight,
       showPageHeader,
-      hasAuth,
-      ...mixMethods,
+      auth,
+      ...listMethods,
       close
     }
   }

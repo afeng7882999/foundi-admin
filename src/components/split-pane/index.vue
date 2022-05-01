@@ -1,12 +1,5 @@
 <template>
-  <div
-    ref="wrapper"
-    class="fd-split-pane"
-    :class="wrapperClass"
-    :style="{ cursor, userSelect }"
-    @mouseup="onMouseUp"
-    @mousemove="onMouseMove"
-  >
+  <div class="fd-split-pane" :class="wrapperClass" :style="{ cursor, userSelect }" @mouseup="onMouseUp" @mousemove="onMouseMove">
     <div class="fd-split-pane__pane is-left" :style="leftStyle">
       <slot name="left"></slot>
     </div>
@@ -19,12 +12,14 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { computed, PropType, reactive, ref, watch } from 'vue'
-
-defineOptions({
+<script lang="ts">
+export default {
   name: 'FdSplitPane'
-})
+}
+</script>
+
+<script setup lang="ts">
+import { computed, PropType, reactive, watch } from 'vue'
 
 const props = defineProps({
   // min width of left or min height of top
@@ -79,8 +74,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['resize', 'update:shrinkAll'])
-
-const wrapper = ref()
 
 const state = reactive({
   active: false,

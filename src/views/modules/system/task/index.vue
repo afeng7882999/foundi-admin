@@ -23,22 +23,22 @@
           </div>
         </transition>
       </el-form>
-      <div class="fd-page-act">
-        <el-button v-show="hasAuth('system:task:delete')" v-waves :disabled="selectedNodes.length <= 0" plain type="danger" @click="del()">
+      <div class="fd-page-toolbar">
+        <el-button v-show="auth('system:task:delete')" v-waves :disabled="selectedNodes.length <= 0" plain type="danger" @click="del()">
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <div class="fd-page-act__right">
-          <el-button v-show="hasAuth('system:task:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
-          <el-button v-show="hasAuth('system:task:export')" v-waves @click="exportData()">导出数据</el-button>
+        <div class="fd-page-toolbar__right">
+          <el-button v-show="auth('system:task:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
+          <el-button v-show="auth('system:task:export')" v-waves @click="exportData()">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
           <el-tooltip :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
-            <fd-icon-button
+            <fd-button type="icon"
               :class="queryFormShow ? 'expanded' : ''"
               class="action-query-toggle"
               icon="double-down"
               @click="toggleQueryForm()"
-            ></fd-icon-button>
+            ></fd-button>
           </el-tooltip>
         </div>
       </div>
@@ -104,7 +104,7 @@
               placement="top"
             >
               <el-button
-                v-show="hasAuth('system:task:edit')"
+                v-show="auth('system:task:edit')"
                 :type="ifStart(scope.row.jobStatus) ? 'success' : 'danger'"
                 class="tb-act-btn"
                 plain
@@ -120,7 +120,7 @@
           <template #default="scope">
             <el-tooltip :show-after="500" class="item" content="立即执行一次" effect="dark" placement="top">
               <el-button
-                v-show="hasAuth('system:task:edit')"
+                v-show="auth('system:task:edit')"
                 :disabled="!ifStart(scope.row.jobStatus)"
                 class="tb-act-btn"
                 plain
@@ -133,7 +133,7 @@
             </el-tooltip>
             <el-tooltip :show-after="500" content="编辑" placement="top">
               <el-button
-                v-show="hasAuth('system:task:edit')"
+                v-show="auth('system:task:edit')"
                 class="tb-act-btn"
                 plain
                 size="small"
@@ -145,7 +145,7 @@
             </el-tooltip>
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
-                v-show="hasAuth('system:task:delete')"
+                v-show="auth('system:task:delete')"
                 class="tb-act-btn"
                 plain
                 size="small"
@@ -167,7 +167,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useList from '@/extend/crud/use-list'
+import useList from '@/crud/hooks/use-list'
 import {
   Task,
   TASK_STATUS_DICT,
@@ -184,7 +184,7 @@ import Edit from './edit.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { dictKey } from '@/utils/dict'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 
 export default defineComponent({
   name: 'SystemTask',
@@ -200,12 +200,12 @@ export default defineComponent({
       taskStatusDict: TASK_STATUS_DICT
     }
 
-    const { mixRefs, mixState, mixMethods, mixAttrs } = useList<Task>(stateOption)
+    const { listRefs, listState, listMethods, listAttrs } = useList<Task>(stateOption)
 
-    const { docMinHeight, showPageHeader, hasAuth } = usePage()
+    const { docMinHeight, showPageHeader, auth } = usePage()
 
     const ifStart = (status: string) => {
-      return status === dictKey(mixState.taskStatusDict, '运行中')
+      return status === dictKey(listState.taskStatusDict, '运行中')
     }
 
     const onStatusClick = async (id: string, status: string) => {
@@ -227,7 +227,7 @@ export default defineComponent({
           type: 'success',
           duration: 1500,
           onClose: async () => {
-            await mixMethods.getList()
+            await listMethods.getList()
           }
         })
       } catch (e) {
@@ -254,13 +254,13 @@ export default defineComponent({
     }
 
     return {
-      ...mixRefs,
-      ...mixAttrs,
-      ...toRefs(mixState),
+      ...listRefs,
+      ...listAttrs,
+      ...toRefs(listState),
       docMinHeight,
       showPageHeader,
-      hasAuth,
-      ...mixMethods,
+      auth,
+      ...listMethods,
       ...useExpandTransition(),
       ifStart,
       onStatusClick,

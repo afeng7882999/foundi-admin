@@ -3,7 +3,7 @@
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
       <div class="page-monitor-db__act">
-        <el-button v-if="hasAuth('monitor:dataSource:edit')" v-waves type="primary" @click="dbStatReset">重置</el-button>
+        <el-button v-if="auth('monitor:dataSource:edit')" v-waves type="primary" @click="dbStatReset">重置</el-button>
       </div>
     </div>
     <div class="fd-page__table is-bordered">
@@ -892,7 +892,7 @@ export default {
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, reactive, ref } from 'vue'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 import request from '@/app/request'
 import FullSqlDialog from './full-sql.vue'
 import WebUriDetailDialog from './web-uri-detail.vue'
@@ -1116,7 +1116,7 @@ const arrayToText = (array: string[]) => {
   }
 }
 
-const { docMinHeight, showPageHeader, hasAuth } = usePage()
+const { docMinHeight, showPageHeader, auth } = usePage()
 </script>
 
 <style lang="scss">

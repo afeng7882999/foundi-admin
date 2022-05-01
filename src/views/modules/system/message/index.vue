@@ -37,22 +37,22 @@
           </div>
         </transition>
       </el-form>
-      <div class="fd-page-act">
-        <el-button v-show="hasAuth('system:message:delete')" :disabled="selectedNodes.length <= 0" plain type="danger" @click="del()">
+      <div class="fd-page-toolbar">
+        <el-button v-show="auth('system:message:delete')" :disabled="selectedNodes.length <= 0" plain type="danger" @click="del()">
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <div class="fd-page-act__right">
-          <el-button v-show="hasAuth('system:message:add')" v-waves type="primary" @click="showEdit()">新增</el-button>
-          <el-button v-show="hasAuth('system:message:export')" v-waves @click="exportData()">导出数据</el-button>
+        <div class="fd-page-toolbar__right">
+          <el-button v-show="auth('system:message:add')" v-waves type="primary" @click="showEdit()">新增</el-button>
+          <el-button v-show="auth('system:message:export')" v-waves @click="exportData()">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
           <el-tooltip :content="queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
-            <fd-icon-button
+            <fd-button type="icon"
               :class="queryFormShow ? 'expanded' : ''"
               class="action-query-toggle"
               icon="double-down"
               @click="toggleQueryForm()"
-            ></fd-icon-button>
+            ></fd-button>
           </el-tooltip>
         </div>
       </div>
@@ -99,7 +99,7 @@
           <template #default="scope">
             <el-tooltip :show-after="500" content="编辑" placement="top">
               <el-button
-                v-show="hasAuth('system:message:edit')"
+                v-show="auth('system:message:edit')"
                 class="tb-act-btn"
                 plain
                 size="small"
@@ -111,7 +111,7 @@
             </el-tooltip>
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
-                v-show="hasAuth('system:message:delete')"
+                v-show="auth('system:message:delete')"
                 class="tb-act-btn"
                 plain
                 size="small"
@@ -143,11 +143,11 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useList from '@/extend/crud/use-list'
+import useList from '@/crud/hooks/use-list'
 import { Message, messageDel, messageDicts, messageExport, messageFields, messageList, messageQuery } from '@/api/system/message'
 import Edit from './edit.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 
 export default defineComponent({
   name: 'SystemMessage',
@@ -162,17 +162,17 @@ export default defineComponent({
       query: messageQuery
     }
 
-    const { mixRefs, mixState, mixMethods } = useList<Message>(stateOption)
+    const { listRefs, listState, listMethods } = useList<Message>(stateOption)
 
-    const { docMinHeight, showPageHeader, hasAuth } = usePage()
+    const { docMinHeight, showPageHeader, auth } = usePage()
 
     return {
-      ...mixRefs,
-      ...toRefs(mixState),
+      ...listRefs,
+      ...toRefs(listState),
       docMinHeight,
       showPageHeader,
-      hasAuth,
-      ...mixMethods,
+      auth,
+      ...listMethods,
       ...useExpandTransition()
     }
   }

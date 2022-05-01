@@ -21,13 +21,13 @@
           </div>
         </transition>
       </el-form>
-      <div class="fd-page-act">
+      <div class="fd-page-toolbar">
         <el-button @click="close()">
           <fd-icon class="is-in-btn" icon="left"></fd-icon>
           返回列表
         </el-button>
         <el-button
-          v-show="hasAuth('system:dictItem:delete')"
+          v-show="auth('system:dictItem:delete')"
           v-waves
           :disabled="state.selectedNodes.length <= 0"
           plain
@@ -37,13 +37,13 @@
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <div class="fd-page-act__right">
-          <el-button v-show="hasAuth('system:dictItem:add')" v-waves plain type="primary" @click="showDictItemEdit()">新增</el-button>
-          <el-button v-show="hasAuth('system:dictItem:export')" @click.prevent.stop="openMenu($event)">导出数据</el-button>
+        <div class="fd-page-toolbar__right">
+          <el-button v-show="auth('system:dictItem:add')" v-waves plain type="primary" @click="showDictItemEdit()">新增</el-button>
+          <el-button v-show="auth('system:dictItem:export')" @click.prevent.stop="openMenu($event)">导出数据</el-button>
           <el-divider class="action-divider" direction="vertical"></el-divider>
           <el-tooltip :content="state.queryFormShow ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <el-badge :hidden="state.queryFormShow || !state.queryLen" :value="state.queryLen" class="action-badge">
-              <fd-icon-button class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-icon-button>
+              <fd-button type="icon" class="action-query-toggle" icon="search" @click="toggleQueryForm()"></fd-button>
             </el-badge>
           </el-tooltip>
         </div>
@@ -60,7 +60,7 @@
           <template #default="scope">
             <el-tooltip :show-after="500" content="编辑" placement="top">
               <el-button
-                v-show="hasAuth('system:dictItem:edit')"
+                v-show="auth('system:dictItem:edit')"
                 class="tb-act-btn"
                 plain
                 size="small"
@@ -72,7 +72,7 @@
             </el-tooltip>
             <el-tooltip :show-after="500" content="删除" placement="top">
               <el-button
-                v-show="hasAuth('system:dictItem:delete')"
+                v-show="auth('system:dictItem:delete')"
                 class="tb-act-btn"
                 plain
                 size="small"
@@ -104,14 +104,14 @@ export default {
 
 <script setup lang="ts">
 import { nextTick, onBeforeMount, ref } from 'vue'
-import useList from '@/extend/crud/use-list'
+import useList from '@/crud/hooks/use-list'
 import { DictItem, dictItemDel, dictItemExport, dictItemFields, dictItemList, dictItemParams, dictItemQuery } from '@/api/system/dict-item'
 import Edit from './edit.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { dictGetOne } from '@/api/system/dict'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 
 const contextMenu = ref()
 
@@ -130,12 +130,12 @@ const route = useRoute()
 const router = useRouter()
 const store = useStore()
 
-const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<DictItem>(stateOption)
-const { queryForm, editDialog } = mixRefs
-const { getList, queryList, resetQuery, del, toggleQueryForm } = mixMethods
-const { tableAttrs, paginationAttrs } = mixAttrs
+const { listRefs, listState: state, listMethods, listAttrs } = useList<DictItem>(stateOption)
+const { queryForm, editDialog } = listRefs
+const { getList, queryList, resetQuery, del, toggleQueryForm } = listMethods
+const { tableAttrs, paginationAttrs } = listAttrs
 
-const { docMinHeight, showPageHeader, hasAuth } = usePage()
+const { docMinHeight, showPageHeader, auth } = usePage()
 
 const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition()
 

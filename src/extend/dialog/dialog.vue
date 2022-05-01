@@ -43,7 +43,7 @@ import { computed, reactive, ref, watch } from 'vue'
 import { ElDialog } from 'element-plus'
 import useLayoutSize from '@/hooks/use-layout-size'
 import { onBeforeRouteLeave } from 'vue-router'
-import useView from '@/extend/page/use-view'
+import useView from '@/crud/hooks/use-view'
 
 defineOptions({
   name: 'FdDialog',

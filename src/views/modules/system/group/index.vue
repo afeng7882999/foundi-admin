@@ -2,9 +2,9 @@
   <div ref="moduleRoot" :style="docMinHeight" class="page-system-group fd-page">
     <fd-page-header v-show="showPageHeader"></fd-page-header>
     <div class="fd-page__form">
-      <div class="fd-page-act">
+      <div class="fd-page-toolbar">
         <el-button
-          v-show="hasAuth('system:group:delete')"
+          v-show="auth('system:group:delete')"
           v-waves
           :disabled="state.selectedNodes.length <= 0"
           plain
@@ -14,9 +14,9 @@
           <fd-icon class="is-in-btn" icon="delete"></fd-icon>
           删除
         </el-button>
-        <div class="fd-page-act__right">
-          <el-button v-show="hasAuth('system:group:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
-          <el-button v-show="hasAuth('system:group:export')" v-waves plain @click="exportData()">导出数据</el-button>
+        <div class="fd-page-toolbar__right">
+          <el-button v-show="auth('system:group:add')" v-waves plain type="primary" @click="showEdit()">新增</el-button>
+          <el-button v-show="auth('system:group:export')" v-waves plain @click="exportData()">导出数据</el-button>
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@
           <template #default="scope">
             <el-tooltip content="编辑" placement="top" :show-after="500">
               <el-button
-                v-show="hasAuth('system:group:edit')"
+                v-show="auth('system:group:edit')"
                 class="tb-act-btn"
                 plain
                 size="small"
@@ -46,7 +46,7 @@
             </el-tooltip>
             <el-tooltip content="删除" placement="top" :show-after="500">
               <el-button
-                v-show="hasAuth('system:group:delete')"
+                v-show="auth('system:group:delete')"
                 class="tb-act-btn"
                 plain
                 size="small"
@@ -74,8 +74,8 @@ export default {
 <script setup lang="ts">
 import { groupFields, groupTreeFields, groupList, groupDel, groupExport, Group } from '@/api/system/group'
 import Edit from './edit.vue'
-import usePage from '@/extend/page/use-page'
-import useList from '@/extend/crud/use-list'
+import usePage from '@/crud/hooks/use-page'
+import useList from '@/crud/hooks/use-list'
 
 const stateOption = {
   treeTable: true,
@@ -87,10 +87,10 @@ const stateOption = {
   defaultExpandAll: true
 }
 
-const { mixRefs, mixState: state, mixMethods, mixAttrs } = useList<Group>(stateOption)
-const { table, editDialog } = mixRefs
-const { showEdit, getList, del, getParentName, exportData } = mixMethods
-const { tableAttrs } = mixAttrs
+const { listRefs, listState: state, listMethods, listAttrs } = useList<Group>(stateOption)
+const { table, editDialog } = listRefs
+const { showEdit, getList, del, getParentName, exportData } = listMethods
+const { tableAttrs } = listAttrs
 
-const { docMinHeight, showPageHeader, hasAuth } = usePage()
+const { docMinHeight, showPageHeader, auth } = usePage()
 </script>

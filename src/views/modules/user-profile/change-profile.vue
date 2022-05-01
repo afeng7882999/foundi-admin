@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
-import useEdit, { REFRESH_DATA_EVENT } from '@/extend/crud/use-edit'
+import useEdit, { REFRESH_DATA_EVENT } from '@/crud/hooks/use-edit'
 import FdRegionCascader from '@/components/region-cascader/index.vue'
 import { currentCheckUsername, currentEdit, User, userGetOne } from '@/api/system/user'
 import { DictItem } from '@/api/system/dict-item'
@@ -96,28 +96,28 @@ export default defineComponent({
       }
     }
 
-    const { mixRefs, mixState, mixMethods } = useEdit<User>(stateOption, emit)
+    const { editRefs, editState, editMethods } = useEdit<User>(stateOption, emit)
 
-    mixMethods.onAfterGetData(async (data) => {
-      mixState.formData = data
-      mixState.formData.userRegion = {
+    editMethods.onAfterGetData(async (data) => {
+      editState.formData = data
+      editState.formData.userRegion = {
         province: data.province,
         city: data.city,
         district: data.district
       }
     })
 
-    mixMethods.onBeforeSubmitData(async () => {
-      mixState.formData.province = mixState.formData.userRegion.province
-      mixState.formData.city = mixState.formData.userRegion.city
-      mixState.formData.district = mixState.formData.userRegion.district
-      mixState.formData = omit(mixState.formData, ['userRegion'])
+    editMethods.onBeforeSubmitData(async () => {
+      editState.formData.province = editState.formData.userRegion.province
+      editState.formData.city = editState.formData.userRegion.city
+      editState.formData.district = editState.formData.userRegion.district
+      editState.formData = omit(editState.formData, ['userRegion'])
     })
 
     return {
-      ...mixRefs,
-      ...toRefs(mixState),
-      ...mixMethods,
+      ...editRefs,
+      ...toRefs(editState),
+      ...editMethods,
       validateUsername
     }
   }

@@ -1,5 +1,4 @@
 import { App } from 'vue'
-import FdForm from './components/form.vue'
 import FdItemDateRange from './item/item-date-range.vue'
 import FdItemDict from './item/item-dict.vue'
 import FdItem from './item/item.vue'
@@ -12,7 +11,6 @@ import FdItemBoolean from './item/item-boolean.vue'
 import FdItemCustom from './item/item-custom.vue'
 
 export default function install(app: App) {
-  app.component(FdForm.name, FdForm)
   app.component(FdItemDateRange.name, FdItemDateRange)
   app.component(FdItemDict.name, FdItemDict)
   app.component(FdItem.name, FdItem)

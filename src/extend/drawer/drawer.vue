@@ -29,11 +29,11 @@
 
 <script setup lang="ts">
 import { computed, ref, useSlots } from 'vue'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 import { ElDrawer } from 'element-plus'
 import useLayoutSize from '@/hooks/use-layout-size'
 import { onBeforeRouteLeave } from 'vue-router'
-import useView from '@/extend/page/use-view'
+import useView from '@/crud/hooks/use-view'
 
 defineOptions({
   name: 'FdDrawer',

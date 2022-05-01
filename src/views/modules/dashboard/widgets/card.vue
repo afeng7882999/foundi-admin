@@ -23,15 +23,13 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FdWidgetCard'
-}
-</script>
-
 <script setup lang="ts">
 import { computed, PropType } from 'vue'
 import { useRouter } from 'vue-router'
+
+defineOptions({
+  name: 'FdWidgetCard'
+})
 
 const props = defineProps({
   width: Number,

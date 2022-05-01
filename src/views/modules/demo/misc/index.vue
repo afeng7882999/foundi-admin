@@ -10,8 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import usePage from '@/extend/page/use-page'
-import FdPageFooter from '@/extend/page/page-footer.vue'
+import usePage from '@/crud/hooks/use-page'
+import FdPageFooter from '@/crud/page/page-footer.vue'
 import DemoMiscButton from './button.vue'
 
 defineOptions({

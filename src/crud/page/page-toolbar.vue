@@ -88,14 +88,14 @@
 
 <script setup lang="ts">
 import { computed, onMounted, PropType, reactive, ref, useSlots, VNode } from 'vue'
-import usePage from '@/extend/page/use-page'
+import usePage from '../hooks/use-page'
 import { isBoolean } from 'lodash-es'
 import { TableSettingProp } from '@/components/table/types'
 import FdContextmenuItem from '@/components/contextmenu/item.vue'
 import FdContextmenuSubmenu from '@/components/contextmenu/submenu.vue'
 import { ApiQuery } from '@/api'
 import useLayoutSize from '@/hooks/use-layout-size'
-import { CompactButton } from '@/extend/page/types'
+import { CompactButton } from '@/crud/page/types'
 import { Indexable } from '@/common/types'
 import FdTableOptionSubmenu from './table-option-submenu.vue'
 

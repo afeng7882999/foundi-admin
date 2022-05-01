@@ -185,7 +185,7 @@
 
 <script setup lang="ts">
 import { computed, onBeforeMount, reactive, ref } from 'vue'
-import usePage from '@/extend/page/use-page'
+import usePage from '@/crud/hooks/use-page'
 import { filterTree, TreeNodeDefault } from '@/utils/data-tree'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
@@ -195,7 +195,7 @@ import { genTableGetOne, genTablePutOne, genTableSyncDb, GenTableColumn, GenTabl
 import { dictList, Dict } from '@/api/system/dict'
 import { DEFAULT_HTML_TYPES, DEFAULT_QUERY_TYPES } from '@/views/modules/generator/types'
 import useSortableRow from '@/components/table/hooks/use-sortable-row'
-import useView from '@/extend/page/use-view'
+import useView from '@/crud/hooks/use-view'
 
 defineOptions({
   name: 'GeneratorEdit'
