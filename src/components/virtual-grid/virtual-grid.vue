@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { CURRENT_CHANGED_EVENT, GRID_DEFAULT_PROPS } from './types'
+import { OFFSET_CHANGED_EVENT, GRID_DEFAULT_PROPS } from './types'
 import { computed, onMounted, ref, watch } from 'vue'
 import useGrid from './use-grid'
 import { Indexable } from '@/common/types'
@@ -47,7 +47,7 @@ const viewRef = ref<HTMLElement>()
 const innerRef = ref<HTMLElement>()
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 
-const emit = defineEmits([CURRENT_CHANGED_EVENT])
+const emit = defineEmits([OFFSET_CHANGED_EVENT])
 
 const { wrapperRect, itemHeight, buffer, viewHeight, innerTranslate, scrollToIdx } = useGrid(props, emit, wrapperRef, viewRef, innerRef)
 

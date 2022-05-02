@@ -31,7 +31,7 @@ export interface InternalItem {
   value: unknown | undefined
 }
 
-export const CURRENT_CHANGED_EVENT = 'current-changed'
+export const OFFSET_CHANGED_EVENT = 'offset-changed'
 
 export const GRID_DEFAULT_PROPS = {
   // The number of items in the list.

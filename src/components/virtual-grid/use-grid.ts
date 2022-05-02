@@ -1,7 +1,7 @@
 import {
   BufferMeta,
   CURRENT_CHANGED_EVENT,
-  GRID_PROPS,
+  GRID_DEFAULT_PROPS,
   GridMeasurement,
   InternalItem,
   ItemsByPage,
@@ -192,7 +192,7 @@ const getItemHeight = (innerEl: Element, height?: number): number => {
 }
 
 export default function useGrid(
-  props: Readonly<ExtractPropTypes<typeof GRID_PROPS>>,
+  props: Readonly<ExtractPropTypes<typeof GRID_DEFAULT_PROPS>>,
   emit: AnyFunction,
   wrapperRef: Ref<HTMLElement | undefined>,
   viewRef: Ref<HTMLElement | undefined>,
