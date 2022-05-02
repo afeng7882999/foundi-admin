@@ -1,6 +1,6 @@
 import {
   BufferMeta,
-  CURRENT_CHANGED_EVENT,
+  OFFSET_CHANGED_EVENT,
   GRID_DEFAULT_PROPS,
   GridMeasurement,
   InternalItem,
@@ -152,6 +152,7 @@ const getBufferItems = (
     const index = bufferedOffset + localIndex
     return {
       index,
+      localIndex,
       value
     }
   })
@@ -258,7 +259,7 @@ export default function useGrid(
     if (currentIdx !== index) {
       currentIdx = index
       const page = Math.ceil((index + resizeMeasurement.columns) / (props.pageSize as number))
-      emit(CURRENT_CHANGED_EVENT, index, page)
+      emit(OFFSET_CHANGED_EVENT, index, page)
     }
   }
   const emitCurrentItemDebounce = useDebounceFn(emitCurrentItem, 300)

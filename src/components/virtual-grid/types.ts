@@ -28,6 +28,7 @@ export type PageProvider = (pageNumber: number, pageSize: number) => Promise<unk
 
 export interface InternalItem {
   index: number
+  localIndex: number
   value: unknown | undefined
 }
 
