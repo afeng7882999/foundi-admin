@@ -33,7 +33,7 @@ export interface InternalItem {
 
 export const CURRENT_CHANGED_EVENT = 'current-changed'
 
-export const GRID_PROPS = {
+export const GRID_DEFAULT_PROPS = {
   // The number of items in the list.
   length: {
     type: Number,

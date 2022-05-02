@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { CURRENT_CHANGED_EVENT, GRID_PROPS } from './types'
+import { CURRENT_CHANGED_EVENT, GRID_DEFAULT_PROPS } from './types'
 import { computed, onMounted, ref, watch } from 'vue'
 import useGrid from './use-grid'
 import { Indexable } from '@/common/types'
@@ -39,7 +39,7 @@ defineOptions({
 })
 
 const props = defineProps({
-  ...GRID_PROPS
+  ...GRID_DEFAULT_PROPS
 })
 
 const wrapperRef = ref<HTMLElement>()
