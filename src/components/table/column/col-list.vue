@@ -22,10 +22,11 @@
 
 <script setup lang="ts">
 import { computed, PropType, useAttrs } from 'vue'
-import { COL_DEFAULT_PROPS, FormatMapping } from '../types'
+import { COL_DEFAULT_PROPS } from '../types'
 import useColumn from '../hooks/use-column'
 import { Indexable } from '@/common/types'
 import { DEFAULT_TREE_FIELDS, TreeFields } from '@/utils/data-tree'
+import { FormatMapping } from '@/components/formatter/types'
 
 defineOptions({
   name: 'FdColList',

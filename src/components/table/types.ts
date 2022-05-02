@@ -24,19 +24,6 @@ export interface TableSettingProp {
   border: () => Ref<boolean | null>
 }
 
-export interface FormatMappingItem {
-  key: string
-  val?: string
-  color?: string
-}
-
-export type FormatMapping = FormatMappingItem[]
-
-export const FORMATTER_DEFAULT_PROPS = {
-  data: [String, Number, Array] as PropType<string | number | string[] | number[]>,
-  mapping: [String, Array] as PropType<string[] | FormatMapping>
-}
-
 export const COL_DEFAULT_PROPS = {
   showOverflowTooltip: {
     type: Boolean,

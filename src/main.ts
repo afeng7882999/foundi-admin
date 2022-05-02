@@ -15,6 +15,7 @@ import FdSvgImage from '@/components/svg-image'
 import FdPageHeader from '@/components/page-header'
 import FdContextmenu from '@/components/contextmenu'
 import FdTreeSelect from '@/components/tree-select'
+import FdFmtAll from '@/components/formatter'
 import FdTableAll from '@/components/table'
 import FdFormAll from '@/components/form'
 import FdButtonAll from '@/components/button'
@@ -38,6 +39,7 @@ app
   .use(FdPageHeader)
   .use(FdContextmenu)
   .use(FdTreeSelect)
+  .use(FdFmtAll)
   .use(FdTableAll)
   .use(FdFormAll)
   .use(FdButtonAll)

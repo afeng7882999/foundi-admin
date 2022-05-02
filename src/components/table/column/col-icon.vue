@@ -10,8 +10,9 @@
 
 <script setup lang="ts">
 import { computed, PropType, useAttrs } from 'vue'
-import { COL_DEFAULT_PROPS, FormatMapping } from '../types'
+import { COL_DEFAULT_PROPS } from '../types'
 import useColumn from '../hooks/use-column'
+import { FormatMapping } from '@/components/formatter/types'
 
 defineOptions({
   name: 'FdColIcon',

@@ -10,7 +10,7 @@ const useColumn = (props: Readonly<ExtractPropTypes<typeof COL_DEFAULT_PROPS>>) 
     if (props.auth) {
       return auth(props.auth)
     }
-    return true
+    return false
   })
 
   const booleanOrAuth = (val: boolean | string) => {
@@ -20,7 +20,7 @@ const useColumn = (props: Readonly<ExtractPropTypes<typeof COL_DEFAULT_PROPS>>) 
     if (val) {
       return auth(val)
     }
-    return true
+    return false
   }
 
   const sortable = computed(() => {
