@@ -12,7 +12,7 @@
       <template #default="scope">
         <slot name="prefix" :row="scope.row" :idx="scope.$index"></slot>
         <el-tooltip v-if="detailVisible" :show-after="500" content="详细" placement="top">
-          <fd-button class="tb-act-btn" icon="view-grid-detail" plain color="primary" @click="emitDetail(scope.$index)" />
+          <fd-button class="tb-act-btn" icon="view-list" plain color="primary" @click="emitDetail(scope.$index)" />
         </el-tooltip>
         <el-tooltip v-if="editVisible" :show-after="500" content="编辑" placement="top">
           <fd-button class="tb-act-btn" icon="write" plain color="success" @click="emitEdit(scope.row)" />
