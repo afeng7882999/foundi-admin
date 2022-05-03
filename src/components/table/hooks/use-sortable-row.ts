@@ -106,6 +106,10 @@ const useSortableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, so
   onUnmounted(() => {
     sortable?.destroy()
   })
+
+  return {
+    initRowDrag
+  }
 }
 
 export default useSortableRow

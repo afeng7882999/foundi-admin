@@ -1,14 +1,14 @@
 import { RowDensity, TableColumn, TableSettingProp } from '../types'
 import { ref } from 'vue'
 
-const useTableSetting = (tableOption: TableSettingProp) => {
+const useTableSetting = (tableSettingOption: TableSettingProp) => {
   const sortColumnDialog = ref()
 
-  const expandAll = tableOption.expandAll()
-  const rowDensity = tableOption.rowDensity()
-  const columns = tableOption.columns()
-  const stripe = tableOption.stripe()
-  const border = tableOption.border()
+  const expandAll = tableSettingOption.expandAll()
+  const rowDensity = tableSettingOption.rowDensity()
+  const columns = tableSettingOption.columns()
+  const stripe = tableSettingOption.stripe()
+  const border = tableSettingOption.border()
 
   const setRowDensity = (density: RowDensity) => {
     rowDensity != undefined && (rowDensity.value = density)

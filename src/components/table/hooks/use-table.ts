@@ -1,7 +1,7 @@
 import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus'
 import { merge } from 'lodash-es'
-import { Indexable } from '@/common/types'
+import { AnyFunction, Indexable } from '@/common/types'
 import useFocusableRow, { FocusRowOption } from '../hooks/use-focusable-row'
 import useSettings, { TableSettingsOption } from '../hooks/use-settings'
 import useSortableRow, { SortableRowOption } from '../hooks/use-sortable-row'
@@ -27,18 +27,30 @@ const useTable = (table: Ref<InstanceType<typeof ElTable> | undefined>, tableOpt
   //===============================================================================
 
   const result = {} as Indexable
+  let initRowDragFn = undefined as AnyFunction | undefined
+  let initConfigurableTableFn = undefined as AnyFunction | undefined
+  let initFocusableRowFn = undefined as AnyFunction | undefined
 
   if (option.rowDraggable) {
-    useSortableRow(table, option)
+    const { initRowDrag } = useSortableRow(table, option)
+    initRowDragFn = initRowDrag
   }
   if (option.configurable) {
-    const { columns, rowDensity, expandAll, stripe, border } = useSettings(table, option)
+    const { initConfigurableTable, columns, rowDensity, expandAll, stripe, border } = useSettings(table, option)
     Object.assign(result, { columns, rowDensity, expandAll, stripe, border })
+    initConfigurableTableFn = initConfigurableTable
   }
 
   if (option.rowFocusable) {
-    const { focusCurrentRow } = useFocusableRow(table, option)
+    const { initFocusableRow, focusCurrentRow } = useFocusableRow(table, option)
     result.focusCurrentRow = focusCurrentRow
+    initFocusableRowFn = initFocusableRow
+  }
+
+  result.initTable = () => {
+    initRowDragFn?.()
+    initConfigurableTableFn?.()
+    initFocusableRowFn?.()
   }
 
   //===============================================================================

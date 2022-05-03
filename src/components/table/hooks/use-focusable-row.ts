@@ -61,7 +61,7 @@ const useFocusableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, f
 
   // 设置focus边框的位置和大小
   const resizeHighlightBox = (wrapperRect: DOMRectReadOnly) => {
-    if (!boxEl) {
+    if (!boxEl || !bodyWrapperElCo.value) {
       return
     }
     colEl = bodyWrapperElCo.value.querySelector('tr.current-row') as HTMLElement
@@ -105,6 +105,16 @@ const useFocusableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, f
     scrollToHighlightBox()
   }
 
+  // 初始化高亮行
+  const initFocusableRow = () => {
+    if (option.rowFocusable && bodyWrapperElCo.value) {
+      createHighlightBox()
+      useResizeObserver(bodyWrapperElCo.value as HTMLElement, (entries) => {
+        resizeHighlightBox(entries[0].contentRect)
+      })
+    }
+  }
+
   //===============================================================================
   // life hooks
   //===============================================================================
@@ -112,11 +122,8 @@ const useFocusableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, f
   let rowFocusableInitialized = false
 
   const tryInit = () => {
-    if (option.rowFocusable && bodyWrapperElCo.value && !rowFocusableInitialized) {
-      createHighlightBox()
-      useResizeObserver(bodyWrapperElCo.value as HTMLElement, (entries) => {
-        resizeHighlightBox(entries[0].contentRect)
-      })
+    if (!rowFocusableInitialized) {
+      initFocusableRow()
       rowFocusableInitialized = true
     }
   }
@@ -130,6 +137,7 @@ const useFocusableRow = (table: Ref<InstanceType<typeof ElTable> | undefined>, f
   })
 
   return {
+    initFocusableRow,
     focusCurrentRow
   }
 }

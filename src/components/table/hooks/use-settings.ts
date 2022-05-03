@@ -273,6 +273,7 @@ const useSettings = (table: Ref<InstanceType<typeof ElTable> | undefined>, table
   })
 
   return {
+    initConfigurableTable,
     columns,
     rowDensity,
     expandAll,
