@@ -4,7 +4,7 @@
       <div v-show="length > 0" ref="viewRef" class="fd-virtual-grid__view" :style="viewStyle">
         <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyle">
           <template v-for="(item, idx) in buffer" :key="idx">
-            <slot v-if="item.value === undefined" name="placeholder" :index="item.index" />
+            <slot v-if="item.value === undefined" name="placeholder" :index="item.index" :itemHeight="itemHeightCal" />
             <slot v-else name="default" :item="item.value" :index="item.index" />
           </template>
         </div>
@@ -15,9 +15,7 @@
         <div v-show="length > 0" ref="viewRef" class="fd-virtual-grid__view" :style="viewStyle">
           <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyle">
             <template v-for="(item, idx) in buffer" :key="idx">
-              <div v-if="item.value === undefined" class="fd-virtual-grid__placeholder" :style="`height: ${itemHeight}px`">
-                <slot name="placeholder" :index="item.index" />
-              </div>
+              <slot v-if="item.value === undefined" name="placeholder" :index="item.index" :itemHeight="itemHeightCal" />
               <slot v-else name="default" :item="item.value" :index="item.index" />
             </template>
           </div>
@@ -49,7 +47,14 @@ const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 
 const emit = defineEmits([OFFSET_CHANGED_EVENT])
 
-const { wrapperRect, itemHeight, buffer, viewHeight, innerTranslate, scrollToIdx } = useGrid(props, emit, wrapperRef, viewRef, innerRef)
+const {
+  wrapperRect,
+  itemHeight: itemHeightCal,
+  buffer,
+  viewHeight,
+  innerTranslate,
+  scrollToIdx
+} = useGrid(props, emit, wrapperRef, viewRef, innerRef)
 
 const wrapperClass = computed(() => {
   const clazz = []
