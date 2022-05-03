@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { computed, PropType } from 'vue'
-import { FormatMapping, FormatMappingItem } from '../types'
+import { FormatMapping, FormatMappingItem } from './types'
 import { isString } from 'lodash-es'
 
 defineOptions({

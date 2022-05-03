@@ -13,7 +13,7 @@
 import { computed, PropType } from 'vue'
 import { DictItem } from '@/api/system/dict-item'
 import useDict from '@/crud/hooks/use-dict'
-import { FormatMapping, FormatMappingItem } from '../types'
+import { FormatMapping, FormatMappingItem } from './types'
 import { isArray, isString } from 'lodash-es'
 
 defineOptions({

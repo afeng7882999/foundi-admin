@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { computed, PropType } from 'vue'
-import { FormatMapping, FormatMappingItem } from '../types'
+import { FormatMapping, FormatMappingItem } from './types'
 import { isArray, isString } from 'lodash-es'
 import { DEFAULT_TREE_FIELDS, getTreeNode, isTreeData, TreeFields } from '@/utils/data-tree'
 import { Indexable } from '@/common/types'
