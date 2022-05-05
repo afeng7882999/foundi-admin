@@ -26,33 +26,33 @@ export default function useLayoutSize(react: boolean | undefined = true) {
   const store = useStore<AllState>()
   const storeState = store.state as AllState
 
-  const getDocH = (rect: DOMRectReadOnly) => {
+  const getDocH = (h: number) => {
     const height = storeState.app.enableTags
       ? sizeConst.tabHeight + sizeConst.titleHeight + sizeConst.titlePadding
       : sizeConst.titleHeight + sizeConst.titlePadding
-    return rect.height - height
+    return h - height
   }
 
-  const getDocW = (rect: DOMRectReadOnly) => {
+  const getDocW = (w: number) => {
     if (storeState.app.sidebarMode?.offScreen) {
-      return rect.width
+      return w
     }
     if (storeState.app.sidebarMode?.minimized) {
-      return rect.width - sizeConst.sidebarMiniWidth
+      return w - sizeConst.sidebarMiniWidth
     }
-    return rect.width - sizeConst.sidebarNormalWidth
+    return w - sizeConst.sidebarNormalWidth
   }
 
-  const resizeLayout = async (rect: DOMRectReadOnly) => {
-    await store.dispatch('app/setBodyHeight', rect.height)
-    await store.dispatch('app/setBodyWidth', rect.width)
-    await store.dispatch('app/setDocHeight', getDocH(rect))
-    await store.dispatch('app/setDocWidth', getDocW(rect))
-    if (rect.width - sizeConst.ratio < breakpoints.sm) {
+  const resizeLayout = async (w: number, h: number) => {
+    await store.dispatch('app/setBodyHeight', h)
+    await store.dispatch('app/setBodyWidth', w)
+    await store.dispatch('app/setDocHeight', getDocH(h))
+    await store.dispatch('app/setDocWidth', getDocW(w))
+    if (w - sizeConst.ratio < breakpoints.sm) {
       await store.dispatch('app/toggleDevice', DeviceType.Mobile)
       return
     }
-    if (rect.width - sizeConst.ratio > breakpoints.md) {
+    if (w - sizeConst.ratio > breakpoints.md) {
       await store.dispatch('app/toggleDevice', DeviceType.Desktop)
       return
     }
@@ -64,7 +64,8 @@ export default function useLayoutSize(react: boolean | undefined = true) {
       if (document.hidden) {
         return
       }
-      await resizeLayout(entries[0].contentRect)
+      const rect = entries[0].contentRect
+      await resizeLayout(Math.floor(rect.width), Math.floor(rect.height))
     })
   }
 
@@ -72,7 +73,8 @@ export default function useLayoutSize(react: boolean | undefined = true) {
     if (document.hidden) {
       return
     }
-    await resizeLayout(document.body.getBoundingClientRect())
+    const rect = document.body.getBoundingClientRect()
+    await resizeLayout(Math.floor(rect.width), Math.floor(rect.height))
   }
 
   const device = computed(() => {

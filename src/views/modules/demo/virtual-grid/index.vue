@@ -24,7 +24,7 @@
       :page-provider="pageProvider"
       :page-mode="pageMode"
       :style="gridStyle"
-      @current-changed="currentChanged"
+      @offset-changed="offsetChanged"
     >
       <template #placeholder>
         <demo-grid-card />
@@ -46,19 +46,20 @@ import FdVirtualGrid from '@/components/virtual-grid/virtual-grid.vue'
 import { Indexable } from '@/common/types'
 import { loginLogDicts, loginLogList } from '@/api/system/login-log'
 import useDict from '@/crud/hooks/use-dict'
+import { FdVirtualGridType } from '@/components/virtual-grid/types'
 
 defineOptions({
   name: 'DemoVirtualGrid'
 })
 
-const virtualGrid = ref<InstanceType<typeof FdVirtualGrid>>()
+const virtualGrid = ref<FdVirtualGridType>()
 const actRef = ref<HTMLElement>()
 const length = ref<number>(200)
 const pageMode = ref<boolean>(false)
 const scrollIdx = ref<number | undefined>(undefined)
 
 const scrollToIdx = () => {
-  virtualGrid.value.scrollToIdx(scrollIdx.value)
+  virtualGrid.value?.scrollToIdx(scrollIdx.value as number)
 }
 
 const { docHeight, docMinHeight, showPageHeader, auth } = usePage({ footerVisible: false })
@@ -129,7 +130,7 @@ const { isMobile } = useLayoutSize()
 
 const pageChange = (val: number) => {
   pageState.current = val
-  virtualGrid.value.scrollToIdx((val - 1) * pageState.siz)
+  virtualGrid.value?.scrollToPage(val)
 }
 
 const sizeChange = async (val: number) => {
@@ -137,7 +138,7 @@ const sizeChange = async (val: number) => {
   pageState.count = Math.ceil(pageState.total / val)
 }
 
-const currentChanged = (index: number, page: number) => {
+const offsetChanged = (index: number, page: number) => {
   pageState.current = page
 }
 

@@ -78,9 +78,17 @@
         <fd-contextmenu-item label="导出当前页" @click="emit('export')" />
         <fd-contextmenu-item label="导出全部页" @click="emit('exportAll')" />
       </fd-contextmenu-submenu>
-      <template v-if="tableOption">
+      <template v-if="gridViewEnable">
         <fd-contextmenu-item v-if="exportVisible" divider />
-        <fd-table-option-submenu :table-option="tableOption" />
+        <fd-contextmenu-item
+          :icon="gridView ? 'table-row' : 'view-grid-detail'"
+          :label="gridView ? '切换表格视图' : '切换卡片视图'"
+          @click="emit('toggleGridView')"
+        />
+      </template>
+      <template v-if="tableSettingOption && !gridView">
+        <fd-contextmenu-item v-if="gridViewEnable" divider />
+        <fd-table-option-submenu :table-setting-option="tableSettingOption" />
       </template>
     </fd-contextmenu>
   </template>
@@ -139,8 +147,13 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  tableOption: {
+  tableSettingOption: {
     type: Object as PropType<TableSettingProp>
+  },
+  gridView: Boolean,
+  gridViewEnable: {
+    type: Boolean,
+    default: true
   },
   mobileCompact: {
     type: Boolean,
@@ -184,7 +197,7 @@ const menuDividerVisible = computed(() => {
   return !!(useSlots().menu || state.compactButtons.length != 0)
 })
 
-const emit = defineEmits(['del', 'create', 'export', 'exportAll', 'update:queryVisible'])
+const emit = defineEmits(['del', 'create', 'export', 'exportAll', 'update:queryVisible', 'toggleGridView'])
 
 const toggleQueryVisible = () => {
   emit('update:queryVisible', !props.queryVisible)

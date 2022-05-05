@@ -14,6 +14,19 @@ import { ApiObj, ApiQuery, ExportRange } from '@/api'
 import { DictList } from '@/api/system/dict-item'
 import { AnyFunction, Indexable } from '@/common/types'
 import { MaybeRef, useThrottleFn } from '@vueuse/core'
+import FdVirtualGrid from '@/components/virtual-grid/virtual-grid.vue'
+import { FdVirtualGridType } from '@/components/virtual-grid/types'
+
+export interface PageState {
+  // 页码
+  current: number
+  // 每页数据条数
+  siz: number
+  // 数据总数
+  total: number
+  // 总页数
+  count: number
+}
 
 export type ListStateOption<T extends ApiObj> = Partial<{
   // 是否是树表
@@ -30,8 +43,8 @@ export type ListStateOption<T extends ApiObj> = Partial<{
   query: ApiQuery
   // 表头排序是否支持多字段
   sortMulti: boolean
-  // 每页数据条数
-  siz: number
+  // 数据页对象
+  pageState: PageState
   // 导出Excel文件名前缀
   exportTitle: string
   // 等待时间
@@ -46,6 +59,8 @@ export type ListStateOption<T extends ApiObj> = Partial<{
   delApi: AnyFunction
   // 导出数据的api
   exportApi: AnyFunction
+  // 是否使用卡片模式
+  gridViewEnable: boolean
 
   [key: string]: any
 }> & {
@@ -66,6 +81,7 @@ export type TreeStateOption<T extends ApiObj> = ListStateOption<T> &
 export type Refs<T extends ApiObj> = {
   queryForm: Ref<InstanceType<typeof ElForm>>
   table: Ref<InstanceType<typeof ElTable>>
+  grid: Ref<FdVirtualGridType>
   editDialog: Ref<EditDialog>
   detailDialog: Ref<DetailDialog<T>>
 }
@@ -77,6 +93,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   const queryForm = refs?.queryForm ?? (ref() as Ref<InstanceType<typeof ElForm>>)
   const table = refs?.table ?? (ref() as Ref<InstanceType<typeof ElTable>>)
+  const grid = refs?.grid ?? (ref() as Ref<FdVirtualGridType>)
   const editDialog = refs?.editDialog ?? (ref() as Ref<EditDialog>)
   const detailDialog = refs?.detailDialog ?? (ref() as Ref<DetailDialog<T>>)
 
@@ -99,16 +116,20 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     } as ApiQuery,
     // 表头排序是否支持多字段
     sortMulti: false,
-    // 当前ID
+    // 当前选中ID
     currentId: '',
-    // 页码
-    current: 0,
-    // 每页数据条数
-    siz: 20,
-    // 总页数
-    total: 0,
-    // 数据总数
-    count: 0,
+    // 当前页第一项的索引值
+    firstIdxInPage: 0,
+    pageState: {
+      // 页码
+      current: 0,
+      // 每页数据条数
+      siz: 20,
+      // 数据总数
+      total: 0,
+      // 总页数
+      count: 0
+    },
     // 导出Excel文件名前缀
     exportTitle: '导出',
     // 等待时间
@@ -122,7 +143,11 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     // 删除 Loading 属性
     delLoading: false,
     // 选择的项目
-    selectedNodes: [] as T[],
+    selectedItems: [] as T[],
+    // 是否使用卡片模式
+    gridViewEnable: true,
+    // 卡片模式
+    gridView: false,
     // 弹窗属性
     editShow: false,
     // detail dialog visible
@@ -155,7 +180,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     // 默认展开所有树
     defaultExpandAll: true,
     // 选择的树节点
-    selectedNodes: [] as T[],
+    selectedItems: [] as T[],
     // 根节点名称
     rootName: '根节点'
   }
@@ -241,11 +266,11 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       if (stateOption.treeTable) {
         setTreeData(data)
       } else {
-        listState.total = total
-        listState.count = count
+        listState.pageState.total = total
+        listState.pageState.count = count
         listState.data = data
       }
-      listState.selectedNodes = []
+      listState.selectedItems = []
       for (const fn of mixHandlers.afterGetList) {
         await fn?.(resData)
       }
@@ -290,8 +315,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
 
     return {
-      current: listState.current,
-      size: listState.siz,
+      current: listState.pageState.current,
+      size: listState.pageState.siz,
       ...listState.params,
       ...listState.query,
       orderByList
@@ -300,8 +325,12 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 查询方法
   const queryList = async () => {
-    listState.current = 0
-    await getList()
+    listState.pageState.current = 0
+    if (listState.gridView) {
+      await grid.value.refresh()
+    } else {
+      await getList()
+    }
   }
 
   // 重置查询
@@ -345,15 +374,15 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 改变页码
   const pageChange = async (val: number) => {
-    listState.current = val
+    listState.pageState.current = val
     await getList()
     scrollDocToTop()
   }
 
   // 改变每页显示数
   const sizeChange = async (val: number) => {
-    listState.current = 1
-    listState.siz = val
+    listState.pageState.current = 1
+    listState.pageState.siz = val
     await getList()
     scrollDocToTop()
   }
@@ -381,29 +410,29 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 树节点选中
   const onTreeSelect = (selection: T[]) => {
-    if (selection.length > listState.selectedNodes.length) {
+    if (selection.length > listState.selectedItems.length) {
       const selected = selection.filter(
-        (item) => !listState.selectedNodes.some((item2) => item2[listState.idField] === item[listState.idField])
+        (item) => !listState.selectedItems.some((item2) => item2[listState.idField] === item[listState.idField])
       )
       traverseTree(
         selected,
         (item) => {
           table.value.toggleRowSelection(item, true)
-          if (!listState.selectedNodes.some((item2) => item2[listState.idField] === item[listState.idField])) {
-            ;(listState.selectedNodes as T[]).push(item)
+          if (!listState.selectedItems.some((item2) => item2[listState.idField] === item[listState.idField])) {
+            ;(listState.selectedItems as T[]).push(item)
           }
         },
         listState.treeFields
       )
     } else {
-      const selected = listState.selectedNodes.filter(
+      const selected = listState.selectedItems.filter(
         (item) => !selection.some((item2) => item2[listState.idField] === item[listState.idField])
       )
       traverseTree(
         selected,
         (item) => {
           table.value.toggleRowSelection(item, false)
-          listState.selectedNodes = listState.selectedNodes.filter((item2) => item2[listState.idField] !== item[listState.idField])
+          listState.selectedItems = listState.selectedItems.filter((item2) => item2[listState.idField] !== item[listState.idField])
         },
         listState.treeFields
       )
@@ -435,7 +464,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         return
       }
     }
-    const rows = row ? [row] : listState.selectedNodes
+    const rows = row ? [row] : listState.selectedItems
     const promptStr = prompt ? ' ' + prompt : '选择的项目'
     if (rows.length === 0) {
       ElMessage({
@@ -476,7 +505,59 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   // 预防删除第二页最后一条数据时，或者多选删除第二页的数据时，页码错误导致请求无数据
   const setPageAfterDel = (size = 1) => {
     if (listState.data.length === size && listState.page !== 0) {
-      listState.current = listState.current - 1
+      listState.pageState.current = listState.pageState.current - 1
+    }
+  }
+
+  //===============================================================================
+  // grid layout
+  //===============================================================================
+
+  const pageProvider = async (pageNumber: number, pageSize: number) => {
+    listState.pageState.current = pageNumber
+    listState.pageState.siz = pageSize
+    listState.loading = true
+    await getList()
+    return listState.data
+  }
+
+  const gridPageChange = (val: number) => {
+    listState.pageState.current = val
+    grid.value.scrollToIdx((val - 1) * listState.pageState.siz)
+  }
+
+  const gridPageSizeChange = async (val: number) => {
+    listState.pageState.siz = val
+    listState.pageState.count = Math.ceil(listState.pageState.total / val)
+  }
+
+  const offsetChanged = (index: number, page: number) => {
+    listState.pageState.current = page
+    listState.firstIdxInPage = index
+  }
+
+  const gridSelected = ({ item, selected }: { item: T; selected: boolean }) => {
+    const itemIdx = listState.selectedItems.findIndex((i) => i.id === item.id)
+    if (selected && itemIdx === -1) {
+      ;(listState.selectedItems as T[]).push(item)
+      return
+    }
+    if (!selected && itemIdx !== -1) {
+      listState.selectedItems.splice(itemIdx, 1)
+      return
+    }
+  }
+
+  const toggleGridView = () => {
+    if (listState.gridViewEnable) {
+      if (listState.gridView) {
+        listState.gridView = false
+        nextTick(() => {
+          initTable()
+        })
+      } else {
+        listState.gridView = true
+      }
     }
   }
 
@@ -580,7 +661,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 表格选择
   const tableSelectionChange = (val: T[]) => {
-    ;(listState.selectedNodes as T[]) = val
+    ;(listState.selectedItems as T[]) = val
   }
 
   // 表格行点击
@@ -604,6 +685,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // use-table
   const {
+    initTable,
     focusCurrentRow,
     columns,
     rowDensity,
@@ -633,6 +715,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       queryVisible: listState.queryFormShow,
       'onUpdate:queryVisible': (val: boolean) => (listState.queryFormShow = val),
       queryFn: queryList,
+      gridView: listState.gridView,
       pagination: paginationAttrs.value
     }
   })
@@ -644,11 +727,14 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       queryFn: queryList,
       queryVisible: listState.queryFormShow,
       'onUpdate:queryVisible': (val: boolean) => (listState.queryFormShow = val),
+      gridViewEnable: listState.gridViewEnable,
+      gridView: listState.gridView,
+      onToggleGridView: toggleGridView,
       onCreate: showEdit,
       onDel: del,
       onExport: exportData,
       onExportAll: exportDataAll,
-      tableOption: {
+      tableSettingOption: {
         expandAll: () => expandAll,
         rowDensity: () => rowDensity,
         columns: () => columns,
@@ -683,14 +769,37 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const paginationAttrs = computed(() => {
     return {
       background: 'background',
-      currentPage: listState.current,
-      pageCount: listState.count,
-      pageSize: listState.siz,
+      currentPage: listState.pageState.current,
+      pageCount: listState.pageState.count,
+      pageSize: listState.pageState.siz,
       pageSizes: [10, 15, 20, 50, 100, 200],
-      total: listState.total,
+      total: listState.pageState.total,
       layout: 'total, sizes, prev, pager, next, jumper',
       onCurrentChange: pageChange,
       onSizeChange: sizeChange
+    }
+  })
+
+  // fd-virtual-grid默认参数
+  const gridAttrs = computed(() => {
+    return {
+      length: listState.pageState.total,
+      pageSize: listState.pageState.siz,
+      pageProvider: pageProvider,
+      pageMode: false,
+      onOffsetChanged: offsetChanged
+    }
+  })
+
+  // fd-default-card默认参数
+  const cardAttrs = computed(() => {
+    return {
+      dicts: listState.dicts,
+      currentId: listState.currentId,
+      selectItems: listState.selectedItems,
+      onDetail: showDetail,
+      onDel: del,
+      onSelect: gridSelected
     }
   })
 
@@ -698,6 +807,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     listRefs: {
       queryForm,
       table,
+      grid,
       editDialog,
       detailDialog
     },
@@ -736,7 +846,9 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       tableAttrs,
       paginationAttrs,
       detailAttrs,
-      pageToolbarAttrs
+      pageToolbarAttrs,
+      gridAttrs,
+      cardAttrs
     }
   }
 }

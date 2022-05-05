@@ -1,13 +1,13 @@
 <template>
   <fd-contextmenu-submenu icon="table-row" label="表格设置">
     <fd-contextmenu-item
-      v-if="tableOption.treeTable"
+      v-if="tableSettingOption.treeTable"
       icon="row-height"
       :label="expandAll ? '收缩所有行' : '展开所有行'"
       @click="toggleExpandAll"
     />
     <fd-contextmenu-item
-      v-if="!tableOption.treeTable"
+      v-if="!tableSettingOption.treeTable"
       icon="table-stripe"
       :label="stripe ? '隐藏斑马纹' : '显示斑马纹'"
       @click="toggleStripe"
@@ -40,7 +40,7 @@ defineOptions({
 })
 
 const props = defineProps({
-  tableOption: {
+  tableSettingOption: {
     type: Object as PropType<TableSettingProp>,
     required: true
   }
@@ -58,5 +58,5 @@ const {
   toggleBorder,
   showSortColumnDialog,
   setTableColumns
-} = useTableSetting(props.tableOption)
+} = useTableSetting(props.tableSettingOption)
 </script>

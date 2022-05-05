@@ -1,7 +1,6 @@
 import { PropType } from 'vue'
 
 export interface GridMeasurement {
-  colGap: number
   rowGap: number
   columns: number
 }
@@ -10,7 +9,6 @@ export interface ResizeMeasurement {
   rowGap: number
   columns: number
   itemHeightWithGap: number
-  itemWidthWithGap: number
 }
 
 export interface BufferMeta {
@@ -32,6 +30,12 @@ export interface InternalItem {
   value: unknown | undefined
 }
 
+export interface FdVirtualGridType {
+  scrollToIdx: (idx: number) => void
+  scrollToPage: (pageNumber: number) => void
+  refresh: () => Promise<void>
+}
+
 export const OFFSET_CHANGED_EVENT = 'offset-changed'
 
 export const GRID_DEFAULT_PROPS = {
@@ -46,7 +50,7 @@ export const GRID_DEFAULT_PROPS = {
     type: Number,
     validator: (value: number) => Number.isInteger(value) && value >= 0
   },
-  // Item min-width, ignored when itemWidth is set
+  // min-width used by grid-template-columns, ignored when itemWidth is set
   itemMinWidth: {
     type: Number,
     validator: (value: number) => Number.isInteger(value) && value >= 0
@@ -85,5 +89,10 @@ export const GRID_DEFAULT_PROPS = {
   pageMode: {
     type: Boolean,
     default: false
+  },
+  // enable or disable mobile mode
+  mobileCompact: {
+    type: Boolean,
+    default: true
   }
 }

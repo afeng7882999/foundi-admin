@@ -29,7 +29,6 @@ export default {
 import { onBeforeMount } from 'vue'
 import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/crud/hooks/use-detail'
 import { Config, configFields } from '@/api/system/config'
-import usePage from '@/crud/hooks/use-page'
 
 const stateOption = {
   ifEditable: true,
@@ -48,8 +47,6 @@ const emit = defineEmits([OPEN_EDIT_EVENT, NAVIGATE_EVENT])
 
 const { detailState: s, detailMethods: m, detailAttrs } = useDetail<Config>(stateOption, emit)
 const { actAttrs } = detailAttrs
-
-const { auth } = usePage()
 
 onBeforeMount(async () => {
   m.resetForm()

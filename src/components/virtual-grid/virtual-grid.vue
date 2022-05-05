@@ -31,6 +31,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import useGrid from './use-grid'
 import { Indexable } from '@/common/types'
 import { ElScrollbar } from 'element-plus'
+import useLayoutSize from '@/hooks/use-layout-size'
 
 defineOptions({
   name: 'FdVirtualGrid'
@@ -53,8 +54,12 @@ const {
   buffer,
   viewHeight,
   innerTranslate,
-  scrollToIdx
+  scrollToIdx,
+  scrollToPage,
+  refresh
 } = useGrid(props, emit, wrapperRef, viewRef, innerRef)
+
+const { isMobile } = useLayoutSize(props.mobileCompact)
 
 const wrapperClass = computed(() => {
   const clazz = []
@@ -73,16 +78,23 @@ const scrollbarStyle = computed(() => {
 
 const viewStyle = computed(() => {
   return {
-    height: `${viewHeight.value}px`
+    height: `${viewHeight.value + props.gridGap}px`,
+    paddingBottom: `${props.gridGap}px`
   }
 })
 
 const innerStyle = computed(() => {
   const style = {
     width: '100%',
-    transform: `translate3d(0px, ${innerTranslate.value}px, 0px)`,
-    gap: `${props.gridGap}px`
+    transform: `translate3d(0px, ${innerTranslate.value}px, 0px)`
   } as Indexable
+
+  if (isMobile.value) {
+    style.gridTemplateColumns = '1fr'
+    return style
+  }
+
+  style.gap = `${props.gridGap}px`
   if (props.itemWidth) {
     style.gridTemplateColumns = `repeat(auto-fit, ${props.itemWidth}px)`
   } else if (props.itemMinWidth) {
@@ -105,6 +117,8 @@ onMounted(() => {
 })
 
 defineExpose({
-  scrollToIdx
+  scrollToIdx,
+  scrollToPage,
+  refresh
 })
 </script>

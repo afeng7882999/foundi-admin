@@ -32,6 +32,16 @@
         <fd-col-act detail="system:loginLog:list" del="system:loginLog:delete" width="100" @detail="m.showDetail" @del="m.del" />
       </el-table>
     </template>
+    <template #grid>
+      <fd-virtual-grid ref="grid" v-bind="gridAttrs" :item-min-width="310">
+        <template #placeholder="{ itemHeight }">
+          <card :style="`height: ${itemHeight}px`" />
+        </template>
+        <template #default="{ localIndex, item }">
+          <card v-bind="cardAttrs" :local-index="localIndex" :item="item" detail="system:loginLog:list" del="system:loginLog:delete" />
+        </template>
+      </fd-virtual-grid>
+    </template>
   </fd-page>
   <detail v-if="s.detailShow" ref="detailDialog" v-bind="detailAttrs"></detail>
 </template>
@@ -48,6 +58,7 @@ import {
   loginLogExport,
   LoginLog
 } from '@/api/system/login-log'
+import Card from './card.vue'
 import Detail from './detail.vue'
 
 defineOptions({
@@ -65,6 +76,6 @@ const stateOption = {
 }
 
 const { listRefs, listAttrs, listState: s, listMethods: m } = useList<LoginLog>(stateOption)
-const { table, detailDialog } = listRefs
-const { pageMainAttrs, tableAttrs, paginationAttrs, detailAttrs, pageToolbarAttrs } = listAttrs
+const { table, grid, detailDialog } = listRefs
+const { pageMainAttrs, tableAttrs, paginationAttrs, detailAttrs, pageToolbarAttrs, gridAttrs, cardAttrs } = listAttrs
 </script>

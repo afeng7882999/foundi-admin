@@ -55,7 +55,6 @@ const getGridMeasurement = (innerEl: Element): GridMeasurement => {
   const style = window.getComputedStyle(innerEl)
   return {
     rowGap: parseInt(style.getPropertyValue('row-gap')) || 0,
-    colGap: parseInt(style.getPropertyValue('column-gap')) || 0,
     columns: style.getPropertyValue('grid-template-columns').split(' ').length
   }
 }
@@ -63,13 +62,12 @@ const getGridMeasurement = (innerEl: Element): GridMeasurement => {
 /**
  * Get Resize measurement of grid and item
  */
-const getResizeMeasurement = (rootEl: Element, itemW: number, itemH: number): ResizeMeasurement => {
-  const { rowGap, colGap, columns } = getGridMeasurement(rootEl)
+const getResizeMeasurement = (rootEl: Element, itemH: number): ResizeMeasurement => {
+  const { rowGap, columns } = getGridMeasurement(rootEl)
   return {
     rowGap,
     columns,
-    itemHeightWithGap: itemH + rowGap,
-    itemWidthWithGap: itemW + colGap
+    itemHeightWithGap: itemH + rowGap
   }
 }
 
@@ -217,10 +215,17 @@ export default function useGrid(
   })
 
   /**
-   * calculate buffer
+   * Get wrapper div height
+   */
+  const getWrapperHeight = () => {
+    return props.pageMode ? window.innerHeight : (wrapperRef.value as Element).getBoundingClientRect().height
+  }
+
+  /**
+   * Calculate buffer
    */
   const getBuffer = async (): Promise<void> => {
-    const wrapperHeight = props.pageMode ? window.innerHeight : (wrapperRef.value as Element).clientHeight
+    const wrapperHeight = getWrapperHeight()
     bufferMeta = getBufferMeta(wrapperHeight, heightAboveWrapper, resizeMeasurement)
     const visiblePn = getVisiblePageNumbers(bufferMeta, props.length as number, props.pageSize as number)
     const pageChanged = difference(visiblePn, visiblePageNumbers).length > 0
@@ -271,7 +276,7 @@ export default function useGrid(
     const viewEl = viewRef.value as Element
     heightAboveWrapper = props.pageMode ? getHeightAbove(viewEl) : getHeightAbove(viewEl, wrapperRef.value as Element)
     state.itemHeight = getItemHeight(innerRef.value as Element, props.itemHeight)
-    resizeMeasurement = getResizeMeasurement(innerRef.value as Element, props.itemWidth as number, state.itemHeight)
+    resizeMeasurement = getResizeMeasurement(innerRef.value as Element, state.itemHeight)
     emitCurrentItem()
     state.viewHeight = getViewHeight(resizeMeasurement, props.length as number)
     await getBuffer()
@@ -282,21 +287,15 @@ export default function useGrid(
    * Init grid after component is mounted
    */
   const initItems = async () => {
-    let wrapperHeight = 0
-    if (props.pageMode) {
-      wrapperHeight = window.innerHeight
-    } else {
-      wrapperHeight = (wrapperRef.value as Element).getBoundingClientRect().height
-    }
-
-    resizeMeasurement = getResizeMeasurement(innerRef.value as Element, props.itemWidth as number, state.itemHeight)
+    const wrapperHeight = getWrapperHeight()
+    resizeMeasurement = getResizeMeasurement(innerRef.value as Element, state.itemHeight)
     bufferMeta = getBufferMeta(wrapperHeight, heightAboveWrapper, resizeMeasurement)
     itemByPages = await callPageProvider([0], props.pageSize as number, props.pageProvider as PageProvider)
     state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
 
     await nextFrame(() => {
       state.itemHeight = getItemHeight(innerRef.value as Element, props.itemHeight)
-      resizeMeasurement = getResizeMeasurement(innerRef.value as Element, props.itemWidth as number, state.itemHeight)
+      resizeMeasurement = getResizeMeasurement(innerRef.value as Element, state.itemHeight)
       state.viewHeight = getViewHeight(resizeMeasurement, props.length as number)
       getBuffer()
     })
@@ -318,6 +317,22 @@ export default function useGrid(
     const scrollTop =
       Math.floor(idx / resizeMeasurement.columns) * resizeMeasurement.itemHeightWithGap + topToView + viewPaddingTop + viewBorderTop
     verticalScrollEl.scrollTo({ top: scrollTop, behavior: 'smooth' })
+  }
+
+  /**
+   * Scroll to specific page
+   */
+  const scrollToPage = (pageNumber: number): void => {
+    scrollToIdx((pageNumber - 1) * props.pageSize)
+  }
+
+  /**
+   * Refresh grid, fetch data from backend
+   */
+  const refresh = async (): Promise<void> => {
+    heightAboveWrapper = 0
+    visiblePageNumbers = []
+    await initItems()
   }
 
   onMounted(async () => {
@@ -363,6 +378,8 @@ export default function useGrid(
     viewHeight,
     innerTranslate,
     buffer,
-    scrollToIdx
+    scrollToIdx,
+    scrollToPage,
+    refresh
   }
 }
