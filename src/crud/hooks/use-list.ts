@@ -14,7 +14,6 @@ import { ApiObj, ApiQuery, ExportRange } from '@/api'
 import { DictList } from '@/api/system/dict-item'
 import { AnyFunction, Indexable } from '@/common/types'
 import { MaybeRef, useThrottleFn } from '@vueuse/core'
-import FdVirtualGrid from '@/components/virtual-grid/virtual-grid.vue'
 import { FdVirtualGridType } from '@/components/virtual-grid/types'
 
 export interface PageState {
@@ -122,7 +121,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     firstIdxInPage: 0,
     pageState: {
       // 页码
-      current: 0,
+      current: 1,
       // 每页数据条数
       siz: 20,
       // 数据总数
@@ -260,7 +259,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
     try {
       listState.loading = true
-      await getDictData()
       const query = getQueryParam()
       const { data, total, count, resData } = await listState.listApi(query)
       if (stateOption.treeTable) {
@@ -290,6 +288,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   onMounted(async () => {
     listState.loading = true
     await nextFrame(async () => {
+      await getDictData()
       await getList()
     })
   })
@@ -325,7 +324,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 查询方法
   const queryList = async () => {
-    listState.pageState.current = 0
+    listState.pageState.current = 1
     if (listState.gridView) {
       await grid.value.refresh()
     } else {
@@ -485,6 +484,11 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         : rows.map((item) => item[listState.idField])
       listState.delLoading = true
       await listState.delApi(ids)
+
+      if (listState.gridView) {
+        await grid.value.refreshBuffer()
+      }
+
       ElMessage({
         message: '操作成功',
         type: 'success',
@@ -514,21 +518,51 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   //===============================================================================
 
   const pageProvider = async (pageNumber: number, pageSize: number) => {
-    listState.pageState.current = pageNumber
-    listState.pageState.siz = pageSize
     listState.loading = true
-    await getList()
+
+    if (!listState.listApi) {
+      return
+    }
+    for (const fn of mixHandlers.beforeGetList) {
+      if (!(await fn?.())) {
+        return
+      }
+    }
+
+    try {
+      listState.loading = true
+      const query = getQueryParam()
+      query.current = pageNumber
+      const { data, total, count, resData } = await listState.listApi(query)
+      listState.pageState.total = total
+      listState.pageState.count = count
+      listState.data = data
+
+      for (const fn of mixHandlers.afterGetList) {
+        await fn?.(resData)
+      }
+
+      setTimeout(() => {
+        listState.loading = false
+      }, listState.waitAfterGet)
+    } catch (e) {
+      listState.loading = false
+      console.log(e)
+    }
+
     return listState.data
   }
 
   const gridPageChange = (val: number) => {
     listState.pageState.current = val
-    grid.value.scrollToIdx((val - 1) * listState.pageState.siz)
+    grid.value.scrollToPage(val)
   }
 
   const gridPageSizeChange = async (val: number) => {
     listState.pageState.siz = val
     listState.pageState.count = Math.ceil(listState.pageState.total / val)
+    listState.pageState.current = 1
+    await grid.value.refresh()
   }
 
   const offsetChanged = (index: number, page: number) => {
@@ -548,12 +582,13 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
   }
 
-  const toggleGridView = () => {
+  const toggleGridView = async () => {
     if (listState.gridViewEnable) {
       if (listState.gridView) {
         listState.gridView = false
-        nextTick(() => {
+        await nextTick(() => {
           initTable()
+          getList()
         })
       } else {
         listState.gridView = true
@@ -729,6 +764,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       'onUpdate:queryVisible': (val: boolean) => (listState.queryFormShow = val),
       gridViewEnable: listState.gridViewEnable,
       gridView: listState.gridView,
+      gridPage: { index: listState.firstIdxInPage, total: listState.pageState.total },
       onToggleGridView: toggleGridView,
       onCreate: showEdit,
       onDel: del,
@@ -780,13 +816,31 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
   })
 
+  // grid视图下，el-pagination默认参数
+  const gridPaginationAttrs = computed(() => {
+    return {
+      background: 'background',
+      small: true,
+      currentPage: listState.pageState.current,
+      pageCount: listState.pageState.count,
+      pageSize: listState.pageState.siz,
+      pageSizes: [10, 15, 20, 50, 100, 200],
+      total: listState.pageState.total,
+      pagerCount: 5,
+      layout: 'sizes, prev, pager, next',
+      onCurrentChange: gridPageChange,
+      onSizeChange: gridPageSizeChange
+    }
+  })
+
   // fd-virtual-grid默认参数
   const gridAttrs = computed(() => {
     return {
       length: listState.pageState.total,
       pageSize: listState.pageState.siz,
+      initPageNumber: listState.pageState.current,
       pageProvider: pageProvider,
-      pageMode: false,
+      windowMode: false,
       onOffsetChanged: offsetChanged
     }
   })
@@ -845,6 +899,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       pageMainAttrs,
       tableAttrs,
       paginationAttrs,
+      gridPaginationAttrs,
       detailAttrs,
       pageToolbarAttrs,
       gridAttrs,

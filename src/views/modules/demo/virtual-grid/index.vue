@@ -22,7 +22,7 @@
       :item-min-width="310"
       :page-size="pageState.siz"
       :page-provider="pageProvider"
-      :page-mode="pageMode"
+      :window-mode="windowMode"
       :style="gridStyle"
       @offset-changed="offsetChanged"
     >
@@ -55,7 +55,7 @@ defineOptions({
 const virtualGrid = ref<FdVirtualGridType>()
 const actRef = ref<HTMLElement>()
 const length = ref<number>(200)
-const pageMode = ref<boolean>(false)
+const windowMode = ref<boolean>(false)
 const scrollIdx = ref<number | undefined>(undefined)
 
 const scrollToIdx = () => {
@@ -65,7 +65,7 @@ const scrollToIdx = () => {
 const { docHeight, docMinHeight, showPageHeader, auth } = usePage({ footerVisible: false })
 
 const pageStyle = computed(() => {
-  if (pageMode.value) {
+  if (windowMode.value) {
     return docMinHeight.value
   }
   return docHeight.value
@@ -94,7 +94,7 @@ const toggleWidth = () => {
 }
 
 const togglePageMode = () => {
-  pageMode.value = !pageMode.value
+  windowMode.value = !windowMode.value
 }
 
 const pageState = reactive({

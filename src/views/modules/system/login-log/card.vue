@@ -16,16 +16,15 @@
           tag
           :mapping="['成功,success', '失败,danger']"
         />
-        <fd-button v-if="delVisible" class="title-btn" type="icon" color="danger" icon="delete" @click="emitDel(item)" />
-        <el-divider direction="vertical" />
-        <fd-button
-          v-if="detailVisible"
-          class="title-btn"
-          type="icon"
-          color="primary"
-          icon="view-grid-detail"
-          @click="emitDetail(localIndex)"
-        />
+        <div class="fd-card-default__act">
+          <el-tooltip v-if="delVisible" :show-after="500" content="删除" placement="top">
+            <fd-button class="act-btn" type="icon" color="danger" icon="delete" @click.stop="emitDel(item)" />
+          </el-tooltip>
+          <el-divider v-if="delVisible" direction="vertical" />
+          <el-tooltip v-if="detailVisible" :show-after="500" content="详细" placement="top">
+            <fd-button class="act-btn" type="icon" color="primary" icon="view-list" @click.stop="emitDetail(localIndex)" />
+          </el-tooltip>
+        </div>
       </div>
       <div class="fd-card-default__label">时间</div>
       <div class="fd-card-default__item">
@@ -162,14 +161,21 @@ const objClass = computed(() => {
   font-size: var(--el-font-size-small);
   color: var(--el-text-color-regular);
   background-color: var(--el-color-white);
+  border: 1px solid transparent;
   border-radius: var(--el-border-radius-base);
+  cursor: pointer;
 
   &.is-loading {
     display: block;
   }
 
+  &:hover {
+    background-color: var(--el-bg-color);
+  }
+
   &.is-focused {
-    border: 1px solid var(--el-primary-color);
+    background-color: var(--el-color-primary-light-9);
+    border-color: var(--el-color-primary);
   }
 
   &__title {
@@ -183,9 +189,10 @@ const objClass = computed(() => {
     ::v-deep(.title-tag) {
       margin-left: 8px;
     }
-    .title-btn {
-      margin-left: auto;
-    }
+  }
+
+  &__act {
+    margin-left: auto;
   }
 
   &__label {
@@ -201,6 +208,9 @@ const objClass = computed(() => {
     max-width: 100%;
     border-radius: 0;
     border-bottom: 1px solid var(--el-border-color-base);
+    &.is-focused {
+      border-color: var(--el-color-primary);
+    }
   }
 
   @include theme-s() {

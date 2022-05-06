@@ -15,13 +15,20 @@
                 />
               </el-badge>
             </el-tooltip>
-            <el-divider class="fd-page-toolbar__divider" direction="vertical" style="margin-left: 16px" />
           </template>
           <div class="query-compact">
-            <el-form :model="queryData" inline compact :submit-fn="queryFn">
+            <el-form :model="queryData" inline compact @submit="queryFn">
               <slot name="query" />
             </el-form>
           </div>
+        </div>
+        <div v-if="gridView" class="fd-page-toolbar__center">
+          <el-divider class="fd-page-toolbar__divider" direction="vertical" />
+          <div class="fd-page-toolbar__pagination">
+            <span class="pagination-current">第{{ gridPage.index + 1 }}条 / 共{{ gridPage.total }}条</span>
+            <el-pagination v-bind="pagination" />
+          </div>
+          <el-divider class="fd-page-toolbar__divider" direction="vertical" />
         </div>
         <div class="fd-page-toolbar__right">
           <fd-button v-if="delVisible" label="删除" icon="delete" plain color="danger" @click="emit('del')" />
@@ -103,7 +110,7 @@ import FdContextmenuItem from '@/components/contextmenu/item.vue'
 import FdContextmenuSubmenu from '@/components/contextmenu/submenu.vue'
 import { ApiQuery } from '@/api'
 import useLayoutSize from '@/hooks/use-layout-size'
-import { CompactButton } from '@/crud/page/types'
+import { CompactButton, GridPage } from '@/crud/page/types'
 import { Indexable } from '@/common/types'
 import FdTableOptionSubmenu from './table-option-submenu.vue'
 
@@ -155,6 +162,7 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
+  gridPage: Object as PropType<GridPage>,
   mobileCompact: {
     type: Boolean,
     default: true

@@ -1,6 +1,7 @@
 <template>
   <div ref="wrapperRef" class="fd-virtual-grid" :class="wrapperClass">
-    <template v-if="pageMode">
+    <div v-show="!initialized" v-loading="true" class="fd-virtual-grid__loading"></div>
+    <template v-if="windowMode">
       <div v-show="length > 0" ref="viewRef" class="fd-virtual-grid__view" :style="viewStyle">
         <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyle">
           <template v-for="(item, idx) in buffer" :key="idx">
@@ -27,7 +28,7 @@
 
 <script setup lang="ts">
 import { OFFSET_CHANGED_EVENT, GRID_DEFAULT_PROPS } from './types'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import useGrid from './use-grid'
 import { Indexable } from '@/common/types'
 import { ElScrollbar } from 'element-plus'
@@ -49,6 +50,7 @@ const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 const emit = defineEmits([OFFSET_CHANGED_EVENT])
 
 const {
+  initialized,
   wrapperRect,
   itemHeight: itemHeightCal,
   buffer,
@@ -56,15 +58,16 @@ const {
   innerTranslate,
   scrollToIdx,
   scrollToPage,
-  refresh
+  refresh,
+  refreshBuffer
 } = useGrid(props, emit, wrapperRef, viewRef, innerRef)
 
 const { isMobile } = useLayoutSize(props.mobileCompact)
 
 const wrapperClass = computed(() => {
   const clazz = []
-  if (props.pageMode) {
-    clazz.push('is-page')
+  if (props.windowMode) {
+    clazz.push('is-window')
   }
   return clazz.join(' ')
 })
@@ -112,13 +115,10 @@ watch(
   { immediate: true }
 )
 
-onMounted(() => {
-  scrollToIdx(0)
-})
-
 defineExpose({
   scrollToIdx,
   scrollToPage,
-  refresh
+  refresh,
+  refreshBuffer
 })
 </script>

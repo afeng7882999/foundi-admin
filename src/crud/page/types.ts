@@ -4,3 +4,8 @@ export interface CompactButton {
   disabled: boolean
   onClick: () => void
 }
+
+export interface GridPage {
+  index: number
+  total: number
+}

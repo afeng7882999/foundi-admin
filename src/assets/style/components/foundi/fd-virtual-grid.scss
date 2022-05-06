@@ -1,5 +1,8 @@
+@use 'src/assets/style/variable' as *;
+
 .fd-virtual-grid {
   width: 100%;
+  position: relative;
   overflow: hidden;
   
   &__inner {
@@ -13,5 +16,15 @@
     display: flex;
     align-items: stretch;
     overflow: hidden;
+  }
+  
+  &__loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: var(--el-color-white);
+    z-index: $index-mask;
   }
 }

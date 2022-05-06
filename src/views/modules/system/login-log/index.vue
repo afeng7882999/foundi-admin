@@ -9,7 +9,12 @@
       <fd-item-sort label="排序" prop="sort" :fields="loginLogSortFields"></fd-item-sort>
     </template>
     <template #act>
-      <fd-page-toolbar del="system:loginLog:delete" export="system:loginLog:export" v-bind="pageToolbarAttrs" :pagination="paginationAttrs">
+      <fd-page-toolbar
+        del="system:loginLog:delete"
+        export="system:loginLog:export"
+        v-bind="pageToolbarAttrs"
+        :pagination="gridPaginationAttrs"
+      >
         <template #query>
           <fd-item-date-range prop="operTime" />
           <fd-item-dict prop="statusDict" :dict="s.dicts.sysLoginLogStatus" placeholder="请选择状态" />
@@ -77,5 +82,5 @@ const stateOption = {
 
 const { listRefs, listAttrs, listState: s, listMethods: m } = useList<LoginLog>(stateOption)
 const { table, grid, detailDialog } = listRefs
-const { pageMainAttrs, tableAttrs, paginationAttrs, detailAttrs, pageToolbarAttrs, gridAttrs, cardAttrs } = listAttrs
+const { pageMainAttrs, tableAttrs, paginationAttrs, gridPaginationAttrs, detailAttrs, pageToolbarAttrs, gridAttrs, cardAttrs } = listAttrs
 </script>

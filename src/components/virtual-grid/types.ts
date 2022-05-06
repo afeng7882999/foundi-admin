@@ -34,6 +34,7 @@ export interface FdVirtualGridType {
   scrollToIdx: (idx: number) => void
   scrollToPage: (pageNumber: number) => void
   refresh: () => Promise<void>
+  refreshBuffer: () => Promise<void>
 }
 
 export const OFFSET_CHANGED_EVENT = 'offset-changed'
@@ -84,9 +85,15 @@ export const GRID_DEFAULT_PROPS = {
     default: 40,
     validator: (value: number) => Number.isInteger(value) && value >= 1
   },
-  // if not limit the height of component, set pageMode true and
+  // initial page number used by refresh and initialize
+  initPageNumber: {
+    type: Number,
+    default: 1,
+    validator: (value: number) => Number.isInteger(value) && value >= 1
+  },
+  // if not limit the height of component, set windowMode true and
   // component is scrolled by window scroller
-  pageMode: {
+  windowMode: {
     type: Boolean,
     default: false
   },
