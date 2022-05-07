@@ -163,7 +163,6 @@ const objClass = computed(() => {
   background-color: var(--el-color-white);
   border: 1px solid transparent;
   border-radius: var(--el-border-radius-base);
-  cursor: pointer;
 
   &.is-loading {
     display: block;

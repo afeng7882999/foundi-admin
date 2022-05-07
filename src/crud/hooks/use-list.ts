@@ -8,7 +8,7 @@ import useTable from '@/components/table/hooks/use-table'
 import { arrayToTree, getTreeNode, getTreeNodes, TreeFields, traverseTree } from '@/utils/data-tree'
 import { Ref } from '@vue/reactivity'
 import { ElTable } from 'element-plus/es'
-import { DetailDialog } from './use-detail'
+import { DetailDialog, NavigateResult } from './use-detail'
 import { EditDialog } from './use-edit'
 import { ApiObj, ApiQuery, ExportRange } from '@/api'
 import { DictList } from '@/api/system/dict-item'
@@ -100,6 +100,27 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   // state
   //===============================================================================
 
+  const defaultGridState = {
+    // 是否使用卡片模式
+    gridViewEnable: true,
+    // 卡片模式
+    gridView: false,
+    // 高亮对象索引
+    gridFocusedIdx: undefined as number | undefined,
+    // 当前页第一项的索引值
+    firstIdxInPage: 0,
+    gridPageState: {
+      // 页码
+      current: 1,
+      // 每页数据条数
+      siz: 20,
+      // 数据总数
+      total: 0,
+      // 总页数
+      count: 0
+    }
+  }
+
   const defaultState = {
     // 主键
     idField: 'id',
@@ -115,10 +136,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     } as ApiQuery,
     // 表头排序是否支持多字段
     sortMulti: false,
-    // 当前选中ID
-    currentId: '',
-    // 当前页第一项的索引值
-    firstIdxInPage: 0,
+    // 高亮对象索引
+    focusedIdx: undefined as number | undefined,
     pageState: {
       // 页码
       current: 1,
@@ -142,11 +161,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     // 删除 Loading 属性
     delLoading: false,
     // 选择的项目
-    selectedItems: [] as T[],
-    // 是否使用卡片模式
-    gridViewEnable: true,
-    // 卡片模式
-    gridView: false,
+    selectedItems: [] as MaybeRef<T[]>,
     // 弹窗属性
     editShow: false,
     // detail dialog visible
@@ -156,11 +171,14 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     // 表格别名
     alias: '_0',
     // 行是否可拖动
-    rowDraggable: false
+    rowDraggable: false,
+
+    ...defaultGridState
   }
 
   const defaultTreeState = {
     ...defaultState,
+
     // 是否是树表
     treeTable: true,
     // 树表字段
@@ -178,8 +196,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     } as Partial<TreeFields>,
     // 默认展开所有树
     defaultExpandAll: true,
-    // 选择的树节点
-    selectedItems: [] as T[],
     // 根节点名称
     rootName: '根节点'
   }
@@ -272,8 +288,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       for (const fn of mixHandlers.afterGetList) {
         await fn?.(resData)
       }
-      if (listState.tableRowSelectable && listState.currentId) {
-        setCurrentData(listState.currentId)
+      if (listState.tableRowSelectable && listState.focusedIdx) {
+        setFocusedIdx(listState.focusedIdx)
       }
       setTimeout(() => {
         listState.loading = false
@@ -324,12 +340,14 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 查询方法
   const queryList = async () => {
-    listState.pageState.current = 1
     if (listState.gridView) {
+      listState.gridPageState.current = 1
       await grid.value.refresh()
-    } else {
-      await getList()
+      return
     }
+
+    listState.pageState.current = 1
+    await getList()
   }
 
   // 重置查询
@@ -418,20 +436,22 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         (item) => {
           table.value.toggleRowSelection(item, true)
           if (!listState.selectedItems.some((item2) => item2[listState.idField] === item[listState.idField])) {
-            ;(listState.selectedItems as T[]).push(item)
+            unref<T[]>(listState.selectedItems).push(item)
           }
         },
         listState.treeFields
       )
     } else {
-      const selected = listState.selectedItems.filter(
+      const selected = unref<T[]>(listState.selectedItems).filter(
         (item) => !selection.some((item2) => item2[listState.idField] === item[listState.idField])
       )
       traverseTree(
         selected,
         (item) => {
           table.value.toggleRowSelection(item, false)
-          listState.selectedItems = listState.selectedItems.filter((item2) => item2[listState.idField] !== item[listState.idField])
+          listState.selectedItems = unref<T[]>(listState.selectedItems).filter(
+            (item2) => item2[listState.idField] !== item[listState.idField]
+          )
         },
         listState.treeFields
       )
@@ -445,7 +465,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 获取上级节点名称
   const getParentName = (parentId: string, nameField = 'name') => {
-    const parent = getTreeNode(listState.data as T[], (n) => n[listState.idField] === parentId)
+    const parent = getTreeNode(unref<T[]>(listState.data), (n) => n[listState.idField] === parentId)
     return parent ? parent[nameField] : '无'
   }
 
@@ -571,9 +591,9 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   }
 
   const gridSelected = ({ item, selected }: { item: T; selected: boolean }) => {
-    const itemIdx = listState.selectedItems.findIndex((i) => i.id === item.id)
+    const itemIdx = listState.selectedItems.findIndex((i) => i[listState.idField] === item[listState.idField])
     if (selected && itemIdx === -1) {
-      ;(listState.selectedItems as T[]).push(item)
+      unref<T[]>(listState.selectedItems).push(item)
       return
     }
     if (!selected && itemIdx !== -1) {
@@ -656,23 +676,44 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 显示详细内容
   const showDetail = async (idx: number) => {
+    listState.focusedIdx = idx
     listState.detailShow = true
     await nextTick(() => {
-      detailDialog.value.open(listState.data, idx, { dicts: listState.dicts })
+      detailDialog.value.open(listState.data[idx], listState.data.length, idx, onNavigate, { dicts: listState.dicts })
     })
   }
 
   // 详细对话框导航时
-  const onDetailNavigate = (id: string) => {
-    const current = unref<T[]>(listState.data).find((d) => d.id === id)
-    table.value.setCurrentRow(current)
-    setCurrentData(id)
+  const onNavigate = (direction: 'prev' | 'next'): NavigateResult<T> => {
+    let prevEnabled = true
+    let nextEnabled = true
+    let idx = listState.focusedIdx as number
+    if (direction === 'prev') {
+      idx--
+      if (idx <= 0) {
+        prevEnabled = false
+      }
+    } else {
+      idx++
+      if (idx >= listState.data.length - 1) {
+        nextEnabled = false
+      }
+    }
+    listState.focusedIdx = idx
+    const focused = listState.data[idx]
+    table.value.setCurrentRow(focused)
+    setFocusedIdx(idx)
+    return {
+      prevEnabled,
+      nextEnabled,
+      data: focused
+    }
   }
 
   // 详情对话框默认参数
   const detailAttrs = computed(() => {
     return {
-      onNavigate: onDetailNavigate
+      onOpenEditDialog: showEdit
     }
   })
 
@@ -696,21 +737,22 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 表格选择
   const tableSelectionChange = (val: T[]) => {
-    ;(listState.selectedItems as T[]) = val
+    listState.selectedItems = val
   }
 
   // 表格行点击
   const tableRowClick = (row: T) => {
-    setCurrentData(row?.id)
+    const idx = unref<T[]>(listState.data).findIndex((d) => d[listState.idField] === row[listState.idField])
+    setFocusedIdx(idx)
   }
 
   // 设置当前行
-  const setCurrentData = (id: string) => {
+  const setFocusedIdx = (idx?: number) => {
     if (listState.tableRowSelectable) {
-      if (!id) {
-        listState.currentId = ''
+      if (idx === undefined) {
+        listState.focusedIdx = undefined
       } else {
-        listState.currentId = id
+        listState.focusedIdx = idx
       }
       nextTick(() => {
         focusCurrentRow()
@@ -821,11 +863,11 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     return {
       background: 'background',
       small: true,
-      currentPage: listState.pageState.current,
-      pageCount: listState.pageState.count,
-      pageSize: listState.pageState.siz,
+      currentPage: listState.gridPageState.current,
+      pageCount: listState.gridPageState.count,
+      pageSize: listState.gridPageState.siz,
       pageSizes: [10, 15, 20, 50, 100, 200],
-      total: listState.pageState.total,
+      total: listState.gridPageState.total,
       pagerCount: 5,
       layout: 'sizes, prev, pager, next',
       onCurrentChange: gridPageChange,
@@ -836,9 +878,9 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   // fd-virtual-grid默认参数
   const gridAttrs = computed(() => {
     return {
-      length: listState.pageState.total,
-      pageSize: listState.pageState.siz,
-      initPageNumber: listState.pageState.current,
+      length: listState.gridPageState.total,
+      pageSize: listState.gridPageState.siz,
+      initPageNumber: listState.gridPageState.current,
       pageProvider: pageProvider,
       windowMode: false,
       onOffsetChanged: offsetChanged
@@ -849,7 +891,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const cardAttrs = computed(() => {
     return {
       dicts: listState.dicts,
-      currentId: listState.currentId,
+      focusedItem: listState.focusedIdx ? listState.data[listState.focusedIdx],
       selectItems: listState.selectedItems,
       onDetail: showDetail,
       onDel: del,
