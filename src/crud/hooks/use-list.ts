@@ -1,4 +1,4 @@
-import { computed, nextTick, onMounted, reactive, ref, unref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, unref, UnwrapRef } from 'vue'
 import { isString, merge } from 'lodash-es'
 import { ElForm, ElMessage, ElMessageBox } from 'element-plus'
 import useDict from './use-dict'
@@ -105,15 +105,13 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     gridViewEnable: true,
     // 卡片模式
     gridView: false,
-    // 高亮对象索引
-    gridFocusedIdx: undefined as number | undefined,
     // 当前页第一项的索引值
     firstIdxInPage: 0,
     gridPageState: {
       // 页码
       current: 1,
       // 每页数据条数
-      siz: 20,
+      siz: 50,
       // 数据总数
       total: 0,
       // 总页数
@@ -136,8 +134,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     } as ApiQuery,
     // 表头排序是否支持多字段
     sortMulti: false,
-    // 高亮对象索引
-    focusedIdx: undefined as number | undefined,
+    // 高亮对象
+    focusedItem: undefined as MaybeRef<T | undefined>,
     pageState: {
       // 页码
       current: 1,
@@ -288,8 +286,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       for (const fn of mixHandlers.afterGetList) {
         await fn?.(resData)
       }
-      if (listState.tableRowSelectable && listState.focusedIdx) {
-        setFocusedIdx(listState.focusedIdx)
+      if (listState.tableRowSelectable && listState.focusedItem) {
+        setFocusedItem(listState.focusedItem)
       }
       setTimeout(() => {
         listState.loading = false
@@ -605,12 +603,14 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const toggleGridView = async () => {
     if (listState.gridViewEnable) {
       if (listState.gridView) {
+        listState.pageState.current = listState.gridPageState.current
         listState.gridView = false
         await nextTick(() => {
           initTable()
           getList()
         })
       } else {
+        listState.gridPageState.current = listState.pageState.current
         listState.gridView = true
       }
     }
@@ -675,19 +675,20 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   //===============================================================================
 
   // 显示详细内容
-  const showDetail = async (idx: number) => {
-    listState.focusedIdx = idx
+  const showDetail = async (item: T) => {
+    listState.focusedItem = item
     listState.detailShow = true
+    const idx = unref<T[]>(listState.data).findIndex((d) => d[listState.idField] === item[listState.idField])
     await nextTick(() => {
-      detailDialog.value.open(listState.data[idx], listState.data.length, idx, onNavigate, { dicts: listState.dicts })
+      detailDialog.value.open(item, listState.data.length, idx, onNavigate, { dicts: listState.dicts })
     })
   }
 
   // 详细对话框导航时
   const onNavigate = (direction: 'prev' | 'next'): NavigateResult<T> => {
+    let idx = unref<T[]>(listState.data).findIndex((d) => d[listState.idField] === (listState.focusedItem as T)[listState.idField])
     let prevEnabled = true
     let nextEnabled = true
-    let idx = listState.focusedIdx as number
     if (direction === 'prev') {
       idx--
       if (idx <= 0) {
@@ -699,10 +700,9 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         nextEnabled = false
       }
     }
-    listState.focusedIdx = idx
     const focused = listState.data[idx]
     table.value.setCurrentRow(focused)
-    setFocusedIdx(idx)
+    setFocusedItem(focused)
     return {
       prevEnabled,
       nextEnabled,
@@ -742,17 +742,16 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 表格行点击
   const tableRowClick = (row: T) => {
-    const idx = unref<T[]>(listState.data).findIndex((d) => d[listState.idField] === row[listState.idField])
-    setFocusedIdx(idx)
+    setFocusedItem(row)
   }
 
   // 设置当前行
-  const setFocusedIdx = (idx?: number) => {
+  const setFocusedItem = (item: T | UnwrapRef<T> | undefined) => {
     if (listState.tableRowSelectable) {
-      if (idx === undefined) {
-        listState.focusedIdx = undefined
+      if (!item) {
+        listState.focusedItem = undefined
       } else {
-        listState.focusedIdx = idx
+        listState.focusedItem = item
       }
       nextTick(() => {
         focusCurrentRow()
@@ -866,7 +865,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       currentPage: listState.gridPageState.current,
       pageCount: listState.gridPageState.count,
       pageSize: listState.gridPageState.siz,
-      pageSizes: [10, 15, 20, 50, 100, 200],
+      pageSizes: [20, 50, 100, 200],
       total: listState.gridPageState.total,
       pagerCount: 5,
       layout: 'sizes, prev, pager, next',
@@ -891,7 +890,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const cardAttrs = computed(() => {
     return {
       dicts: listState.dicts,
-      focusedItem: listState.focusedIdx ? listState.data[listState.focusedIdx],
+      focusedItem: listState.focusedItem,
       selectItems: listState.selectedItems,
       onDetail: showDetail,
       onDel: del,
