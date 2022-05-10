@@ -14,7 +14,7 @@ import { ApiObj, ApiQuery, ExportRange } from '@/api'
 import { DictList } from '@/api/system/dict-item'
 import { AnyFunction, Indexable } from '@/common/types'
 import { MaybeRef, useThrottleFn } from '@vueuse/core'
-import { FdVirtualGridType } from '@/components/virtual-grid/types'
+import { FdVirtualGridType, InternalItem } from '@/components/virtual-grid/types'
 
 export interface PageState {
   // 页码
@@ -105,8 +105,15 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     gridViewEnable: true,
     // 卡片模式
     gridView: false,
-    // 当前页第一项的索引值
-    firstIdxInPage: 0,
+    // 卡片选择模式
+    gridSelectMode: false,
+    // 卡片模式，当前页第一项的索引值
+    gridFirstIndexInPage: 0,
+    // 卡片模式，初始化索引值
+    gridInitIndex: 0,
+    // 卡片模式，高亮对象索引
+    gridFocusIndex: undefined as number | undefined,
+    // 卡片模式，分页参数
     gridPageState: {
       // 页码
       current: 1,
@@ -136,6 +143,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     sortMulti: false,
     // 高亮对象
     focusedItem: undefined as MaybeRef<T | undefined>,
+    // 分页参数
     pageState: {
       // 页码
       current: 1,
@@ -535,9 +543,12 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   // grid layout
   //===============================================================================
 
-  const pageProvider = async (pageNumber: number, pageSize: number) => {
-    listState.loading = true
+  // grid缓存
+  let gridBuffer = [] as InternalItem[]
+  // grid高亮对象索引
+  let gridFocusedItem = {} as T
 
+  const pageProvider = async (pageNumber: number, pageSize: number) => {
     if (!listState.listApi) {
       return
     }
@@ -548,44 +559,66 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
 
     try {
-      listState.loading = true
-      const query = getQueryParam()
+      const query = getGridQueryParam()
       query.current = pageNumber
       const { data, total, count, resData } = await listState.listApi(query)
-      listState.pageState.total = total
-      listState.pageState.count = count
+      listState.gridPageState.total = total
+      listState.gridPageState.count = count
       listState.data = data
 
       for (const fn of mixHandlers.afterGetList) {
         await fn?.(resData)
       }
-
-      setTimeout(() => {
-        listState.loading = false
-      }, listState.waitAfterGet)
     } catch (e) {
-      listState.loading = false
       console.log(e)
     }
 
     return listState.data
   }
 
+  const getGridQueryParam = () => {
+    if (stateOption.treeTable) {
+      return {
+        ...listState.query,
+        ...listState.params
+      }
+    }
+
+    const orderByList = [] as string[]
+    if (listState.query.sort) {
+      listState.query.sort.forEach((s) => {
+        orderByList.push(`${s.prop}:${s.order}`)
+      })
+    }
+
+    return {
+      current: listState.gridPageState.current,
+      size: listState.gridPageState.siz,
+      ...listState.params,
+      ...listState.query,
+      orderByList
+    }
+  }
+
   const gridPageChange = (val: number) => {
-    listState.pageState.current = val
+    listState.gridPageState.current = val
     grid.value.scrollToPage(val)
   }
 
   const gridPageSizeChange = async (val: number) => {
-    listState.pageState.siz = val
-    listState.pageState.count = Math.ceil(listState.pageState.total / val)
-    listState.pageState.current = 1
+    listState.gridPageState.siz = val
+    listState.gridPageState.count = Math.ceil(listState.gridPageState.total / val)
+    listState.gridPageState.current = 1
     await grid.value.refresh()
   }
 
-  const offsetChanged = (index: number, page: number) => {
-    listState.pageState.current = page
-    listState.firstIdxInPage = index
+  const gridOffsetChanged = ({ index, page }: { index: number; localIndex: number; page: number }) => {
+    listState.gridPageState.current = page
+    listState.gridFirstIndexInPage = index
+  }
+
+  const gridBufferRefreshed = ({ buffer }: { index: number; localIndex: number; buffer: InternalItem[] }) => {
+    gridBuffer = buffer
   }
 
   const gridSelected = ({ item, selected }: { item: T; selected: boolean }) => {
@@ -600,20 +633,84 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
   }
 
-  const toggleGridView = async () => {
-    if (listState.gridViewEnable) {
-      if (listState.gridView) {
-        listState.pageState.current = listState.gridPageState.current
-        listState.gridView = false
-        await nextTick(() => {
-          initTable()
-          getList()
-        })
-      } else {
-        listState.gridPageState.current = listState.pageState.current
-        listState.gridView = true
+  // 切换选择模式
+  const toggleSelectMode = () => {
+    listState.selectedItems = []
+    listState.gridFocusIndex = undefined
+    gridFocusedItem = {} as T
+    listState.gridSelectMode = !listState.gridSelectMode
+  }
+
+  // 显示详细内容
+  const gridShowDetail = async ({ index, item }: { index: number; item: T }) => {
+    listState.gridFocusIndex = index
+    listState.detailShow = true
+    await nextTick(() => {
+      detailDialog.value.open(item, listState.gridPageState.total, index, onNavigateOfGrid, { dicts: listState.dicts })
+    })
+  }
+
+  // 详细对话框导航时
+  const onNavigateOfGrid = (direction: 'prev' | 'next'): NavigateResult<T> => {
+    let idx = listState.gridFocusIndex as number
+    let prevEnabled = true
+    let nextEnabled = true
+    if (direction === 'prev') {
+      idx--
+      if (idx <= 0) {
+        prevEnabled = false
+      }
+    } else {
+      idx++
+      if (idx >= listState.gridPageState.total - 1) {
+        nextEnabled = false
       }
     }
+    const data = gridBuffer.find((b: InternalItem) => b.index === idx)?.value as T
+
+    if (data) {
+      // buffer is filled
+      listState.gridFocusIndex = idx
+      gridFocusedItem = data
+      grid.value.scrollToIdx(idx)
+      return {
+        prevEnabled,
+        nextEnabled,
+        idx: listState.gridFocusIndex,
+        data
+      }
+    }
+
+    // buffer is not filled, skip navigation
+    return {
+      prevEnabled: undefined,
+      nextEnabled: undefined,
+      idx: listState.gridFocusIndex as number,
+      data: gridFocusedItem
+    }
+  }
+
+  const toggleGridView = async () => {
+    if (!listState.gridViewEnable) {
+      return
+    }
+
+    // switch to table view
+    if (listState.gridView) {
+      listState.pageState.current = Math.floor(listState.gridFirstIndexInPage / listState.pageState.siz) + 1
+      listState.selectedItems = []
+      listState.gridView = false
+      await nextTick(() => {
+        initTable()
+        getList()
+      })
+      return
+    }
+
+    // switch to grid view
+    listState.gridInitIndex = (listState.pageState.current - 1) * listState.pageState.siz
+    listState.selectedItems = []
+    listState.gridView = true
   }
 
   //===============================================================================
@@ -706,6 +803,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     return {
       prevEnabled,
       nextEnabled,
+      idx,
       data: focused
     }
   }
@@ -805,8 +903,9 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       'onUpdate:queryVisible': (val: boolean) => (listState.queryFormShow = val),
       gridViewEnable: listState.gridViewEnable,
       gridView: listState.gridView,
-      gridPage: { index: listState.firstIdxInPage, total: listState.pageState.total },
+      gridPage: { index: listState.gridFirstIndexInPage, total: listState.pageState.total },
       onToggleGridView: toggleGridView,
+      onToggleSelectMode: toggleSelectMode,
       onCreate: showEdit,
       onDel: del,
       onExport: exportData,
@@ -879,10 +978,12 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     return {
       length: listState.gridPageState.total,
       pageSize: listState.gridPageState.siz,
-      initPageNumber: listState.gridPageState.current,
+      gridInitIndex: listState.gridInitIndex,
       pageProvider: pageProvider,
       windowMode: false,
-      onOffsetChanged: offsetChanged
+      loading: listState.loading,
+      onOffsetChanged: gridOffsetChanged,
+      onBufferRefreshed: gridBufferRefreshed
     }
   })
 
@@ -890,9 +991,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const cardAttrs = computed(() => {
     return {
       dicts: listState.dicts,
-      focusedItem: listState.focusedItem,
-      selectItems: listState.selectedItems,
-      onDetail: showDetail,
+      focusedIndex: listState.gridFocusIndex,
+      selectMode: listState.gridSelectMode,
+      selectedItems: listState.selectedItems,
+      onDetail: gridShowDetail,
       onDel: del,
       onSelect: gridSelected
     }
@@ -934,7 +1036,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       tableSelectionChange,
       tableRowClick,
       pageChange,
-      sizeChange
+      sizeChange,
+      onNavigateOfGrid
     },
     listAttrs: {
       pageMainAttrs,

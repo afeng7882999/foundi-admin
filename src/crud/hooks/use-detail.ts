@@ -27,8 +27,9 @@ export type DetailStateOption<T extends ApiObj> = Partial<{
 }>
 
 export interface NavigateResult<T extends ApiObj> {
-  prevEnabled: boolean
-  nextEnabled: boolean
+  prevEnabled?: boolean
+  nextEnabled?: boolean
+  idx: number
   data: T
 }
 
@@ -85,7 +86,7 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
       }
     ],
     // 改变当前项之后
-    currentChanged: [
+    focusChanged: [
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       async (data: T) => {
         return
@@ -100,7 +101,7 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
 
   // 改变当前项之后
   const onCurrentChanged = async (fn: (data: T) => Promise<void>) => {
-    mixHandlers.currentChanged.push(fn)
+    mixHandlers.focusChanged.push(fn)
   }
 
   //===============================================================================
@@ -123,7 +124,7 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
     detailState.prevEnabled = idx > 0
     detailState.nextEnabled = idx < size - 1
 
-    for (const fn of mixHandlers.currentChanged) {
+    for (const fn of mixHandlers.focusChanged) {
       await fn?.(data)
     }
     detailState.visible = true
@@ -150,11 +151,12 @@ export default function <T extends ApiObj>(stateOption: DetailStateOption<T>, em
     if (!detailState.navigateFn) {
       return
     }
-    const { prevEnabled, nextEnabled, data } = detailState.navigateFn(direction)
-    detailState.prevEnabled = prevEnabled
-    detailState.nextEnabled = nextEnabled
+    const { prevEnabled, nextEnabled, idx, data } = detailState.navigateFn(direction)
+    prevEnabled !== undefined && (detailState.prevEnabled = prevEnabled)
+    nextEnabled !== undefined && (detailState.nextEnabled = nextEnabled)
+    detailState.idx = idx
     ;(detailState.data as T) = data
-    for (const fn of mixHandlers.currentChanged) {
+    for (const fn of mixHandlers.focusChanged) {
       await fn?.(data)
     }
   }

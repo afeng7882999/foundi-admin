@@ -31,6 +31,7 @@
           <el-divider class="fd-page-toolbar__divider" direction="vertical" />
         </div>
         <div class="fd-page-toolbar__right">
+          <fd-button v-if="gridView" label="选择" icon="check-correct" plain @click="emit('toggleSelectMode')" />
           <fd-button v-if="delVisible" label="删除" icon="delete" plain color="danger" @click="emit('del')" />
           <fd-button v-if="createVisible" label="新增" icon="plus" plain color="primary" @click="emit('create')" />
           <slot name="buttons" />
@@ -205,7 +206,7 @@ const menuDividerVisible = computed(() => {
   return !!(useSlots().menu || state.compactButtons.length != 0)
 })
 
-const emit = defineEmits(['del', 'create', 'export', 'exportAll', 'update:queryVisible', 'toggleGridView'])
+const emit = defineEmits(['del', 'create', 'export', 'exportAll', 'update:queryVisible', 'toggleGridView', 'toggleSelectMode'])
 
 const toggleQueryVisible = () => {
   emit('update:queryVisible', !props.queryVisible)

@@ -6,10 +6,11 @@ import {
   InternalItem,
   ItemsByPage,
   PageProvider,
-  ResizeMeasurement
+  ResizeMeasurement,
+  BUFFER_REFRESHED_EVENT
 } from './types'
 import { clamp, concat, difference, isEqual, parseInt, range } from 'lodash-es'
-import { ExtractPropTypes, nextTick, onMounted, reactive, toRefs, watch } from 'vue'
+import { computed, ExtractPropTypes, onMounted, reactive, toRefs, watch } from 'vue'
 import { Ref } from '@vue/reactivity'
 import { useDebounceFn, useEventListener, useResizeObserver } from '@vueuse/core'
 import { nextFrame } from '@/utils/next-frame'
@@ -214,6 +215,11 @@ export default function useGrid(
     innerTranslate: 0
   })
 
+  const scrollEl = computed(() => {
+    const viewEl = viewRef.value as HTMLElement
+    return getVerticalScrollParent(viewEl)
+  })
+
   /**
    * Get wrapper div height
    */
@@ -239,6 +245,9 @@ export default function useGrid(
       state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
       state.innerTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
     }
+    if (!pageChanged && needRefresh) {
+      emitBufferRefreshedDebounce()
+    }
   }
 
   /**
@@ -251,23 +260,11 @@ export default function useGrid(
         itemByPages = items
         state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
         state.innerTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
+        emitBufferRefreshed()
       }
     })
   }
   const getBufferRemoteDebounce = useDebounceFn(getBufferRemote, props.pageProviderDebounceTime as number)
-
-  /**
-   * Emit current item index and page
-   */
-  const emitCurrentItem = () => {
-    const index = getOffsetBeforeView(heightAbove, resizeMeasurement)
-    if (currentIdx !== index) {
-      currentIdx = index
-      const page = Math.ceil((index + resizeMeasurement.columns) / (props.pageSize as number))
-      emit(OFFSET_CHANGED_EVENT, index, page)
-    }
-  }
-  const emitCurrentItemDebounce = useDebounceFn(emitCurrentItem, 300)
 
   /**
    * Callback of ResizeObserver
@@ -286,7 +283,7 @@ export default function useGrid(
   /**
    * Init grid after component is mounted
    */
-  const initItems = async () => {
+  const initGrid = async () => {
     const init = async () => {
       resizeMeasurement = getResizeMeasurement(innerRef.value as Element, state.itemHeight)
       state.viewHeight = getViewHeight(resizeMeasurement, props.length as number)
@@ -294,9 +291,10 @@ export default function useGrid(
       bufferMeta = getBufferMeta(wrapperHeight, heightAbove, resizeMeasurement)
       visiblePageNumbers = getVisiblePageNumbers(bufferMeta, props.length as number, props.pageSize as number)
 
-      state.initialized = true
       await nextFrame(() => {
-        scrollToPage(props.initPageNumber as number, false)
+        emitBufferRefreshed()
+        scrollToIdx(props.initIndex as number, false)
+        state.initialized = true
       })
     }
 
@@ -319,16 +317,74 @@ export default function useGrid(
     })
   }
 
+  onMounted(async () => {
+    const scrollCb = async () => {
+      if (!state.initialized) {
+        return
+      }
+      heightAbove = props.windowMode
+        ? getHeightAbove(viewRef.value as Element)
+        : getHeightAbove(viewRef.value as Element, wrapperRef.value as Element)
+      emitCurrentItemDebounce()
+      await getBuffer()
+    }
+
+    await initGrid()
+    useEventListener(scrollEl.value, 'scroll', scrollCb, {
+      capture: true,
+      passive: true
+    })
+  })
+
+  useResizeObserver(wrapperRef, async (entries) => {
+    if (!state.initialized) {
+      return
+    }
+    state.wrapperRect = entries[0].contentRect
+    await resizeObserverCbDebounce()
+  })
+
+  watch(
+    () => props.length,
+    (val) => {
+      if (val === undefined) {
+        return
+      }
+      state.viewHeight = getViewHeight(resizeMeasurement, val)
+    }
+  )
+
+  /**
+   * Emit current item index and page
+   */
+  const emitCurrentItem = () => {
+    const index = getOffsetBeforeView(heightAbove, resizeMeasurement)
+    if (currentIdx !== index) {
+      currentIdx = index
+      const localIndex = index - bufferOffset
+      const page = Math.ceil((index + resizeMeasurement.columns) / (props.pageSize as number))
+      emit(OFFSET_CHANGED_EVENT, { index, localIndex, page })
+    }
+  }
+  const emitCurrentItemDebounce = useDebounceFn(emitCurrentItem, 300)
+
+  /**
+   * Emit after buffer changed
+   */
+  const emitBufferRefreshed = () => {
+    emit(BUFFER_REFRESHED_EVENT, { index: currentIdx, localIndex: currentIdx - bufferOffset, buffer: state.buffer })
+  }
+  const emitBufferRefreshedDebounce = useDebounceFn(emitBufferRefreshed, 300)
+
   /**
    * Scroll to item with a specific index
    */
   const scrollToIdx = (idx: number, smooth = true): void => {
     idx = Math.max(idx, 0)
     const viewEl = viewRef.value as HTMLElement
-    const verticalScrollEl = getVerticalScrollParent(viewEl) as HTMLElement
-    const topToView = verticalScrollEl instanceof Element ? viewEl.offsetTop - verticalScrollEl.offsetTop : 0
+    const topToView = scrollEl.value instanceof HTMLElement ? viewEl.offsetTop - scrollEl.value.offsetTop : 0
     const scrollTop = Math.floor(idx / resizeMeasurement.columns) * resizeMeasurement.itemHeightWithGap + topToView
-    verticalScrollEl.scrollTo({ top: scrollTop, behavior: smooth ? 'smooth' : undefined })
+    scrollEl.value.scrollTo({ top: scrollTop, behavior: smooth ? 'smooth' : undefined })
   }
 
   /**
@@ -344,7 +400,7 @@ export default function useGrid(
   const refresh = async (): Promise<void> => {
     heightAbove = 0
     visiblePageNumbers = []
-    await initItems()
+    await initGrid()
   }
 
   /**
@@ -356,46 +412,6 @@ export default function useGrid(
       state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
     })
   }
-
-  onMounted(async () => {
-    await initItems()
-  })
-
-  useResizeObserver(wrapperRef, async (entries) => {
-    if (!state.initialized) {
-      return
-    }
-    state.wrapperRect = entries[0].contentRect
-    await resizeObserverCbDebounce()
-  })
-
-  useEventListener(
-    'scroll',
-    async () => {
-      if (!state.initialized) {
-        return
-      }
-      heightAbove = props.windowMode
-        ? getHeightAbove(viewRef.value as Element)
-        : getHeightAbove(viewRef.value as Element, wrapperRef.value as Element)
-      emitCurrentItemDebounce()
-      await getBuffer()
-    },
-    {
-      capture: true,
-      passive: true
-    }
-  )
-
-  watch(
-    () => props.length,
-    (val) => {
-      if (val === undefined) {
-        return
-      }
-      state.viewHeight = getViewHeight(resizeMeasurement, val)
-    }
-  )
 
   const { initialized, wrapperRect, itemHeight, buffer, viewHeight, innerTranslate } = toRefs(state)
   return {

@@ -42,8 +42,8 @@
         <template #placeholder="{ itemHeight }">
           <card :style="`height: ${itemHeight}px`" />
         </template>
-        <template #default="{ localIndex, item }">
-          <card v-bind="cardAttrs" :local-index="localIndex" :item="item" detail="system:loginLog:list" del="system:loginLog:delete" />
+        <template #default="{ index, item }">
+          <card v-bind="cardAttrs" :index="index" :item="item" detail="system:loginLog:list" del="system:loginLog:delete" />
         </template>
       </fd-virtual-grid>
     </template>

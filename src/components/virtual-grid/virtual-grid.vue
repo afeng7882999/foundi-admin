@@ -1,11 +1,11 @@
 <template>
   <div ref="wrapperRef" class="fd-virtual-grid" :class="wrapperClass">
-    <div v-show="!initialized" v-loading="true" class="fd-virtual-grid__loading"></div>
+    <div v-show="!initialized || loading" v-loading="true" class="fd-virtual-grid__loading"></div>
     <template v-if="windowMode">
       <div v-show="length > 0" ref="viewRef" class="fd-virtual-grid__view" :style="viewStyle">
         <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyle">
           <template v-for="(item, idx) in buffer" :key="idx">
-            <slot v-if="item.value === undefined" name="placeholder" :index="item.index" :itemHeight="itemHeightCal" />
+            <slot v-if="item.value === undefined" name="placeholder" :index="item.index" :item-height="itemHeightCal" />
             <slot v-else name="default" :item="item.value" :index="item.index" />
           </template>
         </div>
@@ -16,8 +16,8 @@
         <div v-show="length > 0" ref="viewRef" class="fd-virtual-grid__view" :style="viewStyle">
           <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyle">
             <template v-for="(item, idx) in buffer" :key="idx">
-              <slot v-if="item.value === undefined" name="placeholder" :index="item.index" :itemHeight="itemHeightCal" />
-              <slot v-else name="default" :item="item.value" :index="item.index" />
+              <slot v-if="item.value === undefined" name="placeholder" :index="item.index" :item-height="itemHeightCal" />
+              <slot v-else name="default" :item="item.value" :local-index="item.localIndex" :index="item.index" />
             </template>
           </div>
         </div>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { OFFSET_CHANGED_EVENT, GRID_DEFAULT_PROPS } from './types'
+import { OFFSET_CHANGED_EVENT, GRID_DEFAULT_PROPS, BUFFER_REFRESHED_EVENT } from './types'
 import { computed, ref, watch } from 'vue'
 import useGrid from './use-grid'
 import { Indexable } from '@/common/types'
@@ -47,7 +47,7 @@ const viewRef = ref<HTMLElement>()
 const innerRef = ref<HTMLElement>()
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 
-const emit = defineEmits([OFFSET_CHANGED_EVENT])
+const emit = defineEmits([OFFSET_CHANGED_EVENT, BUFFER_REFRESHED_EVENT])
 
 const {
   initialized,

@@ -38,6 +38,7 @@ export interface FdVirtualGridType {
 }
 
 export const OFFSET_CHANGED_EVENT = 'offset-changed'
+export const BUFFER_REFRESHED_EVENT = 'buffer-refreshed'
 
 export const GRID_DEFAULT_PROPS = {
   // The number of items in the list.
@@ -85,11 +86,11 @@ export const GRID_DEFAULT_PROPS = {
     default: 40,
     validator: (value: number) => Number.isInteger(value) && value >= 1
   },
-  // initial page number used by refresh and initialize
-  initPageNumber: {
+  // initial index of item used by refresh and initialize
+  initIndex: {
     type: Number,
     default: 1,
-    validator: (value: number) => Number.isInteger(value) && value >= 1
+    validator: (value: number) => value >= 0
   },
   // if not limit the height of component, set windowMode true and
   // component is scrolled by window scroller
@@ -97,6 +98,8 @@ export const GRID_DEFAULT_PROPS = {
     type: Boolean,
     default: false
   },
+  // show loading mask
+  loading: Boolean,
   // enable or disable mobile mode
   mobileCompact: {
     type: Boolean,

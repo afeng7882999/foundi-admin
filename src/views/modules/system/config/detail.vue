@@ -27,7 +27,7 @@ export default {
 
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
-import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/crud/hooks/use-detail'
+import useDetail, { OPEN_EDIT_EVENT } from '@/crud/hooks/use-detail'
 import { Config, configFields } from '@/api/system/config'
 
 const stateOption = {
@@ -43,7 +43,7 @@ const stateOption = {
   }
 }
 
-const emit = defineEmits([OPEN_EDIT_EVENT, NAVIGATE_EVENT])
+const emit = defineEmits([OPEN_EDIT_EVENT])
 
 const { detailState: s, detailMethods: m, detailAttrs } = useDetail<Config>(stateOption, emit)
 const { actAttrs } = detailAttrs

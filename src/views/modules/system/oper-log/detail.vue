@@ -59,13 +59,13 @@ export default {
 </script>
 
 <script setup lang="ts">
-import useDetail, { NAVIGATE_EVENT, OPEN_EDIT_EVENT } from '@/crud/hooks/use-detail'
+import useDetail, { OPEN_EDIT_EVENT } from '@/crud/hooks/use-detail'
 import { OperLog, operLogFields } from '@/api/system/oper-log'
 import FdCodeEditor from '@/components/code-editor/index.vue'
 import { formatJson } from '@/utils/lang'
 import { formatTimestamp } from '@/utils/time'
 
-const emit = defineEmits([OPEN_EDIT_EVENT, NAVIGATE_EVENT])
+const emit = defineEmits([OPEN_EDIT_EVENT])
 
 const stateOption = {
   idField: operLogFields.idField,

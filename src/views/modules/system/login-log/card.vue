@@ -1,8 +1,8 @@
 <template>
   <template v-if="item && dicts">
-    <div class="fd-card-default" :class="objClass">
+    <div class="fd-card-default" :class="objClass" @click.stop="onCardClick">
       <div class="fd-card-default__title">
-        <el-checkbox :model-value="getSelected(item)" @change="(checked) => emitSelect(item, checked)" />
+        <el-checkbox v-if="selectMode" :model-value="selected" @click.stop="" @change="(checked) => emitSelect(item, checked)" />
         <fd-fmt-dict class="title-label" :dict="dicts.sysLoginLogType" :data="item.typeDict">
           <template #default="{ values }">
             <span>{{ values[0] }}</span>
@@ -20,10 +20,7 @@
           <el-tooltip v-if="delVisible" :show-after="500" content="删除" placement="top">
             <fd-button class="act-btn" type="icon" color="danger" icon="delete" @click.stop="emitDel(item)" />
           </el-tooltip>
-          <el-divider v-if="delVisible" direction="vertical" />
-          <el-tooltip v-if="detailVisible" :show-after="500" content="详细" placement="top">
-            <fd-button class="act-btn" type="icon" color="primary" icon="view-list" @click.stop="emitDetail(localIndex)" />
-          </el-tooltip>
+          <el-divider v-if="delVisible && editVisible" direction="vertical" />
         </div>
       </div>
       <div class="fd-card-default__label">时间</div>
@@ -59,12 +56,13 @@ defineOptions({
 })
 
 const props = defineProps({
-  localIndex: Number,
+  index: Number,
   item: Object as PropType<LoginLog>,
   dicts: Object as PropType<typeof loginLogDicts>,
-  currentId: {
-    type: String,
-    default: '-1'
+  focusedIndex: Number,
+  selectMode: {
+    type: Boolean,
+    default: false
   },
   selectedItems: {
     type: Array as PropType<LoginLog[]>,
@@ -82,7 +80,6 @@ const props = defineProps({
     type: [String, Boolean] as PropType<string | boolean>,
     default: false
   },
-  // enable or disable mobile mode
   mobileCompact: {
     type: Boolean,
     default: true
@@ -93,19 +90,21 @@ const selectedIds = computed(() => {
   return props.selectedItems.map((item) => item.id)
 })
 
-const getFocused = (item: LoginLog) => {
-  return item.id === props.currentId
-}
+const selected = computed(() => {
+  return props.item !== undefined && selectedIds.value.includes(props.item.id)
+})
 
-const getSelected = (item: LoginLog) => {
-  selectedIds.value.includes(item.id)
+const onCardClick = () => {
+  if (props.selectMode) {
+    emitSelect(props.item as LoginLog, !selected.value)
+  } else {
+    emitDetail()
+  }
 }
 
 const emit = defineEmits(['detail', 'del', 'select', 'offsetChanged'])
-const emitDetail = (localIndex: number) => {
-  if (delVisible.value) {
-    emit('detail', localIndex)
-  }
+const emitDetail = () => {
+  emit('detail', { index: props.index, item: props.item })
 }
 const emitDel = (item: LoginLog) => {
   emit('del', item)
@@ -127,7 +126,9 @@ const booleanOrAuth = (val: boolean | string) => {
 const detailVisible = computed(() => {
   return booleanOrAuth(props.detail)
 })
-
+const editVisible = computed(() => {
+  return booleanOrAuth(props.edit)
+})
 const delVisible = computed(() => {
   return booleanOrAuth(props.del)
 })
@@ -135,7 +136,10 @@ const delVisible = computed(() => {
 const { isMobile } = useLayoutSize(props.mobileCompact)
 const objClass = computed(() => {
   const clazz = []
-  if (getFocused(props.item as LoginLog)) {
+  if (selected.value) {
+    clazz.push('is-selected')
+  }
+  if (props.focusedIndex !== undefined && props.focusedIndex === props.index) {
     clazz.push('is-focused')
   }
   if (isMobile.value) {
@@ -163,6 +167,7 @@ const objClass = computed(() => {
   background-color: var(--el-color-white);
   border: 1px solid transparent;
   border-radius: var(--el-border-radius-base);
+  cursor: pointer;
 
   &.is-loading {
     display: block;
@@ -172,8 +177,12 @@ const objClass = computed(() => {
     background-color: var(--el-bg-color);
   }
 
-  &.is-focused {
+  &.is-focused,
+  &.is-selected {
     background-color: var(--el-color-primary-light-9);
+  }
+
+  &.is-selected {
     border-color: var(--el-color-primary);
   }
 
@@ -183,10 +192,13 @@ const objClass = computed(() => {
     align-items: center;
     .title-label {
       font-size: var(--el-font-size-base);
-      margin: 0 4px 0 8px;
+      margin: 0 4px 0 0;
     }
     ::v-deep(.title-tag) {
       margin-left: 8px;
+    }
+    ::v-deep(.el-checkbox) {
+      width: 22px;
     }
   }
 

@@ -9,7 +9,7 @@
     "svgo:icon": "svgo -f src/assets/svg/icons"
   },
   "dependencies": {
-    "@vueuse/core": "^7.6.2",
+    "@vueuse/core": "^8.4.2",
     "axios": "^0.24.0",
     "china-area-data": "^5.0.1",
     "codemirror": "^5.62.2",
