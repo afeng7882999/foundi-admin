@@ -104,7 +104,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     // 是否使用卡片模式
     gridViewEnable: true,
     // 卡片模式
-    gridView: false,
+    gridView: true,
     // 卡片选择模式
     gridSelectMode: false,
     // 卡片模式，当前页第一项的索引值
@@ -348,7 +348,9 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const queryList = async () => {
     if (listState.gridView) {
       listState.gridPageState.current = 1
+      listState.loading = true
       await grid.value.refresh()
+      listState.loading = false
       return
     }
 
@@ -903,7 +905,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       'onUpdate:queryVisible': (val: boolean) => (listState.queryFormShow = val),
       gridViewEnable: listState.gridViewEnable,
       gridView: listState.gridView,
-      gridPage: { index: listState.gridFirstIndexInPage, total: listState.pageState.total },
+      gridPage: { index: listState.gridFirstIndexInPage, total: listState.gridPageState.total },
       onToggleGridView: toggleGridView,
       onToggleSelectMode: toggleSelectMode,
       onCreate: showEdit,
@@ -978,9 +980,9 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     return {
       length: listState.gridPageState.total,
       pageSize: listState.gridPageState.siz,
-      gridInitIndex: listState.gridInitIndex,
+      initIndex: listState.gridInitIndex,
       pageProvider: pageProvider,
-      windowMode: false,
+      windowMode: true,
       loading: listState.loading,
       onOffsetChanged: gridOffsetChanged,
       onBufferRefreshed: gridBufferRefreshed

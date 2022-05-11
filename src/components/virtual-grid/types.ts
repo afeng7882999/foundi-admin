@@ -89,7 +89,7 @@ export const GRID_DEFAULT_PROPS = {
   // initial index of item used by refresh and initialize
   initIndex: {
     type: Number,
-    default: 1,
+    default: 0,
     validator: (value: number) => value >= 0
   },
   // if not limit the height of component, set windowMode true and

@@ -1,6 +1,6 @@
 <template>
   <template v-if="isMobile">
-    <div class="fd-page" :style="docHeight" :class="objClass">
+    <div class="fd-page" :style="docMinHeight" :class="objClass">
       <fd-page-header v-show="showPageHeader"></fd-page-header>
       <fd-drawer
         v-if="hasQuery"
@@ -27,6 +27,7 @@
       </fd-drawer>
       <slot name="act" />
       <slot name="grid" />
+      <el-backtop></el-backtop>
     </div>
   </template>
   <template v-else>
