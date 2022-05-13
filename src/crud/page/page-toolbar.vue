@@ -1,7 +1,7 @@
 <template>
   <template v-if="visibleCo">
     <div class="fd-page-toolbar" :class="objClass">
-      <template v-if="!isMobile">
+      <template v-if="!isMobileCo">
         <div class="fd-page-toolbar__left">
           <template v-if="query">
             <el-tooltip :content="queryVisible ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
@@ -54,7 +54,6 @@
               />
             </el-badge>
           </template>
-          <fd-button v-if="delVisible" type="toolbar" label="删除" icon="delete" @click="emit('del')" />
           <fd-button v-if="createVisible" type="toolbar" label="新增" icon="plus" @click="emit('create')" />
           <fd-button v-if="editVisible" type="toolbar" label="编辑" icon="write" @click="emit('edit')" />
           <div v-show="false">
@@ -72,6 +71,19 @@
         </div>
       </template>
     </div>
+    <el-affix v-if="isMobileCo" class="fd-page-toolbar__top">
+      <div class="fd-page-toolbar__pagination is-mobile">
+        <div class="pagination-current" @click.stop="toggleMobilePaginationVisible">
+          <span class="current-text">第{{ gridPage.index + 1 }}条 / 共{{ gridPage.total }}条</span>
+          <fd-icon class="current-icon" icon="right" :class="currentIconClassCo" />
+        </div>
+        <transition name="expand" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave" @enter="expandEnter">
+          <div v-show="state.mobilePaginationVisible" class="pagination-page">
+            <el-pagination v-bind="pagination" />
+          </div>
+        </transition>
+      </div>
+    </el-affix>
     <fd-contextmenu ref="contextMenu">
       <fd-contextmenu-item
         v-for="item in state.compactButtons"
@@ -86,7 +98,7 @@
         <fd-contextmenu-item label="导出当前页" @click="emit('export')" />
         <fd-contextmenu-item label="导出全部页" @click="emit('exportAll')" />
       </fd-contextmenu-submenu>
-      <template v-if="gridViewEnable">
+      <template v-if="gridViewEnable && !isMobileCo">
         <fd-contextmenu-item v-if="exportVisible" divider />
         <fd-contextmenu-item
           :icon="gridView ? 'table-row' : 'view-grid-detail'"
@@ -110,10 +122,10 @@ import { TableSettingProp } from '@/components/table/types'
 import FdContextmenuItem from '@/components/contextmenu/item.vue'
 import FdContextmenuSubmenu from '@/components/contextmenu/submenu.vue'
 import { ApiQuery } from '@/api'
-import useLayoutSize from '@/hooks/use-layout-size'
 import { CompactButton, GridPage } from '@/crud/page/types'
 import { Indexable } from '@/common/types'
 import FdTableOptionSubmenu from './table-option-submenu.vue'
+import useExpandTransition from '@/hooks/use-expand-transition'
 
 defineOptions({
   name: 'FdPageToolbar'
@@ -164,6 +176,7 @@ const props = defineProps({
     default: true
   },
   gridPage: Object as PropType<GridPage>,
+  isMobile: Boolean,
   mobileCompact: {
     type: Boolean,
     default: true
@@ -172,7 +185,8 @@ const props = defineProps({
 
 const state = reactive({
   showedButtons: [] as CompactButton[],
-  compactButtons: [] as CompactButton[]
+  compactButtons: [] as CompactButton[],
+  mobilePaginationVisible: false
 })
 
 const visibleCo = computed(() => {
@@ -235,10 +249,13 @@ const queryLenCo = computed(() => {
   return len
 })
 
-const { isMobile } = useLayoutSize(props.mobileCompact)
+const isMobileCo = computed(() => {
+  return props.mobileCompact && props.isMobile
+})
+
 const objClass = computed(() => {
   const clazz = []
-  if (isMobile.value) {
+  if (isMobileCo.value) {
     clazz.push('is-mobile')
   }
   return clazz.join(' ')
@@ -270,8 +287,16 @@ const compactButtons = () => {
 }
 
 onMounted(() => {
-  if (isMobile.value) {
+  if (isMobileCo.value) {
     compactButtons()
   }
 })
+
+const { expandAfterEnter, expandBeforeLeave, expandEnter } = useExpandTransition()
+const currentIconClassCo = computed(() => {
+  return state.mobilePaginationVisible ? 'is-expanded' : ''
+})
+const toggleMobilePaginationVisible = () => {
+  state.mobilePaginationVisible = !state.mobilePaginationVisible
+}
 </script>

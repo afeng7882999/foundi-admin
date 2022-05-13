@@ -41,7 +41,8 @@ export default defineConfig({
         drop_console: true,
         drop_debugger: true
       }
-    }
+    },
+    minify: 'terser'
   },
   server: {
     port: 3000,

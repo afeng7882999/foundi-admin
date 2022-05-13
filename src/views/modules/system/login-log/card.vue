@@ -2,6 +2,7 @@
   <template v-if="item && dicts">
     <div class="fd-card-default" :class="objClass" @click.stop="onCardClick">
       <div class="fd-card-default__title">
+        {{ index }}
         <el-checkbox v-if="selectMode" :model-value="selected" @click.stop="" @change="(checked) => emitSelect(item, checked)" />
         <fd-fmt-dict class="title-label" :dict="dicts.sysLoginLogType" :data="item.typeDict">
           <template #default="{ values }">
@@ -38,7 +39,7 @@
     </div>
   </template>
   <template v-else>
-    <div class="fd-card-default is-loading">
+    <div class="fd-card-default is-loading" :class="objClass">
       <el-skeleton :rows="3" />
     </div>
   </template>
@@ -219,9 +220,6 @@ const objClass = computed(() => {
     max-width: 100%;
     border-radius: 0;
     border-bottom: 1px solid var(--el-border-color-base);
-    &.is-focused {
-      border-color: var(--el-color-primary);
-    }
   }
 
   @include theme-s() {

@@ -15,6 +15,7 @@ import { DictList } from '@/api/system/dict-item'
 import { AnyFunction, Indexable } from '@/common/types'
 import { MaybeRef, useThrottleFn } from '@vueuse/core'
 import { FdVirtualGridType, InternalItem } from '@/components/virtual-grid/types'
+import useLayoutSize from "@/hooks/use-layout-size";
 
 export interface PageState {
   // 页码
@@ -104,7 +105,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     // 是否使用卡片模式
     gridViewEnable: true,
     // 卡片模式
-    gridView: true,
+    gridView: false,
     // 卡片选择模式
     gridSelectMode: false,
     // 卡片模式，当前页第一项的索引值
@@ -883,6 +884,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   // default attrs
   //===============================================================================
 
+  const { isMobile } = useLayoutSize()
+
   // fd-page-main默认参数
   const pageMainAttrs = computed(() => {
     return {
@@ -892,7 +895,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       'onUpdate:queryVisible': (val: boolean) => (listState.queryFormShow = val),
       queryFn: queryList,
       gridView: listState.gridView,
-      pagination: paginationAttrs.value
+      pagination: paginationAttrs.value,
+      isMobile: isMobile.value
     }
   })
 
@@ -919,7 +923,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         stripe: () => stripe,
         border: () => border
       },
-      pagination: paginationAttrs.value
+      pagination: paginationAttrs.value,
+      isMobile: isMobile.value
     }
   })
 
@@ -969,7 +974,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       pageSizes: [20, 50, 100, 200],
       total: listState.gridPageState.total,
       pagerCount: 5,
-      layout: 'sizes, prev, pager, next',
+      layout: isMobile.value ? 'sizes, pager' : 'sizes, prev, pager, next',
       onCurrentChange: gridPageChange,
       onSizeChange: gridPageSizeChange
     }
@@ -982,7 +987,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       pageSize: listState.gridPageState.siz,
       initIndex: listState.gridInitIndex,
       pageProvider: pageProvider,
-      windowMode: true,
+      windowMode: isMobile.value,
       loading: listState.loading,
       onOffsetChanged: gridOffsetChanged,
       onBufferRefreshed: gridBufferRefreshed

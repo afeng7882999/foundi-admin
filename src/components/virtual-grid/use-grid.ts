@@ -42,11 +42,11 @@ const getVerticalScrollParent = (el: Element, includeHidden = false): Element =>
 const getHeightAbove = (viewEl: Element, wrapperEl?: Element): number => {
   if (wrapperEl) {
     const top = viewEl.getBoundingClientRect().top - wrapperEl.getBoundingClientRect().top
-    return Math.abs(Math.min(top, 0))
+    return Math.ceil(Math.abs(Math.min(top, 0)))
   }
-  // page mode
+  // window mode
   const top = viewEl.getBoundingClientRect().top
-  return Math.abs(Math.min(top, 0))
+  return Math.ceil(Math.abs(Math.min(top, 0)))
 }
 
 /**
@@ -317,7 +317,7 @@ export default function useGrid(
       addScrollEventListener(props.windowMode)
 
       await nextFrame(() => {
-        scrollToIdx(props.initIndex as number, false)
+        props.initIndex && scrollToIdx(props.initIndex as number, false)
         state.initialized = true
       })
     }
@@ -405,8 +405,13 @@ export default function useGrid(
    */
   const scrollToIdx = (idx: number, smooth = true): void => {
     idx = Math.max(idx, 0)
+    if (idx === 0) {
+      // just scroll to top
+      scrollEl?.scrollTo({ top: 0, behavior: smooth ? 'smooth' : undefined })
+      return
+    }
     const viewEl = viewRef.value as HTMLElement
-    const topToView = scrollEl instanceof HTMLElement ? viewEl.offsetTop - scrollEl.offsetTop : 0
+    const topToView = props.windowMode ? viewEl.getBoundingClientRect().top + window.scrollY : 0
     const scrollTop = Math.floor(idx / resizeMeasurement.columns) * resizeMeasurement.itemHeightWithGap + topToView
     scrollEl?.scrollTo({ top: scrollTop, behavior: smooth ? 'smooth' : undefined })
   }

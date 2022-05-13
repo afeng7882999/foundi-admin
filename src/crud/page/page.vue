@@ -1,5 +1,5 @@
 <template>
-  <template v-if="isMobile">
+  <template v-if="isMobileCo">
     <div class="fd-page" :style="docMinHeight" :class="objClass">
       <fd-page-header v-show="showPageHeader"></fd-page-header>
       <fd-drawer
@@ -38,7 +38,7 @@
         <slot v-if="gridView" name="grid" />
         <div v-else ref="tableWrapper" class="fd-page__table is-bordered">
           <slot name="table" />
-          <el-pagination v-if="!isMobile" class="fd-pagination" v-bind="pagination"></el-pagination>
+          <el-pagination v-if="!isMobileCo" class="fd-pagination" v-bind="pagination"></el-pagination>
         </div>
       </template>
       <fd-split-pane
@@ -77,7 +77,7 @@
           <slot v-if="gridView" name="grid" />
           <div v-else ref="tableWrapper" class="fd-page__table is-bordered">
             <slot name="table" />
-            <el-pagination v-if="!isMobile" class="fd-pagination" v-bind="pagination"></el-pagination>
+            <el-pagination v-if="!isMobileCo" class="fd-pagination" v-bind="pagination"></el-pagination>
           </div>
         </template>
       </fd-split-pane>
@@ -120,6 +120,7 @@ const props = defineProps({
     default: false
   },
   pagination: Object,
+  isMobile: Boolean,
   mobileCompact: {
     type: Boolean,
     default: true
@@ -138,12 +139,14 @@ watch(
   { immediate: true, deep: true }
 )
 
-const { isMobile } = useLayoutSize(props.mobileCompact)
+const isMobileCo = computed(() => {
+  return props.mobileCompact && props.isMobile
+})
 
 const objClass = computed(() => {
   const clazz = []
   clazz.push(`page-${props.name}`)
-  if (isMobile.value) {
+  if (isMobileCo.value) {
     clazz.push('is-mobile')
   }
   return clazz.join(' ')
