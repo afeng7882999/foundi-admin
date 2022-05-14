@@ -5,8 +5,7 @@
       <div v-show="length > 0" ref="viewRef" class="fd-virtual-grid__view" :style="viewStyle">
         <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyle">
           <template v-for="(item, idx) in buffer" :key="idx">
-            <slot v-if="item.value === undefined" name="placeholder" :index="item.index" :item-height="itemHeightCal" />
-            <slot v-else name="default" :item="item.value" :index="item.index" />
+            <slot :item="item.value" :index="item.index" :item-height="itemHeightCal" />
           </template>
         </div>
       </div>
@@ -16,8 +15,7 @@
         <div v-show="length > 0" ref="viewRef" class="fd-virtual-grid__view" :style="viewStyle">
           <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyle">
             <template v-for="(item, idx) in buffer" :key="idx">
-              <slot v-if="item.value === undefined" name="placeholder" :index="item.index" :item-height="itemHeightCal" />
-              <slot v-else name="default" :item="item.value" :local-index="item.localIndex" :index="item.index" />
+              <slot :item="item.value" :index="item.index" :item-height="itemHeightCal" />
             </template>
           </div>
         </div>

@@ -35,11 +35,10 @@ export function scrollTo(start: number, end: number, move: (val: number) => void
 /**
  * 横向滚动
  */
-export function scrollElementH(target: HTMLElement, end: HTMLElement | number, duration = 300) {
-  const endNum = isNumber(end) ? end : end.scrollLeft
+export function scrollElementH(target: Element, end: number, duration = 300) {
   scrollTo(
     target.scrollLeft,
-    endNum,
+    end,
     (val) => {
       target.scrollLeft = val
     },
@@ -50,11 +49,10 @@ export function scrollElementH(target: HTMLElement, end: HTMLElement | number, d
 /**
  * 纵向滚动
  */
-export function scrollElementV(target: HTMLElement, end: HTMLElement | number, duration = 300) {
-  const endNum = isNumber(end) ? end : end.scrollTop
+export function scrollElementV(target: Element, end: number, duration = 300) {
   scrollTo(
     target.scrollTop,
-    endNum,
+    end,
     (val) => {
       target.scrollTop = val
     },
@@ -81,7 +79,7 @@ function setDocumentTop(val: number) {
 /**
  * 页面纵向滚动
  */
-export function scrollDocH(end: HTMLElement | number, duration = 300) {
+export function scrollDocH(end: Element | number, duration = 300) {
   const endNum = isNumber(end) ? end : end.scrollTop
   scrollTo(getDocumentTop(), endNum, (val) => setDocumentTop(val), duration)
 }

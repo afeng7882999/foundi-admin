@@ -7,7 +7,10 @@ import {
   ItemsByPage,
   PageProvider,
   ResizeMeasurement,
-  BUFFER_REFRESHED_EVENT
+  BUFFER_REFRESHED_EVENT,
+  SMOOTH_SCROLL_THRESHOLD,
+  SMOOTH_SCROLL_DURATION,
+  DEBOUNCE_DEFAULT_TIME
 } from './types'
 import { clamp, concat, difference, isEqual, parseInt, range } from 'lodash-es'
 import { ExtractPropTypes, onMounted, onUnmounted, reactive, toRefs, watch } from 'vue'
@@ -15,6 +18,7 @@ import { Ref } from '@vue/reactivity'
 import { useDebounceFn, useResizeObserver } from '@vueuse/core'
 import { nextFrame } from '@/utils/next-frame'
 import { AnyFunction } from '@/common/types'
+import { scrollTo } from '@/utils/smooth-scroll'
 
 /**
  * Get scrollable parent
@@ -34,6 +38,41 @@ const getVerticalScrollParent = (el: Element, includeHidden = false): Element =>
     if (overflowRegex.test(parentStyle.overflow + parentStyle.overflowY)) return parent
   }
   return document.scrollingElement || document.documentElement
+}
+
+/**
+ * Smooth scroll to end, with duration and threshold
+ */
+export function smoothScroll(target: Element | Window, end: number, duration: number, threshold = SMOOTH_SCROLL_THRESHOLD) {
+  const start = target instanceof Element ? target.scrollTop : window.scrollY
+  const smoothEnd = end > start ? start + threshold : start - threshold
+  if (target instanceof Element) {
+    // element target
+    scrollTo(
+      start,
+      smoothEnd,
+      (val) => {
+        target.scrollTop = val
+      },
+      duration
+    )
+    window.setTimeout(() => {
+      target.scrollTop = end
+    }, duration)
+  } else {
+    // target is window
+    scrollTo(
+      start,
+      smoothEnd,
+      (val) => {
+        window.scrollTo({ top: val })
+      },
+      duration
+    )
+    window.setTimeout(() => {
+      window.scrollTo({ top: end })
+    }, duration)
+  }
 }
 
 /**
@@ -238,8 +277,8 @@ export default function useGrid(
     }
     if (pageChanged || needRefresh) {
       bufferOffset = bufferMeta.bufferedOffset
-      state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
       state.innerTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
+      state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
     }
     if (!pageChanged && needRefresh) {
       emitBufferRefreshedDebounce()
@@ -254,8 +293,8 @@ export default function useGrid(
       const itemPn = items.map((i) => i.pageNumber)
       if (isEqual(visiblePageNumbers, itemPn)) {
         itemByPages = items
-        state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
         state.innerTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
+        state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
         emitBufferRefreshed()
       }
     })
@@ -277,7 +316,7 @@ export default function useGrid(
     state.viewHeight = getViewHeight(resizeMeasurement, props.length as number)
     await getBuffer()
   }
-  const resizeObserverCbDebounce = useDebounceFn(resizeObserverCb, 300)
+  const resizeObserverCbDebounce = useDebounceFn(resizeObserverCb, DEBOUNCE_DEFAULT_TIME)
 
   /**
    * Callback of wrapper scrolling
@@ -313,6 +352,7 @@ export default function useGrid(
       const wrapperHeight = getWrapperHeight()
       bufferMeta = getBufferMeta(wrapperHeight, heightAbove, resizeMeasurement)
       visiblePageNumbers = getVisiblePageNumbers(bufferMeta, props.length as number, props.pageSize as number)
+      emitBufferRefreshed()
 
       addScrollEventListener(props.windowMode)
 
@@ -390,7 +430,7 @@ export default function useGrid(
       emit(OFFSET_CHANGED_EVENT, { index, localIndex, page })
     }
   }
-  const emitCurrentItemDebounce = useDebounceFn(emitCurrentItem, 300)
+  const emitCurrentItemDebounce = useDebounceFn(emitCurrentItem, DEBOUNCE_DEFAULT_TIME)
 
   /**
    * Emit after buffer changed
@@ -398,29 +438,29 @@ export default function useGrid(
   const emitBufferRefreshed = () => {
     emit(BUFFER_REFRESHED_EVENT, { index: currentIdx, localIndex: currentIdx - bufferOffset, buffer: state.buffer })
   }
-  const emitBufferRefreshedDebounce = useDebounceFn(emitBufferRefreshed, 300)
+  const emitBufferRefreshedDebounce = useDebounceFn(emitBufferRefreshed, DEBOUNCE_DEFAULT_TIME)
 
   /**
    * Scroll to item with a specific index
    */
-  const scrollToIdx = (idx: number, smooth = true): void => {
+  const scrollToIdx = (idx: number, smooth = true, offset = 0): void => {
     idx = Math.max(idx, 0)
     if (idx === 0) {
       // just scroll to top
-      scrollEl?.scrollTo({ top: 0, behavior: smooth ? 'smooth' : undefined })
+      scrollEl && smoothScroll(scrollEl, 0, smooth ? SMOOTH_SCROLL_DURATION : 0)
       return
     }
     const viewEl = viewRef.value as HTMLElement
     const topToView = props.windowMode ? viewEl.getBoundingClientRect().top + window.scrollY : 0
-    const scrollTop = Math.floor(idx / resizeMeasurement.columns) * resizeMeasurement.itemHeightWithGap + topToView
-    scrollEl?.scrollTo({ top: scrollTop, behavior: smooth ? 'smooth' : undefined })
+    const scrollTop = Math.floor(idx / resizeMeasurement.columns) * resizeMeasurement.itemHeightWithGap + topToView - offset
+    scrollEl && smoothScroll(scrollEl, scrollTop, smooth ? SMOOTH_SCROLL_DURATION : 0)
   }
 
   /**
    * Scroll to specific page
    */
-  const scrollToPage = (pageNumber: number, smooth = true): void => {
-    scrollToIdx((pageNumber - 1) * props.pageSize, smooth)
+  const scrollToPage = (pageNumber: number, smooth = true, offset = 0): void => {
+    scrollToIdx((pageNumber - 1) * props.pageSize, smooth, offset)
   }
 
   /**

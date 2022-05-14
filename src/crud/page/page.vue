@@ -27,7 +27,6 @@
       </fd-drawer>
       <slot name="act" />
       <slot name="grid" />
-      <el-backtop></el-backtop>
     </div>
   </template>
   <template v-else>
@@ -94,7 +93,6 @@ import { computed, PropType, reactive, ref, toRaw, useSlots, watch } from 'vue'
 import { cloneDeep } from 'lodash-es'
 import { ApiQuery } from '@/api'
 import { sizeConst } from '@/hooks/use-layout-size'
-import useLayoutSize from '@/hooks/use-layout-size'
 
 defineOptions({
   name: 'FdPage'

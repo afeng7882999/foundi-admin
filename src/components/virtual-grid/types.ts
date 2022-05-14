@@ -31,11 +31,15 @@ export interface InternalItem {
 }
 
 export interface FdVirtualGridType {
-  scrollToIdx: (idx: number) => void
-  scrollToPage: (pageNumber: number) => void
+  scrollToIdx: (idx: number, smooth?: boolean, offset?: number) => void
+  scrollToPage: (pageNumber: number, smooth?: boolean, offset?: number) => void
   refresh: () => Promise<void>
   refreshBuffer: () => Promise<void>
 }
+
+export const DEBOUNCE_DEFAULT_TIME = 300
+export const SMOOTH_SCROLL_DURATION = 500
+export const SMOOTH_SCROLL_THRESHOLD = 10000
 
 export const OFFSET_CHANGED_EVENT = 'offset-changed'
 export const BUFFER_REFRESHED_EVENT = 'buffer-refreshed'

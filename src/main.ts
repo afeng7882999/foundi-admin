@@ -20,6 +20,7 @@ import FdTableAll from '@/components/table'
 import FdFormAll from '@/components/form'
 import FdButtonAll from '@/components/button'
 import FdVirtualGrid from '@/components/virtual-grid'
+import FdCardAll from '@/components/card'
 
 import FdForm from '@/extend/form'
 import FdDialog from '@/extend/dialog'
@@ -44,6 +45,7 @@ app
   .use(FdFormAll)
   .use(FdButtonAll)
   .use(FdVirtualGrid)
+  .use(FdCardAll)
   .use(FdForm)
   .use(FdDialog)
   .use(FdDrawer)

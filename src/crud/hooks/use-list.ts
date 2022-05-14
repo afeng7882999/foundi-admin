@@ -312,7 +312,9 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     listState.loading = true
     await nextFrame(async () => {
       await getDictData()
-      await getList()
+      if (!listState.gridView) {
+        await getList()
+      }
     })
   })
 
@@ -605,7 +607,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   const gridPageChange = (val: number) => {
     listState.gridPageState.current = val
-    grid.value.scrollToPage(val)
+    grid.value.scrollToPage(val, true, isMobile.value ? 89 : 0)
   }
 
   const gridPageSizeChange = async (val: number) => {
@@ -1001,6 +1003,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       focusedIndex: listState.gridFocusIndex,
       selectMode: listState.gridSelectMode,
       selectedItems: listState.selectedItems,
+      isMobile: isMobile.value,
       onDetail: gridShowDetail,
       onDel: del,
       onSelect: gridSelected
