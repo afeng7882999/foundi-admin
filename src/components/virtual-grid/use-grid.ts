@@ -252,7 +252,8 @@ export default function useGrid(
     itemHeight: props.itemHeight ?? 100,
     buffer: [] as InternalItem[],
     viewHeight: 0,
-    innerTranslate: 0
+    innerTranslate: 0,
+    fixColumns: 0
   })
 
   /**
@@ -293,6 +294,7 @@ export default function useGrid(
       const itemPn = items.map((i) => i.pageNumber)
       if (isEqual(visiblePageNumbers, itemPn)) {
         itemByPages = items
+        state.fixColumns = items.length < resizeMeasurement.columns ? resizeMeasurement.columns : 0
         state.innerTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
         state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
         emitBufferRefreshed()
@@ -348,6 +350,7 @@ export default function useGrid(
     // initialize the grid and scroll to initIndex
     const initGrid = async () => {
       resizeMeasurement = getResizeMeasurement(innerRef.value as Element, state.itemHeight)
+      state.fixColumns = itemByPages[0].items.length < resizeMeasurement.columns ? resizeMeasurement.columns : 0
       state.viewHeight = getViewHeight(resizeMeasurement, props.length as number)
       const wrapperHeight = getWrapperHeight()
       bufferMeta = getBufferMeta(wrapperHeight, heightAbove, resizeMeasurement)
@@ -482,7 +485,7 @@ export default function useGrid(
     })
   }
 
-  const { initialized, wrapperRect, itemHeight, buffer, viewHeight, innerTranslate } = toRefs(state)
+  const { initialized, wrapperRect, itemHeight, buffer, viewHeight, innerTranslate, fixColumns } = toRefs(state)
   return {
     initialized,
     wrapperRect,
@@ -490,6 +493,7 @@ export default function useGrid(
     viewHeight,
     innerTranslate,
     buffer,
+    fixColumns,
     scrollToIdx,
     scrollToPage,
     refresh,

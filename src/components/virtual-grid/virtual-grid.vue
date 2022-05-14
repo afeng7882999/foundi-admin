@@ -31,6 +31,7 @@ import useGrid from './use-grid'
 import { Indexable } from '@/common/types'
 import { ElScrollbar } from 'element-plus'
 import useLayoutSize from '@/hooks/use-layout-size'
+import { fill } from 'lodash-es'
 
 defineOptions({
   name: 'FdVirtualGrid'
@@ -54,6 +55,7 @@ const {
   buffer,
   viewHeight,
   innerTranslate,
+  fixColumns,
   scrollToIdx,
   scrollToPage,
   refresh,
@@ -96,7 +98,9 @@ const innerStyle = computed(() => {
   }
 
   style.gap = `${props.gridGap}px`
-  if (props.itemWidth) {
+  if (fixColumns.value > 0) {
+    style.gridTemplateColumns = fill(Array(fixColumns.value), '1fr').join(' ')
+  } else if (props.itemWidth) {
     style.gridTemplateColumns = `repeat(auto-fit, ${props.itemWidth}px)`
   } else if (props.itemMinWidth) {
     style.gridTemplateColumns = `repeat(auto-fit, minmax(${props.itemMinWidth}px, 1fr))`

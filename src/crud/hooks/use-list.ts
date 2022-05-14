@@ -15,7 +15,7 @@ import { DictList } from '@/api/system/dict-item'
 import { AnyFunction, Indexable } from '@/common/types'
 import { MaybeRef, useThrottleFn } from '@vueuse/core'
 import { FdVirtualGridType, InternalItem } from '@/components/virtual-grid/types'
-import useLayoutSize from "@/hooks/use-layout-size";
+import useLayoutSize from '@/hooks/use-layout-size'
 
 export interface PageState {
   // 页码
@@ -158,7 +158,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     // 导出Excel文件名前缀
     exportTitle: '导出',
     // 等待时间
-    waitAfterGet: 50,
+    waitAfterGet: 200,
     // 导出的 Loading
     exportLoading: false,
     // 表格 Loading 属性
@@ -353,7 +353,9 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       listState.gridPageState.current = 1
       listState.loading = true
       await grid.value.refresh()
-      listState.loading = false
+      setTimeout(() => {
+        listState.loading = false
+      }, listState.waitAfterGet)
       return
     }
 
