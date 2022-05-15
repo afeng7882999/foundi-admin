@@ -52,7 +52,7 @@ watch(
 onMounted(() => {
   bus.on(({ event, id }) => {
     if (state.elId === id) {
-      _show(event.pageY, event.pageX)
+      _show(event.clientY, event.clientX)
     } else {
       hide()
     }
@@ -64,6 +64,7 @@ onBeforeUnmount(() => {
 })
 
 const show = (e: MouseEvent) => {
+  console.log(e)
   if (!props.disabled) {
     bus.emit({ event: e, id: state.elId })
   }
