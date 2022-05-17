@@ -33,7 +33,7 @@ defineOptions({
 const store = useStore<AllState>()
 const storeState = store.state as AllState
 
-const { addResizeObserver, doLayoutResize, isMobileOrPad } = useLayoutSize()
+const { addResizeObserver, doLayoutResize, isMobileOrPad, isMobile } = useLayoutSize()
 
 const appSetting = ref()
 
@@ -73,10 +73,23 @@ const classObj = computed(() => {
     'is-sidebar-minimized': mode.value.minimized,
     'is-sidebar-opened': mode.value.opened,
     'is-pad': isMobileOrPad.value,
+    'is-mobile': isMobile.value,
     'is-enable-tags': enableTags.value,
     'is-fixed-header': fixedHeader.value
   }
 })
+
+watch(
+  () => isMobile.value,
+  (val) => {
+    if (val) {
+      document.body.classList.add('is-mobile')
+    } else {
+      document.body.classList.remove('is-mobile')
+    }
+  },
+  { immediate: true }
+)
 
 watch(
   () => isMobileOrPad.value,

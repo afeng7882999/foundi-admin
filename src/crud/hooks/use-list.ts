@@ -318,9 +318,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     listState.loading = true
     await nextFrame(async () => {
       await getDictData()
-      if (!listState.gridView) {
-        await getList()
+      if (listState.gridView || isMobile.value) {
+        return
       }
+      await getList()
     })
   })
 
@@ -357,7 +358,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 查询方法
   const queryList = async () => {
-    if (listState.gridView) {
+    if (listState.gridView || isMobile.value) {
       await gridQueryList()
       return
     }
@@ -526,7 +527,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       listState.delLoading = true
       await listState.delApi(ids)
 
-      if (listState.gridView) {
+      if (listState.gridView || isMobile.value) {
         await grid.value.refreshBuffer()
       }
 
@@ -596,6 +597,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const gridQueryList = async () => {
     listState.gridPageState.current = 1
     listState.selectedItems = []
+    console.log('query')
     await grid.value.refresh()
   }
 
@@ -613,6 +615,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         orderByList.push(`${s.prop}:${s.order}`)
       })
     }
+
+    console.log(listState.query)
 
     return {
       current: listState.gridPageState.current,

@@ -440,7 +440,11 @@ export default function useGrid(
     state.loading = true
     heightAbove = 0
     visiblePageNumbers = []
-    await init()
+    scrollToIdx(0, false)
+    await getBuffer()
+    setTimeout(() => {
+      state.loading = false
+    }, props.loadingWait)
   }
 
   /**
