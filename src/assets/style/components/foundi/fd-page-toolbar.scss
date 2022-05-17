@@ -27,6 +27,10 @@
         margin-bottom: 0;
       }
       
+      .el-form-item__label {
+        padding: 0;
+      }
+      
       .el-form--inline .el-form-item {
         margin-right: 16px;
         &:last-child {
@@ -66,11 +70,13 @@
   }
   
   &__badge {
+    margin-right: 12px;
     sup {
       height: 12px;
       line-height: 12px;
       border: none;
       border-radius: 10px;
+      transform: translateY(-30%) translateX(100%) !important;
     }
   }
   
@@ -91,7 +97,6 @@
     border-right: none;
     border-radius: 0;
     z-index: $index-top;
-    // transform: translateZ(0);
     
     .fd-page-toolbar__center {
       margin-bottom: 0;

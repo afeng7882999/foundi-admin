@@ -38,8 +38,6 @@ export interface FdVirtualGridType {
 }
 
 export const DEBOUNCE_DEFAULT_TIME = 300
-export const SMOOTH_SCROLL_DURATION = 500
-export const SMOOTH_SCROLL_THRESHOLD = 10000
 
 export const OFFSET_CHANGED_EVENT = 'offset-changed'
 export const BUFFER_REFRESHED_EVENT = 'buffer-refreshed'
@@ -96,14 +94,21 @@ export const GRID_DEFAULT_PROPS = {
     default: 0,
     validator: (value: number) => value >= 0
   },
-  // if not limit the height of component, set windowMode true and
-  // component is scrolled by window scroller
+  // set windowMode true, component is scrolled by window scroller
   windowMode: {
     type: Boolean,
     default: false
   },
-  // show loading mask
-  loading: Boolean,
+  // delay of hiding loading mask
+  loadingWait: {
+    type: Number,
+    default: 300
+  },
+  // distance subtracted when scrolling
+  scrollOffset: {
+    type: Number,
+    default: 0
+  },
   // enable or disable mobile mode
   mobileCompact: {
     type: Boolean,

@@ -48,7 +48,7 @@ export type ListStateOption<T extends ApiObj> = Partial<{
   // 导出Excel文件名前缀
   exportTitle: string
   // 等待时间
-  waitAfterGet: number
+  loadingWait: number
   // 表格别名
   alias: string
   // 表格行是否可选
@@ -88,7 +88,7 @@ export type Refs<T extends ApiObj> = {
 
 export default function <T extends ApiObj>(stateOption: ListStateOption<T> | TreeStateOption<T>, refs?: Partial<Refs<T>>) {
   //===============================================================================
-  // ref
+  // region: ref
   //===============================================================================
 
   const queryForm = refs?.queryForm ?? (ref() as Ref<InstanceType<typeof ElForm>>)
@@ -97,8 +97,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const editDialog = refs?.editDialog ?? (ref() as Ref<EditDialog>)
   const detailDialog = refs?.detailDialog ?? (ref() as Ref<DetailDialog<T>>)
 
+  // endregion
+
   //===============================================================================
-  // state
+  // region: state
   //===============================================================================
 
   const defaultGridState = {
@@ -158,7 +160,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     // 导出Excel文件名前缀
     exportTitle: '导出',
     // 等待时间
-    waitAfterGet: 200,
+    loadingWait: 300,
     // 导出的 Loading
     exportLoading: false,
     // 表格 Loading 属性
@@ -211,8 +213,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     ? reactive(merge({}, defaultTreeState, stateOption) as typeof defaultTreeState & TreeStateOption<T>)
     : reactive(merge({}, defaultState, stateOption) as typeof defaultState & ListStateOption<T>)
 
+  // endregion
+
   //===============================================================================
-  // handler
+  // region: handler
   //===============================================================================
 
   const mixHandlers = {
@@ -263,8 +267,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     mixHandlers.afterDel.push(fn)
   }
 
+  // endregion
+
   //===============================================================================
-  // list
+  // region: list
   //===============================================================================
 
   // 字典方法
@@ -300,7 +306,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       }
       setTimeout(() => {
         listState.loading = false
-      }, listState.waitAfterGet)
+      }, listState.loadingWait)
     } catch (e) {
       listState.loading = false
       console.log(e)
@@ -318,8 +324,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     })
   })
 
+  // endregion
+
   //===============================================================================
-  // query
+  // region: query
   //===============================================================================
 
   // 构造查询参数和分页
@@ -350,12 +358,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   // 查询方法
   const queryList = async () => {
     if (listState.gridView) {
-      listState.gridPageState.current = 1
-      listState.loading = true
-      await grid.value.refresh()
-      setTimeout(() => {
-        listState.loading = false
-      }, listState.waitAfterGet)
+      await gridQueryList()
       return
     }
 
@@ -398,9 +401,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     await getList()
   }
 
-  //===============================================================================
-  // page
-  //===============================================================================
+  // 显示、隐藏查询表单
+  const toggleQueryForm = () => {
+    listState.queryFormShow = !listState.queryFormShow
+  }
 
   // 改变页码
   const pageChange = async (val: number) => {
@@ -417,8 +421,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     scrollDocToTop()
   }
 
+  // endregion
+
   //===============================================================================
-  // tree table
+  // region: tree table
   //===============================================================================
 
   // 处理树状数据
@@ -482,8 +488,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     return parent ? parent[nameField] : '无'
   }
 
+  // endregion
+
   //===============================================================================
-  // del
+  // region: del
   //===============================================================================
 
   // 删除
@@ -546,8 +554,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
   }
 
+  // endregion
+
   //===============================================================================
-  // grid layout
+  // region: grid layout
   //===============================================================================
 
   // grid缓存
@@ -583,6 +593,12 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     return listState.data
   }
 
+  const gridQueryList = async () => {
+    listState.gridPageState.current = 1
+    listState.selectedItems = []
+    await grid.value.refresh()
+  }
+
   const getGridQueryParam = () => {
     if (stateOption.treeTable) {
       return {
@@ -609,7 +625,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   const gridPageChange = (val: number) => {
     listState.gridPageState.current = val
-    grid.value.scrollToPage(val, true, isMobile.value ? 89 : 0)
+    grid.value.scrollToPage(val, true)
   }
 
   const gridPageSizeChange = async (val: number) => {
@@ -720,8 +736,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     listState.gridView = true
   }
 
+  // endregion
+
   //===============================================================================
-  // export
+  // region: export
   //===============================================================================
 
   // 通用导出
@@ -761,8 +779,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     await exportData('all')
   }
 
+  // endregion
+
   //===============================================================================
-  // edit dialog
+  // region: dialogs
   //===============================================================================
 
   // 显示添加、修改对话框
@@ -773,10 +793,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       editDialog.value.open(id)
     })
   }
-
-  //===============================================================================
-  // detail dialog
-  //===============================================================================
 
   // 显示详细内容
   const showDetail = async (item: T) => {
@@ -822,17 +838,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
   })
 
-  //===============================================================================
-  // query form
-  //===============================================================================
-
-  // 显示、隐藏查询表单
-  const toggleQueryForm = () => {
-    listState.queryFormShow = !listState.queryFormShow
-  }
+  // endregion
 
   //===============================================================================
-  // table
+  // region: table
   //===============================================================================
 
   // 表格列内容空formatter
@@ -884,8 +893,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     defaultExpandAll: listState.defaultExpandAll
   })
 
+  // endregion
+
   //===============================================================================
-  // default attrs
+  // region: default attrs
   //===============================================================================
 
   const { isMobile } = useLayoutSize()
@@ -914,6 +925,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       gridViewEnable: listState.gridViewEnable,
       gridView: listState.gridView,
       gridPage: { index: listState.gridFirstIndexInPage, total: listState.gridPageState.total },
+      selectMode: listState.gridSelectMode,
+      selectNumber: listState.selectedItems.length,
       onToggleGridView: toggleGridView,
       onToggleSelectMode: toggleSelectMode,
       onCreate: showEdit,
@@ -992,7 +1005,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       initIndex: listState.gridInitIndex,
       pageProvider: pageProvider,
       windowMode: isMobile.value,
-      loading: listState.loading,
+      loadingWait: listState.loadingWait,
+      scrollOffset: isMobile.value ? 86 : 0,
       onOffsetChanged: gridOffsetChanged,
       onBufferRefreshed: gridBufferRefreshed
     }
@@ -1011,6 +1025,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       onSelect: gridSelected
     }
   })
+
+  // endregion
 
   return {
     listRefs: {

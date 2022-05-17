@@ -64,7 +64,6 @@ onBeforeUnmount(() => {
 })
 
 const show = (e: MouseEvent) => {
-  console.log(e)
   if (!props.disabled) {
     bus.emit({ event: e, id: state.elId })
   }

@@ -31,7 +31,13 @@
           <el-divider class="fd-page-toolbar__divider" direction="vertical" />
         </div>
         <div class="fd-page-toolbar__right">
-          <fd-button v-if="gridView" label="选择" icon="check-correct" plain @click="emit('toggleSelectMode')" />
+          <el-badge v-if="gridView" :hidden="!selectMode" :value="selectNumber" type="primary" class="fd-page-toolbar__badge">
+            <fd-button
+              :label="selectMode ? '取消选择' : '选择模式'"
+              :icon="selectMode ? 'square' : 'check-correct'"
+              @click="emit('toggleSelectMode')"
+            />
+          </el-badge>
           <fd-button v-if="delVisible" label="删除" icon="delete" plain color="danger" @click="emit('del')" />
           <fd-button v-if="createVisible" label="新增" icon="plus" plain color="primary" @click="emit('create')" />
           <slot name="buttons" />
@@ -106,7 +112,7 @@
           @click="emit('toggleGridView')"
         />
       </template>
-      <template v-if="tableSettingOption && !gridView">
+      <template v-if="!isMobile && tableSettingOption">
         <fd-contextmenu-item v-if="gridViewEnable" divider />
         <fd-table-option-submenu :table-setting-option="tableSettingOption" />
       </template>
@@ -176,6 +182,8 @@ const props = defineProps({
     default: true
   },
   gridPage: Object as PropType<GridPage>,
+  selectMode: Boolean,
+  selectNumber: Number,
   isMobile: Boolean,
   mobileCompact: {
     type: Boolean,

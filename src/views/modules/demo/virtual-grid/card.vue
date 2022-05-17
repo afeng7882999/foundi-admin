@@ -64,6 +64,7 @@ const props = defineProps({
   grid-gap: 4px;
   align-items: center;
   width: 100%;
+  height: 184px;
   padding: 16px;
   overflow: hidden;
   font-size: var(--el-font-size-small);

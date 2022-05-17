@@ -27,6 +27,7 @@
       </fd-drawer>
       <slot name="act" />
       <slot name="grid" />
+      <el-backtop></el-backtop>
     </div>
   </template>
   <template v-else>

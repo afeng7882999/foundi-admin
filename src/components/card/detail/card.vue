@@ -1,6 +1,6 @@
 <template>
   <template v-if="item">
-    <div class="fd-detail-card" :class="objClass" @click.stop="onCardClick">
+    <div class="fd-detail-card" :class="objClass" @click="onCardClick">
       <div class="fd-detail-card__title">
         <el-checkbox v-if="selectMode" :model-value="selected" @click.stop="" @change="(checked) => emitSelect(item, checked)" />
         <slot name="title" />

@@ -1,5 +1,5 @@
-import { rAF } from '@/utils/next-frame'
 import { isNumber } from 'lodash-es'
+import { rAF } from '@/utils/next-frame'
 
 /**
  * 曲线函数

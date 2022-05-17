@@ -20,6 +20,7 @@
       ref="virtualGrid"
       :length="length"
       :item-min-width="310"
+      :item-height="184"
       :page-size="pageState.siz"
       :page-provider="pageProvider"
       :window-mode="windowMode"

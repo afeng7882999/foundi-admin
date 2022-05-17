@@ -8,7 +8,6 @@
   &__inner {
     box-sizing: border-box;
     display: grid;
-    place-content: center;
     justify-items: center;
   }
   
@@ -25,5 +24,12 @@
     bottom: 0;
     right: 0;
     z-index: $index-mask;
+  }
+  
+  &.is-window {
+    .fd-virtual-grid__loading {
+      position: fixed;
+      left: 0;
+    }
   }
 }
