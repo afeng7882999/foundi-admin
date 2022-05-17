@@ -1,7 +1,10 @@
 <template>
   <div ref="wrapperRef" class="fd-virtual-grid" :class="wrapperClassCo">
     <template v-if="windowMode">
-      <div v-show="length > 0" ref="viewRef" class="fd-virtual-grid__view" :style="viewStyleCo">
+      <div ref="viewRef" class="fd-virtual-grid__view" :style="viewStyleCo">
+        <div v-if="length === 0" class="fd-virtual-grid__empty">
+          <slot name="empty">{{ emptyText }}</slot>
+        </div>
         <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyleCo">
           <template v-for="(item, idx) in buffer" :key="idx">
             <slot :item="item.value" :index="item.index" :item-height="itemHeightCal" />
@@ -11,7 +14,10 @@
     </template>
     <template v-else>
       <el-scrollbar ref="scrollbarRef" :style="scrollbarStyleCo">
-        <div v-show="length > 0" ref="viewRef" class="fd-virtual-grid__view" :style="viewStyleCo">
+        <div ref="viewRef" class="fd-virtual-grid__view" :style="viewStyleCo">
+          <div v-if="length === 0" class="fd-virtual-grid__empty">
+            <slot name="empty">{{ emptyText }}</slot>
+          </div>
           <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyleCo">
             <template v-for="(item, idx) in buffer" :key="idx">
               <slot :item="item.value" :index="item.index" :item-height="itemHeightCal" />

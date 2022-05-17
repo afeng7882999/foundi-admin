@@ -88,28 +88,33 @@ export const GRID_DEFAULT_PROPS = {
     default: 40,
     validator: (value: number) => Number.isInteger(value) && value >= 1
   },
-  // initial index of item used by refresh and initialize
+  // Initial index of item used by refresh and initialize
   initIndex: {
     type: Number,
     default: 0,
     validator: (value: number) => value >= 0
   },
-  // set windowMode true, component is scrolled by window scroller
+  // Set windowMode true, component is scrolled by window scroller
   windowMode: {
     type: Boolean,
     default: false
   },
-  // delay of hiding loading mask
+  // Delay of hiding loading mask
   loadingWait: {
     type: Number,
     default: 300
   },
-  // distance subtracted when scrolling
+  // Distance subtracted when scrolling
   scrollOffset: {
     type: Number,
     default: 0
   },
-  // enable or disable mobile mode
+  // Text displayed when data is empty
+  emptyText: {
+    type: String,
+    default: '暂无数据'
+  },
+  // Enable or disable mobile mode
   mobileCompact: {
     type: Boolean,
     default: true

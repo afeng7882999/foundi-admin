@@ -32,4 +32,14 @@
       left: 0;
     }
   }
+  
+  &__empty {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--el-font-size-base);
+    color: var(--el-text-color-secondary);
+    background-color: var(--el-color-white);
+  }
 }
