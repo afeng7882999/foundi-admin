@@ -318,7 +318,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     listState.loading = true
     await nextFrame(async () => {
       await getDictData()
-      if (listState.gridView || isMobile.value) {
+      if (listState.gridView) {
         return
       }
       await getList()
@@ -358,7 +358,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 查询方法
   const queryList = async () => {
-    if (listState.gridView || isMobile.value) {
+    if (listState.gridView) {
       await gridQueryList()
       return
     }
@@ -527,7 +527,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       listState.delLoading = true
       await listState.delApi(ids)
 
-      if (listState.gridView || isMobile.value) {
+      if (listState.gridView) {
         await grid.value.refreshBuffer()
       }
 
@@ -597,7 +597,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const gridQueryList = async () => {
     listState.gridPageState.current = 1
     listState.selectedItems = []
-    console.log('query')
     await grid.value.refresh()
   }
 
@@ -615,8 +614,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         orderByList.push(`${s.prop}:${s.order}`)
       })
     }
-
-    console.log(listState.query)
 
     return {
       current: listState.gridPageState.current,
@@ -903,8 +900,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   // region: default attrs
   //===============================================================================
 
-  const { isMobile } = useLayoutSize()
-
   // fd-page-main默认参数
   const pageMainAttrs = computed(() => {
     return {
@@ -914,8 +909,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       'onUpdate:queryVisible': (val: boolean) => (listState.queryFormShow = val),
       queryFn: queryList,
       gridView: listState.gridView,
-      pagination: paginationAttrs.value,
-      isMobile: isMobile.value
+      pagination: paginationAttrs.value
     }
   })
 
@@ -944,8 +938,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
         stripe: () => stripe,
         border: () => border
       },
-      pagination: paginationAttrs.value,
-      isMobile: isMobile.value
+      pagination: paginationAttrs.value
     }
   })
 
@@ -995,7 +988,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       pageSizes: [20, 50, 100, 200],
       total: listState.gridPageState.total,
       pagerCount: 5,
-      layout: isMobile.value ? 'sizes, pager' : 'sizes, prev, pager, next',
+      layout: 'sizes, prev, pager, next',
       onCurrentChange: gridPageChange,
       onSizeChange: gridPageSizeChange
     }
@@ -1008,9 +1001,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       pageSize: listState.gridPageState.siz,
       initIndex: listState.gridInitIndex,
       pageProvider: pageProvider,
-      windowMode: isMobile.value,
       loadingWait: listState.loadingWait,
-      scrollOffset: isMobile.value ? 86 : 0,
       onOffsetChanged: gridOffsetChanged,
       onBufferRefreshed: gridBufferRefreshed
     }
@@ -1023,7 +1014,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       focusedIndex: listState.gridFocusIndex,
       selectMode: listState.gridSelectMode,
       selectedItems: listState.selectedItems,
-      isMobile: isMobile.value,
       onDetail: gridShowDetail,
       onDel: del,
       onSelect: gridSelected

@@ -2,10 +2,3 @@
 .el-message-box {
   border-radius: var(--el-border-radius-base);
 }
-
-// mobile
-body.is-mobile {
-  .el-message-box {
-    width: 100%;
-  }
-}

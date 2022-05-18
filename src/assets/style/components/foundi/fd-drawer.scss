@@ -82,14 +82,3 @@
     justify-content: flex-end;
   }
 }
-
-// is-mobile
-.fd-drawer.is-mobile {
-  width: 100% !important;
-
-  .el-col {
-    max-width: 100%;
-    width: 100%;
-    flex: 0 0 100%;
-  }
-}

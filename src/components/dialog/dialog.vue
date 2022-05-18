@@ -41,7 +41,6 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue'
 import { ElDialog } from 'element-plus'
-import useLayoutSize from '@/hooks/use-layout-size'
 import { onBeforeRouteLeave } from 'vue-router'
 import useView from '@/crud/hooks/use-view'
 
@@ -63,10 +62,6 @@ const props = defineProps({
   fullscreen: {
     type: Boolean,
     default: false
-  },
-  mobileCompact: {
-    type: Boolean,
-    default: true
   }
 })
 
@@ -84,12 +79,8 @@ watch(
   { immediate: true }
 )
 
-const { isMobile } = useLayoutSize(props.mobileCompact)
 const objClass = computed(() => {
   const clazz = ['fd-dialog']
-  if (isMobile.value) {
-    clazz.push('is-mobile')
-  }
   return clazz.join(' ')
 })
 
@@ -115,7 +106,7 @@ const onOpened = () => {
   goBackToHide.value = true
 }
 onBeforeRouteLeave((to) => {
-  if (props.mobileCompact && goBackToHide.value) {
+  if (goBackToHide.value) {
     hide()
     return false
   }

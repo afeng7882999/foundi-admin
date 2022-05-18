@@ -1,95 +1,51 @@
 <template>
   <template v-if="visibleCo">
-    <div class="fd-page-toolbar" :class="objClass">
-      <template v-if="!isMobileCo">
-        <div class="fd-page-toolbar__left">
-          <template v-if="query">
-            <el-tooltip :content="queryVisible ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
-              <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="fd-page-toolbar__badge">
-                <fd-button
-                  type="icon"
-                  :class="queryVisible ? 'expanded' : ''"
-                  class="fd-page-toolbar__icon-btn"
-                  icon="search-more"
-                  @click="toggleQueryVisible"
-                />
-              </el-badge>
-            </el-tooltip>
-          </template>
-          <div class="query-compact">
-            <el-form :model="queryData" inline compact @submit="queryFn">
-              <slot name="query" />
-            </el-form>
-          </div>
-        </div>
-        <div v-if="gridView" class="fd-page-toolbar__center">
-          <el-divider class="fd-page-toolbar__divider" direction="vertical" />
-          <div class="fd-page-toolbar__pagination">
-            <span class="pagination-current">第{{ gridPage.index + 1 }}条 / 共{{ gridPage.total }}条</span>
-            <el-pagination v-bind="pagination" />
-          </div>
-          <el-divider class="fd-page-toolbar__divider" direction="vertical" />
-        </div>
-        <div class="fd-page-toolbar__right">
-          <el-badge v-if="gridView" :hidden="!selectMode" :value="selectNumber" type="primary" class="fd-page-toolbar__badge">
-            <fd-button
-              :label="selectMode ? '取消选择' : '选择模式'"
-              :icon="selectMode ? 'square' : 'check-correct'"
-              @click="emit('toggleSelectMode')"
-            />
-          </el-badge>
-          <fd-button v-if="delVisible" label="删除" icon="delete" plain color="danger" @click="emit('del')" />
-          <fd-button v-if="createVisible" label="新增" icon="plus" plain color="primary" @click="emit('create')" />
-          <slot name="buttons" />
-          <el-divider v-if="more" class="fd-page-toolbar__divider" direction="vertical" />
-          <el-tooltip content="更多" :show-after="500" effect="dark" placement="top">
-            <fd-button type="icon" class="fd-page-toolbar__icon-btn" icon="more" @click.stop="openMoreMenu" />
-          </el-tooltip>
-        </div>
-      </template>
-      <template v-else>
-        <div class="fd-page-toolbar__center">
-          <template v-if="query">
+    <div class="fd-page-toolbar">
+      <div class="fd-page-toolbar__left">
+        <template v-if="query">
+          <el-tooltip :content="queryVisible ? '隐藏查询表单' : '显示查询表单'" :show-after="500" effect="dark" placement="top">
             <el-badge :hidden="queryVisible || !queryLenCo" :value="queryLenCo" type="primary" class="fd-page-toolbar__badge">
               <fd-button
-                type="toolbar"
+                type="icon"
                 :class="queryVisible ? 'expanded' : ''"
-                label="查询"
+                class="fd-page-toolbar__icon-btn"
                 icon="search-more"
                 @click="toggleQueryVisible"
               />
             </el-badge>
-          </template>
-          <fd-button v-if="createVisible" type="toolbar" label="新增" icon="plus" @click="emit('create')" />
-          <fd-button v-if="editVisible" type="toolbar" label="编辑" icon="write" @click="emit('edit')" />
-          <div v-show="false">
-            <slot name="buttons" />
-          </div>
-          <fd-button
-            v-for="item in state.showedButtons"
-            :key="item.label"
-            type="toolbar"
-            :label="item.label"
-            :icon="item.icon"
-            @click="item.onClick"
-          />
-          <fd-button type="toolbar" label="更多" icon="more" @click.stop="openMoreMenu" />
+          </el-tooltip>
+        </template>
+        <div class="query-compact">
+          <el-form :model="queryData" inline compact @submit="queryFn">
+            <slot name="query" />
+          </el-form>
         </div>
-      </template>
-    </div>
-    <el-affix v-if="isMobileCo" class="fd-page-toolbar__top">
-      <div class="fd-page-toolbar__pagination is-mobile">
-        <div class="pagination-current" @click.stop="toggleMobilePaginationVisible">
-          <span class="current-text">第{{ gridPage.index + 1 }}条 / 共{{ gridPage.total }}条</span>
-          <fd-icon class="current-icon" icon="right" :class="currentIconClassCo" />
-        </div>
-        <transition name="expand" @after-enter="expandAfterEnter" @before-leave="expandBeforeLeave" @enter="expandEnter">
-          <div v-show="state.mobilePaginationVisible" class="pagination-page">
-            <el-pagination v-bind="pagination" />
-          </div>
-        </transition>
       </div>
-    </el-affix>
+      <div v-if="gridView" class="fd-page-toolbar__center">
+        <el-divider class="fd-page-toolbar__divider" direction="vertical" />
+        <div class="fd-page-toolbar__pagination">
+          <span class="pagination-current">第{{ gridPage.index + 1 }}条 / 共{{ gridPage.total }}条</span>
+          <el-pagination v-bind="pagination" />
+        </div>
+        <el-divider class="fd-page-toolbar__divider" direction="vertical" />
+      </div>
+      <div class="fd-page-toolbar__right">
+        <el-badge v-if="gridView" :hidden="!selectMode" :value="selectNumber" type="primary" class="fd-page-toolbar__badge">
+          <fd-button
+            :label="selectMode ? '取消选择' : '选择模式'"
+            :icon="selectMode ? 'square' : 'check-correct'"
+            @click="emit('toggleSelectMode')"
+          />
+        </el-badge>
+        <fd-button v-if="delVisible" label="删除" icon="delete" plain color="danger" @click="emit('del')" />
+        <fd-button v-if="createVisible" label="新增" icon="plus" plain color="primary" @click="emit('create')" />
+        <slot name="buttons" />
+        <el-divider v-if="more" class="fd-page-toolbar__divider" direction="vertical" />
+        <el-tooltip content="更多" :show-after="500" effect="dark" placement="top">
+          <fd-button type="icon" class="fd-page-toolbar__icon-btn" icon="more" @click.stop="openMoreMenu" />
+        </el-tooltip>
+      </div>
+    </div>
     <fd-contextmenu ref="contextMenu">
       <fd-contextmenu-item
         v-for="item in state.compactButtons"
@@ -104,7 +60,7 @@
         <fd-contextmenu-item label="导出当前页" @click="emit('export')" />
         <fd-contextmenu-item label="导出全部页" @click="emit('exportAll')" />
       </fd-contextmenu-submenu>
-      <template v-if="gridViewEnable && !isMobileCo">
+      <template v-if="gridViewEnable">
         <fd-contextmenu-item v-if="exportVisible" divider />
         <fd-contextmenu-item
           :icon="gridView ? 'table-row' : 'view-grid-detail'"
@@ -112,7 +68,7 @@
           @click="emit('toggleGridView')"
         />
       </template>
-      <template v-if="!isMobile && tableSettingOption">
+      <template v-if="tableSettingOption">
         <fd-contextmenu-item v-if="gridViewEnable" divider />
         <fd-table-option-submenu :table-setting-option="tableSettingOption" />
       </template>
@@ -121,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, PropType, reactive, ref, useSlots, VNode } from 'vue'
+import { computed, PropType, reactive, ref, useSlots } from 'vue'
 import usePage from '../hooks/use-page'
 import { isBoolean } from 'lodash-es'
 import { TableSettingProp } from '@/components/table/types'
@@ -129,7 +85,6 @@ import FdContextmenuItem from '@/components/contextmenu/item.vue'
 import FdContextmenuSubmenu from '@/components/contextmenu/submenu.vue'
 import { ApiQuery } from '@/api'
 import { CompactButton, GridPage } from '@/crud/page/types'
-import { Indexable } from '@/common/types'
 import FdTableOptionSubmenu from './table-option-submenu.vue'
 import useExpandTransition from '@/hooks/use-expand-transition'
 
@@ -183,12 +138,7 @@ const props = defineProps({
   },
   gridPage: Object as PropType<GridPage>,
   selectMode: Boolean,
-  selectNumber: Number,
-  isMobile: Boolean,
-  mobileCompact: {
-    type: Boolean,
-    default: true
-  }
+  selectNumber: Number
 })
 
 const state = reactive({
@@ -255,49 +205,6 @@ const queryLenCo = computed(() => {
     len++
   }
   return len
-})
-
-const isMobileCo = computed(() => {
-  return props.mobileCompact && props.isMobile
-})
-
-const objClass = computed(() => {
-  const clazz = []
-  if (isMobileCo.value) {
-    clazz.push('is-mobile')
-  }
-  return clazz.join(' ')
-})
-
-const compactButtons = () => {
-  let empty = 4
-  delVisible.value && empty--
-  editVisible.value && empty--
-  createVisible.value && empty--
-
-  const buttons = (useSlots()?.buttons?.() as VNode[]) ?? []
-
-  for (const btn of buttons) {
-    if ((btn.type as Indexable)?.name === 'FdButton') {
-      const addBtn = {
-        label: btn.props?.label,
-        icon: btn.props?.icon,
-        disabled: btn.props?.disabled,
-        onClick: btn.props?.onClick
-      }
-      if (state.showedButtons.length < empty) {
-        state.showedButtons.push(addBtn)
-      } else {
-        state.compactButtons.push(addBtn)
-      }
-    }
-  }
-}
-
-onMounted(() => {
-  if (isMobileCo.value) {
-    compactButtons()
-  }
 })
 
 const { expandAfterEnter, expandBeforeLeave, expandEnter } = useExpandTransition()

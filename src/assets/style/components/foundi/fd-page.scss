@@ -69,15 +69,6 @@
   .fd-virtual-grid {
     border-radius: var(--el-border-radius-base);
   }
-  
-  &.is-mobile {
-    padding: 8px 0 58px 0;
-    
-    .fd-virtual-grid {
-      flex: 1;
-      border-radius: 0;
-    }
-  }
 }
 
 // fd-page-footer

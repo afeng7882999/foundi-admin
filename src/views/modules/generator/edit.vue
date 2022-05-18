@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <fd-form ref="form" v-loading="state.loading" :model="state.data.table" :rules="state.rules" label-width="130px">
+    <el-form ref="form" v-loading="state.loading" :model="state.data.table" :rules="state.rules" label-width="130px">
       <div class="fd-page__form">
         <div class="fd-page__sub-title"><span class="title-text">基本信息</span></div>
         <el-row>
@@ -83,7 +83,7 @@
           </el-col>
         </el-row>
       </div>
-    </fd-form>
+    </el-form>
 
     <div ref="tableWrapper" v-loading="state.loading" class="fd-page__table is-bordered">
       <div class="fd-page__sub-title"><span class="title-text">字段信息</span></div>

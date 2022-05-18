@@ -85,6 +85,10 @@ export default function useLayoutSize(react: boolean | undefined = true) {
     return react ? storeState.app.device === DeviceType.Mobile : false
   })
 
+  const isPad = computed(() => {
+    return react ? storeState.app.device === DeviceType.Pad : false
+  })
+
   const isMobileOrPad = computed(() => {
     return react ? storeState.app.device === DeviceType.Mobile || storeState.app.device === DeviceType.Pad : false
   })
@@ -92,6 +96,7 @@ export default function useLayoutSize(react: boolean | undefined = true) {
   return {
     addResizeObserver,
     device,
+    isPad,
     isMobile,
     isMobileOrPad,
     doLayoutResize

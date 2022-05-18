@@ -55,12 +55,6 @@
     margin-left: auto;
   }
   
-  &.is-mobile {
-    max-width: 100%;
-    border-radius: 0;
-    border-bottom: 1px solid var(--el-border-color-base);
-  }
-  
   @include theme-s() {
     border-radius: 0;
   }

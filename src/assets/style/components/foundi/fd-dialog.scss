@@ -53,18 +53,3 @@
     }
   }
 }
-
-// is-mobile
-.fd-dialog.is-mobile {
-  transform: none !important;
-  margin: 0;
-  width: 100%;
-  
-  .el-col {
-    max-width: 100%;
-    width: 100%;
-    flex: 0 0 100%;
-  }
-  
-  border-radius: 0;
-}

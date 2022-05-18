@@ -19,13 +19,11 @@ import FdFmtAll from '@/components/formatter'
 import FdTableAll from '@/components/table'
 import FdFormAll from '@/components/form'
 import FdButtonAll from '@/components/button'
+import FdDescriptionsAll from '@/components/descriptions'
 import FdVirtualGrid from '@/components/virtual-grid'
 import FdCardAll from '@/components/card'
-
-import FdForm from '@/extend/form'
-import FdDialog from '@/extend/dialog'
-import FdDrawer from '@/extend/drawer'
-import FdDescriptionsAll from '@/extend/descriptions'
+import FdDialog from '@/components/dialog'
+import FdDrawer from '@/components/drawer'
 
 import FdPageAll from '@/crud/page'
 
@@ -44,12 +42,11 @@ app
   .use(FdTableAll)
   .use(FdFormAll)
   .use(FdButtonAll)
+  .use(FdDescriptionsAll)
   .use(FdVirtualGrid)
   .use(FdCardAll)
-  .use(FdForm)
   .use(FdDialog)
   .use(FdDrawer)
-  .use(FdDescriptionsAll)
   .use(FdPageAll)
 
 app.mount('#app')

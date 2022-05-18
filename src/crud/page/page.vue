@@ -1,90 +1,57 @@
 <template>
-  <template v-if="isMobileCo">
-    <div class="fd-page" :style="docMinHeight" :class="objClass">
-      <fd-page-header v-show="showPageHeader"></fd-page-header>
-      <fd-drawer
-        v-if="hasQuery"
-        ref="drawer"
-        v-model="queryVisibleCo"
-        :close-on-click-modal="false"
-        direction="ltr"
-        :modal="false"
-        title="查询"
-      >
-        <el-form ref="queryForm" :model="state.data" label-position="top" @keyup.enter="onQuery">
-          <slot name="query" />
-        </el-form>
-        <template #footer>
-          <el-button plain type="primary" @click="onQuery">
-            <fd-icon icon="search" class="is-in-btn"></fd-icon>
-            查询
-          </el-button>
-          <el-button @click="reset">
-            <fd-icon icon="refresh" class="is-in-btn"></fd-icon>
-            重置
-          </el-button>
-        </template>
-      </fd-drawer>
+  <div class="fd-page" :style="gridView ? docHeight : docMinHeight" :class="objClass">
+    <fd-page-header v-show="showPageHeader"></fd-page-header>
+    <template v-if="!hasQuery">
       <slot name="act" />
-      <slot name="grid" />
-      <el-backtop></el-backtop>
-    </div>
-  </template>
-  <template v-else>
-    <div class="fd-page" :style="gridView ? docHeight : docMinHeight" :class="objClass">
-      <fd-page-header v-show="showPageHeader"></fd-page-header>
-      <template v-if="!hasQuery">
+      <slot v-if="gridView" name="grid" />
+      <div v-else ref="tableWrapper" class="fd-page__table is-bordered">
+        <slot name="table" />
+        <el-pagination class="fd-pagination" v-bind="pagination"></el-pagination>
+      </div>
+    </template>
+    <fd-split-pane
+      v-else
+      v-model:shrink-all.not="queryVisibleCo"
+      class="fd-page__split-pane"
+      :animation="false"
+      :default-pos="280"
+      shrink="right"
+      :shrink-to-hide="true"
+    >
+      <template #left>
+        <div class="fd-page__form fd-page-query">
+          <div class="fd-page__sub-title"><span class="title-text">查询</span></div>
+          <el-form ref="queryForm" :model="state.data" label-position="top" @keyup.enter="onQuery">
+            <el-scrollbar class="fd-page-query__scrollbar" :style="scrollbarStyle">
+              <slot name="query" />
+            </el-scrollbar>
+            <el-form-item>
+              <div class="fd-page-query__act">
+                <el-button plain type="primary" @click="onQuery">
+                  <fd-icon icon="search" class="is-in-btn"></fd-icon>
+                  查询
+                </el-button>
+                <el-button @click="reset">
+                  <fd-icon icon="refresh" class="is-in-btn"></fd-icon>
+                  重置
+                </el-button>
+              </div>
+            </el-form-item>
+          </el-form>
+        </div>
+      </template>
+      <template #right>
         <slot name="act" />
         <slot v-if="gridView" name="grid" />
         <div v-else ref="tableWrapper" class="fd-page__table is-bordered">
           <slot name="table" />
-          <el-pagination v-if="!isMobileCo" class="fd-pagination" v-bind="pagination"></el-pagination>
+          <el-pagination class="fd-pagination" v-bind="pagination"></el-pagination>
         </div>
       </template>
-      <fd-split-pane
-        v-else
-        v-model:shrink-all.not="queryVisibleCo"
-        class="fd-page__split-pane"
-        :animation="false"
-        :default-pos="280"
-        shrink="right"
-        :shrink-to-hide="true"
-      >
-        <template #left>
-          <div class="fd-page__form fd-page-query">
-            <div class="fd-page__sub-title"><span class="title-text">查询</span></div>
-            <el-form ref="queryForm" :model="state.data" label-position="top" @keyup.enter="onQuery">
-              <el-scrollbar class="fd-page-query__scrollbar" :style="scrollbarStyle">
-                <slot name="query" />
-              </el-scrollbar>
-              <el-form-item>
-                <div class="fd-page-query__act">
-                  <el-button plain type="primary" @click="onQuery">
-                    <fd-icon icon="search" class="is-in-btn"></fd-icon>
-                    查询
-                  </el-button>
-                  <el-button @click="reset">
-                    <fd-icon icon="refresh" class="is-in-btn"></fd-icon>
-                    重置
-                  </el-button>
-                </div>
-              </el-form-item>
-            </el-form>
-          </div>
-        </template>
-        <template #right>
-          <slot name="act" />
-          <slot v-if="gridView" name="grid" />
-          <div v-else ref="tableWrapper" class="fd-page__table is-bordered">
-            <slot name="table" />
-            <el-pagination v-if="!isMobileCo" class="fd-pagination" v-bind="pagination"></el-pagination>
-          </div>
-        </template>
-      </fd-split-pane>
-      <el-backtop></el-backtop>
-      <fd-page-footer :visible="!gridView && footerVisible"></fd-page-footer>
-    </div>
-  </template>
+    </fd-split-pane>
+    <el-backtop></el-backtop>
+    <fd-page-footer :visible="!gridView && footerVisible"></fd-page-footer>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -118,12 +85,7 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  pagination: Object,
-  isMobile: Boolean,
-  mobileCompact: {
-    type: Boolean,
-    default: true
-  }
+  pagination: Object
 })
 
 const state = reactive({
@@ -138,16 +100,9 @@ watch(
   { immediate: true, deep: true }
 )
 
-const isMobileCo = computed(() => {
-  return props.mobileCompact && props.isMobile
-})
-
 const objClass = computed(() => {
   const clazz = []
   clazz.push(`page-${props.name}`)
-  if (isMobileCo.value) {
-    clazz.push('is-mobile')
-  }
   return clazz.join(' ')
 })
 

@@ -31,7 +31,6 @@
 import { computed, ref, useSlots } from 'vue'
 import usePage from '@/crud/hooks/use-page'
 import { ElDrawer } from 'element-plus'
-import useLayoutSize from '@/hooks/use-layout-size'
 import { onBeforeRouteLeave } from 'vue-router'
 import useView from '@/crud/hooks/use-view'
 
@@ -64,16 +63,11 @@ const props = defineProps({
   modal: {
     type: Boolean,
     default: false
-  },
-  mobileCompact: {
-    type: Boolean,
-    default: true
   }
 })
 
 const drawer = ref<InstanceType<typeof ElDrawer>>()
 
-const { isMobile } = useLayoutSize(props.mobileCompact)
 const objClass = computed(() => {
   const clazz = ['fd-drawer']
   if (props.customClass) {
@@ -81,9 +75,6 @@ const objClass = computed(() => {
   }
   if (useSlots().footer) {
     clazz.push('has-footer')
-  }
-  if (isMobile.value) {
-    clazz.push('is-mobile')
   }
   return clazz.join(' ')
 })
@@ -111,7 +102,7 @@ const onOpened = () => {
   goBackToHide.value = true
 }
 onBeforeRouteLeave((to) => {
-  if (props.mobileCompact && goBackToHide.value) {
+  if (goBackToHide.value) {
     hide()
     return false
   }

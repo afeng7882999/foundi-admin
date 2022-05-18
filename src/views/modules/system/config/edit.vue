@@ -1,12 +1,12 @@
 <template>
   <fd-drawer v-model="s.visible" :title="s.isCreate ? '新增系统配置' : '修改系统配置'" size="600px" @closed="m.hideDialog">
-    <fd-form ref="form" :model="s.formData" :rules="s.formRules" label-width="80px">
+    <el-form ref="form" :model="s.formData" :rules="s.formRules" label-width="80px">
       <fd-item-dict label="配置分类" prop="configTypeDict" :dict="s.dicts.sysConfigType" />
       <fd-item label="键" prop="configKey" />
       <fd-item-json label="值" prop="configValue" />
       <fd-item-boolean label="是否启用" prop="enabled" />
       <fd-item-multiline label="备注" prop="remark" />
-    </fd-form>
+    </el-form>
     <template #footer>
       <el-button @click="s.visible = false">取消</el-button>
       <el-button type="primary" @click="m.submit">确定</el-button>

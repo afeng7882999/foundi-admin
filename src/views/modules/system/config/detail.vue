@@ -1,6 +1,6 @@
 <template>
   <fd-drawer v-model="s.visible" :title="`系统配置详细 (${s.idx + 1} / ${s.data.length})`" size="600px">
-    <fd-descriptions :column="2" border direction="vertical">
+    <el-descriptions :column="2" border direction="vertical">
       <el-descriptions-item label="配置分类">
         <fd-fmt-dict :dict="s.dicts.sysConfigType" :data="s.data[s.idx].configTypeDict" />
       </el-descriptions-item>
@@ -15,7 +15,7 @@
       <template #extra>
         <fd-descriptions-act v-bind="actAttrs" edit="system:config:edit" />
       </template>
-    </fd-descriptions>
+    </el-descriptions>
   </fd-drawer>
 </template>
 
