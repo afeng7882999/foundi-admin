@@ -13,7 +13,7 @@ import {
 import { clamp, concat, difference, isEqual, parseInt, range } from 'lodash-es'
 import { ExtractPropTypes, onMounted, onUnmounted, reactive, toRefs, watch } from 'vue'
 import { Ref } from '@vue/reactivity'
-import { useDebounceFn, useResizeObserver } from '@vueuse/core'
+import { useDebounceFn, useMutationObserver, useResizeObserver } from '@vueuse/core'
 import { nextFrame } from '@/utils/next-frame'
 import { AnyFunction } from '@/common/types'
 
@@ -105,7 +105,7 @@ const getBufferMeta = (wrapperHeight: number, heightAbove: number, rm: ResizeMea
 const getVisiblePageNumbers = ({ bufferedOffset, bufferedLength }: BufferMeta, length: number, pageSize: number): number[] => {
   const startPage = Math.floor(bufferedOffset / pageSize)
   const endPage = Math.ceil(Math.min(bufferedOffset + bufferedLength, length) / pageSize)
-  return range(startPage, endPage)
+  return endPage ? range(startPage, endPage) : [0]
 }
 
 /**
@@ -235,6 +235,7 @@ export default function useGrid(
     const visiblePn = getVisiblePageNumbers(bufferMeta, props.length as number, props.pageSize as number)
     const pageChanged = difference(visiblePn, visiblePageNumbers).length > 0
     const needRefresh = reachRefreshSpan(bufferMeta, bufferOffset, props.length as number)
+    console.log(visiblePn)
     if (pageChanged || needRefresh) {
       bufferOffset = bufferMeta.bufferedOffset
       state.innerTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
@@ -314,37 +315,50 @@ export default function useGrid(
     // initialize the grid and scroll to initIndex
     const initGrid = async () => {
       resizeMeasurement = getResizeMeasurement(innerRef.value as Element, state.itemHeight)
-      state.lessThanRowSize = itemByPages[0].items.length < resizeMeasurement.columns
       state.viewHeight = getViewHeight(resizeMeasurement, props.length as number)
-      const wrapperHeight = getWrapperHeight()
-      bufferMeta = getBufferMeta(wrapperHeight, heightAbove, resizeMeasurement)
-      visiblePageNumbers = getVisiblePageNumbers(bufferMeta, props.length as number, props.pageSize as number)
+      visiblePageNumbers = []
+      await getBuffer()
       emitBufferRefreshed()
 
       addScrollEventListener(props.windowMode)
       await nextFrame(() => {
-        props.initIndex && scrollToIdx(props.initIndex as number, false)
         state.initialized = true
+        props.initIndex && scrollToIdx(props.initIndex as number, false)
       })
     }
 
-    // initialize the buffer
-    const initBuffer = async () => {
+    if (!props.itemHeight) {
+      // get item height dynamically
+      await getItemHeightDynamically()
+    }
+    await initGrid()
+  }
+
+  /**
+   * Calculate item height after initial rendering
+   */
+  const getItemHeightDynamically = async (): Promise<void> => {
+    return new Promise((resolve) => {
+      const { stop } = useMutationObserver(
+        innerRef.value,
+        (mutations) => {
+          if (mutations[0]) {
+            stop()
+            state.itemHeight = getItemHeight(innerRef.value as Element, props.itemHeight)
+            return resolve()
+          }
+        },
+        { childList: true }
+      )
+
       const wrapperHeight = getWrapperHeight()
       resizeMeasurement = getResizeMeasurement(innerRef.value as Element, state.itemHeight)
       bufferMeta = getBufferMeta(wrapperHeight, heightAbove, resizeMeasurement)
-      bufferMeta.bufferedLength = props.pageSize as number
-      itemByPages = await callPageProvider([0], props.pageSize as number, props.pageProvider as PageProvider)
-      state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
-    }
-
-    await initBuffer()
-    await nextFrame(() => {
-      if (!viewRef.value || !innerRef.value) {
-        return
-      }
-      state.itemHeight = getItemHeight(innerRef.value as Element, props.itemHeight)
-      initGrid()
+      // param 'pageSize' must be large enough to avoid flicker of first loading
+      callPageProvider([0], props.pageSize, props.pageProvider as PageProvider).then((pages) => {
+        itemByPages = pages
+        state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
+      })
     })
   }
 

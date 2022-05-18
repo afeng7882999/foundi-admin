@@ -88,7 +88,7 @@ export type Refs<T extends ApiObj> = {
 
 export default function <T extends ApiObj>(stateOption: ListStateOption<T> | TreeStateOption<T>, refs?: Partial<Refs<T>>) {
   //===============================================================================
-  // region: ref
+  // ref
   //===============================================================================
 
   const queryForm = refs?.queryForm ?? (ref() as Ref<InstanceType<typeof ElForm>>)
@@ -97,10 +97,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const editDialog = refs?.editDialog ?? (ref() as Ref<EditDialog>)
   const detailDialog = refs?.detailDialog ?? (ref() as Ref<DetailDialog<T>>)
 
-  // endregion
-
   //===============================================================================
-  // region: state
+  // state
   //===============================================================================
 
   const defaultGridState = {
@@ -213,10 +211,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     ? reactive(merge({}, defaultTreeState, stateOption) as typeof defaultTreeState & TreeStateOption<T>)
     : reactive(merge({}, defaultState, stateOption) as typeof defaultState & ListStateOption<T>)
 
-  // endregion
-
   //===============================================================================
-  // region: handler
+  // handler
   //===============================================================================
 
   const mixHandlers = {
@@ -267,10 +263,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     mixHandlers.afterDel.push(fn)
   }
 
-  // endregion
-
   //===============================================================================
-  // region: list
+  // list
   //===============================================================================
 
   // 字典方法
@@ -325,10 +319,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     })
   })
 
-  // endregion
-
   //===============================================================================
-  // region: query
+  // query
   //===============================================================================
 
   // 构造查询参数和分页
@@ -422,10 +414,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     scrollDocToTop()
   }
 
-  // endregion
-
   //===============================================================================
-  // region: tree table
+  // tree table
   //===============================================================================
 
   // 处理树状数据
@@ -489,10 +479,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     return parent ? parent[nameField] : '无'
   }
 
-  // endregion
-
   //===============================================================================
-  // region: del
+  // del
   //===============================================================================
 
   // 删除
@@ -555,10 +543,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
   }
 
-  // endregion
-
   //===============================================================================
-  // region: grid layout
+  // grid layout
   //===============================================================================
 
   // grid缓存
@@ -577,30 +563,31 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
 
     try {
-      const query = getGridQueryParam()
+      const query = getGridQueryParam(pageSize)
       query.current = pageNumber
       const { data, total, count, resData } = await listState.listApi(query)
       listState.gridPageState.total = total
       listState.gridPageState.count = count
-      listState.data = data
+      console.log(data, query)
 
       for (const fn of mixHandlers.afterGetList) {
         await fn?.(resData)
       }
+
+      return data
     } catch (e) {
       console.log(e)
     }
-
-    return listState.data
   }
 
   const gridQueryList = async () => {
     listState.gridPageState.current = 1
     listState.selectedItems = []
+    console.log('query')
     await grid.value.refresh()
   }
 
-  const getGridQueryParam = () => {
+  const getGridQueryParam = (pageSize: number) => {
     if (stateOption.treeTable) {
       return {
         ...listState.query,
@@ -617,7 +604,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
     return {
       current: listState.gridPageState.current,
-      size: listState.gridPageState.siz,
+      size: pageSize, //listState.gridPageState.siz,
       ...listState.params,
       ...listState.query,
       orderByList
@@ -737,10 +724,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     listState.gridView = true
   }
 
-  // endregion
-
   //===============================================================================
-  // region: export
+  // export
   //===============================================================================
 
   // 通用导出
@@ -780,10 +765,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     await exportData('all')
   }
 
-  // endregion
-
   //===============================================================================
-  // region: dialogs
+  // dialogs
   //===============================================================================
 
   // 显示添加、修改对话框
@@ -839,10 +822,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     }
   })
 
-  // endregion
-
   //===============================================================================
-  // region: table
+  // table
   //===============================================================================
 
   // 表格列内容空formatter
@@ -894,10 +875,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     defaultExpandAll: listState.defaultExpandAll
   })
 
-  // endregion
-
   //===============================================================================
-  // region: default attrs
+  // default attrs
   //===============================================================================
 
   // fd-page-main默认参数
@@ -1019,8 +998,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       onSelect: gridSelected
     }
   })
-
-  // endregion
 
   return {
     listRefs: {

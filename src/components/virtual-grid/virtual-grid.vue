@@ -60,6 +60,7 @@ const {
   viewHeight,
   innerTranslate,
   lessThanRowSize,
+  initialized,
   loading,
   scrollToIdx,
   scrollToPage,
