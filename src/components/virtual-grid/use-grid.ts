@@ -455,16 +455,6 @@ export default function useGrid(
     visiblePageNumbers = []
     scrollToIdx(0, false)
     await getBuffer()
-    const { stop } = useMutationObserver(
-      innerRef.value,
-      (mutations) => {
-        if (mutations[0]) {
-          stop()
-          state.loading = false
-        }
-      },
-      { childList: true }
-    )
   }
 
   /**
@@ -475,18 +465,21 @@ export default function useGrid(
     callPageProvider(visiblePageNumbers, props.pageSize as number, props.pageProvider as PageProvider).then((items) => {
       itemByPages = items
       state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
-      const { stop } = useMutationObserver(
-        innerRef.value,
-        (mutations) => {
-          if (mutations[0]) {
-            stop()
-            state.loading = false
-          }
-        },
-        { childList: true }
-      )
     })
   }
+
+  /**
+   * MutationObserver to hide loading mask
+   */
+  useMutationObserver(
+    innerRef.value,
+    (mutations) => {
+      if (mutations[0]) {
+        state.loading = false
+      }
+    },
+    { childList: true }
+  )
 
   const { initialized, wrapperRect, itemHeight, buffer, viewHeight, innerTranslate, lessThanRowSize, loading } = toRefs(state)
   return {
