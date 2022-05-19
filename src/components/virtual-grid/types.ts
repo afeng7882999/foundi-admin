@@ -88,6 +88,12 @@ export const GRID_DEFAULT_PROPS = {
     default: 40,
     validator: (value: number) => Number.isInteger(value) && value >= 1
   },
+  // The number of items scrolled each time
+  scrollPageSize: {
+    type: Number,
+    default: 40,
+    validator: (value: number) => Number.isInteger(value) && value >= 1
+  },
   // Initial index of item used by refresh and initialize
   initIndex: {
     type: Number,

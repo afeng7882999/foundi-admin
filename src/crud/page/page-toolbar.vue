@@ -68,7 +68,7 @@
           @click="emit('toggleGridView')"
         />
       </template>
-      <template v-if="tableSettingOption">
+      <template v-if="tableSettingOption && !gridView">
         <fd-contextmenu-item v-if="gridViewEnable" divider />
         <fd-table-option-submenu :table-setting-option="tableSettingOption" />
       </template>

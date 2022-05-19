@@ -2,7 +2,7 @@
   <div ref="wrapperRef" class="fd-virtual-grid" :class="wrapperClassCo">
     <template v-if="windowMode">
       <div ref="viewRef" class="fd-virtual-grid__view" :style="viewStyleCo">
-        <div v-if="length === 0" class="fd-virtual-grid__empty">
+        <div v-if="buffer.length === 0" class="fd-virtual-grid__empty">
           <slot name="empty">{{ emptyText }}</slot>
         </div>
         <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyleCo">
@@ -15,7 +15,7 @@
     <template v-else>
       <el-scrollbar ref="scrollbarRef" :style="scrollbarStyleCo">
         <div ref="viewRef" class="fd-virtual-grid__view" :style="viewStyleCo">
-          <div v-if="length === 0" class="fd-virtual-grid__empty">
+          <div v-if="buffer.length === 0" class="fd-virtual-grid__empty">
             <slot name="empty">{{ emptyText }}</slot>
           </div>
           <div ref="innerRef" class="fd-virtual-grid__inner" :style="innerStyleCo">

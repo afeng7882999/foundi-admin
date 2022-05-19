@@ -118,8 +118,10 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     gridPageState: {
       // 页码
       current: 1,
-      // 每页数据条数
-      siz: 50,
+      // 每页获取数据条数
+      siz: 100,
+      // 每页滚动数据条数
+      scrollSiz: 20,
       // 数据总数
       total: 0,
       // 总页数
@@ -565,10 +567,9 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     try {
       const query = getGridQueryParam(pageSize)
       query.current = pageNumber
-      const { data, total, count, resData } = await listState.listApi(query)
+      const { data, total, resData } = await listState.listApi(query)
       listState.gridPageState.total = total
-      listState.gridPageState.count = count
-      console.log(data, query)
+      listState.gridPageState.count = Math.ceil(total / listState.gridPageState.scrollSiz)
 
       for (const fn of mixHandlers.afterGetList) {
         await fn?.(resData)
@@ -583,7 +584,6 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const gridQueryList = async () => {
     listState.gridPageState.current = 1
     listState.selectedItems = []
-    console.log('query')
     await grid.value.refresh()
   }
 
@@ -604,7 +604,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
     return {
       current: listState.gridPageState.current,
-      size: pageSize, //listState.gridPageState.siz,
+      size: pageSize,
       ...listState.params,
       ...listState.query,
       orderByList
@@ -617,7 +617,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   }
 
   const gridPageSizeChange = async (val: number) => {
-    listState.gridPageState.siz = val
+    listState.gridPageState.scrollSiz = val
     listState.gridPageState.count = Math.ceil(listState.gridPageState.total / val)
     listState.gridPageState.current = 1
     await grid.value.refresh()
@@ -963,7 +963,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       small: true,
       currentPage: listState.gridPageState.current,
       pageCount: listState.gridPageState.count,
-      pageSize: listState.gridPageState.siz,
+      pageSize: listState.gridPageState.scrollSiz,
       pageSizes: [20, 50, 100, 200],
       total: listState.gridPageState.total,
       pagerCount: 5,
@@ -978,6 +978,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     return {
       length: listState.gridPageState.total,
       pageSize: listState.gridPageState.siz,
+      scrollPageSize: listState.gridPageState.scrollSiz,
       initIndex: listState.gridInitIndex,
       pageProvider: pageProvider,
       loadingWait: listState.loadingWait,

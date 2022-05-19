@@ -235,7 +235,6 @@ export default function useGrid(
     const visiblePn = getVisiblePageNumbers(bufferMeta, props.length as number, props.pageSize as number)
     const pageChanged = difference(visiblePn, visiblePageNumbers).length > 0
     const needRefresh = reachRefreshSpan(bufferMeta, bufferOffset, props.length as number)
-    console.log(visiblePn)
     if (pageChanged || needRefresh) {
       bufferOffset = bufferMeta.bufferedOffset
       state.innerTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
@@ -407,7 +406,7 @@ export default function useGrid(
     if (currentIdx !== index) {
       currentIdx = index
       const localIndex = index - bufferOffset
-      const page = Math.ceil((index + resizeMeasurement.columns) / (props.pageSize as number))
+      const page = Math.ceil((index + resizeMeasurement.columns) / (props.scrollPageSize as number))
       emit(OFFSET_CHANGED_EVENT, { index, localIndex, page })
     }
   }
@@ -444,7 +443,7 @@ export default function useGrid(
    * Scroll to specific page
    */
   const scrollToPage = (pageNumber: number, smooth = true): void => {
-    scrollToIdx((pageNumber - 1) * props.pageSize, smooth)
+    scrollToIdx((pageNumber - 1) * props.scrollPageSize, smooth)
   }
 
   /**
