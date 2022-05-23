@@ -60,7 +60,6 @@ const {
   viewHeight,
   innerTranslate,
   lessThanRowSize,
-  initialized,
   loading,
   scrollToIdx,
   scrollToPage,
@@ -79,6 +78,9 @@ const wrapperClassCo = computed(() => {
   const clazz = []
   if (props.windowMode) {
     clazz.push('is-window')
+  }
+  if (isMobile.value) {
+    clazz.push('is-mobile')
   }
   return clazz.join(' ')
 })

@@ -4,7 +4,7 @@
     <template v-if="!hasQuery">
       <slot name="act" />
       <slot v-if="gridView" name="grid" />
-      <div v-else ref="tableWrapper" class="fd-page__table is-bordered">
+      <div v-else class="fd-page__table is-bordered">
         <slot name="table" />
         <el-pagination class="fd-pagination" v-bind="pagination"></el-pagination>
       </div>
@@ -21,7 +21,7 @@
       <template #left>
         <div class="fd-page__form fd-page-query">
           <div class="fd-page__sub-title"><span class="title-text">查询</span></div>
-          <el-form ref="queryForm" :model="state.data" label-position="top" @keyup.enter="onQuery">
+          <el-form ref="queryForm" :model="queryDataCo" label-position="top" @keyup.enter="onQuery">
             <el-scrollbar class="fd-page-query__scrollbar" :style="scrollbarStyle">
               <slot name="query" />
             </el-scrollbar>
@@ -43,7 +43,7 @@
       <template #right>
         <slot name="act" />
         <slot v-if="gridView" name="grid" />
-        <div v-else ref="tableWrapper" class="fd-page__table is-bordered">
+        <div v-else class="fd-page__table is-bordered">
           <slot name="table" />
           <el-pagination class="fd-pagination" v-bind="pagination"></el-pagination>
         </div>
@@ -57,8 +57,7 @@
 <script setup lang="ts">
 import usePage from '../hooks/use-page'
 import FdSplitPane from '@/components/split-pane/index.vue'
-import { computed, PropType, reactive, ref, toRaw, useSlots, watch } from 'vue'
-import { cloneDeep } from 'lodash-es'
+import { computed, PropType, ref, useSlots } from 'vue'
 import { ApiQuery } from '@/api'
 import { sizeConst } from '@/hooks/use-layout-size'
 
@@ -88,17 +87,14 @@ const props = defineProps({
   pagination: Object
 })
 
-const state = reactive({
-  data: props.queryData as ApiQuery | undefined
-})
+let queryData = props.queryData as ApiQuery | undefined
 
-watch(
-  () => props.queryData,
-  (val) => {
-    state.data = cloneDeep(toRaw(val))
-  },
-  { immediate: true, deep: true }
-)
+const queryDataCo = computed({
+  get: () => props.queryData,
+  set: (val) => {
+    queryData = val
+  }
+})
 
 const objClass = computed(() => {
   const clazz = []
@@ -117,14 +113,16 @@ const drawer = ref()
 
 const onQuery = () => {
   drawer.value?.hide()
-  emit('update:queryData', state.data)
+  emit('update:queryData', queryData)
   props.queryFn?.()
 }
 const reset = () => {
-  queryForm.value.resetFields()
-  state.data && (state.data.sort = [])
+  queryForm.value?.resetFields()
+  queryData = {
+    sort: []
+  }
   drawer.value?.hide()
-  emit('update:queryData', state.data)
+  emit('update:queryData', queryData)
   props.queryFn?.()
 }
 

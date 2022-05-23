@@ -3,7 +3,6 @@ import { isString, merge } from 'lodash-es'
 import { ElForm, ElMessage, ElMessageBox } from 'element-plus'
 import useDict from './use-dict'
 import { scrollDocToTop } from '@/utils/smooth-scroll'
-import { nextFrame } from '@/utils/next-frame'
 import useTable from '@/components/table/hooks/use-table'
 import { arrayToTree, getTreeNode, getTreeNodes, TreeFields, traverseTree } from '@/utils/data-tree'
 import { Ref } from '@vue/reactivity'
@@ -119,7 +118,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       // 页码
       current: 1,
       // 每页获取数据条数
-      siz: 100,
+      siz: 50,
       // 每页滚动数据条数
       scrollSiz: 20,
       // 数据总数
@@ -212,6 +211,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
   const listState = stateOption.treeTable
     ? reactive(merge({}, defaultTreeState, stateOption) as typeof defaultTreeState & TreeStateOption<T>)
     : reactive(merge({}, defaultState, stateOption) as typeof defaultState & ListStateOption<T>)
+
+  const { isMobile } = useLayoutSize()
 
   //===============================================================================
   // handler
@@ -311,14 +312,11 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
 
   // 显示页面即获取数据
   onMounted(async () => {
-    listState.loading = true
-    await nextFrame(async () => {
-      await getDictData()
-      if (listState.gridView) {
-        return
-      }
-      await getList()
-    })
+    await getDictData()
+    if (listState.gridView) {
+      return
+    }
+    await getList()
   })
 
   //===============================================================================
@@ -518,7 +516,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       await listState.delApi(ids)
 
       if (listState.gridView) {
-        await grid.value.refreshBuffer()
+        await gridDel()
+        return
       }
 
       ElMessage({
@@ -659,6 +658,11 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     await nextTick(() => {
       detailDialog.value.open(item, listState.gridPageState.total, index, onNavigateOfGrid, { dicts: listState.dicts })
     })
+  }
+
+  // 删除
+  const gridDel = async () => {
+    await grid.value.refreshBuffer()
   }
 
   // 详细对话框导航时
@@ -981,6 +985,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       scrollPageSize: listState.gridPageState.scrollSiz,
       initIndex: listState.gridInitIndex,
       pageProvider: pageProvider,
+      windowMode: false,
       loadingWait: listState.loadingWait,
       onOffsetChanged: gridOffsetChanged,
       onBufferRefreshed: gridBufferRefreshed
@@ -994,6 +999,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       focusedIndex: listState.gridFocusIndex,
       selectMode: listState.gridSelectMode,
       selectedItems: listState.selectedItems,
+      isMobile: isMobile.value,
       onDetail: gridShowDetail,
       onDel: del,
       onSelect: gridSelected

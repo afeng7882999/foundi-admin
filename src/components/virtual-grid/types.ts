@@ -1,10 +1,5 @@
 import { PropType } from 'vue'
 
-export interface GridMeasurement {
-  rowGap: number
-  columns: number
-}
-
 export interface ResizeMeasurement {
   rowGap: number
   columns: number
@@ -79,7 +74,7 @@ export const GRID_DEFAULT_PROPS = {
   // which is useful for avoiding network requests of skimmed pages.
   pageProviderDebounceTime: {
     type: Number,
-    default: 300,
+    default: 100,
     validator: (value: number) => Number.isInteger(value) && value >= 0
   },
   // The number of items in a page from the item provider

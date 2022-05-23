@@ -2,7 +2,6 @@ import {
   BufferMeta,
   OFFSET_CHANGED_EVENT,
   GRID_DEFAULT_PROPS,
-  GridMeasurement,
   InternalItem,
   ItemsByPage,
   PageProvider,
@@ -13,7 +12,7 @@ import {
 import { clamp, concat, difference, isEqual, parseInt, range } from 'lodash-es'
 import { ExtractPropTypes, onMounted, onUnmounted, reactive, toRefs, watch } from 'vue'
 import { Ref } from '@vue/reactivity'
-import { useDebounceFn, useMutationObserver, useResizeObserver } from '@vueuse/core'
+import { MaybeElementRef, useDebounceFn, useMutationObserver, useResizeObserver } from '@vueuse/core'
 import { nextFrame } from '@/utils/next-frame'
 import { AnyFunction } from '@/common/types'
 
@@ -51,34 +50,18 @@ const getHeightAbove = (viewEl: Element, wrapperEl?: Element): number => {
 }
 
 /**
- * Get measurement of grid layout
- */
-const getGridMeasurement = (innerEl: Element): GridMeasurement => {
-  const style = window.getComputedStyle(innerEl)
-  return {
-    rowGap: parseInt(style.getPropertyValue('row-gap')) || 0,
-    columns: style.getPropertyValue('grid-template-columns').split(' ').length
-  }
-}
-
-/**
  * Get Resize measurement of grid and item
  */
-const getResizeMeasurement = (rootEl: Element, itemH: number): ResizeMeasurement => {
-  const { rowGap, columns } = getGridMeasurement(rootEl)
+const getResizeMeasurement = (innerEl: Element, itemH: number): ResizeMeasurement => {
+  const style = window.getComputedStyle(innerEl)
+  const rowGap = parseInt(style.getPropertyValue('row-gap')) || 0
+  const columns = style.getPropertyValue('grid-template-columns').split(' ').length
+  const itemHeightWithGap = itemH + rowGap
   return {
     rowGap,
     columns,
-    itemHeightWithGap: itemH + rowGap
+    itemHeightWithGap
   }
-}
-
-/**
- * Get first item index of last row above window/wrapper
- */
-const getOffsetBeforeView = (heightAbove: number, rm: ResizeMeasurement): number => {
-  const rowsBeforeView = rm.itemHeightWithGap && Math.floor((heightAbove + rm.rowGap) / rm.itemHeightWithGap)
-  return rowsBeforeView * rm.columns
 }
 
 /**
@@ -87,11 +70,9 @@ const getOffsetBeforeView = (heightAbove: number, rm: ResizeMeasurement): number
 const getBufferMeta = (wrapperHeight: number, heightAbove: number, rm: ResizeMeasurement): BufferMeta => {
   const rowsInView = rm.itemHeightWithGap && Math.ceil((wrapperHeight + rm.rowGap) / rm.itemHeightWithGap) + 1
   const length = rowsInView * rm.columns
-
   const offset = getOffsetBeforeView(heightAbove, rm)
   const bufferedOffset = Math.max(offset - Math.floor(rowsInView / 2) * rm.columns, 0)
   const bufferedLength = length * 2
-
   return {
     columns: rm.columns,
     bufferedOffset,
@@ -124,7 +105,7 @@ const callPageProvider = async (pageNumbers: number[], pageSize: number, pagePro
 }
 
 /**
- * Calculate buffer, set item not fetched undefined
+ * Calculate buffer
  */
 const getBufferItems = (
   itemsByPages: ItemsByPage[],
@@ -166,7 +147,15 @@ const getViewHeight = ({ columns, rowGap, itemHeightWithGap }: ResizeMeasurement
 }
 
 /**
- * Check if scrolling reaches the refresh margin, refresh inner wrapper div if true
+ * Get first item index of last row above window/wrapper
+ */
+const getOffsetBeforeView = (heightAbove: number, rm: ResizeMeasurement): number => {
+  const rowsBeforeView = rm.itemHeightWithGap && Math.floor((heightAbove + rm.rowGap) / rm.itemHeightWithGap)
+  return rowsBeforeView * rm.columns
+}
+
+/**
+ * Check if scrolling reaches the refresh margin
  */
 const reachRefreshSpan = (bufferMeta: BufferMeta, oldBufferOffset: number, length: number, refreshSpan?: number): boolean => {
   if (oldBufferOffset !== 0 && bufferMeta.bufferedOffset === 0) {
@@ -180,18 +169,6 @@ const reachRefreshSpan = (bufferMeta: BufferMeta, oldBufferOffset: number, lengt
   return Math.abs(bufferMeta.bufferedOffset - oldBufferOffset) > refreshSpan
 }
 
-/**
- * Get grid item height
- */
-const getItemHeight = (innerEl: Element, height?: number): number => {
-  if (height !== undefined) {
-    return height
-  }
-  const firstChildEl = innerEl.firstElementChild
-  const firstChildRect = firstChildEl ? firstChildEl.getBoundingClientRect() : ({ width: 0, height: 0 } as DOMRectReadOnly)
-  return firstChildRect.height
-}
-
 export default function useGrid(
   props: Readonly<ExtractPropTypes<typeof GRID_DEFAULT_PROPS>>,
   emit: AnyFunction,
@@ -199,6 +176,7 @@ export default function useGrid(
   viewRef: Ref<HTMLElement | undefined>,
   innerRef: Ref<HTMLElement | undefined>
 ) {
+  let initialized = false
   let heightAbove = 0
   let visiblePageNumbers = [] as number[]
   let resizeMeasurement = {} as ResizeMeasurement
@@ -206,10 +184,10 @@ export default function useGrid(
   let bufferOffset = 0
   let bufferMeta = {} as BufferMeta
   let currentIdx = 0
+  let wrapperOrBody = props.windowMode ? document.body : (wrapperRef as MaybeElementRef)
   let scrollEl = undefined as Element | Window | undefined
 
   const state = reactive({
-    initialized: false,
     wrapperRect: {} as DOMRectReadOnly,
     itemHeight: props.itemHeight ?? 100,
     buffer: [] as InternalItem[],
@@ -220,75 +198,103 @@ export default function useGrid(
   })
 
   /**
-   * Get wrapper div height
+   * Get wrapper/window height
    */
-  const getWrapperHeight = () => {
+  const getWrapperWindowHeight = () => {
     return props.windowMode ? window.innerHeight : (wrapperRef.value as Element).getBoundingClientRect().height
   }
 
   /**
-   * Calculate buffer
+   * Get grid item height, return false if failed
    */
-  const getBuffer = async (): Promise<void> => {
-    const wrapperHeight = getWrapperHeight()
-    bufferMeta = getBufferMeta(wrapperHeight, heightAbove, resizeMeasurement)
+  const getItemHeight = (): boolean => {
+    if (props.itemHeight !== undefined) {
+      state.itemHeight = props.itemHeight
+      return true
+    }
+
+    const firstChildEl = (innerRef.value as Element).firstElementChild
+    if (firstChildEl) {
+      state.itemHeight = firstChildEl.getBoundingClientRect().height
+      return true
+    }
+
+    return false
+  }
+
+  /**
+   * Update buffer, set debounce false if called by debounced function
+   */
+  const getBuffer = async (debounce = false): Promise<void> => {
+    bufferMeta = getBufferMeta(getWrapperWindowHeight(), heightAbove, resizeMeasurement)
     const visiblePn = getVisiblePageNumbers(bufferMeta, props.length as number, props.pageSize as number)
-    const pageChanged = difference(visiblePn, visiblePageNumbers).length > 0
-    const needRefresh = reachRefreshSpan(bufferMeta, bufferOffset, props.length as number)
-    if (pageChanged || needRefresh) {
+    const needGetUpdate = difference(visiblePn, visiblePageNumbers).length > 0
+    const needUpdate = reachRefreshSpan(bufferMeta, bufferOffset, props.length as number)
+
+    if (needUpdate || needGetUpdate) {
       bufferOffset = bufferMeta.bufferedOffset
       state.innerTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
       state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
     }
-    if (pageChanged) {
+
+    if (needGetUpdate) {
       visiblePageNumbers = visiblePn
-      await getBufferRemoteDebounce()
-    }
-    if (!pageChanged && needRefresh) {
-      emitBufferRefreshedDebounce()
+      debounce ? await getBufferRemoteDebounce() : await getBufferRemote()
+    } else if (needUpdate) {
+      debounce ? emitBufferRefreshedDebounce() : emitBufferRefreshed()
     }
   }
 
   /**
-   * Request buffer data from backend
+   * Request buffer data from backend, and update buffer
    */
   const getBufferRemote = async () => {
-    callPageProvider(visiblePageNumbers, props.pageSize as number, props.pageProvider as PageProvider).then((items) => {
-      const itemPn = items.map((i) => i.pageNumber)
-      if (isEqual(visiblePageNumbers, itemPn)) {
-        itemByPages = items
-        state.lessThanRowSize = items[0].items.length < resizeMeasurement.columns
-        state.innerTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
-        state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
-        emitBufferRefreshed()
-      }
-    })
+    const items = await callPageProvider(visiblePageNumbers, props.pageSize as number, props.pageProvider as PageProvider)
+    const itemPn = items.map((i) => i.pageNumber)
+    // page has changed, ignore the data this time
+    if (!isEqual(visiblePageNumbers, itemPn)) {
+      return
+    }
+    itemByPages = items
+    state.lessThanRowSize = items[0].items.length < resizeMeasurement.columns
+    state.innerTranslate = (bufferMeta.bufferedOffset / bufferMeta.columns) * resizeMeasurement.itemHeightWithGap
+    state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
+    emitBufferRefreshed()
   }
   const getBufferRemoteDebounce = useDebounceFn(getBufferRemote, props.pageProviderDebounceTime as number)
+
+  useResizeObserver(wrapperOrBody, async (entries) => {
+    if (!initialized || !viewRef.value) {
+      return
+    }
+    state.wrapperRect = entries[0].contentRect
+    await resizeCbDebounce()
+  })
 
   /**
    * Callback of ResizeObserver
    */
-  const resizeObserverCb = async () => {
-    if (!state.initialized || !viewRef.value) {
+  const resizeCb = async () => {
+    if (!initialized || !viewRef.value) {
       return
     }
-    const viewEl = viewRef.value as Element
-    heightAbove = props.windowMode ? getHeightAbove(viewEl) : getHeightAbove(viewEl, wrapperRef.value as Element)
-    state.itemHeight = getItemHeight(innerRef.value as Element, props.itemHeight)
+    heightAbove = props.windowMode
+      ? getHeightAbove(viewRef.value as Element)
+      : getHeightAbove(viewRef.value as Element, wrapperRef.value as Element)
+    getItemHeight()
     resizeMeasurement = getResizeMeasurement(innerRef.value as Element, state.itemHeight)
+    state.viewHeight = getViewHeight(resizeMeasurement, props.length as number)
     state.lessThanRowSize = itemByPages[0].items.length < resizeMeasurement.columns
     emitCurrentItem()
-    state.viewHeight = getViewHeight(resizeMeasurement, props.length as number)
     await getBuffer()
   }
-  const resizeObserverCbDebounce = useDebounceFn(resizeObserverCb, DEBOUNCE_DEFAULT_TIME)
+  const resizeCbDebounce = useDebounceFn(resizeCb, DEBOUNCE_DEFAULT_TIME)
 
   /**
-   * Callback of wrapper scrolling
+   * Callback of wrapper/window scrolling
    */
   const scrollCb = async () => {
-    if (!state.initialized || !viewRef.value) {
+    if (!initialized || !viewRef.value) {
       return
     }
     heightAbove = props.windowMode
@@ -296,14 +302,14 @@ export default function useGrid(
       : getHeightAbove(viewRef.value as Element, wrapperRef.value as Element)
     emitCurrentItemDebounce()
     state.viewHeight = getViewHeight(resizeMeasurement, props.length as number)
-    await getBuffer()
+    await getBuffer(true)
   }
 
   /**
    * Add scroll event listener
    */
-  const addScrollEventListener = (windowMode: boolean) => {
-    scrollEl = windowMode ? window : getVerticalScrollParent(viewRef.value as Element)
+  const addScrollEventListener = () => {
+    scrollEl = props.windowMode ? window : getVerticalScrollParent(viewRef.value as Element)
     scrollEl.addEventListener('scroll', scrollCb)
   }
 
@@ -317,12 +323,12 @@ export default function useGrid(
       state.viewHeight = getViewHeight(resizeMeasurement, props.length as number)
       visiblePageNumbers = []
       await getBuffer()
-      emitBufferRefreshed()
 
-      addScrollEventListener(props.windowMode)
+      addScrollEventListener()
       await nextFrame(() => {
-        state.initialized = true
+        initialized = true
         props.initIndex && scrollToIdx(props.initIndex as number, false)
+        state.loading = false
       })
     }
 
@@ -339,35 +345,31 @@ export default function useGrid(
   const getItemHeightDynamically = async (): Promise<void> => {
     return new Promise((resolve) => {
       const { stop } = useMutationObserver(
-        innerRef.value,
+        innerRef,
         (mutations) => {
           if (mutations[0]) {
-            stop()
-            state.itemHeight = getItemHeight(innerRef.value as Element, props.itemHeight)
+            // stop observation if success
+            getItemHeight() && stop()
             return resolve()
           }
         },
         { childList: true }
       )
 
-      const wrapperHeight = getWrapperHeight()
+      const wrapperHeight = getWrapperWindowHeight()
       resizeMeasurement = getResizeMeasurement(innerRef.value as Element, state.itemHeight)
       bufferMeta = getBufferMeta(wrapperHeight, heightAbove, resizeMeasurement)
       // param 'pageSize' must be large enough to avoid flicker of first loading
       callPageProvider([0], props.pageSize, props.pageProvider as PageProvider).then((pages) => {
         itemByPages = pages
         state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
+        if (state.buffer.length === 0) {
+          // observer is not triggered when data is empty, just return resolve
+          return resolve()
+        }
       })
     })
   }
-
-  useResizeObserver(wrapperRef, async (entries) => {
-    if (!state.initialized || !viewRef.value) {
-      return
-    }
-    state.wrapperRect = entries[0].contentRect
-    await resizeObserverCbDebounce()
-  })
 
   onMounted(async () => {
     state.loading = true
@@ -392,8 +394,9 @@ export default function useGrid(
     () => props.windowMode,
     (val) => {
       scrollEl?.removeEventListener('scroll', scrollCb)
+      wrapperOrBody = val ? document.body : wrapperRef
       nextFrame(() => {
-        addScrollEventListener(val)
+        addScrollEventListener()
       })
     }
   )
@@ -455,6 +458,9 @@ export default function useGrid(
     visiblePageNumbers = []
     scrollToIdx(0, false)
     await getBuffer()
+    setTimeout(() => {
+      state.loading = false
+    }, props.loadingWait)
   }
 
   /**
@@ -462,28 +468,15 @@ export default function useGrid(
    */
   const refreshBuffer = async (): Promise<void> => {
     state.loading = true
-    callPageProvider(visiblePageNumbers, props.pageSize as number, props.pageProvider as PageProvider).then((items) => {
-      itemByPages = items
-      state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
-    })
+    itemByPages = await callPageProvider(visiblePageNumbers, props.pageSize as number, props.pageProvider as PageProvider)
+    state.buffer = getBufferItems(itemByPages, bufferMeta, props.length as number, props.pageSize as number)
+    setTimeout(() => {
+      state.loading = false
+    }, props.loadingWait)
   }
 
-  /**
-   * MutationObserver to hide loading mask
-   */
-  useMutationObserver(
-    innerRef.value,
-    (mutations) => {
-      if (mutations[0]) {
-        state.loading = false
-      }
-    },
-    { childList: true }
-  )
-
-  const { initialized, wrapperRect, itemHeight, buffer, viewHeight, innerTranslate, lessThanRowSize, loading } = toRefs(state)
+  const { wrapperRect, itemHeight, buffer, viewHeight, innerTranslate, lessThanRowSize, loading } = toRefs(state)
   return {
-    initialized,
     wrapperRect,
     itemHeight,
     viewHeight,

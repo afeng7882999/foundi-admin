@@ -43,4 +43,12 @@
     border-radius: var(--el-border-radius-base);
     background-color: var(--el-color-white);
   }
+  
+  &.is-mobile {
+    .fd-virtual-grid {
+      &__empty {
+        border-radius: 0;
+      }
+    }
+  }
 }
