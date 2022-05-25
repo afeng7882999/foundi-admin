@@ -1,5 +1,5 @@
 <template>
-  <template v-if="visible && !isMobile">
+  <template v-if="visible">
     <el-table-column
       v-bind="$attrs"
       :align="align"
@@ -31,7 +31,6 @@ import { computed, PropType } from 'vue'
 import { Indexable } from '@/common/types'
 import { COL_DEFAULT_PROPS } from '../types'
 import useColumn from '../hooks/use-column'
-import useLayoutSize from '@/hooks/use-layout-size'
 
 defineOptions({
   name: 'FdColAct',
@@ -69,8 +68,6 @@ const props = defineProps({
 const emit = defineEmits(['detail', 'edit', 'del'])
 
 const { visible, booleanOrAuth } = useColumn(props)
-
-const { isMobile } = useLayoutSize(props.mobileCompact)
 
 const widthCo = computed(() => {
   if (props.width) {

@@ -2,6 +2,7 @@
 import { ActionContext } from 'vuex'
 import { Theme } from 'element-plus-dynamic-theme/theme'
 import { setDocumentTheme } from '@/components/theme/theme'
+import {getDeviceSize} from "@/hooks/use-layout-size";
 
 const DEFAULT_SIDEBAR_MODE = '{"minimized":false,"offScreen":false,"opened":false,"useGrouped":true,"showLogo":true,"showUser":true}'
 
@@ -27,7 +28,7 @@ export interface AppState {
   bodyWidth: number
   docHeight: number
   docWidth: number
-  device: DeviceType
+  deviceSize: DeviceType
   sidebarMode: SidebarMode | null
   theme: Theme | null
   enableTags: boolean
@@ -42,7 +43,7 @@ const state: AppState = {
   bodyWidth: 0,
   docHeight: 0,
   docWidth: 0,
-  device: DeviceType.Desktop,
+  deviceSize: getDeviceSize(),
   sidebarMode: JSON.parse(window.localStorage.getItem('app.sidebarMode') || DEFAULT_SIDEBAR_MODE),
   theme: JSON.parse(window.localStorage.getItem('app.theme') || '{}'),
   enableTags: window.localStorage.getItem('app.enableTags') ? window.localStorage.getItem('app.enableTags') === 'true' : true,
@@ -69,8 +70,8 @@ const mutations = {
   SET_DOC_WIDTH: (state: AppState, width: number) => {
     state.docWidth = width
   },
-  TOGGLE_DEVICE: (state: AppState, device: DeviceType) => {
-    state.device = device
+  TOGGLE_DEVICE_SIZE: (state: AppState, deviceSize: DeviceType) => {
+    state.deviceSize = deviceSize
   },
   SET_SIDEBAR_MODE: (state: AppState, mode: SidebarMode) => {
     state.sidebarMode = Object.assign(state.sidebarMode, mode)
@@ -121,8 +122,8 @@ const actions = {
   setDocWidth({ commit }: ActionContext<AppState, unknown>, width: number) {
     commit('SET_DOC_WIDTH', width)
   },
-  toggleDevice({ commit }: ActionContext<AppState, unknown>, device: DeviceType) {
-    commit('TOGGLE_DEVICE', device)
+  toggleDeviceSize({ commit }: ActionContext<AppState, unknown>, deviceSize: DeviceType) {
+    commit('TOGGLE_DEVICE_SIZE', deviceSize)
   },
   setAppTitle({ commit }: ActionContext<AppState, unknown>, title: string) {
     commit('SET_TITLE', title)

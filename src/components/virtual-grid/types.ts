@@ -116,8 +116,8 @@ export const GRID_DEFAULT_PROPS = {
     default: '暂无数据'
   },
   // Enable or disable mobile mode
-  mobileCompact: {
+  isMobile: {
     type: Boolean,
-    default: true
+    default: false
   }
 }

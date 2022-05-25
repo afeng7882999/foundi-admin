@@ -1,15 +1,23 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { createRouterGuards } from '@/app/permission'
 import { App } from 'vue'
+import { normalizeUrl } from '@/utils/query'
+
+// desktop page path root
+export const PAGE_ROOT_NORMAL = '/src/views/'
+
+// mobile page path root
+export const PAGE_ROOT_MOBILE = '/src/views-m/'
 
 // affix tags
 export const DEFAULT_AFFIX_ROUTE = ['dashboard']
 
 // anonymous paths
-export const ANON_LIST = ['/login', '/register', '/404', '/forgot-password']
+const anonList = ['/login', '/register', '/404', '/forgot-password']
+export const ANON_LIST = [...anonList, ...anonList.map((s) => normalizeUrl(s, true))]
 
 // import pages
-export const importModules = import.meta.glob('/src/views/**/*.vue')
+export const importModules = import.meta.glob('/src/views*/**/*.vue')
 
 // static routes
 export const staticRoutes: RouteRecordRaw[] = [
@@ -39,18 +47,42 @@ export const staticRoutes: RouteRecordRaw[] = [
         component: importModules['/src/views/common/redirect.vue']
       }
     ]
+  },
+  {
+    path: '/m/login',
+    meta: { title: '登录', noCache: true },
+    component: importModules['/src/views-m/modules/login/index.vue'] ?? importModules['/src/views/modules/login/index.vue']
+  },
+  {
+    path: '/m/register',
+    component: importModules['/src/views-m/modules/login/register.vue'] ?? importModules['/src/views/modules/login/register.vue']
+  },
+  {
+    path: '/m/forgot-password',
+    component:
+      importModules['/src/views-m/modules/login/forgot-password.vue'] ?? importModules['/src/views/modules/login/forgot-password.vue']
   }
 ]
 
 // dynamic routes
-export const dynamicRoutes: RouteRecordRaw = {
-  path: '/',
-  component: () => import('@/views/layout/index.vue'),
-  name: 'main',
-  redirect: '/dashboard',
-  meta: { title: '管理主页' },
-  children: []
-}
+export const dynamicRoutes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    component: () => import('@/views/layout/index.vue'),
+    name: 'main',
+    redirect: '/dashboard',
+    meta: { title: '管理主页' },
+    children: []
+  },
+  {
+    path: '/m/',
+    component: () => import('@/views/layout/index.vue'),
+    name: 'mainM',
+    redirect: '/m/dashboard',
+    meta: { title: '管理主页' },
+    children: []
+  }
+]
 
 // create router
 const router = createRouter({

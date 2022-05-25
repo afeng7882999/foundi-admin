@@ -3,6 +3,8 @@ export default {
   title: 'FOUNDi-3.1.0',
   // app标识
   appName: 'web',
+  // 移动端路径
+  mobileRoot: 'm',
   // 记住密码状态下的token在Cookie中存储的天数，默认1天
   tokenCookieExpires: 1,
   // 记住密码状态下的密码在Cookie中存储的天数，默认1天

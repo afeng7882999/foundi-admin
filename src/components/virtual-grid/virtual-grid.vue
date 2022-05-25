@@ -36,7 +36,6 @@ import { computed, reactive, ref, watch } from 'vue'
 import useGrid from './use-grid'
 import { Indexable } from '@/common/types'
 import { ElScrollbar } from 'element-plus'
-import useLayoutSize from '@/hooks/use-layout-size'
 
 defineOptions({
   name: 'FdVirtualGrid'
@@ -67,8 +66,6 @@ const {
   refreshBuffer
 } = useGrid(props, emit, wrapperRef, viewRef, innerRef)
 
-const { isMobile } = useLayoutSize(props.mobileCompact)
-
 const state = reactive({
   loadingStyle: {} as Indexable,
   loadingVisible: false
@@ -79,7 +76,7 @@ const wrapperClassCo = computed(() => {
   if (props.windowMode) {
     clazz.push('is-window')
   }
-  if (isMobile.value) {
+  if (props.isMobile) {
     clazz.push('is-mobile')
   }
   return clazz.join(' ')
@@ -105,7 +102,7 @@ const innerStyleCo = computed(() => {
     transform: `translate3d(0px, ${innerTranslate.value}px, 0px)`
   } as Indexable
 
-  if (isMobile.value) {
+  if (props.isMobile) {
     style.gridTemplateColumns = '1fr'
     return style
   }

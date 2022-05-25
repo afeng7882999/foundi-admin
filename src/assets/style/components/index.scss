@@ -1,4 +1,4 @@
-@use './element-plus/all';
+@use './element-plus/all' as element-plus;
 @use './element-plus/el-backtop';
 @use './element-plus/el-color-picker';
 @use './element-plus/el-message';
@@ -8,6 +8,8 @@
 @use './element-plus/el-range-editor';
 @use './element-plus/el-tag';
 @use './element-plus/el-loading';
+
+@use './vant/all' as vant;
 
 @use './foundi/fd-breadcrumb';
 @use './foundi/fd-card';

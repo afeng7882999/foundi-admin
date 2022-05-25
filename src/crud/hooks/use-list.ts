@@ -14,7 +14,7 @@ import { DictList } from '@/api/system/dict-item'
 import { AnyFunction, Indexable } from '@/common/types'
 import { MaybeRef, useThrottleFn } from '@vueuse/core'
 import { FdVirtualGridType, InternalItem } from '@/components/virtual-grid/types'
-import useLayoutSize from '@/hooks/use-layout-size'
+import useMobilePage from '@/hooks/use-mobile-page'
 
 export interface PageState {
   // 页码
@@ -60,6 +60,8 @@ export type ListStateOption<T extends ApiObj> = Partial<{
   exportApi: AnyFunction
   // 是否使用卡片模式
   gridViewEnable: boolean
+  // 是否使用移动端模式
+  mobileEnable: boolean
 
   [key: string]: any
 }> & {
@@ -180,6 +182,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     alias: '_0',
     // 行是否可拖动
     rowDraggable: false,
+    // 是否使用移动端模式
+    mobileEnable: true,
 
     ...defaultGridState
   }
@@ -212,7 +216,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
     ? reactive(merge({}, defaultTreeState, stateOption) as typeof defaultTreeState & TreeStateOption<T>)
     : reactive(merge({}, defaultState, stateOption) as typeof defaultState & ListStateOption<T>)
 
-  const { isMobile } = useLayoutSize()
+  const { isMobilePage } = useMobilePage(listState.mobileEnable)
 
   //===============================================================================
   // handler
@@ -985,7 +989,8 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       scrollPageSize: listState.gridPageState.scrollSiz,
       initIndex: listState.gridInitIndex,
       pageProvider: pageProvider,
-      windowMode: false,
+      windowMode: isMobilePage.value,
+      isMobile: isMobilePage.value,
       loadingWait: listState.loadingWait,
       onOffsetChanged: gridOffsetChanged,
       onBufferRefreshed: gridBufferRefreshed
@@ -999,7 +1004,7 @@ export default function <T extends ApiObj>(stateOption: ListStateOption<T> | Tre
       focusedIndex: listState.gridFocusIndex,
       selectMode: listState.gridSelectMode,
       selectedItems: listState.selectedItems,
-      isMobile: isMobile.value,
+      isMobile: isMobilePage.value,
       onDetail: gridShowDetail,
       onDel: del,
       onSelect: gridSelected

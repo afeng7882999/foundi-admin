@@ -91,7 +91,6 @@ import { ElMessage } from 'element-plus'
 import usePage from '@/crud/hooks/use-page'
 import { Indexable } from '@/common/types'
 import useView from '@/crud/hooks/use-view'
-import useLayoutSize from '@/hooks/use-layout-size'
 
 defineOptions({
   name: 'Generator'
@@ -172,6 +171,4 @@ const handleEdit = async (row: GenTable) => {
     await gotoView('GeneratorEdit', { id: tableId }, `/generator/edit/${tableId}`, `${tableName} 修改`)
   }
 }
-
-const { isMobile } = useLayoutSize()
 </script>

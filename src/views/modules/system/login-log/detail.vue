@@ -6,7 +6,7 @@
     :title="`系统访问日志详细 (${s.idx + 1} / ${s.siz})`"
     size="500px"
   >
-    <el-descriptions :column="2" :direction="isMobile ? 'vertical' : 'horizontal'" border>
+    <el-descriptions :column="2" direction="horizontal" border>
       <el-descriptions-item :span="2" label="ID">
         {{ s.data.id }}
       </el-descriptions-item>
@@ -54,7 +54,6 @@ export default {
 <script setup lang="ts">
 import useDetail, { OPEN_EDIT_EVENT } from '@/crud/hooks/use-detail'
 import { LoginLog, loginLogFields } from '@/api/system/login-log'
-import useLayoutSize from '@/hooks/use-layout-size'
 
 const emit = defineEmits([OPEN_EDIT_EVENT])
 
@@ -68,8 +67,6 @@ const stateOption = {
 
 const { detailState: s, detailMethods } = useDetail<LoginLog>(stateOption, emit)
 const { open, onEdit, onNavigate, close } = detailMethods
-
-const { isMobile } = useLayoutSize()
 
 defineExpose({
   open,

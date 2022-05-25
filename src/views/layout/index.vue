@@ -25,6 +25,7 @@ import { useStore } from 'vuex'
 import { SidebarMode } from '@/store/modules/app'
 import { setDocumentTheme } from '@/components/theme/theme'
 import useLayoutSize from '@/hooks/use-layout-size'
+import useMobilePage from '@/hooks/use-mobile-page'
 
 defineOptions({
   name: 'FdLayout'
@@ -33,7 +34,8 @@ defineOptions({
 const store = useStore<AllState>()
 const storeState = store.state as AllState
 
-const { addResizeObserver, doLayoutResize, isMobileOrPad, isMobile } = useLayoutSize()
+const { addResizeObserver, doLayoutResize, isMobileOrPadSize } = useLayoutSize()
+const { isMobilePage } = useMobilePage()
 
 const appSetting = ref()
 
@@ -72,15 +74,15 @@ const classObj = computed(() => {
   return {
     'is-sidebar-minimized': mode.value.minimized,
     'is-sidebar-opened': mode.value.opened,
-    'is-pad': isMobileOrPad.value,
-    'is-mobile': isMobile.value,
+    'is-pad': isMobileOrPadSize.value,
+    'is-mobile': isMobilePage.value,
     'is-enable-tags': enableTags.value,
     'is-fixed-header': fixedHeader.value
   }
 })
 
 watch(
-  () => isMobile.value,
+  () => isMobilePage.value,
   (val) => {
     if (val) {
       document.body.classList.add('is-mobile')
@@ -92,7 +94,7 @@ watch(
 )
 
 watch(
-  () => isMobileOrPad.value,
+  () => isMobileOrPadSize.value,
   async (val) => {
     if (val) {
       await store.dispatch('app/setSidebarMode', { offScreen: true, opened: false })

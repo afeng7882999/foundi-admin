@@ -29,9 +29,6 @@
   &.is-focused,
   &.is-selected {
     background-color: var(--el-color-primary-light-9);
-  }
-  
-  &.is-selected {
     border-color: var(--el-color-primary);
   }
   

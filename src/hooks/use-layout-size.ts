@@ -22,9 +22,20 @@ export const breakpoints = {
   xl: 1920
 }
 
+export const getDeviceSize = (w?: number) => {
+  w = w ?? document.body.getBoundingClientRect().width
+  if (w - sizeConst.ratio < breakpoints.sm) {
+    return DeviceType.Mobile
+  }
+  if (w - sizeConst.ratio > breakpoints.md) {
+    return DeviceType.Desktop
+  }
+  return DeviceType.Pad
+}
+
 export default function useLayoutSize(react: boolean | undefined = true) {
   const store = useStore<AllState>()
-  const storeState = store.state as AllState
+  const storeState = store?.state as AllState
 
   const getDocH = (h: number) => {
     const height = storeState.app.enableTags
@@ -48,15 +59,7 @@ export default function useLayoutSize(react: boolean | undefined = true) {
     await store.dispatch('app/setBodyWidth', w)
     await store.dispatch('app/setDocHeight', getDocH(h))
     await store.dispatch('app/setDocWidth', getDocW(w))
-    if (w - sizeConst.ratio < breakpoints.sm) {
-      await store.dispatch('app/toggleDevice', DeviceType.Mobile)
-      return
-    }
-    if (w - sizeConst.ratio > breakpoints.md) {
-      await store.dispatch('app/toggleDevice', DeviceType.Desktop)
-      return
-    }
-    await store.dispatch('app/toggleDevice', DeviceType.Pad)
+    await store.dispatch('app/toggleDeviceSize', getDeviceSize())
   }
 
   const addResizeObserver = () => {
@@ -77,28 +80,40 @@ export default function useLayoutSize(react: boolean | undefined = true) {
     await resizeLayout(Math.floor(rect.width), Math.floor(rect.height))
   }
 
-  const device = computed(() => {
-    return storeState.app.device
+  const deviceSize = computed(() => {
+    return storeState?.app ? storeState.app.deviceSize : getDeviceSize()
   })
 
-  const isMobile = computed(() => {
-    return react ? storeState.app.device === DeviceType.Mobile : false
+  const isMobileSize = computed(() => {
+    if (!react) {
+      return false
+    }
+    const deviceSize = storeState?.app ? storeState.app.deviceSize : getDeviceSize()
+    return deviceSize === DeviceType.Mobile
   })
 
-  const isPad = computed(() => {
-    return react ? storeState.app.device === DeviceType.Pad : false
+  const isPadSize = computed(() => {
+    if (!react) {
+      return false
+    }
+    const deviceSize = storeState?.app ? storeState.app.deviceSize : getDeviceSize()
+    return deviceSize === DeviceType.Pad
   })
 
-  const isMobileOrPad = computed(() => {
-    return react ? storeState.app.device === DeviceType.Mobile || storeState.app.device === DeviceType.Pad : false
+  const isMobileOrPadSize = computed(() => {
+    if (!react) {
+      return false
+    }
+    const deviceSize = storeState?.app ? storeState.app.deviceSize : getDeviceSize()
+    return deviceSize === DeviceType.Mobile || deviceSize === DeviceType.Pad
   })
 
   return {
     addResizeObserver,
-    device,
-    isPad,
-    isMobile,
-    isMobileOrPad,
+    deviceSize,
+    isPadSize,
+    isMobileSize,
+    isMobileOrPadSize,
     doLayoutResize
   }
 }
