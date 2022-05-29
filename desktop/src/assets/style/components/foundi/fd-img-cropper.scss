@@ -1,0 +1,66 @@
+@use '../base/src/assets/style/variable' as *;
+
+.fd-img-cropper {
+  display: flex;
+  font-size: $font-size-tiny;
+  color: var(--el-border-color-base);
+  border: 1px solid var(--el-border-color-base);
+  border-radius: var(--el-border-radius-base);
+  box-sizing: border-box;
+  background-color: var(--el-fill-base);
+  overflow: hidden;
+  cursor: pointer;
+  
+  .img-cropper-img {
+    width: 100%;
+    height: 100%;
+  }
+  
+  &:hover {
+    border-color: var(--el-border-color-hover);
+  }
+}
+
+.fd-img-cropper-dialog {
+  max-width: 900px;
+  min-width: 700px;
+  
+  .el-dialog__body {
+    background-color: var(--el-bg-color);
+  }
+  
+  .cropper {
+    width: 100%;
+    height: 400px;
+    margin: auto auto 0;
+  }
+  
+  .actions {
+    margin-top: 5px;
+  }
+  
+  .preview-title {
+    padding: 0;
+  }
+  
+  .preview {
+    float: left;
+    padding: 3px;
+    margin: 5px 5px 0 0;
+    border: 1px solid var(--el-border-color-base);
+    background-color: var(--el-fill-base);
+    
+    .preview-inner {
+      overflow: hidden;
+    }
+    
+    &.round {
+      border-radius: 50%;
+      overflow: hidden;
+      
+      .preview-inner {
+        border-radius: 50%;
+      }
+    }
+  }
+}

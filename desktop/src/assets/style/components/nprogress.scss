@@ -1,0 +1,10 @@
+// nprogress
+#nprogress {
+  .bar {
+    background: var(--el-color-primary) !important;
+  }
+  
+  .peg {
+    display: none !important;
+  }
+}

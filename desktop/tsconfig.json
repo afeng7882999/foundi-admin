@@ -1,0 +1,22 @@
+{
+  "extends": "../base/tsconfig.json",
+  "compilerOptions": {
+    "types": ["unplugin-vue-define-options"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@b/*": ["../base/src/*"]
+    },
+    "typeRoots": [
+      "src/types"
+    ]
+  },
+  "include": [
+    "*.ts",
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue"
+  ],
+  "exclude": ["node_modules"]
+}

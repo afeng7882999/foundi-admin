@@ -1,0 +1,215 @@
+// vue cropper
+.vue-cropper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  user-select: none;
+  touch-action: none;
+  text-align: left;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');
+  
+  .vue-cropper-img,
+  .vue-cropper-img__canvas,
+  .vue-cropper-drag,
+  .vue-cropper-crop,
+  .vue-cropper-crop__face {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    user-select: none;
+  }
+  
+  .vue-cropper-img__canvas img {
+    position: relative;
+    text-align: left;
+    user-select: none;
+    transform: none;
+    max-width: none;
+    max-height: none;
+    transform-origin: center;
+  }
+  
+  .vue-cropper-img {
+    overflow: hidden;
+  }
+  
+  .cropper-move {
+    cursor: move;
+  }
+  
+  .cropper-crop {
+    cursor: crosshair;
+  }
+  
+  .cropper-modal {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  .vue-cropper-crop {
+    /*border: 2px solid #39f;*/
+  }
+  
+  .vue-cropper-crop__canvas {
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+  }
+  
+  .vue-cropper-crop__canvas img {
+    user-select: none;
+    text-align: left;
+    max-width: none;
+    max-height: none;
+    transform-origin: center;
+  }
+  
+  .vue-cropper-crop__face {
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    opacity: 0.1;
+  }
+  
+  .vue-cropper-crop__info {
+    position: absolute;
+    left: 0;
+    min-width: 65px;
+    text-align: center;
+    color: white;
+    line-height: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    font-size: 12px;
+  }
+  
+  .vue-cropper-crop__line {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    
+    .vue-cropper-crop__line-inner {
+      background: none;
+      transition: border 0.5s;
+      border: 0 solid rgba(#fff, 0.3);
+    }
+  }
+  
+  .line-w {
+    top: -5px;
+    left: 0;
+    height: 10px;
+    cursor: n-resize;
+    
+    .vue-cropper-crop__line-inner {
+      height: 0;
+      width: 100%;
+      border-top-width: 1px;
+    }
+  }
+  
+  .line-a {
+    top: 0;
+    left: -5px;
+    width: 10px;
+    cursor: w-resize;
+    
+    .vue-cropper-crop__line-inner {
+      height: 100%;
+      width: 0;
+      border-left-width: 1px;
+    }
+  }
+  
+  .line-s {
+    bottom: -5px;
+    left: 0;
+    height: 10px;
+    cursor: s-resize;
+    
+    .vue-cropper-crop__line-inner {
+      height: 0;
+      width: 100%;
+      border-bottom-width: 1px;
+    }
+  }
+  
+  .line-d {
+    top: 0;
+    right: -5px;
+    width: 10px;
+    cursor: e-resize;
+    
+    .vue-cropper-crop__line-inner {
+      height: 100%;
+      width: 0;
+      border-right-width: 1px;
+    }
+  }
+  
+  .vue-cropper-crop__point {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    opacity: 1;
+    background-color: #fff;
+  }
+  
+  .point1 {
+    top: -5px;
+    left: -5px;
+    cursor: nw-resize;
+  }
+  
+  .point2 {
+    top: -5px;
+    left: 50%;
+    margin-left: -5px;
+    cursor: n-resize;
+  }
+  
+  .point3 {
+    top: -5px;
+    right: -5px;
+    cursor: ne-resize;
+  }
+  
+  .point4 {
+    top: 50%;
+    left: -5px;
+    margin-top: -5px;
+    cursor: w-resize;
+  }
+  
+  .point5 {
+    top: 50%;
+    right: -5px;
+    margin-top: -5px;
+    cursor: e-resize;
+  }
+  
+  .point6 {
+    bottom: -5px;
+    left: -5px;
+    cursor: sw-resize;
+  }
+  
+  .point7 {
+    bottom: -5px;
+    left: 50%;
+    margin-left: -5px;
+    cursor: s-resize;
+  }
+  
+  .point8 {
+    bottom: -5px;
+    right: -5px;
+    cursor: se-resize;
+  }
+}

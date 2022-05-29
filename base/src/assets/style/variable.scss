@@ -1,0 +1,134 @@
+@use 'sass:math';
+@use './color' as color-def;
+
+/* SCSS variables
+-------------------------- */
+
+// theme
+$dark-mode: 'theme-dark';
+$sharp-mode: 'theme-sharp';
+$round-mode: 'theme-round';
+
+// transition
+$default-transition-time: 0.1s !default; // 0.3s !default;
+$bg-transition: opacity 0.1s cubic-bezier(0.7, 0.3, 0.1, 1) !default;
+$stop-transition: none !important !default;
+
+// colors
+$color-white: color-def.$white !default;
+$color-white-rgb: 255, 255, 255 !default;
+$color-black: color-def.$black !default;
+$color-black-rgb: 0, 0, 0 !default;
+
+$color-logo: #19449a !default;
+
+$color-primary: #579ddb !default;
+$color-accent: #faab1a !default;
+
+$color-success: color-def.$green !default;
+$color-warning: color-def.$orange !default;
+$color-danger: color-def.$red !default;
+$color-error: color-def.$red !default;
+$color-info: color-def.$grey !default;
+
+$color-text-primary: rgba($color-black, 0.9) !default;
+$color-text-regular: rgba($color-black, 0.85) !default;
+$color-text-secondary: rgba($color-black, 0.38) !default;
+$color-text-placeholder: rgba($color-black, 0.26) !default;
+
+$bg-color: #f5f7fa !default;
+$bg-color-hover: rgba($color-black, 0.1) !default;
+$body-bg-color: rgb(237, 240, 242) !default;
+$modal-background-color: rgba(0, 0, 0, 0.3) !default;
+
+$scrollbar-bg-color: rgba($color-text-secondary, 0.3) !default;
+$scrollbar-hover-bg-color: rgba($color-text-secondary, 0.5) !default;
+
+// shadow
+$box-shadow-base: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04) !default;
+$box-shadow-dark: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.12) !default;
+$box-shadow-light: 0 2px 12px 0 rgba(0, 0, 0, 0.1) !default;
+$real-shadow-base: 0 16px 38px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12),
+  0 8px 10px -5px rgba(0, 0, 0, 0.2) !default;
+
+// z-index
+$index-normal: 1 !default;
+$index-mask: 5 !default;
+$index-top: 1000 !default;
+$index-top-bg: 2001 !default;
+$sidebar-z-index: 2002 !default;
+$index-popper: 2000 !default;
+
+// font
+$font-size-large: 18px !default;
+$font-size-base: 14px !default;
+$font-size-small: 13px !default;
+$font-size-tiny: 12px !default;
+$font-color-disabled-base: #bbb !default;
+$font-weight-primary: 500 !default;
+$font-weight-bold: 700 !default;
+$font-weight-secondary: 100 !default;
+$font-line-height-primary: 24px !default;
+$font-line-height-secondary: 16px !default;
+
+// border
+$border-color-base: #dcdfe6 !default;
+$border-color-light: #e4e7ed !default;
+$border-color-lighter: #ebeef5 !default;
+$border-color-extra-light: #f2f6fc !default;
+$border-width-base: 1px !default;
+$border-radius-base: 4px !default;
+$border-radius-small: 3px !default;
+
+// drawer
+$drawer-width: 256px !default;
+
+// appTitle
+$app-title-height: 48px !default;
+$app-title-font-size: $font-size-small !default;
+$app-title-bg-color: $color-white !default;
+
+// appTags
+$app-tags-height: 48px !default;
+$app-tags-padding: 28px !default;
+$app-tags-font-size: $font-size-small !default;
+$app-tags-bg-color: $color-white !default;
+$app-tags-radius: 8px !default;
+
+// appFooter
+$app-footer-height: 48px !default;
+
+// icon
+$icon-size-large: 24px !default;
+$icon-size-base: 22px !default;
+$icon-size-middle: 18px !default;
+$icon-size-small: 16px !default;
+$icon-size-tiny: 14px !default;
+
+// sidebar
+$sidebar-min-width: 56px !default;
+$sidebar-normal-width: 240px !default;
+$sidebar-transition-time: 0.1s !default; // 0.3s !default;
+$sidebar-back-color: #343a40 !default;
+$sidebar-text-color: rgba($color-white, 0.9) !default;
+$sidebar-text-placeholder-color: rgba($color-white, 0.4) !default;
+$sidebar-hover-color: rgba($color-white, 0.1) !default;
+$sidebar-border-color: rgba($color-white, 0) !default;
+$sidebar-active-color: $color-primary !default;
+$sidebar-active-text-color: rgba($color-white, 0.9) !default;
+$sidebar-active-hover-color: $color-primary !default;
+$sidebar-background-img: 'none' !default;
+
+// Break-point
+$sm: 768px !default;
+$md: 992px !default;
+$lg: 1200px !default;
+$xl: 1920px !default;
+
+$breakpoints: (
+  'xs': '(max-width: #{$sm})',
+  'sm': '(min-width: #{$sm})',
+  'md': '(min-width: #{$md})',
+  'lg': '(min-width: #{$lg})',
+  'xl': '(min-width: #{$xl})',
+) !default;

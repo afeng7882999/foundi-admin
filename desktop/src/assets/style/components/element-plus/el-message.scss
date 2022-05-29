@@ -1,0 +1,49 @@
+@use '../base/src/assets/style/variable' as *;
+@use '../base/src/assets/style/mixin' as *;
+
+// el-message
+.el-message {
+  top: 0 !important;
+  width: 480px;
+  height: $app-title-height;
+  border: none;
+  border-radius: 0 0 var(--el-border-radius-base) var(--el-border-radius-base);
+  color: var(--el-color-white);
+  
+  .el-message__icon {
+    color: var(--el-color-white);
+  }
+  
+  .el-message__content {
+    color: var(--el-color-white);
+    
+    p {
+      padding: 0 0 0 0;
+    }
+  }
+  
+  &--success {
+    background-color: var(--el-color-success);
+  }
+  
+  &--warning {
+    background-color: var(--el-color-warning);
+  }
+  
+  &--error {
+    background-color: var(--el-color-danger);
+  }
+  
+  &--info {
+    background-color: var(--el-color-info);
+  }
+  
+  @include theme-d() {
+    .el-message__icon {
+      color: var(--el-text-color-primary);
+    }
+    .el-message__content {
+      color: var(--el-text-color-primary);
+    }
+  }
+}
