@@ -13,6 +13,7 @@ export const ANON_PATHS = ['/login', '/register', '/404', '/forgot-password']
 
 // import pages
 export const importModules = import.meta.glob('/src/views/**/*.vue')
+export const importBaseModules = import.meta.glob('../base/src/views/**/*.vue')
 
 // static routes
 export const staticRoutes: RouteRecordRaw[] = [
@@ -39,7 +40,7 @@ export const staticRoutes: RouteRecordRaw[] = [
     children: [
       {
         path: '/redirect/:path*',
-        component: importModules['/src/views/common/redirect.vue']
+        component: importBaseModules['../base/src/views/common/redirect.vue']
       }
     ]
   }

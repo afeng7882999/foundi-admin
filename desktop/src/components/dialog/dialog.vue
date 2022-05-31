@@ -26,7 +26,7 @@
             @click="toggleFullscreen"
           ></fd-button>
         </el-tooltip>
-        <fd-button type="icon" class="title-button" icon="close-small" @click="hide"></fd-button>
+        <fd-button type="icon" class="title-button" icon="close" @click="hide"></fd-button>
       </div>
     </template>
     <slot />

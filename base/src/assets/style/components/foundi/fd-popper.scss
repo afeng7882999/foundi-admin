@@ -1,0 +1,6 @@
+@use '../../variable' as *;
+
+.fd-popper {
+  position: fixed;
+  z-index: $index-popper;
+}

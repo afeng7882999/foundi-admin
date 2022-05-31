@@ -129,7 +129,7 @@ const selectParamsCo = computed(() => {
   }
 })
 
-const treeFieldsCo = computed<TreeFields>(() => {
+const treeFieldsCo = computed(() => {
   if (props.treeFields) {
     return merge({}, DEFAULT_TREE_FIELDS, props.treeFields)
   } else {
@@ -224,11 +224,11 @@ const setSelectNode = (ids: string[]) => {
   }
   if (multiple) {
     ;(treeCom.value as any).setCheckedKeys(ids)
-    state.labels = (treeCom.value as any).getCheckedNodes().map((item: TreeNode) => item[treeFieldsCo.value.labelField]) || []
+    state.labels = (treeCom.value as any).getCheckedNodes().map((item: TreeNode) => item[treeFieldsCo.value.labelField as string]) || []
   } else {
     ;(treeCom.value as any).setCurrentKey(ids[0])
     if ((treeCom.value as any).getCurrentNode()) {
-      state.labels = (treeCom.value as any).getCurrentNode()[treeFieldsCo.value.labelField]
+      state.labels = (treeCom.value as any).getCurrentNode()[treeFieldsCo.value.labelField as string]
     } else {
       state.labels = ''
     }
@@ -237,7 +237,7 @@ const setSelectNode = (ids: string[]) => {
 
 const filter = (value: string, data: TreeNode) => {
   if (!value) return true
-  return data[treeFieldsCo.value.labelField].indexOf(value) !== -1
+  return data[treeFieldsCo.value.labelField as string].indexOf(value) !== -1
 }
 
 const onTreeNodeClick = (data: TreeNode, node: any, com: any) => {
@@ -294,7 +294,7 @@ const onRemoveTag = (tag: string) => {
   traverseTree(
     data,
     (item) => {
-      if (item[labelField] === tag) {
+      if (item[labelField as string] === tag) {
         const value = item[idField as string]
         state.ids = state.ids.filter((id) => id !== value)
       }

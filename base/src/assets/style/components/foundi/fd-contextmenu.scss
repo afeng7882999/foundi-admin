@@ -2,9 +2,9 @@
 @use '../../mixin' as *;
 
 .fd-contextmenu {
-  position: fixed;
+  display: block;
   margin: 0;
-  padding: 6px 0;
+  padding: 8px 0;
   font-size: var(--el-font-size-base);
   color: var(--el-text-color-primary);
   white-space: nowrap;
@@ -13,7 +13,6 @@
   border-radius: $border-radius-base;
   background-color: var(--el-fill-base);
   box-shadow: var(--el-box-shadow-base);
-  z-index: $index-popper;
   
   &__item {
     display: flex;

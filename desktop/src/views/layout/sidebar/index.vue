@@ -3,7 +3,6 @@
     <div ref="sidebar" class="fd-sidebar__inner" @mouseenter="setExpand(true)" @mouseleave="setExpand(false)">
       <app-logo v-show="state.showLogo" :minimized="minimized"></app-logo>
       <el-scrollbar class="fd-sidebar__scrollbar">
-        <fd-user-profile v-show="state.showUser" :minimized="minimized"></fd-user-profile>
         <fd-nav-menu
           ref="navMenu"
           :default-path="$route.path"
@@ -21,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import FdUserProfile from './user-profile.vue'
 import AppLogo from './logo.vue'
 import FdNavMenu from '@b/components/nav-menu/index.vue'
 import { computed, PropType, reactive, ref, watch } from 'vue'

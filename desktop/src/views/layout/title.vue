@@ -14,9 +14,7 @@
     </div>
     <div class="fd-title__right">
       <system-message-button :check-message-interval="100000"></system-message-button>
-      <el-tooltip :show-after="500" content="全屏" effect="dark" placement="bottom">
-        <fd-full-screen></fd-full-screen>
-      </el-tooltip>
+      <fd-user-profile />
       <el-tooltip :show-after="500" content="设置" effect="dark" placement="bottom">
         <fd-button type="icon" class="fd-title__item" icon="setting-two" @click="toggleSetting"></fd-button>
       </el-tooltip>
@@ -27,11 +25,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import FdBreadcrumb from '@/components/breadcrumb/index.vue'
-import FdFullScreen from '@/components/fullscreen/index.vue'
 import SystemMessageButton from '@/views/modules/message/message-button.vue'
 import { useStore } from '@/store'
 import { SidebarMode } from '@b/store/modules/app'
 import useLayoutSize from '@b/hooks/use-layout-size'
+import FdUserProfile from './user-profile.vue'
 
 defineOptions({
   name: 'FdTitle'

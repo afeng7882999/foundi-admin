@@ -46,7 +46,7 @@
         </el-tooltip>
       </div>
     </div>
-    <fd-contextmenu ref="contextMenu">
+    <fd-contextmenu ref="contextMenu" target>
       <fd-contextmenu-item
         v-for="item in state.compactButtons"
         :key="item.label"

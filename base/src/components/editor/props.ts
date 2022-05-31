@@ -1,6 +1,6 @@
 import { PropType } from 'vue'
-import { ElMessage } from 'element-plus'
 import { Config } from './types'
+import { message } from '@b/common/global'
 
 export const editorProps = {
   // 基础配置
@@ -16,19 +16,19 @@ export const editorProps = {
         customAlert: (s: string, t: string) => {
           switch (t) {
             case 'success':
-              ElMessage.success(s)
+              message(s, 'success', 500)
               break
             case 'info':
-              ElMessage.info(s)
+              message(s, 'info', 500)
               break
             case 'warning':
-              ElMessage.warning(s)
+              message(s, 'warning', 500)
               break
             case 'error':
-              ElMessage.error(s)
+              message(s, 'error', 500)
               break
             default:
-              ElMessage.info(s)
+              message(s, 'info', 500)
               break
           }
         },

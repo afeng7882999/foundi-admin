@@ -78,7 +78,7 @@ const storeState = store.state
 watch(
   () => state.themeIdx,
   (val) => {
-    store.dispatch('app/setTheme', themeProcess(DEFAULT_THEMES[val]))
+    store.dispatch('theme/setTheme', themeProcess(DEFAULT_THEMES[val]))
   }
 )
 

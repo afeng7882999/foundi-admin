@@ -13,7 +13,7 @@
       <div class="fd-drawer__title">
         <fd-icon class="title-icon" :icon="currentIcon"></fd-icon>
         <span class="title-text">{{ title }}</span>
-        <fd-button type="icon" class="title-button" icon="close-small" @click="hide"></fd-button>
+        <fd-button type="icon" class="title-button" icon="close" @click="hide"></fd-button>
       </div>
       <el-scrollbar class="fd-drawer__scroll" :style="scrollbarStyle">
         <div class="fd-drawer__main">
