@@ -3,23 +3,21 @@
     <fd-sidebar :app-config="appConfig" :menu="menu" :mode="mode" :user-profile="userProfile" @off-screen-click="closeOffScreenSidebar" />
     <div class="fd-layout__main">
       <div class="fd-layout__header">
-        <fd-title @app-setting-show="showAppSetting"></fd-title>
+        <fd-title />
         <fd-router-tags v-show="enableTags"></fd-router-tags>
       </div>
       <fd-main></fd-main>
     </div>
-    <fd-setting ref="appSetting"></fd-setting>
   </div>
 </template>
 
 <script setup lang="ts">
 import FdSidebar from './sidebar/index.vue'
-import FdSetting from './setting.vue'
 import FdMain from './main.vue'
 import FdTitle from './title.vue'
 import FdRouterTags from '@/components/router-tags/index.vue'
 import { DEFAULT_AVATAR } from '@b/store/modules/user'
-import { computed, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onBeforeMount, onMounted, onUnmounted, watch } from 'vue'
 import { AllState, useStore } from '@/store'
 import { SidebarMode } from '@b/store/modules/app'
 import { setDocumentTheme } from '@/components/theme/theme'
@@ -33,8 +31,6 @@ const store = useStore()
 const storeState = store.state as AllState
 
 const { addResizeObserver, doLayoutResize, isMobileOrPadSize } = useLayoutSize()
-
-const appSetting = ref()
 
 const mode = computed(() => {
   return storeState.app.sidebarMode as SidebarMode
@@ -109,10 +105,6 @@ const closeOffScreenSidebar = async () => {
   if (mode.value.opened) {
     await store.dispatch('app/setSidebarMode', { opened: false })
   }
-}
-
-const showAppSetting = () => {
-  ;(appSetting.value as any).show()
 }
 </script>
 

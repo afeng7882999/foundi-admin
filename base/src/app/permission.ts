@@ -113,7 +113,7 @@ export async function initDynamicRoutes(
         meta
       } as RouteRecordRaw
       const urlDash = camelToDash(urlNoParam)
-      const moduleName = item.pagePath ? `modules${item.pagePath}.vue` : `modules/${urlDash}/index.vue`
+      const moduleName = item.pagePath ? `${item.pagePath}.vue` : `modules/${urlDash}/index.vue`
       try {
         route.component = importModules[pageRoot + moduleName]
       } catch (e) {

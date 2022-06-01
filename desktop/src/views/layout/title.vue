@@ -15,9 +15,6 @@
     <div class="fd-title__right">
       <system-message-button :check-message-interval="100000"></system-message-button>
       <fd-user-profile />
-      <el-tooltip :show-after="500" content="设置" effect="dark" placement="bottom">
-        <fd-button type="icon" class="fd-title__item" icon="setting-two" @click="toggleSetting"></fd-button>
-      </el-tooltip>
     </div>
   </div>
 </template>
@@ -34,8 +31,6 @@ import FdUserProfile from './user-profile.vue'
 defineOptions({
   name: 'FdTitle'
 })
-
-const emit = defineEmits(['appSettingShow'])
 
 const store = useStore()
 const storeState = store.state
@@ -64,10 +59,6 @@ const toggleSideBar = async () => {
   }
   await doLayoutResize()
 }
-
-const toggleSetting = () => {
-  emit('appSettingShow')
-}
 </script>
 
 <style lang="scss">
@@ -75,6 +66,7 @@ const toggleSetting = () => {
 
 .fd-title {
   height: $app-title-height;
+  padding-right: 16px;
   background: var(--fd-app-title-bg-color);
   border-bottom: 1px solid var(--el-border-color-base);
   border-radius: 0 !important;

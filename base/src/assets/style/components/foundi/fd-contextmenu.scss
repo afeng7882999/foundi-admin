@@ -4,7 +4,7 @@
 .fd-contextmenu {
   display: block;
   margin: 0;
-  padding: 8px 0;
+  padding: 4px 0;
   font-size: var(--el-font-size-base);
   color: var(--el-text-color-primary);
   white-space: nowrap;
@@ -18,7 +18,7 @@
     display: flex;
     align-items: center;
     height: 38px;
-    padding: 8px 4px 8px 15px;
+    padding: 8px 4px 8px 16px;
     min-width: 150px;
     cursor: pointer;
     
@@ -63,7 +63,7 @@
   
   &__divider {
     height: 0;
-    margin: 10px 0;
+    margin: 4px 0;
     border-bottom: 1px solid var(--el-border-color-base);
   }
   
@@ -84,11 +84,11 @@
       }
       
       &.top {
-        top: -11px;
+        top: -5px;
       }
       
       &.bottom {
-        bottom: -11px;
+        bottom: -5px;
       }
     }
   }

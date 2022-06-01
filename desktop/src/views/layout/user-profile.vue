@@ -60,13 +60,25 @@ const openMenu = (e: PointerEvent) => {
 <style lang="scss">
 .fd-user-profile {
   display: flex;
+  justify-content: center;
   align-items: center;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
 
   &__avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 32px;
+    display: block;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0);
+    image-rendering: -webkit-optimize-contrast;
+  }
+
+  &:hover {
+    .fd-user-profile__avatar {
+      box-shadow: 0 0 0 2px var(--el-color-primary-light-9);
+    }
   }
 }
 </style>

@@ -14,7 +14,7 @@ export const POPPER_PROPS_DEFAULT = {
     type: Boolean,
     default: false
   },
-  targetOffset: {
+  boundaryOffset: {
     type: Number,
     default: 8
   },

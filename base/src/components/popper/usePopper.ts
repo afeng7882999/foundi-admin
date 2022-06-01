@@ -46,7 +46,7 @@ const usePopper = (
           // align with the target border
           const target = event.currentTarget as HTMLElement
           targetRect = target.getBoundingClientRect()
-          const top = Math.floor(targetRect.top + targetRect.height + props.targetOffset)
+          const top = Math.floor(targetRect.top + targetRect.height + props.boundaryOffset)
           const left = Math.floor(targetRect.left)
           props.trigger === 'enter' && document.body.addEventListener('mousemove', onMouseMove)
           showByTarget(top, left, Math.floor(targetRect.width), Math.floor(targetRect.height))
@@ -85,7 +85,7 @@ const usePopper = (
 
   const mouseMoveCb = (event: MouseEvent) => {
     const el = wrapperRef.value as HTMLElement
-    if (mouseOutRect(event, targetRect as DOMRectReadOnly) && mouseOutRect(event, el.getBoundingClientRect(), props.targetOffset)) {
+    if (mouseOutRect(event, targetRect as DOMRectReadOnly) && mouseOutRect(event, el.getBoundingClientRect(), props.boundaryOffset)) {
       hide()
     }
   }
@@ -98,11 +98,11 @@ const usePopper = (
       nextTick(() => {
         const w = el.clientWidth
         const h = el.clientHeight
-        if (top + h >= window.innerHeight && top - h >= 0) {
-          top -= h
+        if (top + h + props.boundaryOffset >= document.body.clientHeight) {
+          top = Math.max(top - h, props.boundaryOffset)
         }
-        if (left + w >= window.innerWidth && left - w >= 0) {
-          left -= w
+        if (left + w + props.boundaryOffset >= document.body.clientWidth) {
+          left = Math.max(left - w, props.boundaryOffset)
         }
         state.style = {
           top: `${top}px`,
@@ -124,15 +124,15 @@ const usePopper = (
       nextTick(() => {
         const w = el.clientWidth
         const h = el.clientHeight
-        if (top + h >= window.innerHeight) {
-          const calcTop = top - h - targetH - props.targetOffset * 2
-          top = calcTop >= props.targetOffset ? calcTop : props.targetOffset
+        if (top + h + props.boundaryOffset >= document.body.clientHeight) {
+          const calcTop = top - h - targetH - props.boundaryOffset * 2
+          top = calcTop >= props.boundaryOffset ? calcTop : props.boundaryOffset
         }
         if (left < 0) {
-          left = props.targetOffset
+          left = props.boundaryOffset
         }
-        if (left + w >= window.innerWidth) {
-          left = Math.max(window.innerWidth - w - props.targetOffset, props.targetOffset)
+        if (left + w + props.boundaryOffset >= document.body.clientWidth) {
+          left = Math.max(document.body.clientWidth - w - props.boundaryOffset, props.boundaryOffset)
         }
         state.style = {
           top: `${top}px`,
