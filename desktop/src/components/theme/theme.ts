@@ -1,5 +1,164 @@
-import { Theme, themeProcess as _themeProcess, setDocumentTheme as _setDocumentTheme } from 'element-plus-dynamic-theme/theme'
 import colorString from 'color-string'
+import { colorCluster, mix } from '@b/utils/color'
+
+export type Theme = Record<string, string>
+
+// 默认暗色主题
+export const DARK_THEME_DEFAULT = {
+  'dark-mode': 'true',
+  '--el-color-white': '#343A40',
+  '--el-color-black': '#D2DEEA',
+  '--el-text-color-primary': 'rgba(255, 255, 255, 0.8)',
+  '--el-text-color-regular': 'rgba(255, 255, 255, 0.6)',
+  '--el-text-color-secondary': 'rgba(255, 255, 255, 0.4)',
+  '--el-text-color-placeholder': 'rgba(255, 255, 255, 0.3)',
+  '--el-font-color-disabled-base': 'rgba(80, 80, 80, 1)',
+  '--el-bg-color': 'rgba(43, 48, 52, 1)',
+  '--el-border-color-base': 'rgba(182, 184, 190, 1)',
+  '--el-border-color-light': 'rgba(162, 164, 169, 1)',
+  '--el-border-color-lighter': 'rgba(134, 136, 140, 1)',
+  '--el-border-color-extra-light': 'rgba(103, 104, 108, 1)',
+  '--el-border-color-hover': 'rgba(227, 229, 235, 1)',
+  '--el-body-background-color': '#2B3034'
+}
+
+/**
+ * 处理主题
+ */
+export function _themeProcess(theme: Theme, useDefaultDark = false): Theme {
+  let white = '#ffffff'
+  let black = '#000000'
+
+  if (theme['dark-mode']) {
+    theme = _setThemeDark(theme, useDefaultDark)
+  }
+
+  if (theme['--el-color-white']) {
+    white = theme['--el-color-white']
+    theme['--el-color-white-rgb'] = colorString.get(white)!.value.slice(0, 3).join(', ')
+  }
+  if (theme['--el-color-black']) {
+    black = theme['--el-color-black']
+    theme['--el-color-black-rgb'] = colorString.get(black)!.value.slice(0, 3).join(', ')
+  }
+
+  let cluster = []
+  const rgba = []
+  if (theme['--el-color-black']) {
+    cluster = colorCluster(theme['--el-color-black'], white, black)
+    theme['--el-color-gray-02'] = mix(white, black, 98)
+    theme['--el-color-gray-03'] = mix(white, black, 97)
+    theme['--el-color-gray-05'] = mix(white, black, 95)
+    theme['--el-color-gray-1'] = cluster[9]
+    theme['--el-color-gray-2'] = cluster[8]
+  }
+  if (theme['--el-color-primary']) {
+    cluster = colorCluster(theme['--el-color-primary'], white, black)
+    theme['--el-color-primary-dark-1'] = cluster[10]
+    theme['--el-color-primary-light-1'] = cluster[1]
+    theme['--el-color-primary-light-2'] = cluster[2]
+    theme['--el-color-primary-light-4'] = cluster[4]
+    theme['--el-color-primary-light-5'] = cluster[5]
+    theme['--el-color-primary-light-7'] = cluster[7]
+    theme['--el-color-primary-light-8'] = cluster[8]
+    theme['--el-color-primary-light-9'] = cluster[9]
+  }
+  if (theme['--el-color-success']) {
+    cluster = colorCluster(theme['--el-color-success'], white, black)
+    theme['--el-color-success-dark-1'] = cluster[10]
+    theme['--el-color-success-light-1'] = cluster[1]
+    theme['--el-color-success-light-2'] = cluster[2]
+    theme['--el-color-success-light-4'] = cluster[4]
+    theme['--el-color-success-light-5'] = cluster[5]
+    theme['--el-color-success-light-7'] = cluster[6]
+    theme['--el-color-success-light-8'] = cluster[8]
+    theme['--el-color-success-light-9'] = cluster[9]
+  }
+  if (theme['--el-color-warning']) {
+    cluster = colorCluster(theme['--el-color-warning'], white, black)
+    theme['--el-color-warning-dark-1'] = cluster[10]
+    theme['--el-color-warning-light-1'] = cluster[1]
+    theme['--el-color-warning-light-2'] = cluster[2]
+    theme['--el-color-warning-light-4'] = cluster[4]
+    theme['--el-color-warning-light-5'] = cluster[5]
+    theme['--el-color-warning-light-7'] = cluster[6]
+    theme['--el-color-warning-light-8'] = cluster[8]
+    theme['--el-color-warning-light-9'] = cluster[9]
+  }
+  if (theme['--el-color-danger']) {
+    cluster = colorCluster(theme['--el-color-danger'], white, black)
+    theme['--el-color-danger-dark-1'] = cluster[10]
+    theme['--el-color-danger-light-1'] = cluster[1]
+    theme['--el-color-danger-light-2'] = cluster[2]
+    theme['--el-color-danger-light-4'] = cluster[4]
+    theme['--el-color-danger-light-5'] = cluster[5]
+    theme['--el-color-danger-light-7'] = cluster[6]
+    theme['--el-color-danger-light-8'] = cluster[8]
+    theme['--el-color-danger-light-9'] = cluster[9]
+  }
+  if (theme['--el-color-error']) {
+    cluster = colorCluster(theme['--el-color-error'], white, black)
+    theme['--el-color-error-dark-1'] = cluster[10]
+    theme['--el-color-error-light-1'] = cluster[1]
+    theme['--el-color-error-light-2'] = cluster[2]
+    theme['--el-color-error-light-4'] = cluster[4]
+    theme['--el-color-error-light-5'] = cluster[5]
+    theme['--el-color-error-light-7'] = cluster[6]
+    theme['--el-color-error-light-8'] = cluster[8]
+    theme['--el-color-error-light-9'] = cluster[9]
+  }
+  if (theme['--el-color-info']) {
+    cluster = colorCluster(theme['--el-color-info'], white, black)
+    theme['--el-color-info-dark-1'] = cluster[10]
+    theme['--el-color-info-light-1'] = cluster[1]
+    theme['--el-color-info-light-2'] = cluster[2]
+    theme['--el-color-info-light-4'] = cluster[4]
+    theme['--el-color-info-light-5'] = cluster[5]
+    theme['--el-color-info-light-7'] = cluster[6]
+    theme['--el-color-info-light-8'] = cluster[8]
+    theme['--el-color-info-light-9'] = cluster[9]
+  }
+
+  return theme
+}
+
+/**
+ * 暗色主题
+ */
+function _setThemeDark(theme: Theme, useDefault?: boolean): Theme {
+  const dark = useDefault ? Object.assign({}, theme, DARK_THEME_DEFAULT) : Object.assign({}, theme)
+  const white = dark['--el-color-white']
+  dark['--el-color-primary'] = mix(white, theme['--el-color-primary'], 20)
+  dark['--el-color-success'] = mix(white, theme['--el-color-success'], 20)
+  dark['--el-color-warning'] = mix(white, theme['--el-color-warning'], 20)
+  dark['--el-color-danger'] = mix(white, theme['--el-color-danger'], 20)
+  dark['--el-color-error'] = mix(white, theme['--el-color-error'], 20)
+  dark['--el-color-info'] = mix(white, theme['--el-color-info'], 20)
+  return dark
+}
+
+/**
+ * 设置主题
+ */
+export function _setDocumentTheme(theme: Theme): void {
+  document.documentElement.setAttribute('style', '')
+  Object.keys(theme).forEach((k) => document.documentElement.style.setProperty(k, theme[k]))
+  if (theme['dark-mode']) {
+    document.body.classList.add('theme-dark')
+  } else {
+    document.body.classList.remove('theme-dark')
+  }
+  if (theme['sharp-mode']) {
+    document.body.classList.add('theme-sharp')
+  } else {
+    document.body.classList.remove('theme-sharp')
+  }
+  if (theme['round-mode']) {
+    document.body.classList.add('theme-round')
+  } else {
+    document.body.classList.remove('theme-round')
+  }
+}
 
 // 自定义主题
 export const CUSTOM_THEME = {

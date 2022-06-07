@@ -1,7 +1,7 @@
 import { computed, ExtractPropTypes, getCurrentInstance, inject, ref } from 'vue'
 import { FORM_ITEM_DEFAULT_PROPS } from '../type'
 import { Indexable } from '@b/common/types'
-import { ElFormContext, elFormKey } from 'element-plus'
+import { FormContext, formContextKey } from 'element-plus'
 import { isString } from 'lodash-es'
 import { editContextKey, EditContext } from '@b/crud/hooks/use-edit'
 import { useTimeoutFn } from '@vueuse/core'
@@ -13,7 +13,7 @@ export interface UseQueryItemDefaultOpt {
 }
 
 const useFormItem = (props: Readonly<ExtractPropTypes<typeof FORM_ITEM_DEFAULT_PROPS>>, option?: Partial<UseQueryItemDefaultOpt>) => {
-  const formCtx = inject(elFormKey, {} as ElFormContext)
+  const formCtx = inject(formContextKey, {} as FormContext)
 
   const vm = getCurrentInstance()
   const formInstance = computed(() => {

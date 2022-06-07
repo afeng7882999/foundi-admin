@@ -1,7 +1,8 @@
 @use 'normalize.css/normalize.css';
 @use '../base/src/assets/style/base';
-@use 'element-plus-dynamic-theme/theme-chalk/common/var' as *;
-@use 'var';
+@use 'theme/var' as *;
+@use 'css-vars';
 @use '../base/src/assets/style/components/index' as *;
-@use 'components/index';
-@use 'theme';
+@use 'components/index' as *;
+@use 'theme/index';
+@use 'theme/theme';

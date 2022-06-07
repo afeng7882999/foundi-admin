@@ -1,0 +1,69 @@
+@use 'element-plus/theme-chalk/src/common/var' as *;
+@use 'element-plus/theme-chalk/src/mixins/function' as * ;
+@use 'element-plus/theme-chalk/src/mixins/config' as *;
+@use 'element-plus/theme-chalk/src/mixins/mixins' as *;
+@use 'element-plus/theme-chalk/src/mixins/_var' as *;
+@use '../mixins' as *;
+
+html.round {
+  
+  @include b(color-predefine) {
+    @include e-theme(color-selector, round) {
+      border-radius: getCssVar('border-radius', 'base');
+      > div {
+        border-radius: getCssVar('border-radius', 'small');
+      }
+    }
+  }
+  
+  @include b(color-picker) {
+    @include e-theme(mask, round) {
+      border-radius: getCssVar('border-radius', 'base');
+    }
+    @include e-theme(trigger, round) {
+      border-radius: getCssVar('border-radius', 'base');
+    }
+    @include e-theme(color-inner, round) {
+      border-radius: getCssVar('border-radius', 'base');
+    }
+  }
+  
+  @include b(pagination) {
+    @include when(background) {
+      .btn-prev,
+      .btn-next,
+      .#{$namespace}-pager li {
+        border-radius: getCssVar('border-radius', 'small');
+      }
+    }
+  }
+  
+  @include b(upload) {
+    /* Picture Card for Wall */
+    @include m(picture-card) {
+      border-radius: getCssVar('border-radius', 'base');
+    }
+  }
+  
+  @include b(upload-dragger) {
+    border-radius: getCssVar('border-radius', 'base');
+  }
+  
+  @include b(upload-list) {
+    @include e-theme(item, round) {
+      border-radius: getCssVar('border-radius', 'base');
+    }
+    // upload-list
+    @include m(picture-card) {
+      .#{bem('upload-list', 'item')} {
+        border-radius: getCssVar('border-radius', 'base');
+      }
+    }
+    
+    @include m(picture) {
+      .#{bem('upload-list', 'item')} {
+        border-radius: getCssVar('border-radius', 'base');
+      }
+    }
+  }
+}

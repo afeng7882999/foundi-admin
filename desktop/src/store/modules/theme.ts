@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Theme } from 'element-plus-dynamic-theme/theme'
-import { setDocumentTheme } from '@/components/theme/theme'
+import { setDocumentTheme, Theme } from '@/components/theme/theme'
 import { ActionContext } from 'vuex'
 
 export interface ThemeState {

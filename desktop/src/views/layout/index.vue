@@ -1,23 +1,26 @@
 <template>
   <div :class="classObj" class="fd-layout">
-    <fd-sidebar :app-config="appConfig" :menu="menu" :mode="mode" :user-profile="userProfile" @off-screen-click="closeOffScreenSidebar" />
+    <div class="fd-layout__header">
+      <fd-title :logo="!isMobileOrPadSize" />
+    </div>
+    <div class="fd-layout__tags">
+      <fd-router-tags v-show="enableTags" />
+    </div>
+    <div class="fd-layout__sidebar">
+      <fd-sidebar :menu="menu" :mode="mode" @off-screen-click="closeOffScreenSidebar" />
+    </div>
     <div class="fd-layout__main">
-      <div class="fd-layout__header">
-        <fd-title />
-        <fd-router-tags v-show="enableTags"></fd-router-tags>
-      </div>
-      <fd-main></fd-main>
+      <fd-doc />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import FdSidebar from './sidebar/index.vue'
-import FdMain from './main.vue'
+import FdSidebar from '@b/views/layout/sidebar.vue'
+import FdDoc from './doc.vue'
 import FdTitle from './title.vue'
 import FdRouterTags from '@/components/router-tags/index.vue'
-import { DEFAULT_AVATAR } from '@b/store/modules/user'
-import { computed, onBeforeMount, onMounted, onUnmounted, watch } from 'vue'
+import { computed, onBeforeMount, onMounted, watch } from 'vue'
 import { AllState, useStore } from '@/store'
 import { SidebarMode } from '@b/store/modules/app'
 import { setDocumentTheme } from '@/components/theme/theme'
@@ -28,6 +31,7 @@ defineOptions({
 })
 
 const store = useStore()
+console.log('index', store)
 const storeState = store.state as AllState
 
 const { addResizeObserver, doLayoutResize, isMobileOrPadSize } = useLayoutSize()
@@ -38,21 +42,6 @@ const mode = computed(() => {
 
 const menu = computed(() => {
   return storeState.user.menu
-})
-
-const appConfig = computed(() => {
-  return {
-    title: storeState.app.title,
-    icon: storeState.app.icon
-  }
-})
-
-const userProfile = computed(() => {
-  return {
-    username: storeState.user.user.username,
-    avatar: storeState.user.user.avatar ? storeState.user.user.avatar : DEFAULT_AVATAR,
-    roles: storeState.user.roles
-  }
 })
 
 const enableTags = computed(() => {
@@ -72,7 +61,6 @@ const classObj = computed(() => {
     'is-fixed-header': fixedHeader.value
   }
 })
-
 watch(
   () => isMobileOrPadSize.value,
   async (val) => {
@@ -97,10 +85,6 @@ onMounted(() => {
   doLayoutResize()
 })
 
-onUnmounted(() => {
-  // removeResizeListener()
-})
-
 const closeOffScreenSidebar = async () => {
   if (mode.value.opened) {
     await store.dispatch('app/setSidebarMode', { opened: false })
@@ -113,66 +97,124 @@ const closeOffScreenSidebar = async () => {
 @use '../base/src/assets/style/variable' as *;
 
 .fd-layout {
-  background: var(--el-body-bg-color);
-  @include clearFix;
+  @include clearFix();
   position: relative;
   height: 100%;
   width: 100%;
+  background: var(--el-bg-color-page);
+
+  &__header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid var(--el-border-color);
+    border-radius: 0 !important;
+    background: var(--fd-app-title-bg-color);
+    z-index: $index-title;
+
+    .fd-title {
+      height: 47px;
+    }
+  }
+
+  &__tags {
+    position: fixed;
+    width: 100%;
+    height: 0;
+    top: $app-title-height;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: $index-title;
+
+    .fd-router-tags {
+      width: 100%;
+      padding-left: $sidebar-normal-width;
+    }
+  }
+  &__sidebar {
+    position: fixed;
+    width: 100%;
+    height: 0;
+    top: $app-title-height;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: $index-sidebar;
+
+    .fd-sidebar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 16px 0 0 0;
+      height: calc(100vh - #{$app-title-height});
+      overflow: hidden;
+      z-index: $index-sidebar;
+    }
+  }
 
   &__main {
     position: relative;
-    margin-left: $sidebar-normal-width;
-    min-height: 100%;
-    background: var(--el-body-bg-color);
+    width: 100%;
+    padding-top: $app-title-height;
+    padding-left: $sidebar-normal-width;
   }
 
-  &__header {
-    padding-bottom: 8px;
+  &.is-box {
+    .fd-layout__header .fd-title {
+      max-width: $layout-box-width;
+      margin: 0 auto;
+    }
+    .fd-layout__sidebar {
+      max-width: $layout-box-width;
+    }
+    .fd-layout__tags {
+      max-width: $layout-box-width;
+    }
+    .fd-layout__main {
+      max-width: $layout-box-width;
+      margin: 0 auto;
+    }
+    .fd-page {
+      padding-right: 0;
+    }
+  }
+
+  &.is-enable-tags {
+    .fd-layout__main {
+      padding-top: $app-title-height + $app-tags-height;
+    }
   }
 
   &.is-sidebar-minimized {
+    .fd-router-tags {
+      padding-left: $sidebar-min-width;
+    }
     .fd-layout__main {
-      margin-left: $sidebar-min-width;
+      padding-left: $sidebar-min-width;
     }
   }
 
   &.is-pad {
-    .fd-layout__main {
-      margin-left: 0;
-    }
-  }
-
-  &.is-fixed-header {
-    .fd-layout__main {
-      padding-top: $app-title-height + 8;
-    }
-
-    .fd-layout__header {
-      position: fixed;
+    .fd-layout__sidebar {
       top: 0;
-      right: 0;
-      width: calc(100% - #{$sidebar-normal-width});
-      z-index: 9;
-      background-color: var(--el-body-bg-color);
+      z-index: $index-popper-top;
     }
-  }
-
-  &.is-sidebar-minimized.is-fixed-header {
-    .fd-layout__header {
-      width: calc(100% - #{$sidebar-min-width});
+    .fd-sidebar {
+      left: -$sidebar-normal-width;
+      height: 100vh;
+      padding-top: 0;
     }
-  }
-
-  &.is-pad.is-fixed-header {
-    .fd-layout__header {
-      width: 100%;
+    .fd-router-tags {
+      padding-left: 0;
     }
-  }
-
-  &.is-fixed-header.is-enable-tags {
     .fd-layout__main {
-      padding-top: $app-title-height + $app-tags-height + 8;
+      padding-left: 0;
     }
+  }
+
+  &.is-pad.is-sidebar-opened {
+    overflow: hidden;
   }
 }
 </style>

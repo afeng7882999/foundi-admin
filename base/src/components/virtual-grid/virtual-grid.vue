@@ -13,7 +13,7 @@
       </div>
     </template>
     <template v-else>
-      <el-scrollbar ref="scrollbarRef" :style="scrollbarStyleCo">
+      <component :is="foundiGlobal.scrollbar" ref="scrollbarRef" class="fd-virtual-grid__scrollbar" :style="scrollbarStyleCo">
         <div ref="viewRef" class="fd-virtual-grid__view" :style="viewStyleCo">
           <div v-if="buffer.length === 0" class="fd-virtual-grid__empty">
             <slot name="empty">{{ emptyText }}</slot>
@@ -24,7 +24,7 @@
             </template>
           </div>
         </div>
-      </el-scrollbar>
+      </component>
     </template>
     <div v-show="loadingVisible" v-loading="true" :style="loadingStyle" class="fd-virtual-grid__loading"></div>
   </div>
@@ -41,13 +41,11 @@ import { OFFSET_CHANGED_EVENT, GRID_DEFAULT_PROPS, BUFFER_REFRESHED_EVENT } from
 import { computed, ref, watch } from 'vue'
 import { Indexable } from '@b/common/types'
 import useVirtualGrid from '@b/components/virtual-grid/use-virtual-grid'
-import { ElScrollbar } from 'element-plus'
+import foundiGlobal from '@b/common/global'
 
 const props = defineProps({
   ...GRID_DEFAULT_PROPS
 })
-
-const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 
 const emit = defineEmits([OFFSET_CHANGED_EVENT, BUFFER_REFRESHED_EVENT])
 
@@ -76,6 +74,8 @@ const scrollbarStyleCo = computed(() => {
   return style
 })
 
+// component is ElScrollbar
+const scrollbarRef = ref()
 watch(
   [() => wrapperRect.value.width, () => wrapperRect.value.height],
   () => {

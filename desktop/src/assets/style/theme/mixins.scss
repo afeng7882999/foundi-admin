@@ -1,0 +1,33 @@
+@use 'element-plus/theme-chalk/src/mixins/function' as *;
+@use 'element-plus/theme-chalk/src/mixins/config' as *;
+@use 'element-plus/theme-chalk/src/mixins/mixins' as *;
+
+@mixin e-theme($element, $theme) {
+  $E: $element !global;
+  $selector: &;
+  $currentSelector: '';
+  @each $unit in $element {
+    $currentSelector: #{$currentSelector +
+      '.' +
+      $B +
+      $element-separator +
+      $unit +
+      ','};
+  }
+  
+  @if hitAllSpecialNestRule($selector) {
+    @at-root html.#{$theme} {
+      #{$selector} {
+        #{$currentSelector} {
+          @content;
+        }
+      }
+    }
+  } @else {
+    @at-root html.#{$theme} {
+      #{$currentSelector} {
+        @content;
+      }
+    }
+  }
+}

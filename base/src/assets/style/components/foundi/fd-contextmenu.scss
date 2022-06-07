@@ -9,10 +9,10 @@
   color: var(--el-text-color-primary);
   white-space: nowrap;
   list-style: none;
-  border: 1px solid var(--el-border-color-base);
+  border: 1px solid var(--el-border-color);
   border-radius: $border-radius-base;
-  background-color: var(--el-fill-base);
-  box-shadow: var(--el-box-shadow-base);
+  background-color: var(--el-fill-color-blank);
+  box-shadow: var(--el-box-shadow);
   
   &__item {
     display: flex;
@@ -23,7 +23,7 @@
     cursor: pointer;
     
     &.is-hover {
-      background-color: var(--el-bg-color);
+      background-color: var(--el-fill-color-light);
     }
     
     &.is-disabled {
@@ -64,7 +64,7 @@
   &__divider {
     height: 0;
     margin: 4px 0;
-    border-bottom: 1px solid var(--el-border-color-base);
+    border-bottom: 1px solid var(--el-border-color);
   }
   
   &__submenu {

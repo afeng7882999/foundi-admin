@@ -1,0 +1,171 @@
+@use 'element-plus/theme-chalk/src/common/var' as *;
+@use 'element-plus/theme-chalk/src/mixins/function' as * ;
+@use 'element-plus/theme-chalk/src/mixins/config' as *;
+@use 'element-plus/theme-chalk/src/mixins/mixins' as *;
+@use 'element-plus/theme-chalk/src/mixins/_var' as *;
+@use '../mixins' as *;
+
+html.dark {
+  
+  @include b(date-table) {
+    td {
+      &.today {
+        &.end-date .#{$namespace}-date-table-cell__text {
+          color: getCssVar('text-color', 'primary');
+        }
+      }
+      &.current:not(.disabled) {
+        .#{$namespace}-date-table-cell__text {
+          color: getCssVar('text-color', 'primary');
+        }
+      }
+      &.start-date .#{$namespace}-date-table-cell,
+      &.end-date .#{$namespace}-date-table-cell {
+        color: getCssVar('text-color', 'primary');
+      }
+      &.selected .#{$namespace}-date-table-cell__text {
+        color: getCssVar('text-color', 'primary');
+      }
+    }
+  }
+  
+  @include b(switch) {
+    @include e-theme(core, dark) {
+      .#{$namespace}-switch__inner {
+        .is-icon,
+        .is-text {
+          color: getCssVar('text-color', 'primary');
+        }
+      }
+      .#{$namespace}-switch__action {
+        background-color: getCssVar('text-color', 'primary');
+      }
+    }
+  }
+  
+  @include b(radio) {
+    @include e-theme(inner, dark) {
+      &::after {
+        background-color: getCssVar('text-color', 'primary');
+      }
+    }
+  }
+  
+  @include b(dialog) {
+    border: 1px solid getCssVar('border-color', 'light');
+    @include when(fullscreen) {
+      border: none;
+    }
+  }
+  
+  @include b(drawer) {
+    &.ltr {
+      border-right: 1px solid getCssVar('border-color', 'light');
+    }
+    &.rtl {
+      border-left: 1px solid getCssVar('border-color', 'light');
+    }
+    &.ttb {
+      border-bottom: 1px solid getCssVar('border-color', 'light');
+    }
+    &.btt {
+      border-top: 1px solid getCssVar('border-color', 'light');
+    }
+  }
+  
+  @include b(pagination) {
+    @include when(background) {
+      .#{$namespace}-pager li:not(.is-disabled) {
+        &.is-active {
+          color: getCssVar('text-color', 'primary');
+        }
+      }
+    }
+  }
+  
+  @include b(slider) {
+    @include e-theme(button, dark) {
+      background-color: getCssVar('text-color', 'primary');
+    }
+  }
+  
+  @include b(timeline-item) {
+    & .#{$namespace}-timeline-item__icon {
+      color: getCssVar('text-color', 'primary');
+    }
+    @include e-theme(node, dark) {
+      @include when(hollow) {
+        background: getCssVar('text-color', 'primary');
+      }
+    }
+  }
+  
+  @include b(upload-list) {
+    @include m(picture-card) {
+      .#{bem('upload-list', 'item')} {
+        .#{bem('icon', '' ,'circle-check')} {
+          color: getCssVar('text-color', 'primary');
+        }
+      }
+      .#{bem('upload-list', 'item-actions')} {
+        color: getCssVar('text-color', 'primary');
+      }
+    }
+    @include m(picture) {
+      .#{bem('upload-list', 'item')} {
+        .#{bem('icon', '' ,'check')},
+        .#{bem('icon', '' ,'circle-check')} {
+          color: getCssVar('text-color', 'primary');
+        }
+      }
+      .#{bem('upload-list', 'item-thumbnail')} {
+        background-color: getCssVar('text-color', 'primary');
+      }
+    }
+  }
+  
+  @include b(upload-cover) {
+    @include e-theme(label, dark) {
+      i {
+        color: getCssVar('text-color', 'primary');
+      }
+    }
+    @include e-theme(interact, dark) {
+      .btn {
+        color: getCssVar('text-color', 'primary');
+      }
+    }
+    @include e-theme(title, dark) {
+      background-color: getCssVar('text-color', 'primary');
+    }
+  }
+  
+  @include b(tag) {
+    .#{$namespace}-tag__close {
+      &:hover {
+        color: getCssVar('text-color', 'primary');
+      }
+    }
+    @include m(dark) {
+      @include css-var-from-global(('tag', 'text-color'), ('text-color', 'primary'));
+      @each $type in $types {
+        &.#{bem('tag', '', $type)} {
+          @include css-var-from-global(('tag', 'text-color'), ('text-color', 'primary'));
+        }
+      }
+    }
+  }
+  
+  @include b(badge) {
+    @include e-theme(content, dark) {
+      color: getCssVar('text-color', 'primary');
+    }
+  }
+  
+  @include b(progress-bar) {
+    @include e-theme(innerText, dark) {
+      color: getCssVar('text-color', 'primary');
+    }
+  }
+  
+}

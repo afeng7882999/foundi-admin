@@ -6,7 +6,7 @@
   padding: 16px 16px 0 16px;
   border: 1px solid var(--el-border-color-lighter);
   border-radius: var(--el-border-radius-base);
-  background-color: var(--el-fill-base);
+  background-color: var(--el-fill-color-blank);
   margin-bottom: 8px;
   display: flex;
   flex-wrap: wrap;
@@ -85,28 +85,6 @@
     height: 32px;
   }
   
-  &.is-mobile {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 12px 16px 12px 16px;
-    margin-bottom: 0;
-    border-left: none;
-    border-bottom: none;
-    border-right: none;
-    border-radius: 0;
-    z-index: $index-top;
-    
-    .fd-page-toolbar__center {
-      margin-bottom: 0;
-    }
-    
-    .el-button + .el-button {
-      margin: 0;
-    }
-  }
-  
   &__pagination {
     padding-top: 0;
   
@@ -140,7 +118,7 @@
       flex-direction: column;
       align-items: center;
       background-color: var(--fd-app-title-bg-color);
-      border-bottom: 1px solid var(--el-border-color-base);
+      border-bottom: 1px solid var(--el-border-color);
       border-radius: 0 !important;
     }
   }

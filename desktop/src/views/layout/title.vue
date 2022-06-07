@@ -3,18 +3,20 @@
     <div class="fd-title__left">
       <el-tooltip :content="toggleBtnActive ? '展开菜单' : '收缩菜单'" :show-after="500" effect="dark" placement="bottom">
         <fd-button
-          type="icon"
-          icon="hamburger-button"
-          class="fd-title__toggle-button"
-          :class="{ active: toggleBtnActive }"
-          @click="toggleSideBar"
+            type="icon"
+            icon="hamburger-button"
+            class="fd-title__toggle-button"
+            :class="{ active: toggleBtnActive }"
+            @click="toggleSideBar"
         />
       </el-tooltip>
+      <fd-logo v-if="logo" />
       <fd-breadcrumb v-show="showBreadcrumb"></fd-breadcrumb>
     </div>
     <div class="fd-title__right">
-      <system-message-button :check-message-interval="100000"></system-message-button>
-      <fd-user-profile />
+      <system-message-button :check-message-interval="100000" />
+      <el-divider direction="vertical" />
+      <user-profile-button />
     </div>
   </div>
 </template>
@@ -26,10 +28,18 @@ import SystemMessageButton from '@/views/modules/message/message-button.vue'
 import { useStore } from '@/store'
 import { SidebarMode } from '@b/store/modules/app'
 import useLayoutSize from '@b/hooks/use-layout-size'
-import FdUserProfile from './user-profile.vue'
+import UserProfileButton from '@b/views/modules/user-profile/user-profile-button.vue'
+import FdLogo from '@b/views/layout/logo.vue'
 
 defineOptions({
   name: 'FdTitle'
+})
+
+const props = defineProps({
+  logo: {
+    type: Boolean,
+    default: true
+  }
 })
 
 const store = useStore()
@@ -68,8 +78,6 @@ const toggleSideBar = async () => {
   height: $app-title-height;
   padding-right: 16px;
   background: var(--fd-app-title-bg-color);
-  border-bottom: 1px solid var(--el-border-color-base);
-  border-radius: 0 !important;
   display: flex;
   justify-content: space-between;
   overflow: hidden;
@@ -77,7 +85,7 @@ const toggleSideBar = async () => {
   &__left {
     display: flex;
     align-items: center;
-    margin-left: 16px;
+    margin-left: 12px;
   }
 
   &__toggle-button {
@@ -95,6 +103,9 @@ const toggleSideBar = async () => {
     align-items: center;
     margin-right: 16px;
     color: var(--el-color-primary);
+    .el-divider {
+      margin: 0 16px;
+    }
   }
 }
 </style>

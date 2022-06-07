@@ -7,7 +7,7 @@
   display: flex;
   flex-flow: column;
   align-items: stretch;
-  background-color: var(--el-fill-base);
+  background-color: var(--el-fill-color-blank);
   border-radius: var(--el-border-radius-base);
   
   &.is-bordered {

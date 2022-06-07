@@ -110,7 +110,7 @@ const onMoreClick = () => {
   cursor: pointer;
 
   &:hover {
-    box-shadow: var(--el-box-shadow-base);
+    box-shadow: var(--el-box-shadow);
   }
 
   &.is-primary {

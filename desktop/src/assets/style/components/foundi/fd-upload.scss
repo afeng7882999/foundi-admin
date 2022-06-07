@@ -25,7 +25,7 @@
     width: 150px;
     height: 150px;
     border: 1px solid var(--el-border-color-base);
-    background-color: var(--el-fill-base);
+    background-color: var(--el-fill-color-blank);
     border-radius: var(--el-border-radius-base);
     overflow: hidden;
     
@@ -40,7 +40,7 @@
       align-self: stretch;
       
       .el-image__error {
-        background-color: var(--el-fill-base);
+        background-color: var(--el-fill-color-blank);
       }
     }
     

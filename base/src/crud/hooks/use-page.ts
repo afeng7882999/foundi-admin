@@ -1,9 +1,8 @@
 import { isAuth } from '@b/app/account'
 import { computed, reactive } from 'vue'
-import { useStore } from 'vuex'
-import { BaseState, storeKey } from '@b/store'
-import { sizeConst } from '@b/hooks/use-layout-size'
 import { merge } from 'lodash-es'
+import { LAYOUT_SIZES } from '@b/common/global'
+import store from '@b/store'
 
 export type PageStateOption = Partial<{
   // 是否显示页脚
@@ -18,7 +17,6 @@ export default function (stateOption?: PageStateOption) {
 
   const pageState = reactive(merge({}, defaultState, stateOption) as typeof defaultState & PageStateOption)
 
-  const store = useStore(storeKey)
   const storeState = store.state
 
   // 判断权限
@@ -67,7 +65,7 @@ export default function (stateOption?: PageStateOption) {
 
   // 获取Doc高度
   const getDocHeight = (remove: number, unit?: string): number | string => {
-    const footer = pageState.footerVisible ? sizeConst.footerHeight : 0
+    const footer = pageState.footerVisible ? LAYOUT_SIZES.footerHeight : 0
     if (unit) {
       return (storeState.app.docHeight - remove - footer + unit) as string
     } else {
@@ -77,8 +75,8 @@ export default function (stateOption?: PageStateOption) {
 
   // 获取Doc高度，去除 PageHeader, PageFooter 高度
   const getDocHeightNoHeaderFooter = (remove: number, unit?: string): number | string => {
-    const header = storeState.app.enableTags ? 0 : sizeConst.pageHeaderHeight
-    const footer = pageState.footerVisible ? sizeConst.footerHeight : 0
+    const header = storeState.app.enableTags ? 0 : LAYOUT_SIZES.pageHeaderHeight
+    const footer = pageState.footerVisible ? LAYOUT_SIZES.footerHeight : 0
     if (unit) {
       return (storeState.app.docHeight - remove - header - footer + unit) as string
     } else {

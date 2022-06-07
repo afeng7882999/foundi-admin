@@ -157,7 +157,7 @@ const { expandEnter, expandAfterEnter, expandBeforeLeave } = useExpandTransition
   }
 
   &:hover {
-    box-shadow: var(--el-box-shadow-base);
+    box-shadow: var(--el-box-shadow);
   }
 }
 </style>

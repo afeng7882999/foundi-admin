@@ -98,7 +98,7 @@
         padding-bottom: 0;
         
         > .fd-nav-menu-item__inner {
-          margin: 8px;
+          margin: 4px 16px 0 16px;
           
           .fd-nav-menu-item__icon {
             font-size: $icon-size-base;
@@ -157,7 +157,7 @@
     &.is-level-1 {
       padding: 4px 0 12px 0;
       margin-top: 4px;
-      background-color: rgba($color-black, 0.3);
+      background-color: $sidebar-submenu-back-color;
     }
   }
   
@@ -173,7 +173,7 @@
     position: relative;
     width: auto;
     padding: 8px 16px;
-    margin: 6px 8px 0 8px;
+    margin: 4px 16px 0 16px;
     border-radius: var(--el-border-radius-base);
     text-decoration: none;
     white-space: nowrap;

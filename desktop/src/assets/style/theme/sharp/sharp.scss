@@ -1,0 +1,96 @@
+@use 'sass:map';
+
+@use 'element-plus/theme-chalk/src/common/var.scss' as common;
+@use 'element-plus/theme-chalk/src/mixins/mixins.scss' as *;
+@use 'element-plus/theme-chalk/src/mixins/function' as *;
+
+// Border
+$border-radius: () !default;
+$border-radius: map.merge(
+    (
+      'base': 0,
+      'small': 0,
+      'round': 20px,
+      'circle': 100%,
+    ),
+    $border-radius
+);
+
+// MessageBox
+// css3 var in packages/theme-chalk/src/message-box.scss
+$messagebox: () !default;
+$messagebox: map.merge(
+    (
+      'border-radius': getCssVar('border-radius', 'base')
+    ),
+    $messagebox
+);
+
+// Notification
+// css3 var in packages/theme-chalk/src/notification.scss
+$notification: () !default;
+$notification: map.merge(
+    (
+      'radius': getCssVar('border-radius', 'base')
+    ),
+    $notification
+);
+
+// Popover
+// css3 var in packages/theme-chalk/src/popover.scss
+$popover: () !default;
+$popover: map.merge(
+    (
+      'border-radius': getCssVar('border-radius', 'base')
+    ),
+    $popover
+);
+
+// popper
+// Pay attention to the difference between 'popper' and 'popover'
+$popper: () !default;
+$popper: map.merge(
+    (
+      'border-radius': getCssVar('border-radius', 'base')
+    ),
+    $popper
+);
+
+// Tag
+// css3 var in packages/theme-chalk/src/tag.scss
+$tag: () !default;
+$tag: map.merge(
+    (
+      'border-radius': getCssVar('border-radius', 'base')
+    ),
+    $tag
+);
+
+// Card
+$card: () !default;
+$card: map.merge(
+    (
+      'border-radius': getCssVar('border-radius', 'base')
+    ),
+    $card
+);
+
+// Slider
+// css3 var in packages/theme-chalk/src/slider.scss
+$slider: () !default;
+$slider: map.merge(
+    (
+      'border-radius': getCssVar('border-radius', 'small')
+    ),
+    $slider
+);
+
+// Pagination
+// css3 var in packages/theme-chalk/src/pagination.scss
+$pagination: () !default;
+$pagination: map.merge(
+    (
+      'border-radius': getCssVar('border-radius', 'small')
+    ),
+    $pagination
+);

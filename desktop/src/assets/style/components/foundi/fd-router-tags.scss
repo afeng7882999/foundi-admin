@@ -32,12 +32,12 @@ $tags-inner-height: $app-tags-height - 8;
     border-radius: $app-tags-radius $app-tags-radius 0 0;
     
     &.is-active {
-      background-color: var(--el-body-bg-color);
+      background-color: var(--el-bg-color-page);
       color: var(--el-text-color-primary);
-      border-color: var(--el-body-bg-color);
+      border-color: var(--el-bg-color-page);
       
       &:hover {
-        background-color: var(--el-body-bg-color);
+        background-color: var(--el-bg-color-page);
       }
     }
     
@@ -76,7 +76,7 @@ $tags-inner-height: $app-tags-height - 8;
       &:hover {
         .item-close__icon {
           padding: 2px;
-          color: var(--el-body-bg-color);
+          color: var(--el-bg-color-page);
           background-color: var(--el-text-color-placeholder);
         }
       }
@@ -106,7 +106,7 @@ $tags-inner-height: $app-tags-height - 8;
   }
   
   &__menu {
-    font-size: $font-size-small;
+    // font-size: $font-size-small;
   }
 }
 
@@ -144,7 +144,7 @@ $tags-inner-height: $app-tags-height - 8;
     width: 20px;
     height: 20px;
     border-radius: 100%;
-    box-shadow: 0 0 0 40px var(--el-body-bg-color);
+    box-shadow: 0 0 0 40px var(--el-bg-color-page);
   }
   
   &:before {
@@ -165,7 +165,7 @@ $tags-inner-height: $app-tags-height - 8;
     &:hover {
       &:before,
       &:after {
-        box-shadow: 0 0 0 40px var(--el-body-bg-color);
+        box-shadow: 0 0 0 40px var(--el-bg-color-page);
       }
     }
   }

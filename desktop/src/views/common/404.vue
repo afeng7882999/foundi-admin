@@ -56,7 +56,7 @@ const buttonCom = computed(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: var(--el-body-bg-color);
+  background-color: var(--el-bg-color-page);
 
   &__title {
     text-align: center;

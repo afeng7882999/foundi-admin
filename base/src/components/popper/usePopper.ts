@@ -5,6 +5,7 @@ import { Ref } from '@vue/reactivity'
 import { generateId } from '@b/utils/lang'
 import { useThrottleFn } from '@vueuse/core'
 import bus from './bus'
+import { nextZIndex } from '@b/common/global'
 
 const usePopper = (
   props: Readonly<ExtractPropTypes<typeof POPPER_PROPS_DEFAULT>>,
@@ -16,7 +17,8 @@ const usePopper = (
     elId: 'fd-popper-' + generateId(),
     style: {
       top: '0px',
-      left: '0px'
+      left: '0px',
+      zIndex: nextZIndex()
     }
   })
 
@@ -27,11 +29,11 @@ const usePopper = (
     (val) => {
       if (val) {
         emit(POPPER_SHOW_EVENT, wrapperRef)
-        props.trigger === 'click' && document.body.addEventListener('click', onBodyClick)
+        props.trigger === 'click' && window.addEventListener('click', onBodyClick)
       } else {
         emit(POPPER_HIDE_EVENT, wrapperRef)
-        props.trigger === 'click' && document.body.removeEventListener('click', onBodyClick)
-        props.trigger === 'enter' && document.body.removeEventListener('mousemove', onMouseMove)
+        props.trigger === 'click' && window.removeEventListener('click', onBodyClick)
+        props.trigger === 'enter' && window.removeEventListener('mousemove', onMouseMove)
       }
     },
     {
@@ -48,7 +50,7 @@ const usePopper = (
           targetRect = target.getBoundingClientRect()
           const top = Math.floor(targetRect.top + targetRect.height + props.boundaryOffset)
           const left = Math.floor(targetRect.left)
-          props.trigger === 'enter' && document.body.addEventListener('mousemove', onMouseMove)
+          props.trigger === 'enter' && window.addEventListener('mousemove', onMouseMove)
           showByTarget(top, left, Math.floor(targetRect.width), Math.floor(targetRect.height))
         } else {
           // pop up at mouse cursor point
@@ -61,11 +63,12 @@ const usePopper = (
   })
 
   onBeforeUnmount(() => {
-    props.trigger === 'click' && document.body.removeEventListener('click', onBodyClick)
-    props.trigger === 'enter' && document.body.removeEventListener('mousemove', onMouseMove)
+    props.trigger === 'click' && window.removeEventListener('click', onBodyClick)
+    props.trigger === 'enter' && window.removeEventListener('mousemove', onMouseMove)
   })
 
   const onBodyClick = (event: MouseEvent) => {
+    console.log('body')
     const isInter = event.composedPath().some((item) => {
       const elementId = (item as HTMLElement).id
       return !!elementId && (elementId === state.elId || elementId === state.elId)
@@ -104,10 +107,8 @@ const usePopper = (
         if (left + w + props.boundaryOffset >= document.body.clientWidth) {
           left = Math.max(left - w, props.boundaryOffset)
         }
-        state.style = {
-          top: `${top}px`,
-          left: `${left}px`
-        }
+        state.style.top = `${top}px`
+        state.style.left = `${left}px`
         emit(POPPER_SHOWED_EVENT, wrapperRef)
       })
     }, props.showDelay)
@@ -134,10 +135,8 @@ const usePopper = (
         if (left + w + props.boundaryOffset >= document.body.clientWidth) {
           left = Math.max(document.body.clientWidth - w - props.boundaryOffset, props.boundaryOffset)
         }
-        state.style = {
-          top: `${top}px`,
-          left: `${left}px`
-        }
+        state.style.top = `${top}px`
+        state.style.left = `${left}px`
         emit(POPPER_SHOWED_EVENT, wrapperRef)
       })
     }, props.showDelay)

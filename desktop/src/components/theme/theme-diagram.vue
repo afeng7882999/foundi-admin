@@ -22,8 +22,7 @@
 
 <script setup lang="ts">
 import { computed, PropType } from 'vue'
-import { Theme } from 'element-plus-dynamic-theme/theme'
-import { CUSTOM_THEME } from './theme'
+import { CUSTOM_THEME, Theme } from './theme'
 
 defineOptions({
   name: 'FdThemeDiagram'

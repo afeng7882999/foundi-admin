@@ -519,7 +519,7 @@ export default defineComponent({
 
       .form-main__item {
         height: 41px;
-        border: 1px solid var(--el-border-color-base);
+        border: 1px solid var(--el-border-color);
         border-radius: var(--el-border-radius-base);
 
         .el-input {

@@ -1,0 +1,24 @@
+@use '../base/src/assets/style/color' as color-def;
+@use '../base/src/assets/style/variable' as fd-var;
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+        'base': fd-var.$color-primary,
+      ),
+      'success': (
+        'base': fd-var.$color-success,
+      ),
+      'warning': (
+        'base': fd-var.$color-warning,
+      ),
+      'danger': (
+        'base': fd-var.$color-danger,
+      ),
+      'error': (
+        'base': fd-var.$color-error,
+      ),
+      'info': (
+        'base': fd-var.$color-info,
+      )
+  ),
+);

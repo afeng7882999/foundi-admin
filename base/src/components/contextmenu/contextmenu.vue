@@ -2,13 +2,13 @@
   <fd-popper
     ref="popper"
     :target="target"
-    :target-offset="targetOffset"
+    :boundary-offset="boundaryOffset"
     :trigger="trigger"
     :show-delay="showDelay"
     :hide-delay="hideDelay"
     :disabled="disabled"
   >
-    <ul class="fd-contextmenu">
+    <ul class="fd-contextmenu" :class="customClass">
       <slot />
     </ul>
   </fd-popper>
@@ -30,7 +30,7 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  targetOffset: {
+  boundaryOffset: {
     type: Number,
     default: 8
   },
@@ -50,6 +50,10 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false
+  },
+  customClass: {
+    type: String,
+    default: ''
   }
 })
 

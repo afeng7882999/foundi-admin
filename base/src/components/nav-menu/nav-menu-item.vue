@@ -38,6 +38,7 @@ import useExpandTransition from '@b/hooks/use-expand-transition'
 import { computed, inject, PropType, ref } from 'vue'
 import { TreeNodeDefault } from '@b/utils/data-tree'
 import { RootMenuProvided } from '@b/components/nav-menu/types'
+import FdIcon from '@b/components/icon/icon.vue'
 
 const MENU_TYPE = '0'
 

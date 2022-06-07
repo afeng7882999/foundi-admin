@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import store from '@/store'
+import store, { storeKey } from '@/store'
 import { setupRouter } from '@/router'
 import 'virtual:svg-icons-register'
 
@@ -20,14 +20,13 @@ import FdTableAll from '@/components/table'
 import FdFormAll from '@/components/form'
 import FdButtonAll from '@/components/button'
 import FdDescriptionsAll from '@/components/descriptions'
-import FdVirtualGrid from '@/components/virtual-grid'
+import FdVirtualGrid from '@b/components/virtual-grid'
 import FdCardAll from '@/components/card'
 import FdDialog from '@/components/dialog'
 import FdDrawer from '@/components/drawer'
 import FdPageAll from '@/crud/page'
 
 import registerBaseGlobal from '@/common/global'
-import { storeKey } from '@b/store'
 
 const app = createApp(App)
 app.use(store, storeKey)

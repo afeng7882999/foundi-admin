@@ -1,46 +1,27 @@
-import { useStore } from 'vuex'
-import { BaseState, storeKey } from '@b/store'
 import { DeviceType } from '@b/store/modules/app'
 import { computed } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
-
-export const sizeConst = {
-  ratio: 3,
-  titleHeight: 48,
-  tabHeight: 48,
-  titlePadding: 8,
-  sidebarMiniWidth: 56,
-  sidebarNormalWidth: 240,
-  footerHeight: 48,
-  pageHeaderHeight: 48
-}
-
-export const breakpoints = {
-  sm: 768,
-  md: 992,
-  lg: 1200,
-  xl: 1920
-}
+import { LAYOUT_BREAKPOINTS, LAYOUT_SIZES } from '@b/common/global'
+import store from '@b/store'
 
 export const getDeviceSize = (w?: number) => {
   w = w ?? document.body.getBoundingClientRect().width
-  if (w - sizeConst.ratio < breakpoints.sm) {
+  if (w - LAYOUT_SIZES.ratio < LAYOUT_BREAKPOINTS.sm) {
     return DeviceType.Mobile
   }
-  if (w - sizeConst.ratio > breakpoints.md) {
+  if (w - LAYOUT_SIZES.ratio > LAYOUT_BREAKPOINTS.md) {
     return DeviceType.Desktop
   }
   return DeviceType.Pad
 }
 
 export default function useLayoutSize(react: boolean | undefined = true) {
-  const store = useStore(storeKey)
   const storeState = store.state
 
   const getDocH = (h: number) => {
     const height = storeState.app.enableTags
-      ? sizeConst.tabHeight + sizeConst.titleHeight + sizeConst.titlePadding
-      : sizeConst.titleHeight + sizeConst.titlePadding
+      ? LAYOUT_SIZES.tabHeight + LAYOUT_SIZES.titleHeight + LAYOUT_SIZES.titlePadding
+      : LAYOUT_SIZES.titleHeight + LAYOUT_SIZES.titlePadding
     return h - height
   }
 
@@ -49,9 +30,9 @@ export default function useLayoutSize(react: boolean | undefined = true) {
       return w
     }
     if (storeState.app.sidebarMode?.minimized) {
-      return w - sizeConst.sidebarMiniWidth
+      return w - LAYOUT_SIZES.sidebarMiniWidth
     }
-    return w - sizeConst.sidebarNormalWidth
+    return w - LAYOUT_SIZES.sidebarNormalWidth
   }
 
   const resizeLayout = async (w: number, h: number) => {

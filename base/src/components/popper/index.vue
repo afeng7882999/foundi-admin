@@ -1,17 +1,21 @@
 <template>
-  <div v-show="visible" :id="elId" ref="wrapperRef" class="fd-popper" :style="style">
-    <slot />
-  </div>
+  <teleport to="body">
+    <div v-show="visible" :id="elId" ref="wrapperRef" class="fd-popper" :style="style">
+      <slot />
+    </div>
+  </teleport>
 </template>
+
+<script lang="ts">
+export default {
+  name: 'FdPopper'
+}
+</script>
 
 <script setup lang="ts">
 import { POPPER_HIDE_EVENT, POPPER_PROPS_DEFAULT, POPPER_SHOW_EVENT, POPPER_SHOWED_EVENT } from './types'
 import { ref } from 'vue'
 import usePopper from './usePopper'
-
-defineOptions({
-  name: 'FdPopper'
-})
 
 const props = defineProps({
   ...POPPER_PROPS_DEFAULT

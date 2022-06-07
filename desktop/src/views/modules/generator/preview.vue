@@ -218,7 +218,7 @@ const handleGenerate = useThrottleFn(
 <style lang="scss">
 .page-generator-preview {
   &__tree {
-    border-radius: var(--el-border-radius-base) 0 0 var(--el-border-radius-base);
+    border-radius: var(--el-border-radius) 0 0 var(--el-border-radius);
     padding: 0;
 
     .fd-page__sub-title {

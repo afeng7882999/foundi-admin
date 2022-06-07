@@ -1,0 +1,136 @@
+@use 'element-plus/theme-chalk/src/common/var' as *;
+@use 'element-plus/theme-chalk/src/mixins/function' as * ;
+@use 'element-plus/theme-chalk/src/mixins/config' as *;
+@use 'element-plus/theme-chalk/src/mixins/mixins' as *;
+@use 'element-plus/theme-chalk/src/mixins/_var' as *;
+@use '../mixins' as *;
+
+html.sharp {
+  
+  @include b(color-predefine) {
+    @include e-theme(color-selector, sharp) {
+      border-radius: getCssVar('border-radius', 'base');
+      > div {
+        border-radius: getCssVar('border-radius', 'small');
+      }
+    }
+  }
+  
+  @include b(color-picker) {
+    @include e-theme(mask, sharp) {
+      border-radius: getCssVar('border-radius', 'base');
+    }
+    @include e-theme(trigger, sharp) {
+      border-radius: getCssVar('border-radius', 'base');
+    }
+  }
+  
+  @include b(pagination) {
+    @include when(background) {
+      .btn-prev,
+      .btn-next,
+      .#{$namespace}-pager li {
+        border-radius: getCssVar('border-radius', 'small');
+      }
+    }
+  }
+  
+  @include b(progress-bar) {
+    @include e(outer) {
+      border-radius: getCssVar('border-radius', 'base');
+    }
+    @include e(inner) {
+      border-radius: getCssVar('border-radius', 'base');
+    }
+  }
+  
+  @include b(tabs) {
+    @include e-theme(new-tab, sharp) {
+      border-radius: 0;
+    }
+    @include e-theme(item, sharp) {
+      &:focus-visible {
+        border-radius: 0;
+      }
+    }
+    @include m(card) {
+      > .#{$namespace}-tabs__header .#{$namespace}-tabs__nav {
+        border-radius: 0;
+      }
+    }
+    @include m(left) {
+      &.#{$namespace}-tabs--card {
+        .#{$namespace}-tabs__nav {
+          border-radius: 0;
+        }
+      }
+    }
+    @include m(right) {
+      &.#{$namespace}-tabs--card {
+        .#{$namespace}-tabs__nav {
+          border-radius: 0;
+        }
+      }
+    }
+  }
+  
+  //@include b(tabs) {
+  //  @include e-theme(new-tab, sharp) {
+  //    border-radius: 3px;
+  //  }
+  //  @include e-theme(item, sharp) {
+  //    &:focus-visible {
+  //      border-radius: 3px;
+  //    }
+  //  }
+  //  @include m(card) {
+  //    > .#{$namespace}-tabs__header .#{$namespace}-tabs__nav {
+  //      border-radius: 4px 4px 0 0;
+  //    }
+  //  }
+  //  @include m(left) {
+  //    &.#{$namespace}-tabs--card {
+  //      .#{$namespace}-tabs__nav {
+  //        border-radius: 4px 0 0 4px;
+  //      }
+  //    }
+  //  }
+  //  @include m(right) {
+  //    &.#{$namespace}-tabs--card {
+  //      .#{$namespace}-tabs__nav {
+  //        border-radius: 0 4px 4px 0;
+  //      }
+  //    }
+  //  }
+  //}
+  //
+  
+  @include b(upload) {
+    /* Picture Card for Wall */
+    @include m(picture-card) {
+      border-radius: getCssVar('border-radius', 'base');
+    }
+  }
+  
+  @include b(upload-dragger) {
+    border-radius: getCssVar('border-radius', 'base');
+  }
+  
+  @include b(upload-list) {
+    @include e-theme(item, sharp) {
+      border-radius: getCssVar('border-radius', 'base');
+    }
+    // upload-list
+    @include m(picture-card) {
+      .#{bem('upload-list', 'item')} {
+        border-radius: getCssVar('border-radius', 'base');
+      }
+    }
+    
+    @include m(picture) {
+      .#{bem('upload-list', 'item')} {
+        border-radius: getCssVar('border-radius', 'base');
+      }
+    }
+  }
+}

@@ -3,8 +3,7 @@ import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 import { onActivated, onMounted, reactive } from 'vue'
 import { Indexable } from '@b/common/types'
 import { merge } from 'lodash-es'
-import { useStore } from 'vuex'
-import { storeKey } from '@b/store'
+import store from '@b/store'
 
 export type ViewStateOption = Partial<{
   // 页面标题
@@ -43,7 +42,6 @@ const useView = (stateOption?: ViewStateOption) => {
     mixHandlers.refreshFn.push(fn)
   }
 
-  const store = useStore(storeKey)
   const storeState = store.state
   const route = useRoute()
   const router = useRouter()

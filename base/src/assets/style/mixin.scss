@@ -12,7 +12,7 @@
 }
 
 @mixin theme($theme: $dark-mode) {
-  @at-root .#{$theme} & {
+  @at-root html.#{$theme} & {
     @content
   }
 }
@@ -97,7 +97,7 @@
 }
 
 @mixin activeBorder {
-  border: 1px solid var(--el-border-color-base);
+  border: 1px solid var(--el-border-color);
   border-radius: 0;
   &:hover {
     border-color: var(--el-border-color-hover);

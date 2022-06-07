@@ -66,7 +66,7 @@ defineExpose({
   display: block;
   height: 500px;
   overflow: hidden;
-  border: 1px solid var(--el-border-color-base);
+  border: 1px solid var(--el-border-color);
   border-radius: var(--el-border-radius-base);
 
   .agreement-content__scroll {

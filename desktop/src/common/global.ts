@@ -1,7 +1,9 @@
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, useZIndex } from 'element-plus'
 import { registerFnGlobal } from '@b/common/global'
 
 const registerBaseGlobal = () => {
+  const { nextZIndex } = useZIndex()
+
   const messageFn = (message: string, type: string, duration: number) => {
     ElMessage({
       message,
@@ -24,7 +26,12 @@ const registerBaseGlobal = () => {
     })
   }
 
-  registerFnGlobal(messageFn, messageBoxConfirmFn)
+  registerFnGlobal({
+    scrollbar: 'ElScrollbar',
+    nextZIndex,
+    messageFn,
+    messageBoxConfirmFn
+  })
 }
 
 export default registerBaseGlobal

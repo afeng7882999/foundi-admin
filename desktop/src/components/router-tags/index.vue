@@ -31,7 +31,7 @@
         <fd-button type="icon" icon="refresh" @click="refreshCurrentTag"></fd-button>
       </el-tooltip>
     </div>
-    <fd-contextmenu ref="contextMenu" class="fd-router-tags__menu">
+    <fd-contextmenu ref="contextMenu" custom-class="fd-router-tags__menu">
       <fd-contextmenu-item icon="refresh" label="刷新" @click="refreshSelectedTag(state.selectedTag)"></fd-contextmenu-item>
       <fd-contextmenu-item
         v-if="state.closable"

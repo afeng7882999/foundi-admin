@@ -1,0 +1,58 @@
+@use 'sass:map';
+
+// CSS3 var
+@use 'round' as *;
+@use 'element-plus/theme-chalk/src/mixins/_var.scss' as *;
+@use 'element-plus/theme-chalk/src/mixins/mixins.scss' as *;
+@use 'components' as *;
+
+// dark
+@mixin round($block) {
+  html.round {
+    @include b($block) {
+      @content;
+    }
+  }
+}
+
+html.round {
+  // border radius
+  @include set-component-css-var('border-radius', $border-radius);
+}
+
+@include round(message-box) {
+  @include set-component-css-var('messagebox', $messagebox);
+}
+
+@include round(notification) {
+  @include set-component-css-var('notification', $notification);
+}
+
+@include round(pagination) {
+  @include set-component-css-var('pagination', $pagination);
+}
+
+@include round(popover) {
+  @include set-component-css-var('popover', $popover);
+}
+
+@include round(popper) {
+  @include set-component-css-var('popper', $popper);
+}
+
+@include round(tag) {
+  @include set-component-css-var('tag', $tag);
+}
+
+@include round(card) {
+  @include set-component-css-var('card', $card);
+}
+
+@include round(slider) {
+  @include set-component-css-var('slider', $slider);
+}
+
+@include round(checkbox) {
+  @include set-component-css-var('checkbox', $checkbox);
+}
+

@@ -5,6 +5,10 @@
   position: relative;
   overflow: hidden;
   
+  &__scrollbar:not(.el-scrollbar) {
+    overflow-y: scroll;
+  }
+  
   &__inner {
     box-sizing: border-box;
     display: grid;
@@ -23,7 +27,7 @@
     left: 0;
     bottom: 0;
     right: 0;
-    z-index: $index-mask;
+    z-index: $index-popper;
   }
   
   &.is-window {

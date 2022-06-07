@@ -1,0 +1,54 @@
+@use 'sass:map';
+
+// CSS3 var
+@use 'sharp' as *;
+@use 'element-plus/theme-chalk/src/mixins/_var.scss' as *;
+@use 'element-plus/theme-chalk/src/mixins/mixins.scss' as *;
+@use 'components' as *;
+
+// dark
+@mixin sharp($block) {
+  html.sharp {
+    @include b($block) {
+      @content;
+    }
+  }
+}
+
+html.sharp {
+  // border radius
+  @include set-component-css-var('border-radius', $border-radius);
+}
+
+@include sharp(message-box) {
+  @include set-component-css-var('messagebox', $messagebox);
+}
+
+@include sharp(notification) {
+  @include set-component-css-var('notification', $notification);
+}
+
+@include sharp(pagination) {
+  @include set-component-css-var('pagination', $pagination);
+}
+
+@include sharp(popover) {
+  @include set-component-css-var('popover', $popover);
+}
+
+@include sharp(popper) {
+  @include set-component-css-var('popper', $popper);
+}
+
+@include sharp(tag) {
+  @include set-component-css-var('tag', $tag);
+}
+
+@include sharp(card) {
+  @include set-component-css-var('card', $card);
+}
+
+@include sharp(slider) {
+  @include set-component-css-var('slider', $slider);
+}
+

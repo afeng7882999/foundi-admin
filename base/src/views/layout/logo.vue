@@ -7,12 +7,14 @@
   </div>
 </template>
 
+<script lang="ts">
+export default {
+  name: 'FdLogo'
+}
+</script>
+
 <script setup lang="ts">
 import FdSvgImage from '@b/components/svg-image/svg-image.vue'
-
-defineOptions({
-  name: 'FdLogo'
-})
 
 const props = defineProps({
   minimized: {
@@ -50,14 +52,15 @@ const props = defineProps({
 .fd-logo {
   display: block;
   position: relative;
-  height: $app-title-height;
+  height: $app-logo-height;
+  width: $app-logo-width;
   overflow: hidden;
   white-space: nowrap;
   margin: 8px 0;
 
   &__link {
     width: 100%;
-    height: $app-title-height;
+    height: $app-logo-height;
     display: flex;
     align-items: stretch;
     align-content: center;

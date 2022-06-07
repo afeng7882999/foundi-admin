@@ -1,5 +1,5 @@
 <template>
-  <div class="fd-main">
+  <div class="fd-doc">
     <router-view v-slot="{ Component, route }">
       <keep-alive :include="cachedViews">
         <component :is="Component" :key="route.path" />
@@ -13,7 +13,7 @@ import { computed } from 'vue'
 import { useStore } from '@/store'
 
 defineOptions({
-  name: 'FdMain'
+  name: 'FdDoc'
 })
 
 const store = useStore()
@@ -27,7 +27,7 @@ const cachedViews = computed(() => {
 <style lang="scss">
 @use '../base/src/assets/style/variable' as *;
 
-.fd-main {
+.fd-doc {
   position: relative;
   overflow: hidden;
 }

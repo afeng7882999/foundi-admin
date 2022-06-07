@@ -99,7 +99,7 @@ defineExpose({
   position: relative;
   padding: 10px;
   cursor: pointer;
-  border: 1px solid var(--el-border-color-base);
+  border: 1px solid var(--el-border-color);
 
   &:hover {
     box-shadow: $box-shadow-base;

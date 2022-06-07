@@ -2,7 +2,7 @@
   <div class="fd-nav-menu" :class="classObj">
     <fd-nav-menu-group v-if="grouped"></fd-nav-menu-group>
     <ul v-else class="fd-nav-menu__menu">
-      <fd-nav-menu-item v-for="item in getVisibleMenu(state.menuItems)" :key="item.id" :menu-item="item"></fd-nav-menu-item>
+      <fd-nav-menu-item v-for="item in state.menuItems" :key="item.id" :menu-item="item"></fd-nav-menu-item>
     </ul>
   </div>
 </template>
@@ -58,19 +58,23 @@ const classObj = computed(() => {
   return [props.minimized ? 'is-minimized' : '']
 })
 
+const arrangeDefaultPath = (path: string) => {
+  const item = getTreeNode(state.menuItems, (item) => item.url === path)
+  if (item) {
+    state.activeId = item.id
+    const arr = item.parentPath.split(',')
+    const parents = arr.slice(1, arr.length - 1)
+    nextFrame(() => {
+      state.descActiveIds = parents
+      state.expandedIds = parents
+    })
+  }
+}
+
 watch(
   () => props.defaultPath,
   (path) => {
-    const item = getTreeNode(state.menuItems, (item) => item.url === path)
-    if (item) {
-      state.activeId = item.id
-      const arr = item.parentPath.split(',')
-      const parents = arr.slice(1, arr.length - 1)
-      nextFrame(() => {
-        state.descActiveIds = parents
-        state.expandedIds = parents
-      })
-    }
+    arrangeDefaultPath(path)
   }
 )
 
@@ -78,13 +82,10 @@ watch(
   () => props.menu,
   (val) => {
     state.menuItems = filterTree(val, (item) => item.visible)
+    arrangeDefaultPath(props.defaultPath)
   },
   { immediate: true }
 )
-
-const getVisibleMenu = (items: TreeNodeDefault[]) => {
-  return items.filter((item) => !!item.visible)
-}
 
 const emit = defineEmits(['select'])
 

@@ -5,9 +5,9 @@
 -------------------------- */
 
 // theme
-$dark-mode: 'theme-dark';
-$sharp-mode: 'theme-sharp';
-$round-mode: 'theme-round';
+$dark-mode: 'dark';
+$sharp-mode: 'sharp';
+$round-mode: 'round';
 
 // transition
 $default-transition-time: 0.1s !default; // 0.3s !default;
@@ -53,11 +53,11 @@ $real-shadow-base: 0 16px 38px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0,
 
 // z-index
 $index-normal: 1 !default;
-$index-mask: 5 !default;
 $index-top: 1000 !default;
-$index-top-bg: 2001 !default;
-$sidebar-z-index: 2002 !default;
+$index-title: 20 !default;
+$index-sidebar: 40 !default;
 $index-popper: 2000 !default;
+$index-popper-top: 3000 !default;
 
 // font
 $font-size-large: 18px !default;
@@ -87,6 +87,9 @@ $drawer-width: 256px !default;
 $app-title-height: 48px !default;
 $app-title-font-size: $font-size-small !default;
 $app-title-bg-color: $color-white !default;
+$app-title-text-color: rgba($color-black, 0.9) !default;
+$app-logo-height: $app-title-height !default;
+$app-logo-width: 180px !default;
 
 // appTags
 $app-tags-height: 48px !default;
@@ -107,17 +110,21 @@ $icon-size-tiny: 14px !default;
 
 // sidebar
 $sidebar-min-width: 56px !default;
-$sidebar-normal-width: 240px !default;
+$sidebar-normal-width: 256px !default;
 $sidebar-transition-time: 0.1s !default; // 0.3s !default;
-$sidebar-back-color: #343a40 !default;
-$sidebar-text-color: rgba($color-white, 0.9) !default;
-$sidebar-text-placeholder-color: rgba($color-white, 0.4) !default;
-$sidebar-hover-color: rgba($color-white, 0.1) !default;
-$sidebar-border-color: rgba($color-white, 0) !default;
+$sidebar-back-color: $color-white!default;
+$sidebar-text-color: rgba($color-black, 0.9) !default;
+$sidebar-text-placeholder-color: rgba($color-black, 0.4) !default;
+$sidebar-hover-color: rgba($color-black, 0.1) !default;
+$sidebar-border-color: rgba($color-black, 0) !default;
 $sidebar-active-color: $color-primary !default;
 $sidebar-active-text-color: rgba($color-white, 0.9) !default;
 $sidebar-active-hover-color: $color-primary !default;
+$sidebar-submenu-back-color: rgba($color-white, 0.3) !default;
 $sidebar-background-img: 'none' !default;
+
+// fix layout size
+$layout-box-width: 1200px !default;
 
 // Break-point
 $sm: 768px !default;

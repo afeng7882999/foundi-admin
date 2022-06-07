@@ -1,4 +1,4 @@
-.theme-dark {
+html.dark {
   // el-loading-mask
   .el-loading-mask {
     background-color: rgba(var(--el-color-white-rgb), 0.9) !important;
@@ -12,11 +12,11 @@
     background-color: var(--el-color-primary-light-9);
   }
   .el-menu.el-menu--horizontal {
-    border-bottom: 1px solid var(--el-border-color-base);
+    border-bottom: 1px solid var(--el-border-color);
     border-right: none;
   }
   .el-menu {
-    border-right: 1px solid var(--el-border-color-base);
+    border-right: 1px solid var(--el-border-color);
   }
   .el-submenu .el-menu {
     border: none;
@@ -27,7 +27,7 @@
   }
 }
 
-.theme-sharp {
+html.sharp {
   // el-popover
   .el-popover {
     border-radius: 0;

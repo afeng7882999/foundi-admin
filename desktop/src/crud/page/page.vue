@@ -59,7 +59,7 @@ import usePage from '@/crud/hooks/use-page'
 import FdSplitPane from '@b/components/split-pane/index.vue'
 import { computed, PropType, ref, useSlots } from 'vue'
 import { ApiQuery } from '@b/api'
-import { sizeConst } from '@b/hooks/use-layout-size'
+import { LAYOUT_SIZES } from '@b/common/global'
 
 defineOptions({
   name: 'FdPage'
@@ -138,7 +138,7 @@ const queryVisibleCo = computed({
 const { docMinHeight, docHeight, showPageHeader, getDocHeightNoHeaderFooter } = usePage()
 
 const scrollbarStyle = computed(() => {
-  const remove = props.footerVisible ? 86 + sizeConst.footerHeight : 86
+  const remove = props.footerVisible ? 86 + LAYOUT_SIZES.footerHeight : 86
   return {
     height: getDocHeightNoHeaderFooter(remove, 'px')
   }

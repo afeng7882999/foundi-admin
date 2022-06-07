@@ -3,7 +3,7 @@
     <el-popover :offset="-5" :show-after="500" :show-arrow="false" placement="bottom" trigger="hover" width="250">
       <template #reference>
         <el-badge :value="unreadCount" class="small-badge message-badge">
-          <fd-button type="icon" class="right-menu-item" icon="mail" style="margin-right: 15px"></fd-button>
+          <fd-button type="icon" class="right-menu-item" icon="remind"></fd-button>
         </el-badge>
       </template>
       <div class="message-list">
@@ -133,7 +133,7 @@ export default defineComponent({
     vertical-align: top;
 
     ::v-deep(sup) {
-      transform: translateY(0);
+      transform: translateY(10%) translateX(80%);
       height: 12px;
       line-height: 12px;
       border: none;
@@ -166,7 +166,7 @@ export default defineComponent({
       position: relative;
       padding: 5px 10px;
       cursor: pointer;
-      border-bottom: 1px solid var(--el-border-color-base);
+      border-bottom: 1px solid var(--el-border-color);
 
       .item-icon {
         position: absolute;

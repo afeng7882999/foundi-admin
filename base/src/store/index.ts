@@ -20,5 +20,3 @@ export default createStore<BaseState>({
     view
   }
 })
-
-export const storeKey: InjectionKey<Store<BaseState>> = Symbol('foundi-admin-store')

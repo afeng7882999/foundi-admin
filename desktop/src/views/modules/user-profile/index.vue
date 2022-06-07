@@ -451,7 +451,7 @@ const { docMinHeight, showPageHeader } = usePage()
     margin: 8px 0;
     width: calc(100% - 8px);
     height: 0;
-    border-top: 1px solid var(--el-border-color-base);
+    border-top: 1px solid var(--el-border-color);
     align-self: center;
   }
 
